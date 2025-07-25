@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -7,13 +6,8 @@ import {
   Tabs,
   Tab,
   Paper,
-  useTheme,
 } from "@mui/material";
-
-// Type for match slug param
-type MatchParams = {
-  slug: string;
-};
+import { StyledBackground } from "@/components/Shared/StyledBackground";
 
 // Tab Panel Component
 type TabPanelProps = {
@@ -34,7 +28,7 @@ const MatchDetailPage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "#0b0b0b", color: "white", minHeight: "100vh", p: 3 }}>
+    <StyledBackground sx={{ color: "white", minHeight: "100vh", p: 3 }}>
       {/* Header Section */}
       <Box mb={4}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
@@ -89,7 +83,7 @@ const MatchDetailPage: React.FC = () => {
           <MicroBets />
         </TabPanel>
       </Paper>
-    </Box>
+    </StyledBackground>
   );
 };
 

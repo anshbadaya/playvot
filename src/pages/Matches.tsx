@@ -1,7 +1,8 @@
 // pages/Matches.tsx
 import React from "react";
-import { Box } from "@mui/material";
 import HighlightsSection from "@/components/Match/HighlightsSection";
+import Layout from "@/components/Layout";
+import { StyledBackground } from "@/components/Shared/StyledBackground";
 
 const kabaddiData = [
   {
@@ -59,17 +60,19 @@ const footballData = [
 
 const Matches = () => {
   return (
-    <Box sx={{ backgroundColor: "#0b0b0b", p: 4 }}>
-      <HighlightsSection
-        sectionTitle="KABADDI: THE ULTIMATE TEAM GAME"
-        items={kabaddiData}
-      />
-      <HighlightsSection sectionTitle="GAME. SET. SMASH." items={badmintonData} />
-      <HighlightsSection
-        sectionTitle="BANGER AFTER BANGER...!"
-        items={footballData}
-      />
-    </Box>
+    <Layout>
+      <StyledBackground sx={{ pl: 2, py: 2 }}>
+        <HighlightsSection
+          sectionTitle="KABADDI: THE ULTIMATE TEAM GAME"
+          items={kabaddiData}
+        />
+        <HighlightsSection sectionTitle="GAME. SET. SMASH." items={badmintonData} />
+        <HighlightsSection
+          sectionTitle="BANGER AFTER BANGER...!"
+          items={footballData}
+        />
+      </StyledBackground>
+    </Layout>
   );
 };
 
