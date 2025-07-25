@@ -127,12 +127,18 @@ const LoginPaper = styled(Paper)(({ theme }) => ({
   background: "transparent",
   padding: theme.spacing(6, 4),
   minWidth: 380,
+  width: "90%",
+  maxWidth: 380,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   boxShadow: "none",
   animation: `${slideUp} 0.8s ease-out`,
   position: "relative",
+  [theme.breakpoints.down("sm")]: {
+    minWidth: "unset",
+    padding: theme.spacing(4, 2),
+  }
 }));
 
 const LogoContainer = styled(Box)(({ theme }) => ({
@@ -189,7 +195,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 const PrimaryButton = styled(Button)(({ theme }) => ({
   background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, #3B82F6 100%)`,
   borderRadius: "12px",
-  padding: "12px 24px",
+  padding: theme.spacing(1.5),
   fontWeight: 700,
   fontSize: "14px",
   letterSpacing: "0.5px",
@@ -210,27 +216,17 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
   "&:active": {
     transform: "translateY(0px)",
   },
-}));
-
-const StyledDivider = styled(Divider)(({ theme }) => ({
-  width: '100%',
-  margin: theme.spacing(3, 0),
-  "&::before, &::after": {
-    borderColor: "rgba(100, 116, 139, 0.3)",
-  },
-  "& .MuiDivider-wrapper": {
-    color: "rgba(100, 116, 139, 0.8)",
+  [theme.breakpoints.down("sm")]: {
     fontSize: "12px",
-    fontWeight: 600,
-    letterSpacing: "1px",
-  },
+    padding: theme.spacing(1.25),
+  }
 }));
 
 const SecondaryButton = styled(Button)(({ theme }) => ({
   background: "rgba(15, 23, 42, 0.5)",
   border: "1px solid rgba(100, 116, 139, 0.3)",
   borderRadius: "12px",
-  padding: "12px 16px",
+  padding: theme.spacing(1.5),
   color: "rgba(255, 255, 255, 0.9)",
   textTransform: "none",
   fontWeight: 600,
@@ -245,6 +241,24 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   },
   "&:active": {
     transform: "translateY(0px)",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "12px",
+    padding: theme.spacing(1.25),
+  }
+}));
+
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  width: '100%',
+  margin: theme.spacing(3, 0),
+  "&::before, &::after": {
+    borderColor: "rgba(100, 116, 139, 0.3)",
+  },
+  "& .MuiDivider-wrapper": {
+    color: "rgba(100, 116, 139, 0.8)",
+    fontSize: "12px",
+    fontWeight: 600,
+    letterSpacing: "1px",
   },
 }));
 
