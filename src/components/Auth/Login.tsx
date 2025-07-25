@@ -229,7 +229,7 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1.5),
   color: "rgba(255, 255, 255, 0.9)",
   textTransform: "none",
-  fontWeight: 600,
+  fontWeight: 700,
   justifyContent: "center",
   backdropFilter: "blur(10px)",
   transition: "all 0.3s ease",
@@ -257,7 +257,7 @@ const StyledDivider = styled(Divider)(({ theme }) => ({
   "& .MuiDivider-wrapper": {
     color: "rgba(100, 116, 139, 0.8)",
     fontSize: "12px",
-    fontWeight: 600,
+    fontWeight: 700,
     letterSpacing: "1px",
   },
 }));
@@ -338,7 +338,7 @@ const Login = () => {
               </IconContainer>
             }
           >
-            Login With Email
+            LOGIN WITH EMAIL
           </SecondaryButton>
           
           <SecondaryButton
@@ -350,7 +350,7 @@ const Login = () => {
               </IconContainer>
             }
           >
-            Login With Google
+            LOGIN WITH GOOGLE
           </SecondaryButton>
         </Stack>
       </LoginPaper>
