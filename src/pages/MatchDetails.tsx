@@ -19,6 +19,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import { Layers } from '@mui/icons-material';
+import Layout from '@/components/Layout';
 
 // --- DATA SIMULATION ---
 
@@ -297,6 +299,7 @@ const MatchDetailPage: React.FC = () => {
   ];
 
   return (
+    <Layout showBackHeader>
     <PageBackground>
       {loading || !matchData ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 10 }}>
@@ -382,6 +385,7 @@ const MatchDetailPage: React.FC = () => {
         </Box>
       )}
     </PageBackground>
+    </Layout>
   );
 };
 
