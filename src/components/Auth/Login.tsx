@@ -13,6 +13,7 @@ import { EmailOutlined } from "@mui/icons-material";
 import { styled, keyframes } from "@mui/material/styles";
 import SportVotImage from '@/assets/images/Sportvot.png';
 import { LOGIN_TITLE } from "@/config/config";
+import { Link } from "react-router-dom";
 
 // Floating animation for background elements
 const float = keyframes`
@@ -337,6 +338,7 @@ const Login = () => {
                 <EmailOutlined sx={{ color: '#fff', fontSize: 16 }} />
               </IconContainer>
             }
+            onClick={() => alert("Login with email functionality not implemented yet.")}
           >
             LOGIN WITH EMAIL
           </SecondaryButton>
@@ -344,6 +346,7 @@ const Login = () => {
           <SecondaryButton
             variant="outlined"
             fullWidth
+            onClick={() => alert("Login with google functionality not implemented yet.")}
             startIcon={
               <IconContainer>
                 <GoogleIcon sx={{ color: '#fff', fontSize: 16 }} />
@@ -354,8 +357,7 @@ const Login = () => {
           </SecondaryButton>
         </Stack>
       </LoginPaper>
-      
-      <SkipButton variant="text">SKIP</SkipButton>
+      <Link to="/"><SkipButton variant="text">SKIP</SkipButton></Link>
     </Background>
   );
 };
