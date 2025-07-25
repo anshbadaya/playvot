@@ -28,18 +28,35 @@ const StyledCard = styled(Card)(({ theme }) => ({
   color: "rgba(255, 255, 255, 0.9)",
   cursor: "pointer",
   backdropFilter: "blur(10px)",
-  transition: "all 0.3s ease",
+  transition: "all 0.4s cubic-bezier(.4,2,.3,1)",
   position: "relative",
-  "&:hover": {
-    transform: "translateY(-4px)",
-    background: "rgba(29, 78, 216, 0.15)",
-    borderColor: "rgba(29, 78, 216, 0.5)",
-    boxShadow: `
-      0 8px 25px rgba(29, 78, 216, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1)
-    `,
+  boxShadow: '0 2px 12px rgba(29, 78, 216, 0.10)',
+  '&.swiper-slide-active': {
+    transform: 'scale(1.08) translateY(-10px)',
+    zIndex: 3,
+    boxShadow: '0 8px 32px 0 rgba(29, 78, 216, 0.25)',
+    background: 'rgba(29, 78, 216, 0.18)',
+    borderColor: 'rgba(29, 78, 216, 0.7)',
   },
-  "&::before": {
+  '&.swiper-slide-next, &.swiper-slide-prev': {
+    transform: 'scale(0.92) translateY(10px)',
+    opacity: 0.85,
+    zIndex: 2,
+    boxShadow: '0 2px 12px rgba(29, 78, 216, 0.10)',
+  },
+  '&:not(.swiper-slide-active)': {
+    filter: 'blur(0.5px)',
+  },
+  '&.swiper-slide': {
+    transition: 'all 0.4s cubic-bezier(.4,2,.3,1)',
+  },
+  '&:hover': {
+    transform: 'scale(1.10) translateY(-14px)',
+    background: 'rgba(29, 78, 216, 0.22)',
+    borderColor: 'rgba(29, 78, 216, 0.9)',
+    boxShadow: `0 12px 32px rgba(29, 78, 216, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)`
+  },
+  '&::before': {
     content: '""',
     position: "absolute",
     top: 0,
@@ -51,7 +68,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     transition: "opacity 0.3s ease",
     pointerEvents: "none",
   },
-  "&:hover::before": {
+  '&:hover::before': {
     opacity: 1,
   },
   [theme.breakpoints.down("sm")]: {

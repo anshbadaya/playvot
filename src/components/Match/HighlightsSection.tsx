@@ -1,6 +1,10 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import HighlightCard from "@/components/Match/HighlightsCard";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import { EffectCoverflow } from 'swiper/modules';
 
 interface HighlightItem {
   title: string;
@@ -38,29 +42,31 @@ const HighlightsSection: React.FC<HighlightsSectionProps> = ({
         {sectionTitle}
       </Typography>
        
-      {/* Horizontal scrollable flex row */}
-      <Box
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          gap: 3,
-          scrollbarWidth: "none", // Firefox
-          "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
-          "&::-webkit-scrollbar-track": {
-            background: "rgba(15, 23, 42, 0.3)",
-            borderRadius: "10px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "rgba(29, 78, 216, 0.5)",
-            borderRadius: "10px",
-          },
-        }}
-      >
-        {items.map((item, index) => (
-          <Box key={index} sx={{ flex: "0 0 auto" }}>
-            <HighlightCard {...item} />
-          </Box>
-        ))}
+      {/* Swiper carousel with coverflow effect */}
+      <Box sx={{ width: '100%', px: { xs: 0, sm: 4 }, mt: 3 }}>
+        <Swiper
+          effect={"coverflow"}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={"auto"}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 120,
+            modifier: 2.5,
+            slideShadows: false,
+          }}
+          spaceBetween={-40}
+          initialSlide={1}
+          modules={[EffectCoverflow]}
+          style={{ paddingBottom: 40, minHeight: 320 }}
+        >
+          {items.map((item, index) => (
+            <SwiperSlide key={index} style={{ width: 280, maxWidth: '90vw', zIndex: 2 }}>
+              <HighlightCard {...item} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </Box>
     </Box>
   );
