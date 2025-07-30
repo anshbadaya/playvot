@@ -57,10 +57,12 @@ const Background = styled(Box)(({ theme }) => ({
   width: "100vw",
   background: "#0A0B1A",
   display: "flex",
-  alignItems: "center",
+  alignItems: "flex-start",
   justifyContent: "center",
   position: "relative",
-  overflow: "hidden",
+  overflow: "auto",
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(4),
   "&::before": {
     content: '""',
     position: "absolute",
@@ -104,7 +106,7 @@ const FloatingElement = styled(Box)(({ theme }) => ({
 
 const SkipButton = styled(Button)(({ theme }) => ({
   position: "absolute",
-  bottom: 24,
+  top: 24,
   right: 24,
   color: "rgba(255, 255, 255, 0.5)",
   fontWeight: 600,
@@ -112,10 +114,15 @@ const SkipButton = styled(Button)(({ theme }) => ({
   fontSize: 12,
   padding: "8px 16px",
   transition: "all 0.2s ease",
+  zIndex: 10,
   "&:hover": {
     color: "rgba(255, 255, 255, 0.8)",
     background: "rgba(255, 255, 255, 0.05)",
   },
+  [theme.breakpoints.down("sm")]: {
+    top: 16,
+    right: 16,
+  }
 }));
 
 const LoginPaper = styled(Paper)<{ component?: React.ElementType; }>(({ theme }) => ({
@@ -130,28 +137,25 @@ const LoginPaper = styled(Paper)<{ component?: React.ElementType; }>(({ theme })
   boxShadow: "none",
   animation: `${slideUp} 0.8s ease-out`,
   position: "relative",
-  maxHeight: "90vh",
-  overflowY: "auto",
-  "&::-webkit-scrollbar": {
-    display: "none"
-  },
+  minHeight: "100%",
+  overflowY: "visible",
   [theme.breakpoints.down("sm")]: {
     width: "85%",
     padding: theme.spacing(0, 2),
-    maxHeight: "85vh",
+    paddingBottom: theme.spacing(8), // Add padding at bottom for skip button
   }
 }));
 
 const LogoContainer = styled(Box)(({ theme }) => ({
   position: "relative",
-  marginTop: theme.spacing(4),
-  marginBottom: theme.spacing(3),
+  marginTop: theme.spacing(2),
+  marginBottom: theme.spacing(2),
   textAlign: "center",
   "& img": {
-    width: "200px",
+    width: "280px",
     height: "auto",
     [theme.breakpoints.down("sm")]: {
-      width: "180px",
+      width: "320px",
       marginTop: theme.spacing(2),
     }
   }
@@ -193,6 +197,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
       background: "rgba(255, 75, 108, 0.05)",
       "& .MuiOutlinedInput-notchedOutline": {
         borderColor: "#FF4B6C",
+        borderWidth: "2px",
       },
     },
     "& .MuiOutlinedInput-notchedOutline": {
@@ -334,40 +339,6 @@ const StyledAlert = styled(Alert)(({ theme }) => ({
   }
 }));
 
-const ErrorTooltip = styled(Box)(({ theme }) => ({
-  position: "absolute",
-  top: "100%",
-  left: "50%",
-  transform: "translateX(-50%)",
-  backgroundColor: "rgba(255, 255, 255, 0.1)",
-  backdropFilter: "blur(8px)",
-  borderRadius: "8px",
-  padding: "8px 16px",
-  marginTop: "8px",
-  color: "#FF4B6C",
-  fontSize: "13px",
-  fontWeight: 500,
-  display: "flex",
-  alignItems: "center",
-  gap: "6px",
-  zIndex: 1,
-  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-  animation: "fadeIn 0.2s ease-in-out",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: "-4px",
-    left: "50%",
-    transform: "translateX(-50%) rotate(45deg)",
-    width: "8px",
-    height: "8px",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-  },
-  "& .MuiSvgIcon-root": {
-    fontSize: 16,
-    color: "#FF4B6C",
-  }
-}));
 
 const IconContainer = styled(Box)(({ theme }) => ({
   width: 20,
@@ -487,6 +458,7 @@ const Login = () => {
 
   return (
     <Background>
+      <Link to="/"><SkipButton variant="text">SKIP</SkipButton></Link>
       <FloatingElement />
       <FloatingElement />
       <FloatingElement />
@@ -525,10 +497,9 @@ const Login = () => {
             required
           />
           {touched.username && errors.username && (
-            <ErrorTooltip>
-              <ErrorOutline />
+            <FormHelperText error sx={{ ml: 1.5, mt: 0.5 }}>
               {errors.username}
-            </ErrorTooltip>
+            </FormHelperText>
           )}
         </Box>
 
@@ -564,10 +535,9 @@ const Login = () => {
             }}
           />
           {touched.password && errors.password && (
-            <ErrorTooltip>
-              <ErrorOutline />
+            <FormHelperText error sx={{ ml: 1.5, mt: 0.5 }}>
               {errors.password}
-            </ErrorTooltip>
+            </FormHelperText>
           )}
         </Box>
 
@@ -633,7 +603,6 @@ const Login = () => {
           </SecondaryButton>
         </Stack>
       </LoginPaper>
-      <Link to="/"><SkipButton variant="text">SKIP</SkipButton></Link>
     </Background>
   );
 };
