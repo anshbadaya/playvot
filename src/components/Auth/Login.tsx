@@ -120,7 +120,8 @@ const SkipButton = styled(Button)(({ theme }) => ({
 
 const LoginPaper = styled(Paper)<{ component?: React.ElementType; }>(({ theme }) => ({
   background: "transparent",
-  padding: theme.spacing(4, 3),
+  padding: theme.spacing(0, 3),
+  paddingTop: 0,
   width: "90%",
   maxWidth: 360,
   display: "flex",
@@ -129,26 +130,30 @@ const LoginPaper = styled(Paper)<{ component?: React.ElementType; }>(({ theme })
   boxShadow: "none",
   animation: `${slideUp} 0.8s ease-out`,
   position: "relative",
+  maxHeight: "90vh",
+  overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    display: "none"
+  },
   [theme.breakpoints.down("sm")]: {
     width: "85%",
-    padding: theme.spacing(3, 2),
+    padding: theme.spacing(0, 2),
+    maxHeight: "85vh",
   }
 }));
 
 const LogoContainer = styled(Box)(({ theme }) => ({
   position: "relative",
-  marginBottom: theme.spacing(4),
+  marginTop: theme.spacing(4),
+  marginBottom: theme.spacing(3),
   textAlign: "center",
   "& img": {
-    width: "312px",
+    width: "200px",
     height: "auto",
-    marginBottom: theme.spacing(1),
-  },
-  "& p": {
-    color: "rgba(255, 255, 255, 0.7)",
-    fontSize: "14px",
-    margin: 0,
-    fontWeight: 400,
+    [theme.breakpoints.down("sm")]: {
+      width: "180px",
+      marginTop: theme.spacing(2),
+    }
   }
 }));
 
@@ -247,26 +252,29 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
-  background: "#4B4EF9",
+  background: "#4461F2",
   borderRadius: "6px",
   padding: "0",
-  height: "52px",
+  height: "44px",
   fontWeight: 600,
-  fontSize: "15px",
+  fontSize: "14px",
   letterSpacing: "0.3px",
   textTransform: "uppercase",
   boxShadow: "none",
   transition: "all 0.2s ease",
   "&:hover": {
-    background: "#5C5FFF",
+    background: "#3451E2",
     boxShadow: "none",
   },
   "&:active": {
-    background: "#4041DB",
+    background: "#2441D2",
+  },
+  "&.Mui-disabled": {
+    background: "rgba(68, 97, 242, 0.5)",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "48px",
-    fontSize: "14px",
+    height: "40px",
+    fontSize: "13px",
   }
 }));
 
@@ -275,11 +283,11 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   border: "1px solid rgba(255, 255, 255, 0.08)",
   borderRadius: "6px",
   padding: "0",
-  height: "52px",
+  height: "44px",
   color: "rgba(255, 255, 255, 0.9)",
   textTransform: "uppercase",
   fontWeight: 600,
-  fontSize: "14px",
+  fontSize: "13px",
   justifyContent: "center",
   transition: "all 0.2s ease",
   "&:hover": {
@@ -290,20 +298,20 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
     background: "rgba(255, 255, 255, 0.01)",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "48px",
-    fontSize: "13px",
+    height: "40px",
+    fontSize: "12px",
   }
 }));
 
 const StyledDivider = styled(Divider)(({ theme }) => ({
   width: '100%',
-  margin: theme.spacing(2.5, 0),
+  margin: theme.spacing(1.5, 0),
   "&::before, &::after": {
     borderColor: "rgba(255, 255, 255, 0.08)",
   },
   "& .MuiDivider-wrapper": {
     color: "rgba(255, 255, 255, 0.4)",
-    fontSize: "13px",
+    fontSize: "12px",
     fontWeight: 400,
     letterSpacing: "0.5px",
     padding: "0 12px",
@@ -488,15 +496,19 @@ const Login = () => {
           <img src={Logo} alt="Zoddz Logo" />
         </LogoContainer>
         
-        <Typography 
+                  <Typography 
           variant="h5" 
           fontWeight={600} 
           align="center"
-          sx={{ 
+          sx={(theme) => ({ 
             color: "rgba(255, 255, 255, 0.95)",
-            mb: 3,
-            fontSize: "24px",
-          }}
+            mb: 2.5,
+            fontSize: "22px",
+            [theme.breakpoints.down("sm")]: {
+              fontSize: "20px",
+              mb: 2,
+            }
+          })}
         >
           Welcome to Zoddz
         </Typography>
@@ -597,7 +609,7 @@ const Login = () => {
         
         <StyledDivider>OR</StyledDivider>
         
-        <Stack spacing={2} width="100%">
+                  <Stack spacing={1.5} width="100%">
           <SecondaryButton
             variant="outlined"
             fullWidth
