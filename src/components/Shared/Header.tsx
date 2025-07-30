@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useNavigate,Link } from "react-router-dom";
 
 const Header: React.FC = () => {
@@ -22,26 +23,31 @@ const Header: React.FC = () => {
         background: `linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%)`,
         boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
         borderBottom: "1px solid rgba(29, 78, 216, 0.2)",
-        backdropFilter: "blur(8px)"
+        backdropFilter: "blur(10px)",
+        height: { xs: "64px", sm: "72px" }
       }}
     >
       <Toolbar 
         sx={{ 
-          minHeight: { xs: "56px !important", sm: "64px !important" }, 
-          gap: { xs: 1, sm: 2 }, 
-          padding: { xs: "0 12px", sm: "0 24px" },
+          minHeight: { xs: "64px !important", sm: "72px !important" }, 
+          gap: { xs: 1.5, sm: 2.5 }, 
+          padding: { xs: "0 16px", sm: "0 32px" },
           alignItems: "center"
         }}
       >
         <Box
           component="img"
-          src="/Sportvot.png"
-          alt="Sportvot Logo"
+          src="/Logo.png"
+          alt="Zoddz Logo"
           sx={{
-            height: { xs: "20px", sm: "28px" },
+            height: { xs: "28px", sm: "38px" },
             cursor: "pointer",
-            transition: "transform 0.2s",
-            "&:hover": { transform: "scale(1.05)" },
+            transition: "transform 0.2s ease",
+            filter: "brightness(1.1)",
+            "&:hover": { 
+              transform: "scale(1.05)",
+              filter: "brightness(1.2)"
+            },
           }}
           onClick={() => navigate("/")}
         />
@@ -49,18 +55,25 @@ const Header: React.FC = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "rgba(15, 23, 42, 0.5)",
+            backgroundColor: "rgba(15, 23, 42, 0.3)",
             borderRadius: "12px",
-            padding: { xs: "6px 10px", sm: "8px 16px" },
+            padding: { xs: "6px 12px", sm: "7px 16px" },
             flex: 1,
-            maxWidth: { xs: "300px", sm: "500px" },
+            maxWidth: { xs: "320px", sm: "540px" },
             margin: { xs: "0 8px", sm: "0 auto" },
-            border: "1px solid rgba(100, 116, 139, 0.3)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
             transition: "all 0.3s ease",
-            backdropFilter: "blur(8px)",
+            backdropFilter: "blur(12px)",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
             "&:hover": {
-              backgroundColor: "rgba(15, 23, 42, 0.7)",
-              borderColor: "rgba(29, 78, 216, 0.5)"
+              backgroundColor: "rgba(15, 23, 42, 0.4)",
+              borderColor: "rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 6px 16px rgba(0, 0, 0, 0.15)"
+            },
+            "&:focus-within": {
+              backgroundColor: "rgba(15, 23, 42, 0.5)",
+              borderColor: "rgba(29, 78, 216, 0.5)",
+              boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)"
             }
           }}
         >
@@ -69,7 +82,7 @@ const Header: React.FC = () => {
             sx={{
               color: "rgba(255, 255, 255, 0.9)",
               flex: 1,
-              fontSize: { xs: "14px", sm: "16px" },
+              fontSize: { xs: "13px", sm: "14px" },
               fontWeight: 400,
               "& input::placeholder": {
                 color: "rgba(100, 116, 139, 0.8)",
@@ -84,40 +97,49 @@ const Header: React.FC = () => {
           <IconButton 
             size="small" 
             sx={{ 
-              color: "rgba(100, 116, 139, 0.8)",
+              color: "rgba(255, 255, 255, 0.7)",
+              backgroundColor: "rgba(29, 78, 216, 0.1)",
+              padding: "4px",
+              marginRight: "-4px",
               transition: "all 0.3s ease",
               "&:hover": {
-                color: theme.palette.primary.main,
-                backgroundColor: "rgba(29, 78, 216, 0.1)"
+                color: "rgba(255, 255, 255, 0.9)",
+                backgroundColor: "rgba(29, 78, 216, 0.2)",
+                transform: "translateY(-1px)"
+              },
+              "&:active": {
+                transform: "translateY(0)"
               }
             }}
           >
-            <SearchIcon fontSize="medium" />
+            <SearchIcon sx={{ fontSize: "18px" }} />
           </IconButton>
         </Box>
         <Link to="/login">
         <Button 
-          variant="contained" 
+          variant="contained"
           sx={{ 
             background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, #3B82F6 100%)`,
-            textTransform: "none",
+            minWidth: 0,
             borderRadius: "12px",
-            fontSize: { xs: "13px", sm: "15px" },
-            fontWeight: 700,
-            padding: { xs: "6px 16px", sm: "8px 28px" },
-            boxShadow: "0 4px 16px rgba(59, 130, 246, 0.3)",
+            padding: { xs: "8px", sm: "10px" },
+            boxShadow: "0 4px 12px rgba(59, 130, 246, 0.25)",
             transition: "all 0.3s ease",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+
             "&:hover": {
-              background: `linear-gradient(135deg, #3B82F6 0%, ${theme.palette.primary.main} 100%)`,
-              boxShadow: "0 8px 24px rgba(59, 130, 246, 0.4)",
-              transform: "translateY(-2px)"
+              background: `linear-gradient(135deg, #4B4EF9 0%, #3B82F6 100%)`,
+              boxShadow: "0 6px 16px rgba(59, 130, 246, 0.35)",
+              transform: "translateY(-1px)",
+              borderColor: "rgba(255, 255, 255, 0.2)"
             },
             "&:active": {
-              transform: "translateY(0)"
+              transform: "translateY(0)",
+              boxShadow: "0 4px 12px rgba(59, 130, 246, 0.2)"
             }
           }}
         >
-          Sign In
+          <PersonOutlineIcon sx={{ fontSize: { xs: "20px", sm: "24px" } }} />
         </Button>
         </Link>
       </Toolbar>
