@@ -16,9 +16,10 @@ import {
   useMediaQuery,
   Badge,
   Tabs,
-  Tab,
   CardHeader,
-  CardContent
+  CardContent,
+  Divider,
+  List
 } from "@mui/material";
 import { useTheme, styled, alpha } from '@mui/material/styles';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -33,6 +34,7 @@ import TargetIcon from '@mui/icons-material/GpsFixed';
 import ActivityIcon from '@mui/icons-material/Timeline';
 import TrophyIcon from '@mui/icons-material/EmojiEvents';
 import Layout from '@/components/Layout';
+import Squads from '@/components/Match/Squads';
 
 // --- DATA SIMULATION ---
 
@@ -54,16 +56,28 @@ interface Player {
   name: string;
   number: number;
   position: string;
-  stats: {
+  role: string;
+  isWicketKeeper?: boolean;
+  isCaptain?: boolean;
+  avatar?: string;
+  stats?: {
+    // Batting stats
     runs?: number;
     balls?: number;
+    fours?: number;
+    sixes?: number;
+    strikeRate?: number;
+    // Bowling stats
+    overs?: string;
+    maidens?: number;
+    wickets?: number;
+    economy?: number;
+    // Other stats
     goals?: number;
     assists?: number;
     shots?: number;
     passes?: number;
-    rating: number;
-    fours?: number;
-    sixes?: number;
+    rating?: number;
   };
 }
 
@@ -104,33 +118,33 @@ interface MatchData {
 const dummyMatchData: MatchData = {
   teams: {
     home: {
-      name: 'India Women',
-      logo: '/teams/india.png',
-      score: 142,
+      name: 'ZIM',
+      logo: '/teams/zimbabwe.png',
+      score: 149,
       stats: {
         possession: 55,
         shots: 12,
         shotsOnTarget: 5,
         corners: 6,
         fouls: 8,
-        wickets: 4
+        wickets: 10
       }
     },
     away: {
-      name: 'Australia Women',
-      logo: '/teams/australia.png',
-      score: 89,
+      name: 'NZ',
+      logo: '/teams/newzealand.png',
+      score: 174,
       stats: {
         possession: 45,
         shots: 10,
         shotsOnTarget: 3,
         corners: 4,
         fouls: 10,
-        wickets: 2
+        wickets: 3
       }
     }
   },
-  score: '2 - 1',
+  score: 'NZ 174/3 (52)',
   league: 'Premier League',
   status: 'Live',
   venue: 'Old Trafford',
@@ -139,41 +153,106 @@ const dummyMatchData: MatchData = {
   players: {
     home: [
       {
-        name: 'E Perry',
+        name: 'Devon Conway',
         number: 1,
-        position: 'Batter',
+        position: 'Opener',
+        role: 'WK-Batter',
+        isWicketKeeper: true,
+        avatar: '/teams/player15.png',
   stats: {
-          runs: 34,
-          balls: 22,
-          fours: 4,
-          sixes: 1,
-          rating: 154.5
+          runs: 87,
+          balls: 162,
+          fours: 12,
+          sixes: 0,
+          strikeRate: 53.70
         }
       },
       {
-        name: 'A Gardner',
+        name: 'Daryl Mitchell',
         number: 2,
-        position: 'Batter',
+        position: 'Top Order',
+        role: 'Batting Allrounder',
+        avatar: '/teams/player19.png',
         stats: {
-          runs: 28,
-          balls: 18,
-          fours: 2,
+          runs: 9,
+          balls: 14,
+          fours: 1,
+          sixes: 0,
+          strikeRate: 64.29
+        }
+      },
+      {
+        name: 'Nick Welch',
+        number: 3,
+        position: 'Middle Order',
+        role: 'Batter',
+        avatar: '/teams/player3.png',
+        stats: {
+          runs: 15,
+          balls: 12,
+          fours: 1,
+          sixes: 0,
+          rating: 125.0
+        }
+      },
+      {
+        name: 'Craig Ervine',
+        number: 4,
+        position: 'Middle Order',
+        role: 'Batter',
+        isCaptain: true,
+        avatar: '/teams/player5.png',
+        stats: {
+          runs: 42,
+          balls: 30,
+          fours: 3,
           sixes: 2,
-          rating: 155.6
+          rating: 140.0
         }
       }
     ],
     away: [
       {
-        name: 'S Mandhana',
-        number: 3,
-        position: 'Batter',
+        name: 'Blessing Muzarabani',
+        number: 10,
+        position: 'Bowler',
+        role: 'Bowler',
+        avatar: '/teams/player10.png',
         stats: {
-          runs: 52,
-          balls: 38,
-          fours: 6,
-          sixes: 2,
-          rating: 136.8
+          overs: "16",
+          maidens: 4,
+          wickets: 2,
+          runs: 50,
+          economy: 3.13
+        }
+      },
+      {
+        name: 'Sikandar Raza',
+        number: 6,
+        position: 'All-rounder',
+        role: 'Batting Allrounder',
+        avatar: '/teams/player6.png',
+        stats: {
+          overs: "12",
+          maidens: 2,
+          wickets: 1,
+          runs: 31,
+          economy: 2.58
+        }
+      },
+      {
+        name: 'Mitchell Santner',
+        number: 8,
+        position: 'Lower Order',
+        role: 'Bowling Allrounder',
+        isCaptain: true,
+        avatar: '/teams/player22.png',
+        stats: {
+          runs: 18,
+          balls: 12,
+          fours: 1,
+          sixes: 1,
+          rating: 150.0
         }
       }
     ]
@@ -211,8 +290,8 @@ const dummyMatchData: MatchData = {
     }
   ],
   winProbability: {
-    home: 65,
-    away: 35
+    home: 28,
+    away: 38
   },
   bettingOdds: {
     home: 2.1,
@@ -330,22 +409,7 @@ const TopBar = styled(Box)(({ theme }) => ({
   }
 }));
 
-const LiveBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    background: themeColors.error,
-    animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-    '@keyframes pulse': {
-      '0%, 100%': {
-        opacity: 1,
-        transform: 'scale(1)'
-      },
-      '50%': {
-        opacity: 0.7,
-        transform: 'scale(1.1)'
-      },
-    },
-  }
-}));
+
 
 const TabPanel = styled(Box)({
   padding: '16px',
@@ -441,78 +505,7 @@ const VideoPlayer: React.FC = () => {
   );
 };
 
-const ScoreCard: React.FC<{ data: MatchData }> = ({ data }) => (
-  <Card sx={{ bgcolor: alpha("#000000", 0.2), color: 'white', p: 3, borderRadius: 3 }}>
-    <Typography variant="h5" gutterBottom fontWeight="bold">Live Score</Typography>
-    <Stack direction="row" justifyContent="space-around" alignItems="center" my={3}>
-      <Stack alignItems="center" spacing={1}>
-        <Avatar sx={{ width: 60, height: 60, bgcolor: '#2D2D2D' }}>{data.teams.home.name.charAt(0)}</Avatar>
-        <Typography variant="h6">{data.teams.home.name}</Typography>
-      </Stack>
-      <Typography variant="h2" fontWeight="bold">{data.score}</Typography>
-      <Stack alignItems="center" spacing={1}>
-        <Avatar sx={{ width: 60, height: 60, bgcolor: '#2D2D2D' }}>{data.teams.away.name.charAt(0)}</Avatar>
-        <Typography variant="h6">{data.teams.away.name}</Typography>
-      </Stack>
-    </Stack>
-    <Typography variant="subtitle2" sx={{ color: '#aaa', textAlign: 'center' }}>
-      {data.league} | Status: <span style={{ color: '#3B82F6' }}>{data.status}</span>
-    </Typography>
-  </Card>
-);
 
-const Stats: React.FC<{ data: MatchData }> = ({ data }) => (
-  <Card sx={{ bgcolor: alpha("#000000", 0.2), color: 'white', borderRadius: 3, p: 3 }}>
-    <Typography variant="h5" gutterBottom fontWeight="bold">Match Stats</Typography>
-    <Stack spacing={2} mt={2}>
-      <Box>
-        <Typography variant="body2" color="gray" gutterBottom>Possession</Typography>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <LinearProgress 
-            variant="determinate" 
-            value={data.teams.home.stats.possession} 
-            sx={{ 
-              flex: 1,
-              height: 8,
-              borderRadius: 1,
-              bgcolor: 'rgba(255,255,255,0.1)',
-              '& .MuiLinearProgress-bar': {
-                bgcolor: '#3B82F6'
-              }
-            }} 
-          />
-          <Typography variant="body2">{data.teams.home.stats.possession}%</Typography>
-        </Stack>
-      </Box>
-      
-      <Stack spacing={1}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="body2">{data.teams.home.stats.shots}</Typography>
-          <Typography variant="body2" color="gray">Shots</Typography>
-          <Typography variant="body2">{data.teams.away.stats.shots}</Typography>
-        </Box>
-        
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="body2">{data.teams.home.stats.shotsOnTarget}</Typography>
-          <Typography variant="body2" color="gray">Shots on Target</Typography>
-          <Typography variant="body2">{data.teams.away.stats.shotsOnTarget}</Typography>
-        </Box>
-        
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="body2">{data.teams.home.stats.corners}</Typography>
-          <Typography variant="body2" color="gray">Corners</Typography>
-          <Typography variant="body2">{data.teams.away.stats.corners}</Typography>
-        </Box>
-        
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="body2">{data.teams.home.stats.fouls}</Typography>
-          <Typography variant="body2" color="gray">Fouls</Typography>
-          <Typography variant="body2">{data.teams.away.stats.fouls}</Typography>
-        </Box>
-      </Stack>
-    </Stack>
-  </Card>
-);
 
 const Probability: React.FC<{ data: MatchData }> = ({ data }) => (
   <Card sx={{ bgcolor: alpha("#000000", 0.2), color: 'white', p: 3, borderRadius: 3 }}>
@@ -572,8 +565,207 @@ const PredictAndBet: React.FC<{ data: MatchData }> = ({ data }) => (
 
 // --- MAIN PAGE ---
 
+// Match Summary Component
+const MatchSummary: React.FC<{ data: MatchData }> = ({ data }) => {
+  // Find the top 2 batsmen based on runs
+  const topBatsmen = [...data.players.home, ...data.players.away]
+    .filter(player => player.stats?.runs)
+    .sort((a, b) => (b.stats?.runs || 0) - (a.stats?.runs || 0))
+    .slice(0, 2);
+
+  // Find the top 2 bowlers based on wickets and economy
+  const topBowlers = [...data.players.home, ...data.players.away]
+    .filter(player => player.stats?.wickets)
+    .sort((a, b) => {
+      if ((b.stats?.wickets || 0) !== (a.stats?.wickets || 0)) {
+        return (b.stats?.wickets || 0) - (a.stats?.wickets || 0);
+      }
+      return (a.stats?.economy || 999) - (b.stats?.economy || 999);
+    })
+    .slice(0, 2);
+
+  return (
+    <Box sx={{ 
+      mt: 2,
+      p: 2,
+      bgcolor: 'rgba(15, 23, 42, 0.3)',
+      borderRadius: 2,
+      border: '1px solid rgba(59, 130, 246, 0.3)'
+    }}>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="subtitle2" color="gray" sx={{ mb: 1 }}>
+          Day 2, Lunch Break • New Zealand lead by 25 runs
+        </Typography>
+        
+        {/* Score summary */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          <Typography variant="body2">
+            {data.teams.home.name} 149
+          </Typography>
+          <Typography variant="body2">
+            {data.teams.away.name} 174/3 (52)
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Top Batsmen */}
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+          Batting
+        </Typography>
+        <Box sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'minmax(150px, 1fr) repeat(5, auto)', 
+          gap: 1,
+          fontSize: '0.875rem'
+        }}>
+          <Box sx={{ color: 'gray' }}>Batter</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>B</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>4s</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>6s</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>SR</Box>
+          
+          {topBatsmen.map((player, index) => (
+            <React.Fragment key={index}>
+              <Box sx={{ fontWeight: player.isWicketKeeper ? 'bold' : 'normal' }}>
+                {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
+              </Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.balls}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.fours}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.sixes}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.strikeRate?.toFixed(2)}</Box>
+            </React.Fragment>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Top Bowlers */}
+      <Box>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+          Bowling
+        </Typography>
+        <Box sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'minmax(150px, 1fr) repeat(5, auto)', 
+          gap: 1,
+          fontSize: '0.875rem'
+        }}>
+          <Box sx={{ color: 'gray' }}>Bowler</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>O</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>M</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>W</Box>
+          <Box sx={{ color: 'gray', textAlign: 'right' }}>ECON</Box>
+          
+          {topBowlers.map((player, index) => (
+            <React.Fragment key={index}>
+              <Box sx={{ fontWeight: player.isCaptain ? 'bold' : 'normal' }}>
+                {player.name} {player.isCaptain ? '(c)' : ''}
+              </Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.overs}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.maidens}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.wickets}</Box>
+              <Box sx={{ textAlign: 'right' }}>{player.stats?.economy?.toFixed(2)}</Box>
+            </React.Fragment>
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+// Win Probability Component
+const WinProbabilityBar: React.FC<{ data: MatchData }> = ({ data }) => {
+  // Calculate total percentage (home + away + draw)
+  const totalPercentage = data.winProbability.home + data.winProbability.away + (data.bettingOdds.draw > 0 ? 100 - data.winProbability.home - data.winProbability.away : 0);
+  
+  // Calculate draw percentage if it exists
+  const drawPercentage = data.bettingOdds.draw > 0 ? 100 - data.winProbability.home - data.winProbability.away : 0;
+  
+  // Calculate relative percentages for the progress bars
+  const homeWidth = (data.winProbability.home / totalPercentage) * 100;
+  const drawWidth = (drawPercentage / totalPercentage) * 100;
+  const awayWidth = (data.winProbability.away / totalPercentage) * 100;
+
+  // Dominant team (highest probability)
+  const dominantTeam = data.winProbability.home > data.winProbability.away ? 
+    { name: data.teams.home.name, percentage: data.winProbability.home } : 
+    { name: data.teams.away.name, percentage: data.winProbability.away };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      {/* Live win probability section */}
+      <Box sx={{ 
+        p: 2, 
+        bgcolor: 'rgba(15, 23, 42, 0.3)',
+        borderRadius: 2,
+        border: '1px solid rgba(59, 130, 246, 0.3)'
+      }}>
+        
+        {/* Team names and percentages */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          <Typography variant="body2" sx={{ color: '#3B82F6' }}>
+            {data.teams.home.name}
+            <Typography component="span" sx={{ ml: 1, color: '#3B82F6', fontWeight: 'bold' }}>
+              {data.winProbability.home}%
+            </Typography>
+          </Typography>
+          
+          {drawPercentage > 0 && (
+            <Typography variant="body2" sx={{ color: 'gray' }}>
+              Draw
+              <Typography component="span" sx={{ ml: 1, color: 'gray', fontWeight: 'bold' }}>
+                {drawPercentage}%
+              </Typography>
+            </Typography>
+          )}
+          
+          <Typography variant="body2" sx={{ color: '#3B82F6', textAlign: 'right' }}>
+            {data.teams.away.name}
+            <Typography component="span" sx={{ ml: 1, color: '#3B82F6', fontWeight: 'bold' }}>
+              {data.winProbability.away}%
+            </Typography>
+          </Typography>
+        </Box>
+        
+        {/* Progress bar */}
+        <Box sx={{ 
+          display: 'flex', 
+          height: 6, 
+          borderRadius: 3, 
+          overflow: 'hidden',
+          bgcolor: 'rgba(15, 23, 42, 0.5)'
+        }}>
+          <Box sx={{ 
+            width: `${homeWidth}%`, 
+            bgcolor: '#3B82F6', 
+            height: '100%' 
+          }} />
+          
+          {drawPercentage > 0 && (
+            <Box sx={{ 
+              width: `${drawWidth}%`, 
+              bgcolor: '#6B7280', 
+              height: '100%' 
+            }} />
+          )}
+          
+          <Box sx={{ 
+            width: `${awayWidth}%`, 
+            bgcolor: '#3B82F6', 
+            height: '100%' 
+          }} />
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 const MatchDetailPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('live');
+  const [activeTab, setActiveTab] = useState('info');
   const [activeBettingTab, setActiveBettingTab] = useState('Main');
   const [matchData, setMatchData] = useState<MatchData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -587,11 +779,11 @@ const MatchDetailPage: React.FC = () => {
   }, []);
   
       const tabs = [
+      { value: 'info', label: 'Info' },
       { value: 'live', label: 'Live' },
       { value: 'odds', label: 'Odds' },
-      { value: 'card', label: 'Card' },
-      { value: 'comm', label: 'Comm' },
-      { value: 'stats', label: 'Stats' },
+      { value: 'scorecard', label: 'Scorecard' },
+      { value: 'squads', label: 'Squads' },
       { value: 'highlights', label: 'Highlights' },
     ];
 
@@ -619,81 +811,7 @@ const MatchDetailPage: React.FC = () => {
           <>
             {/* Top Section - Always Visible */}
             <TopBar>
-              {/* Team Names & Score */}
-              <Box sx={{ mb: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography variant="h6" fontWeight="bold">{matchData.teams.home.name}</Typography>
-                  </Box>
-                  <LiveBadge badgeContent="●" color="error">
-                    <Typography 
-                      variant="caption" 
-          sx={{
-                        px: 1.5, 
-                        py: 0.5, 
-                        bgcolor: 'error.main', 
-                        borderRadius: 1,
-                        fontWeight: 'bold'
-                      }}
-                    >
-                      LIVE
-                    </Typography>
-                  </LiveBadge>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography variant="h6" fontWeight="bold">{matchData.teams.away.name}</Typography>
-                  </Box>
-                </Box>
 
-                {/* Match Info */}
-                <Box sx={{ textAlign: 'center', mb: 2 }}>
-                  <Typography variant="subtitle2" color="gray">{matchData.league}</Typography>
-                  <Stack 
-                    direction="row" 
-                    spacing={2} 
-                    justifyContent="center" 
-                    alignItems="center"
-                    sx={{ mt: 0.5 }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <LocationOnIcon sx={{ fontSize: 16, color: 'gray' }} />
-                      <Typography variant="caption" color="gray">{matchData.venue}</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <AccessTimeIcon sx={{ fontSize: 16, color: 'gray' }} />
-                      <Typography variant="caption" color="gray">{matchData.timeElapsed}</Typography>
-                    </Box>
-                  </Stack>
-                </Box>
-
-                {/* Score Display */}
-                <Box sx={{ 
-                  bgcolor: 'rgba(15, 23, 42, 0.3)',
-                  borderRadius: 2,
-                  p: 2,
-                  border: '1px solid rgba(59, 130, 246, 0.3)'
-                }}>
-                  <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
-                    <Box sx={{ textAlign: 'center' }}>
-                      <Typography variant="body2" color="gray">{matchData.teams.home.name}</Typography>
-                      <Typography variant="h4" fontWeight="bold">
-                        {matchData.teams.home.score}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ textAlign: 'center' }}>
-                      <Typography variant="caption" color="gray">Time Elapsed</Typography>
-                      <Typography variant="h6" color="primary" fontWeight="bold">
-                        {matchData.timeElapsed}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ textAlign: 'center' }}>
-                      <Typography variant="body2" color="gray">{matchData.teams.away.name}</Typography>
-                      <Typography variant="h4" fontWeight="bold">
-                        {matchData.teams.away.score}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
 
                                           {/* Tab Navigation */}
         <Box
@@ -754,105 +872,362 @@ const MatchDetailPage: React.FC = () => {
 
             {/* Tab Content */}
             <Box sx={{ p: 2 }}>
-              {activeTab === 'live' && (
-                <Stack spacing={2}>
-                  {/* Current Partnership */}
+              {activeTab === 'info' && (
+                <Stack spacing={3}>
+                  {/* Match Info Card */}
                   <Card sx={{ ...commonStyles.card }}>
-                    <CardHeader
-                      title={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <ActivityIcon sx={{ color: '#10B981' }} />
-                          <Typography variant="h6">Current Partnership</Typography>
-                        </Box>
-                      }
-                    />
+                    <CardHeader title={<Typography variant="h6">Match Info</Typography>} />
                     <CardContent>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                        <Typography>{matchData.players.home[0].name} & {matchData.players.home[1].name}</Typography>
-                        <Typography variant="caption" sx={{ 
-                          px: 1.5, 
-                          py: 0.5, 
-                          bgcolor: 'rgba(59, 130, 246, 0.1)', 
+                      <Stack spacing={2}>
+                        {/* Teams and Scores */}
+                        <Box sx={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          p: 2,
+                          bgcolor: 'rgba(15, 23, 42, 0.3)',
                           borderRadius: 1,
-                          border: '1px solid rgba(59, 130, 246, 0.3)'
+                          border: '1px solid rgba(59, 130, 246, 0.2)'
                         }}>
-                          45 (28 balls)
+                          <Box sx={{ textAlign: 'center', flex: 1 }}>
+                            <Avatar 
+                              src={matchData.teams.home.logo} 
+                              alt={matchData.teams.home.name}
+                              sx={{ width: 48, height: 48, mx: 'auto', mb: 1 }}
+                            />
+                            <Typography variant="subtitle1">{matchData.teams.home.name}</Typography>
+                            <Typography variant="h4" fontWeight="bold">
+                              {matchData.teams.home.score}
+                            </Typography>
+                          </Box>
+                          
+                          <Box sx={{ 
+                            mx: 2,
+                            px: 2,
+                          py: 0.5, 
+                            bgcolor: 'error.main',
+                          borderRadius: 1,
+                            alignSelf: 'center'
+                        }}>
+                            <Typography variant="caption" fontWeight="bold" color="white">
+                              LIVE
                         </Typography>
                       </Box>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={65} 
-                        sx={{ 
-                          height: 8, 
-                          borderRadius: 1,
-                          bgcolor: 'rgba(59, 130, 246, 0.1)',
-                          '& .MuiLinearProgress-bar': {
-                            bgcolor: '#3B82F6'
-                          }
-                        }} 
-                      />
-                    </CardContent>
-                  </Card>
-
-                  {/* Current Batters */}
-                  <Card sx={{ ...commonStyles.card }}>
-                    <CardHeader title={<Typography variant="h6">Current Batters</Typography>} />
-                    <CardContent>
-                      <Stack spacing={1.5}>
-                        {matchData.players.home.slice(0, 2).map((player, idx) => (
-                          <Box
-                            key={idx}
-            sx={{ 
-              display: 'flex',
-                              justifyContent: 'space-between',
-                              p: 2,
-                              bgcolor: 'rgba(15, 23, 42, 0.5)',
-                              borderRadius: 1,
-                              border: '1px solid rgba(59, 130, 246, 0.2)'
-                            }}
-                          >
-              <Box>
-                              <Typography variant="subtitle1">{player.name}</Typography>
-                              <Typography variant="caption" color="gray">
-                                {player.stats.runs}* ({player.stats.balls})
-                  </Typography>
-          </Box>
-                            <Box textAlign="right">
-                              <Typography variant="body2">SR: {player.stats.rating}</Typography>
-                              <Typography variant="caption" color="gray">
-                                {player.stats.fours}×4 {player.stats.sixes}×6
-                  </Typography>
-                </Box>
+                          
+                          <Box sx={{ textAlign: 'center', flex: 1 }}>
+                            <Avatar 
+                              src={matchData.teams.away.logo} 
+                              alt={matchData.teams.away.name}
+                              sx={{ width: 48, height: 48, mx: 'auto', mb: 1 }}
+                            />
+                            <Typography variant="subtitle1">{matchData.teams.away.name}</Typography>
+                            <Typography variant="h4" fontWeight="bold">
+                              {matchData.teams.away.score}
+                            </Typography>
                           </Box>
-                        ))}
+                        </Box>
+                        
+
+                        
+                        {/* Match Summary */}
+                        <Box sx={{ 
+                          p: 2,
+                          bgcolor: 'rgba(15, 23, 42, 0.3)',
+                          borderRadius: 1,
+                          border: '1px solid rgba(59, 130, 246, 0.2)'
+                        }}>
+                          <Typography variant="subtitle1" sx={{ mb: 2 }}>Match Summary</Typography>
+                          <Typography variant="body2">
+                            Day 2, Lunch Break • New Zealand lead by 25 runs
+                          </Typography>
+                          <Typography variant="body2" sx={{ mt: 1 }}>
+                            Zimbabwe were bowled out for 149 in their first innings. New Zealand are currently 174/3 with Conway (67*) and Latham (52*) at the crease.
+                          </Typography>
+                        </Box>
                       </Stack>
                     </CardContent>
                   </Card>
-
-                  {/* Last 5 Balls */}
+                  
+                  {/* Top Performers */}
                   <Card sx={{ ...commonStyles.card }}>
-                    <CardHeader title={<Typography variant="h6">Last 5 Balls</Typography>} />
+                    <CardHeader title={<Typography variant="h6">Top Performers</Typography>} />
                     <CardContent>
-                      <Stack direction="row" spacing={1} justifyContent="center">
-                        {['4', '1', '.', '6', '2'].map((ball, idx) => (
-                          <Avatar
+                      <MatchSummary data={matchData} />
+                    </CardContent>
+                  </Card>
+                  
+                                     {/* Win Probability */}
+                   <Card sx={{ ...commonStyles.card }}>
+                     <CardHeader title={<Typography variant="h6">Win Probability</Typography>} />
+                     <CardContent>
+                       <WinProbabilityBar data={matchData} />
+                     </CardContent>
+                   </Card>
+                   
+                   {/* Match Details */}
+                   <Card sx={{ ...commonStyles.card }}>
+                     <CardHeader title={<Typography variant="h6">Match Details</Typography>} />
+                     <CardContent>
+                       <Stack spacing={1.5}>
+                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                           <Typography variant="body2" color="gray">Tournament</Typography>
+                           <Typography variant="body2">{matchData.league}</Typography>
+                         </Box>
+                         <Divider sx={{ borderColor: 'rgba(59, 130, 246, 0.2)' }} />
+                         
+                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                           <Typography variant="body2" color="gray">Venue</Typography>
+                           <Typography variant="body2">{matchData.venue}</Typography>
+                         </Box>
+                         <Divider sx={{ borderColor: 'rgba(59, 130, 246, 0.2)' }} />
+                         
+                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                           <Typography variant="body2" color="gray">Date & Time</Typography>
+                           <Typography variant="body2">{matchData.dateTime}</Typography>
+                         </Box>
+                         <Divider sx={{ borderColor: 'rgba(59, 130, 246, 0.2)' }} />
+                         
+                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                           <Typography variant="body2" color="gray">Status</Typography>
+                           <Typography variant="body2" color="error.main" fontWeight="bold">{matchData.status}</Typography>
+                         </Box>
+                       </Stack>
+                     </CardContent>
+                   </Card>
+                  </Stack>
+                )}
+              
+              {activeTab === 'live' && (
+                <Stack spacing={2}>
+                  {/* Last 20 Overs - Compact View */}
+                  <Card sx={{ ...commonStyles.card }}>
+                    <CardHeader 
+                      title={<Typography variant="h6" sx={{ fontWeight: 600 }}>Last 20 Overs</Typography>} 
+                      sx={{ pb: 1 }}
+                    />
+                    <CardContent sx={{ pt: 0 }}>
+                      <Box sx={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(5, 1fr)', 
+                        gap: 1.5, 
+                        mb: 3,
+                        p: 1,
+                        bgcolor: 'rgba(15, 23, 42, 0.2)',
+                        borderRadius: 1,
+                        border: '1px solid rgba(59, 130, 246, 0.1)'
+                      }}>
+                        {Array.from({ length: 20 }, (_, i) => {
+                          const overRuns = [8, 12, 6, 15, 9, 7, 11, 4, 13, 8, 10, 5, 14, 6, 9, 12, 7, 8, 11, 6][i];
+                          const ballRuns = [
+                            [1,2,0,4,1,0], [6,1,0,4,1,0], [1,1,0,2,1,1], [4,6,1,0,4,0], [2,1,4,1,1,0],
+                            [1,0,2,1,2,1], [4,1,0,6,0,0], [1,0,1,1,0,1], [6,1,4,1,1,0], [2,1,1,2,1,1],
+                            [4,0,2,1,2,1], [1,1,0,1,1,1], [6,2,4,1,1,0], [1,1,1,1,1,1], [2,1,4,1,1,0],
+                            [4,1,0,6,1,0], [1,2,1,1,1,1], [2,1,1,2,1,1], [4,1,6,0,0,0], [1,1,1,1,1,1]
+                          ][i];
+                          
+                          return (
+                            <Box key={i} sx={{ 
+                              textAlign: 'center',
+                              p: 1,
+                              borderRadius: 1,
+                              bgcolor: 'rgba(15, 23, 42, 0.3)',
+                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(59, 130, 246, 0.1)',
+                                border: '1px solid rgba(59, 130, 246, 0.3)',
+                                transform: 'translateY(-1px)'
+                              }
+                            }}>
+                              <Box sx={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                mb: 1,
+                                px: 0.5
+                              }}>
+                                <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>
+                                  O{i+1}
+                                </Typography>
+                                <Typography variant="caption" fontWeight="bold" color="primary" sx={{ fontSize: '0.75rem' }}>
+                                  {overRuns}
+                                </Typography>
+                              </Box>
+                              <Box sx={{ 
+                                display: 'flex', 
+                                gap: 0.3, 
+                                justifyContent: 'center',
+                                flexWrap: 'wrap',
+                                maxWidth: '100%'
+                              }}>
+                                {ballRuns.map((runs, idx) => (
+                                  <Box
+                                    key={idx}
+                                    sx={{
+                                      width: 18,
+                                      height: 18,
+                                      borderRadius: '50%',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      bgcolor: runs === 4 ? '#10B981' : 
+                                              runs === 6 ? '#8B5CF6' : 
+                                              runs === 0 ? '#6B7280' : '#3B82F6',
+                                      color: 'white',
+                                      fontWeight: 'bold',
+                                      fontSize: '0.65rem',
+                                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                                      border: '1px solid rgba(255,255,255,0.1)'
+                                    }}
+                                  >
+                                    {runs === 0 ? '.' : runs}
+                                  </Box>
+                                ))}
+                              </Box>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                      
+                      <Divider sx={{ my: 2, borderColor: 'rgba(59, 130, 246, 0.2)' }} />
+                      
+                      <Box sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center',
+                        p: 1.5,
+                        bgcolor: 'rgba(15, 23, 42, 0.2)',
+                        borderRadius: 1,
+                        border: '1px solid rgba(59, 130, 246, 0.1)'
+                      }}>
+                        <Typography variant="body2" color="gray" sx={{ fontWeight: 500 }}>
+                          Total: <span style={{ color: '#3B82F6', fontWeight: 'bold' }}>180 runs</span> from last 20 overs
+                        </Typography>
+                        <Typography variant="body2" color="gray" sx={{ fontWeight: 500 }}>
+                          RR: <span style={{ color: '#10B981', fontWeight: 'bold' }}>9.0</span> | SR: <span style={{ color: '#8B5CF6', fontWeight: 'bold' }}>112.5</span>
+                        </Typography>
+                      </Box>
+                      
+                      <Box sx={{ 
+                        mt: 2, 
+                        display: 'flex', 
+                        gap: 3, 
+                        justifyContent: 'center',
+                        p: 1.5,
+                        bgcolor: 'rgba(15, 23, 42, 0.1)',
+                        borderRadius: 1,
+                        border: '1px solid rgba(59, 130, 246, 0.1)'
+                      }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                          <Box sx={{ 
+                            width: 10, 
+                            height: 10, 
+                            borderRadius: '50%', 
+                            bgcolor: '#3B82F6',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                          }} />
+                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>1-3</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                          <Box sx={{ 
+                            width: 10, 
+                            height: 10, 
+                            borderRadius: '50%', 
+                            bgcolor: '#10B981',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                          }} />
+                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>4</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                          <Box sx={{ 
+                            width: 10, 
+                            height: 10, 
+                            borderRadius: '50%', 
+                            bgcolor: '#8B5CF6',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                          }} />
+                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>6</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                          <Box sx={{ 
+                            width: 10, 
+                            height: 10, 
+                            borderRadius: '50%', 
+                            bgcolor: '#6B7280',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                          }} />
+                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>0</Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+
+                  {/* Match Stats */}
+                  <Card sx={{ ...commonStyles.card }}>
+                    <CardHeader title={<Typography variant="h6">Match Stats</Typography>} />
+                    <CardContent>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                        <Box sx={{ textAlign: 'center', flex: 1 }}>
+                          <Typography variant="caption" color="gray">Current Run Rate</Typography>
+                          <Typography variant="h5" fontWeight="bold">4.2</Typography>
+                                </Box>
+                        <Box sx={{ textAlign: 'center', flex: 1 }}>
+                          <Typography variant="caption" color="gray">Required Run Rate</Typography>
+                          <Typography variant="h5" fontWeight="bold">5.8</Typography>
+                            </Box>
+                          </Box>
+                      
+                      <Divider sx={{ my: 2 }} />
+                      
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box sx={{ textAlign: 'center', flex: 1 }}>
+                          <Typography variant="caption" color="gray">Boundaries</Typography>
+                          <Typography variant="h5" fontWeight="bold">12 / 6</Typography>
+                          <Typography variant="caption" color="gray">Fours / Sixes</Typography>
+                        </Box>
+                        <Box sx={{ textAlign: 'center', flex: 1 }}>
+                          <Typography variant="caption" color="gray">Last 5 overs</Typography>
+                          <Typography variant="h5" fontWeight="bold">32/2</Typography>
+                          <Typography variant="caption" color="gray">Runs / Wickets</Typography>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+
+                  {/* Commentary Section */}
+                  <Card sx={{ ...commonStyles.card }}>
+                    <CardHeader title={<Typography variant="h6">Live Commentary</Typography>} />
+                    <CardContent>
+                      <Stack spacing={1.5}>
+                        {matchData.commentary.slice(0, 5).map((comment, idx) => (
+                          <Box
                             key={idx}
             sx={{ 
-                              bgcolor: ball === '4' 
-                                ? '#10B981' 
-                                : ball === '6'
-                                  ? '#8B5CF6'
-                                  : ball === '.'
-                                    ? '#6B7280'
-                                    : '#3B82F6',
-                              width: 36,
-                              height: 36,
-                              fontSize: '0.875rem',
-                              fontWeight: 'bold'
+                              p: 2,
+                              borderRadius: 1,
+                              bgcolor: comment.type === 'goal' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(15, 23, 42, 0.3)',
+                              border: comment.type === 'goal' ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(59, 130, 246, 0.2)'
                             }}
                           >
-                            {ball}
-                          </Avatar>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                              <Typography
+                                variant="caption"
+                                sx={{ fontWeight: 'bold', color: comment.type === 'goal' ? '#10B981' : 'gray' }}
+                              >
+                                {comment.time}
+                  </Typography>
+                              {comment.type === 'goal' && (
+                                <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#10B981' }}>
+                                  BOUNDARY
+                  </Typography>
+                              )}
+                </Box>
+                            <Typography variant="body2">{comment.text}</Typography>
+                          </Box>
                         ))}
                       </Stack>
                     </CardContent>
@@ -870,44 +1245,62 @@ const MatchDetailPage: React.FC = () => {
                     mb: 1
                   }}>
                     <Box sx={{
-                      ...commonStyles.card,
-                      p: 2,
+                      p: 2.5,
                       textAlign: 'center',
-                      bgcolor: alpha(themeColors.success, 0.1),
-                      border: `1px solid ${alpha(themeColors.success, 0.2)}`
+                      bgcolor: 'transparent',
+                      border: '1px solid rgba(51, 65, 85, 0.4)',
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-1px)',
+                        border: '1px solid rgba(51, 65, 85, 0.6)',
+                        bgcolor: 'rgba(51, 65, 85, 0.1)'
+                      }
                     }}>
-                      <Typography variant="h4" sx={{ color: themeColors.success, mb: 1 }}>
+                      <Typography variant="h3" sx={{ color: '#E2E8F0', mb: 1, fontWeight: 700 }}>
                         85%
                       </Typography>
-                      <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                      <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>
                         Win Probability
                       </Typography>
                     </Box>
                     <Box sx={{
-                      ...commonStyles.card,
-                      p: 2,
+                      p: 2.5,
                       textAlign: 'center',
-                      bgcolor: alpha(themeColors.warning, 0.1),
-                      border: `1px solid ${alpha(themeColors.warning, 0.2)}`
+                      bgcolor: 'transparent',
+                      border: '1px solid rgba(51, 65, 85, 0.4)',
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-1px)',
+                        border: '1px solid rgba(51, 65, 85, 0.6)',
+                        bgcolor: 'rgba(51, 65, 85, 0.1)'
+                      }
                     }}>
-                      <Typography variant="h4" sx={{ color: themeColors.warning, mb: 1 }}>
+                      <Typography variant="h3" sx={{ color: '#E2E8F0', mb: 1, fontWeight: 700 }}>
                         2.85
                       </Typography>
-                      <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                      <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>
                         Best Odds
                       </Typography>
                     </Box>
                     <Box sx={{
-                      ...commonStyles.card,
-                      p: 2,
+                      p: 2.5,
                       textAlign: 'center',
-                      bgcolor: alpha(themeColors.purple, 0.1),
-                      border: `1px solid ${alpha(themeColors.purple, 0.2)}`
+                      bgcolor: 'transparent',
+                      border: '1px solid rgba(51, 65, 85, 0.4)',
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-1px)',
+                        border: '1px solid rgba(51, 65, 85, 0.6)',
+                        bgcolor: 'rgba(51, 65, 85, 0.1)'
+                      }
                     }}>
-                      <Typography variant="h4" sx={{ color: themeColors.purple, mb: 1 }}>
+                      <Typography variant="h3" sx={{ color: '#E2E8F0', mb: 1, fontWeight: 700 }}>
                         12K
                       </Typography>
-                      <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                      <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>
                         Active Bets
                       </Typography>
                     </Box>
@@ -915,41 +1308,44 @@ const MatchDetailPage: React.FC = () => {
 
                   {/* Betting Type Tabs */}
                   <Box sx={{ 
-              display: 'flex',
-                    gap: 1.5,
-                    p: 1.5,
-                    bgcolor: alpha(themeColors.surface, 0.7),
+                    display: 'flex',
+                    gap: 1,
+                    p: 1,
+                    bgcolor: 'rgba(30, 41, 59, 0.6)',
                     borderRadius: 2,
-                    border: `1px solid ${themeColors.border}`,
+                    border: '1px solid rgba(51, 65, 85, 0.4)',
                     backdropFilter: 'blur(12px)',
-                    boxShadow: `0 4px 20px ${alpha(themeColors.background, 0.2)}`
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
                   }}>
                     {['Main', 'Match', 'Fancy'].map((type) => (
-                    <Button
+                      <Button
                         key={type}
                         onClick={() => setActiveBettingTab(type)}
-                      sx={{
+                        sx={{
                           flex: 1,
-                          py: 1.5,
-                          ...commonStyles.button,
+                          py: 2,
+                          px: 3,
                           bgcolor: type === activeBettingTab 
-                            ? `${themeColors.primary} !important`
-                            : alpha(themeColors.surface, 0.5),
+                            ? '#475569'
+                            : 'transparent',
                           color: type === activeBettingTab 
-                            ? themeColors.text.primary 
-                            : themeColors.text.secondary,
+                            ? '#F8FAFC' 
+                            : '#94A3B8',
                           border: `1px solid ${type === activeBettingTab 
                             ? 'transparent' 
-                            : themeColors.border}`,
-                          backdropFilter: 'blur(8px)',
+                            : 'rgba(51, 65, 85, 0.4)'}`,
+                          borderRadius: 1.5,
                           fontWeight: type === activeBettingTab ? 600 : 500,
                           letterSpacing: '0.5px',
+                          transition: 'all 0.3s ease',
                           '&:hover': {
                             bgcolor: type === activeBettingTab 
-                              ? themeColors.primary 
-                              : alpha(themeColors.primary, 0.1),
+                              ? '#334155' 
+                              : 'rgba(51, 65, 85, 0.2)',
                             transform: 'translateY(-1px)',
-                            boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
+                            boxShadow: type === activeBettingTab 
+                              ? '0 4px 12px rgba(51, 65, 85, 0.4)'
+                              : '0 2px 8px rgba(51, 65, 85, 0.3)'
                           }
                         }}
                       >
@@ -961,74 +1357,100 @@ const MatchDetailPage: React.FC = () => {
                   {activeBettingTab === 'Main' && (
                     <>
                       {/* Match Winner Section */}
-                  <Card sx={{ 
-                    ...commonStyles.card,
-                    bgcolor: alpha(themeColors.surface, 0.7),
-                    backdropFilter: 'blur(12px)',
-                    '&:hover': {
-                      transform: 'translateY(-2px)',
-                      boxShadow: `0 8px 24px ${alpha(themeColors.primary, 0.15)}`
-                    }
-                  }}>
-                    <CardHeader 
-                      title={
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <TrophyIcon sx={{ color: themeColors.warning }} />
-                          <Typography variant="h6" sx={{ 
-                            color: themeColors.text.primary,
-                        fontWeight: 600,
-                            letterSpacing: '0.5px'
-                          }}>
-                            Match Winner
-                          </Typography>
-                        </Stack>
-                      }
-                      sx={{ 
-                        bgcolor: alpha(themeColors.secondary, 0.5),
-                        borderBottom: `1px solid ${themeColors.border}`,
-                        py: 2
-                      }}
-                    />
-                    <CardContent>
-                      <Stack spacing={2}>
-                        {/* India Women */}
-                        <Box sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          ...commonStyles.gridItem,
-                          bgcolor: themeColors.surface
-                        }}>
-                          <Typography variant="body1" sx={{ color: 'white' }}>
-                            India Women
-                          </Typography>
-                          <Stack direction="row" spacing={1}>
-                            <Button
-                                                  variant="contained"
-                    size="small"
-                    sx={{
-                      ...commonStyles.button,
-                      bgcolor: themeColors.primary,
-                      color: themeColors.text.primary,
+                      <Card sx={{ 
+                        bgcolor: 'rgba(30, 41, 59, 0.7)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(51, 65, 85, 0.4)',
+                        borderRadius: 2,
+                        transition: 'all 0.3s ease',
                         '&:hover': {
-                        bgcolor: alpha(themeColors.primary, 0.9),
-                        transform: 'translateY(-1px)',
-                        boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
-                      }
-                              }}
-                            >
-                              Back 2.85
-                    </Button>
-                                                            <Button
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 8px 24px rgba(30, 41, 59, 0.4)'
+                        }
+                      }}>
+                        <CardHeader 
+                          title={
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <Box sx={{ 
+                                p: 1, 
+                                bgcolor: 'rgba(51, 65, 85, 0.4)', 
+                                borderRadius: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}>
+                                <TrophyIcon sx={{ color: '#E2E8F0', fontSize: 24 }} />
+                              </Box>
+                              <Typography variant="h6" sx={{ 
+                                color: '#F8FAFC',
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                              }}>
+                                Match Winner
+                              </Typography>
+                            </Stack>
+                          }
+                          sx={{ 
+                            bgcolor: 'rgba(30, 41, 59, 0.8)',
+                            borderBottom: '1px solid rgba(51, 65, 85, 0.4)',
+                            py: 2.5
+                          }}
+                        />
+                        <CardContent sx={{ p: 3 }}>
+                          <Stack spacing={2.5}>
+                            {/* India Women */}
+                            <Box sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              p: 2.5,
+                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              borderRadius: 1.5,
+                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                              }
+                            }}>
+                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
+                                India Women
+                              </Typography>
+                              <Stack direction="row" spacing={1.5}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
                                   sx={{
-                                    ...commonStyles.button,
-                                    bgcolor: themeColors.error,
-                                    color: themeColors.text.primary,
-                                    minWidth: 100,
+                                    bgcolor: '#3B82F6',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: alpha(themeColors.error, 0.9),
+                                      bgcolor: '#2563EB',
                                       transform: 'translateY(-1px)',
-                                      boxShadow: `0 4px 12px ${alpha(themeColors.error, 0.2)}`
+                                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  Back 2.85
+                                </Button>
+                                <Button
+                                  sx={{
+                                    bgcolor: '#6B7280',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 80,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#4B5563',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
                                     }
                                   }}
                                 >
@@ -1037,152 +1459,254 @@ const MatchDetailPage: React.FC = () => {
                                     <Typography variant="caption">2.9</Typography>
                                   </Stack>
                                 </Button>
-                          </Stack>
-                        </Box>
+                              </Stack>
+                            </Box>
 
-                        {/* Australia Women */}
-                        <Box sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          ...commonStyles.gridItem,
-                          bgcolor: themeColors.surface
-                        }}>
-                          <Typography variant="body1" sx={{ color: 'white' }}>
-                            Australia Women
-                          </Typography>
-                          <Stack direction="row" spacing={1}>
-                            <Button
-                                                  variant="contained"
-                    size="small"
-                    sx={{
-                      ...commonStyles.button,
-                      bgcolor: themeColors.primary,
-                      color: themeColors.text.primary,
-                      '&:hover': {
-                        bgcolor: alpha(themeColors.primary, 0.9),
-                        transform: 'translateY(-1px)',
-                        boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
-                      }
-                              }}
-                            >
-                              Back 1.45
-                            </Button>
-                            <Button
-                              variant="contained"
-                              size="small"
-                              sx={{
-                                bgcolor: 'rgba(255, 255, 255, 0.1)',
-                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
-                              }}
-                            >
-                              Lay 1.47
-                            </Button>
+                            {/* Australia Women */}
+                            <Box sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              p: 2.5,
+                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              borderRadius: 1.5,
+                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                              }
+                            }}>
+                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
+                                Australia Women
+                              </Typography>
+                              <Stack direction="row" spacing={1.5}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: '#3B82F6',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#2563EB',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  Back 1.45
+                                </Button>
+                                <Button
+                                  sx={{
+                                    bgcolor: '#6B7280',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 80,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#4B5563',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  <Stack alignItems="center" spacing={0.5}>
+                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
+                                    <Typography variant="caption">1.47</Typography>
+                                  </Stack>
+                                </Button>
+                              </Stack>
+                            </Box>
                           </Stack>
-                        </Box>
-                      </Stack>
-                    </CardContent>
-                  </Card>
+                        </CardContent>
+                      </Card>
 
                   {/* Toss Winner Section */}
-                  <Card sx={{ ...commonStyles.card }}>
-                    <CardHeader 
-                      title={
-                        <Typography variant="h6" sx={{ color: 'white' }}>
-                          Toss Winner
-                        </Typography>
-                      }
-                      sx={{ 
-                        bgcolor: '#3B82F6',
-                        py: 1.5
-                      }}
-                    />
-                    <CardContent>
-                      <Stack spacing={2}>
-                        {/* India Women */}
-                        <Box sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          ...commonStyles.gridItem,
-                          bgcolor: themeColors.surface
-                        }}>
-                          <Typography variant="body1" sx={{ color: 'white' }}>
-                            India Women
-                          </Typography>
-                          <Stack direction="row" spacing={1}>
-                            <Button
-                                                  variant="contained"
-                    size="small"
-                    sx={{
-                      ...commonStyles.button,
-                      bgcolor: themeColors.primary,
-                      color: themeColors.text.primary,
-                      '&:hover': {
-                        bgcolor: alpha(themeColors.primary, 0.9),
-                        transform: 'translateY(-1px)',
-                        boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
-                      }
-                              }}
-                            >
-                              Back 1.95
-                            </Button>
-                            <Button
-                              variant="contained"
-                              size="small"
-                              sx={{
-                                bgcolor: 'rgba(255, 255, 255, 0.1)',
-                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
-                              }}
-                            >
-                              Lay 1.98
-                            </Button>
-                          </Stack>
-                        </Box>
+                      <Card sx={{ 
+                        bgcolor: 'rgba(15, 23, 42, 0.4)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(59, 130, 246, 0.2)',
+                        borderRadius: 2,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 8px 24px rgba(59, 130, 246, 0.15)'
+                        }
+                      }}>
+                        <CardHeader 
+                          title={
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <Box sx={{ 
+                                p: 1, 
+                                bgcolor: 'rgba(59, 130, 246, 0.2)', 
+                                borderRadius: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}>
+                                <Box sx={{ 
+                                  width: 16, 
+                                  height: 16, 
+                                  borderRadius: '50%', 
+                                  bgcolor: '#3B82F6',
+                                  border: '2px solid white'
+                                }} />
+                              </Box>
+                              <Typography variant="h6" sx={{ 
+                                color: 'white',
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                              }}>
+                                Toss Winner
+                              </Typography>
+                            </Stack>
+                          }
+                          sx={{ 
+                            bgcolor: 'rgba(15, 23, 42, 0.6)',
+                            borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
+                            py: 2.5
+                          }}
+                        />
+                        <CardContent sx={{ p: 3 }}>
+                          <Stack spacing={2.5}>
+                            {/* India Women */}
+                            <Box sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              p: 2.5,
+                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              borderRadius: 1.5,
+                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                              }
+                            }}>
+                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
+                                India Women
+                              </Typography>
+                              <Stack direction="row" spacing={1.5}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: '#3B82F6',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#2563EB',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  Back 1.95
+                                </Button>
+                                <Button
+                                  sx={{
+                                    bgcolor: '#6B7280',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 80,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#4B5563',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  <Stack alignItems="center" spacing={0.5}>
+                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
+                                    <Typography variant="caption">1.98</Typography>
+                                  </Stack>
+                                </Button>
+                              </Stack>
+                            </Box>
 
-                        {/* Australia Women */}
-                        <Box sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          ...commonStyles.gridItem,
-                          bgcolor: themeColors.surface
-                        }}>
-                          <Typography variant="body1" sx={{ color: 'white' }}>
-                            Australia Women
-                          </Typography>
-                          <Stack direction="row" spacing={1}>
-                            <Button
-                                                  variant="contained"
-                    size="small"
-                    sx={{
-                      ...commonStyles.button,
-                      bgcolor: themeColors.primary,
-                      color: themeColors.text.primary,
-                      '&:hover': {
-                        bgcolor: alpha(themeColors.primary, 0.9),
-                        transform: 'translateY(-1px)',
-                        boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
-                      }
-                              }}
-                            >
-                              Back 1.85
-                            </Button>
-                            <Button
-                              variant="contained"
-                              size="small"
-                              sx={{
-                                bgcolor: 'rgba(255, 255, 255, 0.1)',
-                                '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
-                              }}
-                            >
-                              Lay 1.88
-                            </Button>
+                            {/* Australia Women */}
+                            <Box sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              p: 2.5,
+                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              borderRadius: 1.5,
+                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                              }
+                            }}>
+                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
+                                Australia Women
+                              </Typography>
+                              <Stack direction="row" spacing={1.5}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: '#3B82F6',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#2563EB',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  Back 1.85
+                                </Button>
+                                <Button
+                                  sx={{
+                                    bgcolor: '#6B7280',
+                                    color: 'white',
+                                    px: 2.5,
+                                    py: 1,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 80,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: '#4B5563',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  <Stack alignItems="center" spacing={0.5}>
+                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
+                                    <Typography variant="caption">1.88</Typography>
+                                  </Stack>
+                                </Button>
+                              </Stack>
+                            </Box>
                           </Stack>
-                        </Box>
-                      </Stack>
-                    </CardContent>
-                  </Card>
+                        </CardContent>
+                      </Card>
                     </>
                   )}
 
@@ -1682,8 +2206,7 @@ const MatchDetailPage: React.FC = () => {
                       <Card sx={{ bgcolor: 'rgba(234, 179, 8, 0.2)', border: '1px solid rgba(234, 179, 8, 0.3)', mt: 2 }}>
                         <CardHeader 
                           title={
-                            <Stack direction="row" spacing={1} alignItems="center">
-                              <Typography variant="h6" sx={{ color: 'white' }}>⚡</Typography>
+                            <Stack direction="row" spacing={1} alignItems="center"> 
                               <Typography variant="h6" sx={{ color: 'white' }}>
                                 Quick Bets - Next Ball
                               </Typography>
@@ -2010,91 +2533,21 @@ const MatchDetailPage: React.FC = () => {
                 </Stack>
               )}
 
-              {activeTab === 'card' && (
+              {activeTab === 'scorecard' && (
                 <Stack spacing={3}>
-                  {/* Match Info Card */}
+                  {/* First Innings */}
                   <Card sx={{ ...commonStyles.card }}>
                     <Box sx={{
                       p: 2,
                       bgcolor: alpha(themeColors.surface, 0.7),
                       borderBottom: `1px solid ${themeColors.border}`
                     }}>
-                      <Stack spacing={2}>
-                        {/* Match Status */}
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                           <Typography variant="h6" sx={{ color: themeColors.text.primary }}>
-                            Women's T20I • Match 3
+                          {matchData.teams.home.name} - 1st Innings
                           </Typography>
-                          <Box sx={{
-                            px: 2,
-                            py: 0.5,
-                            bgcolor: alpha(themeColors.error, 0.1),
-                            border: `1px solid ${alpha(themeColors.error, 0.3)}`,
-                            borderRadius: 1
-                          }}>
-                            <Typography variant="caption" sx={{ color: themeColors.error, fontWeight: 600 }}>
-                              LIVE
-                            </Typography>
-                          </Box>
-                        </Stack>
-
-                        {/* Venue & Time */}
-                        <Stack direction="row" spacing={3}>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <LocationOnIcon sx={{ color: themeColors.text.secondary, fontSize: 18 }} />
-                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                              Brabourne Stadium, Mumbai
-                            </Typography>
-                          </Stack>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <AccessTimeIcon sx={{ color: themeColors.text.secondary, fontSize: 18 }} />
-                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                              Today, 7:30 PM IST
-                            </Typography>
-                          </Stack>
-                        </Stack>
-
-                        {/* Match Summary */}
-                        <Box sx={{
-                          mt: 1,
-                          p: 2,
-                          bgcolor: alpha(themeColors.primary, 0.05),
-                          border: `1px solid ${alpha(themeColors.primary, 0.2)}`,
-                          borderRadius: 1
-                        }}>
-                          <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
-                            Australia Women need 54 runs in 47 balls at 6.89 RPO
-                          </Typography>
-                        </Box>
-
-                        {/* Toss & Other Details */}
-                        <Stack spacing={0.5}>
-                          <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                            Toss: Australia Women, elected to bowl first
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                            Series: 5-match T20I series level 1-1
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                            Points: India Women 2, Australia Women 2
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </Box>
-                  </Card>
-                  {/* India Women Innings */}
-                  <Card sx={{ ...commonStyles.card }}>
-                    <Box sx={{
-                      p: 2,
-                      bgcolor: alpha(themeColors.surface, 0.7),
-                      borderBottom: `1px solid ${themeColors.border}`
-                    }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center">
                         <Typography variant="h6" sx={{ color: themeColors.text.primary }}>
-                          India Women
-                        </Typography>
-                        <Typography variant="h6" sx={{ color: themeColors.text.primary }}>
-                          142/4 (18.3 ov)
+                          149 all out (52.5 ov)
                         </Typography>
                       </Stack>
                     </Box>
@@ -2103,102 +2556,138 @@ const MatchDetailPage: React.FC = () => {
                       {/* Batting Headers */}
                       <Box sx={{
                         display: 'grid',
-                        gridTemplateColumns: '2fr 60px 60px 60px 60px 80px 1fr',
-                        gap: 2,
+                        gridTemplateColumns: '2fr 40px 40px 40px 40px 60px 1fr',
+                        gap: 1,
                         mb: 1,
                         px: 1
                       }}>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Batting</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Batter</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>R</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>B</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>4s</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>6s</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>S/R</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>SR</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Dismissal</Typography>
                       </Box>
 
                       {/* Batters */}
-                      <Stack spacing={1.5}>
-                        {/* S Mandhana */}
-                                                  <Box sx={{
+                      <Stack spacing={0.5}>
+                        {matchData.players.home.slice(0, 4).map((player, idx) => (
+                          <Box
+                            key={idx}
+                            sx={{
                           display: 'grid',
-                          gridTemplateColumns: '2fr 60px 60px 60px 60px 80px 1fr',
-                          gap: 2,
+                              gridTemplateColumns: '2fr 40px 40px 40px 40px 60px 1fr',
+                              gap: 1,
                           p: 1,
                           borderRadius: 1,
-                          bgcolor: alpha(themeColors.error, 0.02),
-                          '&:hover': { bgcolor: alpha(themeColors.error, 0.05) }
-                        }}>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography sx={{ color: themeColors.text.primary }}>S Mandhana</Typography>
-                            <Box sx={{
-                              px: 1,
-                              bgcolor: alpha(themeColors.error, 0.1),
-                              border: `1px solid ${alpha(themeColors.error, 0.3)}`,
-                              borderRadius: 0.5
-                            }}>
-                              <Typography variant="caption" sx={{ color: themeColors.error }}>OUT</Typography>
+                              bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
+                              '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
+                            }}
+                          >
+                            <Box>
+                              <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
+                                {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
+                              </Typography>
                             </Box>
-                          </Stack>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>52</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>38</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>6</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>2</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>136.8</Typography>
-                          <Typography sx={{ color: themeColors.text.secondary }}>c Perry b Schutt</Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.runs || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.balls || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.fours || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.sixes || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.strikeRate?.toFixed(2) || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                              {idx === 0 ? 'c Conway b Muzarabani' : idx === 1 ? 'b Raza' : idx === 2 ? 'lbw b Muzarabani' : 'not out'}
+                            </Typography>
                         </Box>
-
-                        {/* H Kaur */}
-                        <Box sx={{
-                          display: 'grid',
-                          gridTemplateColumns: '2fr 60px 60px 60px 60px 80px',
-                          gap: 2,
-                          p: 1,
-                          borderRadius: 1,
-                          '&:hover': { bgcolor: alpha(themeColors.surface, 0.5) }
-                        }}>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography sx={{ color: themeColors.text.primary }}>H Kaur</Typography>
-                            <Box sx={{
-                              px: 1,
-                              bgcolor: alpha(themeColors.error, 0.1),
-                              border: `1px solid ${alpha(themeColors.error, 0.3)}`,
-                              borderRadius: 0.5
-                            }}>
-                              <Typography variant="caption" sx={{ color: themeColors.error }}>OUT</Typography>
-                            </Box>
-                          </Stack>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>28</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>24</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>3</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>1</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>116.7</Typography>
-                        </Box>
+                        ))}
                       </Stack>
 
                       {/* Extras & Total */}
                       <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${themeColors.border}` }}>
                         <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                          Extras: 8 (b 2, lb 3, w 3)
+                          Extras: 12 (b 4, lb 5, w 2, nb 1)
                         </Typography>
                         <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                          Total: 142/4 (18.3 ov)
+                          Total: 149 all out (52.5 ov)
                         </Typography>
+                        <Typography variant="body2" sx={{ color: themeColors.text.secondary, mt: 1 }}>
+                          Fall of wickets: 1-23 (Curran, 8.2 ov), 2-45 (Bennett, 15.3 ov), 3-67 (Welch, 22.1 ov), 4-98 (Williams, 32.4 ov)
+                        </Typography>
+                      </Box>
                       </Box>
 
-                      {/* Yet to bat */}
-                      <Box sx={{ mt: 2 }}>
-                        <Typography variant="body2" sx={{ color: themeColors.text.secondary, mb: 1 }}>
-                          Yet to bat
+                    {/* Bowling Section */}
+                    <Box sx={{ p: 2, borderTop: `1px solid ${themeColors.border}` }}>
+                      <Typography variant="subtitle1" sx={{ mb: 2, color: themeColors.text.primary }}>
+                        Bowling
                         </Typography>
+                      
+                      {/* Bowling Headers */}
+                      <Box sx={{
+                        display: 'grid',
+                        gridTemplateColumns: '2fr 40px 40px 40px 40px 60px',
+                        gap: 1,
+                        mb: 1,
+                        px: 1
+                      }}>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Bowler</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>O</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>M</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>R</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>W</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>ECON</Typography>
+                      </Box>
+
+                      {/* Bowlers */}
+                      <Stack spacing={0.5}>
+                        {matchData.players.away.slice(0, 2).map((player, idx) => (
+                          <Box
+                            key={idx}
+                            sx={{
+                              display: 'grid',
+                              gridTemplateColumns: '2fr 40px 40px 40px 40px 60px',
+                              gap: 1,
+                              p: 1,
+                              borderRadius: 1,
+                              bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
+                              '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
+                            }}
+                          >
                         <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
-                          J Rodrigues • R Ghosh • D Sharma • S Rana • R Yadav • M Joshi
+                              {player.name} {player.isCaptain ? '(c)' : ''}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.overs || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.maidens || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.runs || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.wickets || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.economy?.toFixed(2) || 0}
                         </Typography>
                       </Box>
+                        ))}
+                      </Stack>
                     </Box>
                   </Card>
 
-                  {/* Australia Women Innings */}
+                  {/* Second Innings */}
                   <Card sx={{ ...commonStyles.card }}>
                     <Box sx={{
                       p: 2,
@@ -2207,10 +2696,10 @@ const MatchDetailPage: React.FC = () => {
                     }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center">
                         <Typography variant="h6" sx={{ color: themeColors.text.primary }}>
-                          Australia Women
+                          {matchData.teams.away.name} - 1st Innings
                         </Typography>
                         <Typography variant="h6" sx={{ color: themeColors.text.primary }}>
-                          89/2 (12.1 ov)
+                          174/3 (52.0 ov)
                         </Typography>
                       </Stack>
                     </Box>
@@ -2219,132 +2708,87 @@ const MatchDetailPage: React.FC = () => {
                       {/* Batting Headers */}
                       <Box sx={{
                         display: 'grid',
-                        gridTemplateColumns: '2fr 60px 60px 60px 60px 80px 1fr',
-                        gap: 2,
+                        gridTemplateColumns: '2fr 40px 40px 40px 40px 60px 1fr',
+                        gap: 1,
                         mb: 1,
                         px: 1
                       }}>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Batting</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Batter</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>R</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>B</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>4s</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>6s</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>S/R</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>SR</Typography>
                         <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Dismissal</Typography>
                       </Box>
 
                       {/* Batters */}
-                      <Stack spacing={1.5}>
-                        {/* E Perry */}
-                        <Box sx={{
+                      <Stack spacing={0.5}>
+                        {matchData.players.away.slice(0, 2).map((player, idx) => (
+                          <Box
+                            key={idx}
+                            sx={{
                           display: 'grid',
-                          gridTemplateColumns: '2fr 60px 60px 60px 60px 80px',
-                          gap: 2,
+                              gridTemplateColumns: '2fr 40px 40px 40px 40px 60px 1fr',
+                              gap: 1,
                           p: 1,
                           borderRadius: 1,
-                          bgcolor: alpha(themeColors.success, 0.05),
-                          '&:hover': { bgcolor: alpha(themeColors.success, 0.1) }
-                        }}>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography sx={{ color: themeColors.text.primary }}>E Perry</Typography>
-                            <Typography variant="caption" sx={{ color: themeColors.success }}>not out</Typography>
-                          </Stack>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>34</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>22</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>4</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>1</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>154.5</Typography>
+                              bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
+                              '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
+                            }}
+                          >
+                            <Box>
+                              <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
+                                {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
+                              </Typography>
                         </Box>
-
-                        {/* A Gardner */}
-                        <Box sx={{
-                          display: 'grid',
-                          gridTemplateColumns: '2fr 60px 60px 60px 60px 80px',
-                          gap: 2,
-                          p: 1,
-                          borderRadius: 1,
-                          bgcolor: alpha(themeColors.success, 0.05),
-                          '&:hover': { bgcolor: alpha(themeColors.success, 0.1) }
-                        }}>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography sx={{ color: themeColors.text.primary }}>A Gardner</Typography>
-                            <Typography variant="caption" sx={{ color: themeColors.success }}>not out</Typography>
-                          </Stack>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>28</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>18</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>2</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>2</Typography>
-                          <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>155.6</Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.runs || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.balls || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.fours || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.sixes || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              {player.stats?.strikeRate?.toFixed(2) || 0}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                              {idx === 0 ? 'not out' : idx === 1 ? 'not out' : ''}
+                            </Typography>
                         </Box>
+                        ))}
                       </Stack>
 
                       {/* Extras & Total */}
                       <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${themeColors.border}` }}>
                         <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                          Extras: 4 (lb 1, w 3)
+                          Extras: 9 (b 3, lb 2, w 3, nb 1)
                         </Typography>
                         <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                          Total: 89/2 (12.1 ov)
+                          Total: 174/3 (52.0 ov)
                         </Typography>
-                        <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                          CRR: 7.32 • RRR: 8.94
-                        </Typography>
-                      </Box>
-
-                      {/* Yet to bat */}
-                      <Box sx={{ mt: 2 }}>
-                        <Typography variant="body2" sx={{ color: themeColors.text.secondary, mb: 1 }}>
-                          Yet to bat
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
-                          M Lanning • B Mooney • T McGrath • A Sutherland • J Jonassen • A King
+                        <Typography variant="body2" sx={{ color: themeColors.text.secondary, mt: 1 }}>
+                          Fall of wickets: 1-32 (Young, 10.4 ov), 2-85 (Nicholls, 24.3 ov), 3-122 (Ravindra, 38.1 ov)
                         </Typography>
                       </Box>
+                      </Box>
 
-                      {/* Bowling */}
-                      <Box sx={{ mt: 3 }}>
-                        <Box sx={{
-                          p: 2,
-                          mb: 2,
-                          bgcolor: alpha(themeColors.primary, 0.05),
-                          border: `1px solid ${alpha(themeColors.primary, 0.2)}`,
-                          borderRadius: 1
-                        }}>
-                          <Stack direction="row" spacing={3}>
-                            <Box>
-                              <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
-                                Current Bowler
-                              </Typography>
-                              <Typography variant="body1" sx={{ color: themeColors.text.primary }}>
-                                R Yadav • 4.1-0-28-1
-                              </Typography>
-                            </Box>
-                            <Box>
-                              <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
-                                This Over
-                              </Typography>
-                              <Typography variant="body1" sx={{ color: themeColors.text.primary }}>
-                                1 • 4 • 6 • 2 • 1 • 4
-                              </Typography>
-                            </Box>
-                          </Stack>
-                        </Box>
-
-                        <Typography variant="body2" sx={{ 
-                          color: themeColors.text.secondary, 
-                          mb: 2, 
-                          px: 1,
-                          fontWeight: 600,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px'
-                        }}>
+                    {/* Bowling Section */}
+                    <Box sx={{ p: 2, borderTop: `1px solid ${themeColors.border}` }}>
+                      <Typography variant="subtitle1" sx={{ mb: 2, color: themeColors.text.primary }}>
                           Bowling
                         </Typography>
 
+                      {/* Bowling Headers */}
                         <Box sx={{
                           display: 'grid',
-                          gridTemplateColumns: '2fr 60px 60px 60px 60px 80px 80px 80px',
-                          gap: 2,
+                        gridTemplateColumns: '2fr 40px 40px 40px 40px 60px',
+                        gap: 1,
                           mb: 1,
                           px: 1
                         }}>
@@ -2353,473 +2797,325 @@ const MatchDetailPage: React.FC = () => {
                           <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>M</Typography>
                           <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>R</Typography>
                           <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>W</Typography>
-                          <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>Econ</Typography>
-                          <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>Dots</Typography>
-                          <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>4s/6s</Typography>
+                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>ECON</Typography>
                         </Box>
 
-                        <Stack spacing={1.5}>
-                          {/* D Sharma */}
-                          <Box sx={{
+                      {/* Bowlers */}
+                      <Stack spacing={0.5}>
+                        {matchData.players.home.slice(0, 2).map((player, idx) => (
+                          <Box
+                            key={idx}
+                            sx={{
                             display: 'grid',
-                            gridTemplateColumns: '2fr 60px 60px 60px 60px 80px 80px 80px',
-                            gap: 2,
+                              gridTemplateColumns: '2fr 40px 40px 40px 40px 60px',
+                              gap: 1,
                             p: 1,
                             borderRadius: 1,
-                            '&:hover': { bgcolor: alpha(themeColors.surface, 0.5) }
-                          }}>
-                            <Typography sx={{ color: themeColors.text.primary }}>D Sharma</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>4.0</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>0</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>32</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>0</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>8.00</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>8</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>2/1</Typography>
+                              bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
+                              '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
+                            }}
+                          >
+                        <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
+                              {player.name} {player.isCaptain ? '(c)' : ''}
+                        </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              12
+                          </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              2
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              38
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              1
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
+                              3.17
+                            </Typography>
                           </Box>
+                  ))}
+                      </Stack>
+                </Box>
+                  </Card>
+                  
+                  {/* Match Status */}
+                  <Card sx={{ ...commonStyles.card }}>
+                    <Box sx={{ p: 2 }}>
+                      <Typography variant="subtitle1" sx={{ mb: 2, color: themeColors.text.primary, fontWeight: 'bold' }}>
+                        Match Status
+                    </Typography>
 
-                          {/* R Yadav */}
+                      <Typography variant="body1" sx={{ color: themeColors.text.primary, mb: 1 }}>
+                        New Zealand lead by 25 runs
+                      </Typography>
+
                           <Box sx={{
-                            display: 'grid',
-                            gridTemplateColumns: '2fr 60px 60px 60px 60px 80px 80px 80px',
-                            gap: 2,
-                            p: 1,
-                            borderRadius: 1,
+                        p: 2, 
                             bgcolor: alpha(themeColors.primary, 0.05),
-                            '&:hover': { bgcolor: alpha(themeColors.primary, 0.1) }
-                          }}>
-                            <Typography sx={{ color: themeColors.text.primary }}>R Yadav</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>4.1</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>0</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>28</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>1</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>6.72</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>12</Typography>
-                            <Typography sx={{ color: themeColors.text.primary, textAlign: 'right' }}>1/2</Typography>
-                          </Box>
-                        </Stack>
-
-                        {/* Bowling Analysis */}
-                        <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${themeColors.border}` }}>
-                          <Stack direction="row" spacing={3}>
+                              borderRadius: 1,
+                        border: `1px solid ${alpha(themeColors.primary, 0.2)}`
+                      }}>
                             <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                              Powerplay: 1-6: 42/1
+                          Day 2, Lunch Break • Test Match
                             </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                              Middle: 7-15: 78/1
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                              Death: 16-20: 22/0 (2.3 ov)
-                            </Typography>
-                          </Stack>
-                        </Box>
                       </Box>
                     </Box>
                   </Card>
                 </Stack>
               )}
 
-              {activeTab === 'stats' && (
+              {activeTab === 'squads' && (
+                <Squads data={matchData} />
+              )}
+              
+              {activeTab === 'highlights' && (
                 <Stack spacing={3}>
-                  {/* Player Stats Cards */}
-                  {[
-                    {
-                      name: 'E Perry',
-                      stats: { runs: 34, balls: 22, fours: 4, sixes: 1 }
-                    },
-                    {
-                      name: 'A Gardner',
-                      stats: { runs: 28, balls: 18, fours: 2, sixes: 2 }
-                    },
-                    {
-                      name: 'S Mandhana',
-                      stats: { runs: 52, balls: 38, fours: 6, sixes: 2 }
-                    }
-                  ].map((player, index) => (
-                    <Box
-                      key={player.name}
-                      sx={{
-                        bgcolor: 'rgba(15, 23, 42, 0.3)',
-                        borderRadius: 2,
-                        border: '1px solid rgba(59, 130, 246, 0.3)',
-                        overflow: 'hidden'
-                      }}
-                    >
+                  {/* Key Moments */}
+                  <Card sx={{ ...commonStyles.card }}>
+                    <CardHeader title={<Typography variant="h6">Key Moments</Typography>} />
+                    <CardContent>
+                      <List sx={{ width: '100%' }}>
+                        {/* Day 1 */}
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#3B82F6' }}>
+                          Day 1
+                        </Typography>
+                        
                       <Box sx={{
                         p: 2,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}>
-                        <Typography variant="h6" sx={{ color: 'white' }}>
-                          {player.name}
-                        </Typography>
-                        <Box sx={{
-                          px: 2,
-                          py: 0.5,
-                          bgcolor: 'rgba(59, 130, 246, 0.2)',
-                          borderRadius: 5,
-                          border: '1px solid rgba(59, 130, 246, 0.3)'
+                          mb: 2,
+                          borderRadius: 1,
+                          bgcolor: 'rgba(15, 23, 42, 0.3)',
+                          border: '1px solid rgba(59, 130, 246, 0.2)'
                         }}>
-                          <Typography variant="caption" sx={{ color: '#3B82F6' }}>
-                            {((player.stats.runs / player.stats.balls) * 100).toFixed(1)} SR
+                          <Stack spacing={1.5}>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                10.4
+                              </Typography>
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Young b Muzarabani 12(28). Muzarabani with a beautiful inswinging yorker that sneaks through Young's defense and crashes into the stumps. New Zealand 23/1.
                           </Typography>
                         </Box>
                       </Box>
 
-                      <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        borderTop: '1px solid rgba(59, 130, 246, 0.2)',
-                      }}>
-                        {[
-                          { value: player.stats.runs, label: 'Runs' },
-                          { value: player.stats.balls, label: 'Balls' },
-                          { value: player.stats.fours, label: '4s' },
-                          { value: player.stats.sixes, label: '6s' }
-                        ].map((stat, statIndex) => (
-                          <Box
-                            key={statIndex}
-                            sx={{
-                              p: 2,
-                              textAlign: 'center',
-                              borderRight: statIndex < 3 ? '1px solid rgba(59, 130, 246, 0.2)' : 'none'
-                            }}
-                          >
-                            <Typography variant="h6" sx={{ color: 'white', mb: 0.5 }}>
-                              {stat.value}
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                15.3
                             </Typography>
-                            <Typography variant="caption" sx={{ color: 'gray' }}>
-                              {stat.label}
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Bennett b Raza 22(41). Raza with a clever arm ball that Bennett completely misreads. New Zealand 45/2.
                             </Typography>
                           </Box>
-                  ))}
                 </Box>
-                    </Box>
-                  ))}
-
-                  {/* Head to Head Section */}
-                  <Box sx={{
-                    bgcolor: 'rgba(15, 23, 42, 0.3)',
-                    borderRadius: 2,
-                    border: '1px solid rgba(59, 130, 246, 0.3)',
-                    overflow: 'hidden'
-                  }}>
-                    <Typography variant="h6" sx={{ p: 2, color: 'white' }}>
-                      Head to Head
+                            
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                22.1
                     </Typography>
-
-                    <Box sx={{ p: 2, borderTop: '1px solid rgba(59, 130, 246, 0.2)' }}>
-                      <Typography variant="h4" sx={{ 
-                        color: 'white', 
-                        textAlign: 'center',
-                        mb: 1
-                      }}>
-                        IND 12 - 8 AUS
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Welch lbw b Muzarabani 22(56). Muzarabani strikes again with a delivery that keeps low. New Zealand 67/3.
                       </Typography>
+                              </Box>
+                            </Box>
+                            
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
                       <Typography variant="caption" sx={{ 
                         color: 'gray',
-                        display: 'block',
-                        textAlign: 'center',
-                        mb: 3
-                      }}>
-                        Last 20 T20I matches
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                32.4
                       </Typography>
-
-                      <Stack spacing={2}>
                         <Box>
-                          <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            mb: 1
-                          }}>
-                            <Typography variant="body2" sx={{ color: 'gray' }}>Win %</Typography>
-                            <Typography variant="body2" sx={{ color: 'white' }}>65%</Typography>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#10B981' }}>FIFTY! </Typography>
+                                  Tom Latham brings up his half-century with a well-placed drive through the covers. 52 runs from 78 balls with 6 fours.
+                                </Typography>
               </Box>
-                          <LinearProgress 
-                            variant="determinate" 
-                            value={65}
-                            sx={{
-                              height: 8,
-                              borderRadius: 1,
-                              bgcolor: 'rgba(59, 130, 246, 0.2)',
-                              '& .MuiLinearProgress-bar': {
-                                bgcolor: '#3B82F6'
-                              }
-                            }}
-                          />
           </Box>
 
-                        <Box>
-                          <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            mb: 1
-                          }}>
-                            <Typography variant="body2" sx={{ color: 'gray' }}>Avg Score</Typography>
-                            <Typography variant="body2" sx={{ color: 'white' }}>156</Typography>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                32.4
+                              </Typography>
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Williams c Conway b Muzarabani 31(67). Muzarabani picks up his third wicket with a short ball that Williams pulls straight to Conway at deep square leg. New Zealand 98/4.
+                                </Typography>
         </Box>
-                          <LinearProgress 
-                            variant="determinate" 
-                            value={78}
-                            sx={{
-                              height: 8,
-                              borderRadius: 1,
-                              bgcolor: 'rgba(59, 130, 246, 0.2)',
-                              '& .MuiLinearProgress-bar': {
-                                bgcolor: '#3B82F6'
-                              }
-                            }}
-                          />
                         </Box>
 
-                        <Box>
-                          <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            mb: 1
-                          }}>
-                            <Typography variant="body2" sx={{ color: 'gray' }}>Run Rate</Typography>
-                            <Typography variant="body2" sx={{ color: 'white' }}>8.2</Typography>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                52.5
+                              </Typography>
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>ALL OUT! </Typography>
+                                  New Zealand bowled out for 149 in 52.5 overs. Muzarabani finishes with 4/32, Raza 3/41.
+                                </Typography>
                           </Box>
-                          <LinearProgress 
-                            variant="determinate" 
-                            value={82}
-                            sx={{
-                              height: 8,
-                              borderRadius: 1,
-                              bgcolor: 'rgba(59, 130, 246, 0.2)',
-                              '& .MuiLinearProgress-bar': {
-                                bgcolor: '#3B82F6'
-                              }
-                            }}
-                          />
                         </Box>
                       </Stack>
                     </Box>
-                  </Box>
-                </Stack>
+                        
+                        {/* Day 2 */}
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, mt: 3, color: '#3B82F6' }}>
+                          Day 2
+                      </Typography>
+
+                      <Box sx={{
+                        p: 2,
+                          borderRadius: 1,
+                          bgcolor: 'rgba(15, 23, 42, 0.3)',
+                          border: '1px solid rgba(59, 130, 246, 0.2)'
+                        }}>
+                          <Stack spacing={1.5}>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                10.4
+                              </Typography>
+                          <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Young c Conway b Muzarabani 12(28). Muzarabani gets the first breakthrough for Zimbabwe. New Zealand 32/1.
+                            </Typography>
+                          </Box>
+                            </Box>
+                            
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                            <Typography variant="caption" sx={{
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                24.3
+                              </Typography>
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Nicholls b Raza 34(62). Raza bowls Nicholls with a delivery that turns sharply. New Zealand 85/2.
+                            </Typography>
+                          </Box>
+                      </Box>
+
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                24.3
+                              </Typography>
+                          <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#3B82F6' }}>BOUNDARY! </Typography>
+                                  Conway plays an elegant cover drive off Ngarava for four. Textbook cricket shot.
+                            </Typography>
+                          </Box>
+                            </Box>
+                            
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                            <Typography variant="caption" sx={{
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                38.1
+                              </Typography>
+                              <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: '#8B5CF6' }}>WICKET! </Typography>
+                                  Ravindra lbw b Muzarabani 28(54). Muzarabani traps Ravindra in front with a delivery that keeps low. New Zealand 122/3.
+                            </Typography>
+                          </Box>
+                      </Box>
+
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                              <Typography variant="caption" sx={{ 
+                                color: 'gray',
+                                minWidth: '50px',
+                                textAlign: 'right',
+                                pt: 0.5
+                              }}>
+                                52.0
+                              </Typography>
+                          <Box>
+                                <Typography variant="body2">
+                                  <Typography component="span" sx={{ fontWeight: 'bold', color: 'gray' }}>LUNCH </Typography>
+                                  New Zealand 174/3 at lunch on Day 2, leading by 25 runs. Conway 67* (112), Latham 52* (78) at the crease.
+                            </Typography>
+                          </Box>
+                          </Box>
+                        </Stack>
+                      </Box>
+                      </List>
+                    </CardContent>
+                  </Card>
+                    </Stack>
               )}
 
-              {activeTab === 'highlights' && (
+              {activeTab === 'odds' && (
                 <Stack spacing={3}>
-                  {/* Key Moments */}
-                  <Box sx={{
-                    bgcolor: 'rgba(15, 23, 42, 0.3)',
-                    borderRadius: 2,
-                    border: '1px solid rgba(59, 130, 246, 0.3)',
-                    overflow: 'hidden'
-                  }}>
-                    <Box sx={{
-                      p: 2,
-                      borderBottom: '1px solid rgba(59, 130, 246, 0.3)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1
-                    }}>
-                      <StarIcon sx={{ color: '#3B82F6' }} />
-                      <Typography variant="h6" sx={{ color: 'white' }}>
-                        Key Moments
-                      </Typography>
-                    </Box>
-
-                    <Stack>
-                      {/* Mandhana's Fifty */}
-                      <Box sx={{
-                        p: 2,
-                        borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
-                        bgcolor: 'rgba(34, 197, 94, 0.1)',
-                        '&:hover': { bgcolor: 'rgba(34, 197, 94, 0.15)' }
-                      }}>
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <Box sx={{
-                            width: 48,
-                            height: 48,
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            bgcolor: 'rgba(34, 197, 94, 0.2)',
-                            border: '1px solid rgba(34, 197, 94, 0.3)'
-                          }}>
-                            <Typography variant="h6" sx={{ color: '#10B981' }}>50</Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="body1" sx={{ color: 'white', mb: 0.5 }}>
-                              Smriti Mandhana's Fifty
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'gray' }}>
-                              52(38) • 6 fours • 2 sixes • SR 136.8
-                            </Typography>
-                          </Box>
-                          <Box sx={{ ml: 'auto' }}>
-                            <Typography variant="caption" sx={{
-                              color: '#10B981',
-                              bgcolor: 'rgba(34, 197, 94, 0.2)',
-                              px: 1.5,
-                              py: 0.5,
-                              borderRadius: 1
-                            }}>
-                              15.2 ov
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-
-                      {/* Partnership */}
-                      <Box sx={{
-                        p: 2,
-                        borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
-                        bgcolor: 'rgba(59, 130, 246, 0.1)',
-                        '&:hover': { bgcolor: 'rgba(59, 130, 246, 0.15)' }
-                      }}>
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <Box sx={{
-                            width: 48,
-                            height: 48,
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            bgcolor: 'rgba(59, 130, 246, 0.2)',
-                            border: '1px solid rgba(59, 130, 246, 0.3)'
-                          }}>
-                            <Typography variant="h6" sx={{ color: '#3B82F6' }}>50</Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="body1" sx={{ color: 'white', mb: 0.5 }}>
-                              Perry-Gardner Partnership
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'gray' }}>
-                              62(42) • RR 8.85 • Boundaries: 6x4 3x6
-                            </Typography>
-                          </Box>
-                          <Box sx={{ ml: 'auto' }}>
-                            <Typography variant="caption" sx={{
-                              color: '#3B82F6',
-                              bgcolor: 'rgba(59, 130, 246, 0.2)',
-                              px: 1.5,
-                              py: 0.5,
-                              borderRadius: 1
-                            }}>
-                              Current
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-
-                      {/* Big Over */}
-                      <Box sx={{
-                        p: 2,
-                        borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
-                        bgcolor: 'rgba(168, 85, 247, 0.1)',
-                        '&:hover': { bgcolor: 'rgba(168, 85, 247, 0.15)' }
-                      }}>
-                        <Stack direction="row" spacing={2} alignItems="center">
-                          <Box sx={{
-                            width: 48,
-                            height: 48,
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            bgcolor: 'rgba(168, 85, 247, 0.2)',
-                            border: '1px solid rgba(168, 85, 247, 0.3)'
-                          }}>
-                            <Typography variant="h6" sx={{ color: '#A855F7' }}>19</Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="body1" sx={{ color: 'white', mb: 0.5 }}>
-                              Big Over - Gardner's Assault
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'gray' }}>
-                              19 runs • 4,6,1,2,6,0 • Changed momentum
-                            </Typography>
-                          </Box>
-                          <Box sx={{ ml: 'auto' }}>
-                            <Typography variant="caption" sx={{
-                              color: '#A855F7',
-                              bgcolor: 'rgba(168, 85, 247, 0.2)',
-                              px: 1.5,
-                              py: 0.5,
-                              borderRadius: 1
-                            }}>
-                              10th over
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                  </Box>
-
-                  {/* Match Summary */}
-                  <Box sx={{
-                    bgcolor: 'rgba(15, 23, 42, 0.3)',
-                    borderRadius: 2,
-                    border: '1px solid rgba(59, 130, 246, 0.3)',
-                    p: 2
-                  }}>
-                    <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
-                      Match Summary
-                    </Typography>
-                    <Stack spacing={2}>
-                      <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gap: 2
-                      }}>
-                        <Box sx={{
-                          p: 2,
-                          bgcolor: 'rgba(59, 130, 246, 0.1)',
-                          borderRadius: 1,
-                          border: '1px solid rgba(59, 130, 246, 0.2)',
+                  <Card sx={{ ...commonStyles.card }}>
+                    <CardHeader 
+                      title="Betting Odds" 
+                      sx={{
+                        ...commonStyles.cardHeader,
                           textAlign: 'center'
-                        }}>
-                          <Typography variant="h4" sx={{ color: '#3B82F6', mb: 1 }}>12</Typography>
-                          <Typography variant="caption" sx={{ color: 'gray' }}>Boundaries</Typography>
-                        </Box>
-                        <Box sx={{
-                          p: 2,
-                          bgcolor: 'rgba(168, 85, 247, 0.1)',
-                          borderRadius: 1,
-                          border: '1px solid rgba(168, 85, 247, 0.2)',
-                          textAlign: 'center'
-                        }}>
-                          <Typography variant="h4" sx={{ color: '#A855F7', mb: 1 }}>6</Typography>
-                          <Typography variant="caption" sx={{ color: 'gray' }}>Sixes</Typography>
-                        </Box>
-                        <Box sx={{
-                          p: 2,
-                          bgcolor: 'rgba(34, 197, 94, 0.1)',
-                          borderRadius: 1,
-                          border: '1px solid rgba(34, 197, 94, 0.2)',
-                          textAlign: 'center'
-                        }}>
-                          <Typography variant="h4" sx={{ color: '#10B981', mb: 1 }}>8.2</Typography>
-                          <Typography variant="caption" sx={{ color: 'gray' }}>Run Rate</Typography>
-                        </Box>
-                      </Box>
-
-                      <Box sx={{
-                        p: 2,
-                        bgcolor: 'rgba(15, 23, 42, 0.5)',
-                        borderRadius: 1,
-                        border: '1px solid rgba(59, 130, 246, 0.2)'
-                      }}>
-                        <Typography variant="body2" sx={{ color: 'gray', mb: 1 }}>
-                          Match Situation
+                      }} 
+                    />
+                    <CardContent>
+                      <Typography variant="body1" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                        Betting odds information will be displayed here.
                         </Typography>
-                        <Typography variant="body1" sx={{ color: 'white' }}>
-                          Australia Women need 54 runs from 47 balls with 8 wickets in hand. Current partnership of 62 runs between Perry (34*) and Gardner (28*) has kept them in control.
-                        </Typography>
-                      </Box>
-                    </Stack>
-                  </Box>
+                    </CardContent>
+                  </Card>
                 </Stack>
               )}
                 </Box>
-                
-
           </>
       )}
     </PageBackground>
