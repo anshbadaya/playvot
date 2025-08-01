@@ -999,6 +999,59 @@ const MatchDetailPage: React.FC = () => {
               
               {activeTab === 'live' && (
                 <Stack spacing={2}>
+                  {/* Live Commentary Section */}
+                  <Card sx={{ ...commonStyles.card }}>
+                    <CardHeader 
+                      title={
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <MessageIcon sx={{ color: themeColors.warning }} />
+                          <Typography variant="h6" sx={{ 
+                            color: themeColors.text.primary,
+                            fontWeight: 600,
+                            letterSpacing: '0.5px'
+                          }}>
+                            Live Commentary
+                          </Typography>
+                        </Stack>
+                      }
+                      sx={{ 
+                        bgcolor: alpha(themeColors.secondary, 0.5),
+                        borderBottom: `1px solid ${themeColors.border}`,
+                        py: 2
+                      }}
+                    />
+                    <CardContent>
+                      <Stack spacing={1.5}>
+                        {matchData.commentary.slice(0, 5).map((comment, idx) => (
+                          <Box
+                            key={idx}
+                            sx={{ 
+                              p: 2,
+                              borderRadius: 1,
+                              bgcolor: comment.type === 'goal' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(15, 23, 42, 0.3)',
+                              border: comment.type === 'goal' ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(59, 130, 246, 0.2)'
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                              <Typography
+                                variant="caption"
+                                sx={{ fontWeight: 'bold', color: comment.type === 'goal' ? '#10B981' : 'gray' }}
+                              >
+                                {comment.time}
+                              </Typography>
+                              {comment.type === 'goal' && (
+                                <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#10B981' }}>
+                                  BOUNDARY
+                                </Typography>
+                              )}
+                            </Box>
+                            <Typography variant="body2">{comment.text}</Typography>
+                          </Box>
+                        ))}
+                      </Stack>
+                    </CardContent>
+                  </Card>
+
                   {/* Last 20 Overs - Compact View */}
                   <Card sx={{ ...commonStyles.card }}>
                     <CardHeader 
@@ -1198,40 +1251,7 @@ const MatchDetailPage: React.FC = () => {
                     </CardContent>
                   </Card>
 
-                  {/* Commentary Section */}
-                  <Card sx={{ ...commonStyles.card }}>
-                    <CardHeader title={<Typography variant="h6">Live Commentary</Typography>} />
-                    <CardContent>
-                      <Stack spacing={1.5}>
-                        {matchData.commentary.slice(0, 5).map((comment, idx) => (
-                          <Box
-                            key={idx}
-            sx={{ 
-                              p: 2,
-                              borderRadius: 1,
-                              bgcolor: comment.type === 'goal' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(15, 23, 42, 0.3)',
-                              border: comment.type === 'goal' ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(59, 130, 246, 0.2)'
-                            }}
-                          >
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                              <Typography
-                                variant="caption"
-                                sx={{ fontWeight: 'bold', color: comment.type === 'goal' ? '#10B981' : 'gray' }}
-                              >
-                                {comment.time}
-                  </Typography>
-                              {comment.type === 'goal' && (
-                                <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#10B981' }}>
-                                  BOUNDARY
-                  </Typography>
-                              )}
-                </Box>
-                            <Typography variant="body2">{comment.text}</Typography>
-                          </Box>
-                        ))}
-                      </Stack>
-                    </CardContent>
-                  </Card>
+
                 </Stack>
               )}
 
@@ -1873,16 +1893,24 @@ const MatchDetailPage: React.FC = () => {
                       </Card>
 
                       {/* Player Performance Section */}
-                      <Card sx={{ bgcolor: 'rgba(15, 23, 42, 0.3)', border: '1px solid rgba(59, 130, 246, 0.3)', mt: 2 }}>
+                      <Card sx={{ ...commonStyles.card }}>
                         <CardHeader 
                           title={
-                            <Typography variant="h6" sx={{ color: 'white' }}>
-                              Player Performance
-                            </Typography>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <ActivityIcon sx={{ color: themeColors.warning }} />
+                              <Typography variant="h6" sx={{ 
+                                color: themeColors.text.primary,
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                              }}>
+                                Player Performance
+                              </Typography>
+                            </Stack>
                           }
                           sx={{ 
-                            bgcolor: '#3B82F6',
-                            py: 1.5
+                            bgcolor: alpha(themeColors.secondary, 0.5),
+                            borderBottom: `1px solid ${themeColors.border}`,
+                            py: 2
                           }}
                         />
                         <CardContent>
@@ -2032,13 +2060,21 @@ const MatchDetailPage: React.FC = () => {
                       <Card sx={{ ...commonStyles.card }}>
                         <CardHeader 
                           title={
-                            <Typography variant="h6" sx={{ color: 'white' }}>
-                              Next Over Runs
-                            </Typography>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <AccessTimeIcon sx={{ color: themeColors.warning }} />
+                              <Typography variant="h6" sx={{ 
+                                color: themeColors.text.primary,
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                              }}>
+                                Next Over Runs
+                              </Typography>
+                            </Stack>
                           }
                           sx={{ 
-                            bgcolor: '#3B82F6',
-                            py: 1.5
+                            bgcolor: alpha(themeColors.secondary, 0.5),
+                            borderBottom: `1px solid ${themeColors.border}`,
+                            py: 2
                           }}
                         />
                         <CardContent>
@@ -2082,16 +2118,24 @@ const MatchDetailPage: React.FC = () => {
                       </Card>
 
                       {/* Fall of Wicket */}
-                      <Card sx={{ bgcolor: 'rgba(15, 23, 42, 0.3)', border: '1px solid rgba(59, 130, 246, 0.3)', mt: 2 }}>
+                      <Card sx={{ ...commonStyles.card }}>
                         <CardHeader 
                           title={
-                            <Typography variant="h6" sx={{ color: 'white' }}>
-                              Fall of Wicket
-                            </Typography>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <TrophyIcon sx={{ color: themeColors.warning }} />
+                              <Typography variant="h6" sx={{ 
+                                color: themeColors.text.primary,
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                              }}>
+                                Fall of Wicket
+                              </Typography>
+                            </Stack>
                           }
                           sx={{ 
-                            bgcolor: '#3B82F6',
-                            py: 1.5
+                            bgcolor: alpha(themeColors.secondary, 0.5),
+                            borderBottom: `1px solid ${themeColors.border}`,
+                            py: 2
                           }}
                         />
                         <CardContent>
@@ -2203,18 +2247,24 @@ const MatchDetailPage: React.FC = () => {
                       </Card>
 
                       {/* Quick Bets - Next Ball */}
-                      <Card sx={{ bgcolor: 'rgba(234, 179, 8, 0.2)', border: '1px solid rgba(234, 179, 8, 0.3)', mt: 2 }}>
+                      <Card sx={{ ...commonStyles.card }}>
                         <CardHeader 
                           title={
-                            <Stack direction="row" spacing={1} alignItems="center"> 
-                              <Typography variant="h6" sx={{ color: 'white' }}>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <StarIcon sx={{ color: themeColors.warning }} />
+                              <Typography variant="h6" sx={{ 
+                                color: themeColors.text.primary,
+                                fontWeight: 600,
+                                letterSpacing: '0.5px'
+                              }}>
                                 Quick Bets - Next Ball
                               </Typography>
                             </Stack>
                           }
                           sx={{ 
-                            bgcolor: 'rgba(234, 179, 8, 0.3)',
-                            py: 1.5
+                            bgcolor: alpha(themeColors.secondary, 0.5),
+                            borderBottom: `1px solid ${themeColors.border}`,
+                            py: 2
                           }}
                         />
                         <CardContent>
