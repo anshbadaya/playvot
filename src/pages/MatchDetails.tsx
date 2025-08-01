@@ -613,31 +613,75 @@ const MatchSummary: React.FC<{ data: MatchData }> = ({ data }) => {
         <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
           Batting
         </Typography>
-        <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'minmax(150px, 1fr) repeat(5, auto)', 
-          gap: 1,
-          fontSize: '0.875rem'
-        }}>
-          <Box sx={{ color: 'gray' }}>Batter</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>B</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>4s</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>6s</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>SR</Box>
-          
-          {topBatsmen.map((player, index) => (
-            <React.Fragment key={index}>
-              <Box sx={{ fontWeight: player.isWicketKeeper ? 'bold' : 'normal' }}>
-                {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
-              </Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.balls}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.fours}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.sixes}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.strikeRate?.toFixed(2)}</Box>
-            </React.Fragment>
-          ))}
+                 <Box sx={{ 
+           display: 'grid',
+           gap: { xs: 1, sm: 1.5 }, // Reduced vertical gap
+           fontSize: '0.875rem',
+           overflow: 'hidden'
+         }}>
+           {/* Scrollable Container */}
+           <Box sx={{
+             overflowX: 'auto',
+             WebkitOverflowScrolling: 'touch',
+             width: '100%',
+             '&::-webkit-scrollbar': { height: 4 }, // Reduced scrollbar height
+             '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
+             '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
+           }}>
+             {/* Stats Header */}
+             <Box sx={{ 
+               display: 'grid',
+               gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
+               gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
+               justifyContent: 'end',
+               borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
+               pb: 0.5, // Reduced padding
+               minWidth: 'min-content'
+             }}>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>B</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>4s</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>6s</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>SR</Box>
+             </Box>
+             
+             {/* Batsmen List */}
+             {topBatsmen.map((player, index) => (
+               <Box key={index} sx={{
+                 display: 'grid',
+                 gap: 0.5, // Reduced gap between name and stats
+                 borderBottom: index !== topBatsmen.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none',
+                 pb: 1 // Reduced bottom padding
+               }}>
+                 {/* Player Name */}
+                 <Box sx={{ 
+                   fontWeight: player.isWicketKeeper || player.isCaptain ? 'bold' : 'normal',
+                   color: themeColors.text.primary,
+                   whiteSpace: 'nowrap',
+                   overflow: 'hidden',
+                   textOverflow: 'ellipsis',
+                   mb: 0.25 // Small margin bottom
+                 }}>
+                   {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
+                 </Box>
+                 
+                 {/* Stats Row */}
+                 <Box sx={{ 
+                   display: 'grid',
+                   gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
+                   gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
+                   justifyContent: 'end',
+                   minWidth: 'min-content'
+                 }}>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.balls}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.fours}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.sixes}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.strikeRate?.toFixed(2)}</Box>
+                 </Box>
+               </Box>
+             ))}
+           </Box>
         </Box>
       </Box>
 
@@ -646,31 +690,75 @@ const MatchSummary: React.FC<{ data: MatchData }> = ({ data }) => {
         <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
           Bowling
         </Typography>
-        <Box sx={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'minmax(150px, 1fr) repeat(5, auto)', 
-          gap: 1,
-          fontSize: '0.875rem'
-        }}>
-          <Box sx={{ color: 'gray' }}>Bowler</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>O</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>M</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>W</Box>
-          <Box sx={{ color: 'gray', textAlign: 'right' }}>ECON</Box>
-          
-          {topBowlers.map((player, index) => (
-            <React.Fragment key={index}>
-              <Box sx={{ fontWeight: player.isCaptain ? 'bold' : 'normal' }}>
-                {player.name} {player.isCaptain ? '(c)' : ''}
-              </Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.overs}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.maidens}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.wickets}</Box>
-              <Box sx={{ textAlign: 'right' }}>{player.stats?.economy?.toFixed(2)}</Box>
-            </React.Fragment>
-          ))}
+                 <Box sx={{ 
+           display: 'grid',
+           gap: { xs: 1, sm: 1.5 }, // Reduced vertical gap
+           fontSize: '0.875rem',
+           overflow: 'hidden'
+         }}>
+           {/* Scrollable Container */}
+           <Box sx={{
+             overflowX: 'auto',
+             WebkitOverflowScrolling: 'touch',
+             width: '100%',
+             '&::-webkit-scrollbar': { height: 4 }, // Reduced scrollbar height
+             '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
+             '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
+           }}>
+             {/* Stats Header */}
+             <Box sx={{ 
+               display: 'grid',
+               gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
+               gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
+               justifyContent: 'end',
+               borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
+               pb: 0.5, // Reduced padding
+               minWidth: 'min-content'
+             }}>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>O</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>M</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>W</Box>
+               <Box sx={{ color: 'gray', textAlign: 'right' }}>ECON</Box>
+             </Box>
+             
+             {/* Bowlers List */}
+             {topBowlers.map((player, index) => (
+               <Box key={index} sx={{
+                 display: 'grid',
+                 gap: 0.5, // Reduced gap between name and stats
+                 borderBottom: index !== topBowlers.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none',
+                 pb: 1 // Reduced bottom padding
+               }}>
+                 {/* Bowler Name */}
+                 <Box sx={{ 
+                   fontWeight: player.isCaptain ? 'bold' : 'normal',
+                   color: themeColors.text.primary,
+                   whiteSpace: 'nowrap',
+                   overflow: 'hidden',
+                   textOverflow: 'ellipsis',
+                   mb: 0.25 // Small margin bottom
+                 }}>
+                   {player.name} {player.isCaptain ? '(c)' : ''}
+                 </Box>
+                 
+                 {/* Stats Row */}
+                 <Box sx={{ 
+                   display: 'grid',
+                   gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
+                   gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
+                   justifyContent: 'end',
+                   minWidth: 'min-content'
+                 }}>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.overs}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.maidens}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.wickets}</Box>
+                   <Box sx={{ textAlign: 'right' }}>{player.stats?.economy?.toFixed(2)}</Box>
+                 </Box>
+               </Box>
+             ))}
+           </Box>
         </Box>
       </Box>
     </Box>
@@ -816,62 +904,93 @@ const MatchDetailPage: React.FC = () => {
                                           {/* Tab Navigation */}
         <Box
           sx={{
-                  width: '100%',
+            width: '100%',
             display: 'flex',
-                  justifyContent: { xs: 'flex-start', md: 'center' },
-                  overflow: 'auto',
-                  WebkitOverflowScrolling: 'touch', // For smooth scrolling on iOS
-                  msOverflowStyle: 'none', // Hide scrollbar on IE/Edge
-                  scrollbarWidth: 'none', // Hide scrollbar on Firefox
-                  '&::-webkit-scrollbar': { // Hide scrollbar on Chrome/Safari
-                    display: 'none'
-                  },
-                  px: 1 // Add padding to account for the hidden scrollbar
+            justifyContent: { xs: 'flex-start', md: 'center' },
+            overflow: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            },
+            px: { xs: 0.5, sm: 1, md: 2 }, // Responsive padding
+            py: { xs: 1, sm: 1.5, md: 2 }, // Add vertical padding
+            position: 'sticky', // Make tabs sticky on scroll
+            top: 0,
+            zIndex: 10,
+            bgcolor: alpha(themeColors.background, 0.8),
+            backdropFilter: 'blur(12px)'
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex',
+            gap: { xs: 0.5, sm: 1, md: 1.5 }, // Responsive gap
+            bgcolor: themeColors.surface,
+            p: { xs: 1, sm: 1.5, md: 1.5 }, // Responsive padding
+            borderRadius: { xs: 1.5, sm: 2 }, // Smaller radius on mobile
+            border: `1px solid ${themeColors.border}`,
+            backdropFilter: 'blur(12px)',
+            boxShadow: `0 4px 6px ${alpha(themeColors.background, 0.1)}`,
+            width: '100%', // Take full width
+            maxWidth: { xs: '100%', sm: '90%', md: '80%' }, // Responsive max width
+            mx: 'auto' // Center the tabs container
+          }}>
+            {tabs.map((tab) => (
+              <Button
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                sx={{ 
+                  minWidth: { xs: '80px', sm: '100px', md: '120px' }, // Smaller on mobile
+                  flex: { xs: '1 1 0', md: '1 1 0' }, // Equal flex on all screens
+                  fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' }, // Responsive font size
+                  color: activeTab === tab.value ? themeColors.text.primary : themeColors.text.secondary,
+                  ...commonStyles.button,
+                  py: { xs: 1, sm: 1.5 }, // Responsive padding
+                  px: { xs: 0.5, sm: 1, md: 2 }, // Responsive padding
+                  whiteSpace: 'nowrap',
+                  bgcolor: activeTab === tab.value ? themeColors.primary : 'transparent',
+                  border: `1px solid ${activeTab === tab.value ? 'transparent' : themeColors.border}`,
+                  '&:hover': {
+                    bgcolor: activeTab === tab.value 
+                      ? alpha(themeColors.primary, 0.9)
+                      : alpha(themeColors.primary, 0.1),
+                    transform: 'translateY(-1px)',
+                    boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
+                  }
                 }}
               >
-                <Box sx={{ 
-                  display: 'flex',
-                  gap: 1.5,
-                  bgcolor: themeColors.surface,
-                  p: 1.5,
-                  borderRadius: 2,
-                  border: `1px solid ${themeColors.border}`,
-                  backdropFilter: 'blur(12px)',
-                  boxShadow: `0 4px 6px ${alpha(themeColors.background, 0.1)}`,
-                  minWidth: { xs: 'fit-content', md: 'auto' }, // Fit content on mobile, auto on desktop
-                  maxWidth: { md: '80%' } // Limit width on desktop
-                }}>
-                  {tabs.map((tab) => (
-                    <Button
-                      key={tab.value}
-                      onClick={() => setActiveTab(tab.value)}
-            sx={{ 
-                        minWidth: { xs: '100px', sm: '120px', md: '140px' }, // Fixed minimum width for each tab
-                        flex: { xs: '0 0 auto', md: '1 1 0' }, // No flex on mobile, equal flex on desktop
-                        color: activeTab === tab.value ? themeColors.text.primary : themeColors.text.secondary,
-                        ...commonStyles.button,
-                        py: 1.5,
-                        whiteSpace: 'nowrap', // Prevent text wrapping
-                        bgcolor: activeTab === tab.value ? themeColors.primary : 'transparent',
-                        border: `1px solid ${activeTab === tab.value ? 'transparent' : themeColors.border}`,
-                        '&:hover': {
-                          bgcolor: activeTab === tab.value 
-                            ? alpha(themeColors.primary, 0.9)
-                            : alpha(themeColors.primary, 0.1),
-                          transform: 'translateY(-1px)',
-                          boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
-                        }
-                      }}
-                    >
-                      {tab.label}
-                    </Button>
-                  ))}
+                {tab.label}
+              </Button>
+            ))}
           </Box>
-              </Box>
+        </Box>
             </TopBar>
 
             {/* Tab Content */}
-            <Box sx={{ p: 2 }}>
+            <Box sx={{ 
+              p: { xs: 1, sm: 1.5, md: 2 }, // Responsive padding
+              '& .MuiCard-root': { // Apply to all cards
+                mb: { xs: 1.5, sm: 2, md: 2.5 }, // Responsive margin between cards
+                '& .MuiCardHeader-root': {
+                  px: { xs: 1.5, sm: 2, md: 2.5 }, // Responsive padding
+                  py: { xs: 1, sm: 1.5, md: 2 },
+                  '& .MuiTypography-h6': {
+                    fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' } // Responsive font size
+                  }
+                },
+                '& .MuiCardContent-root': {
+                  px: { xs: 1.5, sm: 2, md: 2.5 }, // Responsive padding
+                  py: { xs: 1, sm: 1.5, md: 2 },
+                  '& .MuiTypography-body1': {
+                    fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1rem' } // Responsive font size
+                  },
+                  '& .MuiTypography-body2': {
+                    fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' } // Responsive font size
+                  }
+                }
+              }
+            }}>
               {activeTab === 'info' && (
                 <Stack spacing={3}>
                   {/* Match Info Card */}
@@ -1061,13 +1180,20 @@ const MatchDetailPage: React.FC = () => {
                     <CardContent sx={{ pt: 0 }}>
                       <Box sx={{ 
                         display: 'grid', 
-                        gridTemplateColumns: 'repeat(5, 1fr)', 
-                        gap: 1.5, 
-                        mb: 3,
-                        p: 1,
+                        gridTemplateColumns: {
+                          xs: 'repeat(2, 1fr)', // 2 columns on mobile
+                          sm: 'repeat(3, 1fr)', // 3 columns on tablet
+                          md: 'repeat(4, 1fr)', // 4 columns on small desktop
+                          lg: 'repeat(5, 1fr)'  // 5 columns on large desktop
+                        },
+                        gap: { xs: 1, sm: 1.5, md: 2 }, // Responsive gap
+                        mb: { xs: 2, sm: 2.5, md: 3 }, // Responsive margin
+                        p: { xs: 0.5, sm: 1, md: 1.5 }, // Responsive padding
                         bgcolor: 'rgba(15, 23, 42, 0.2)',
-                        borderRadius: 1,
-                        border: '1px solid rgba(59, 130, 246, 0.1)'
+                        borderRadius: { xs: 0.5, sm: 1 }, // Smaller radius on mobile
+                        border: '1px solid rgba(59, 130, 246, 0.1)',
+                        overflowX: 'auto', // Allow horizontal scroll if needed
+                        WebkitOverflowScrolling: 'touch' // Smooth scroll on iOS
                       }}>
                         {Array.from({ length: 20 }, (_, i) => {
                           const overRuns = [8, 12, 6, 15, 9, 7, 11, 4, 13, 8, 10, 5, 14, 6, 9, 12, 7, 8, 11, 6][i];
@@ -2602,138 +2728,322 @@ const MatchDetailPage: React.FC = () => {
                       </Stack>
                     </Box>
 
-                    <Box sx={{ p: 2 }}>
-                      {/* Batting Headers */}
+                    <Box sx={{ 
+                      p: { xs: 1, sm: 2 },
+                      overflow: 'hidden' // Contains scrollable content
+                    }}>
+                      {/* Scrollable Container */}
                       <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: '2fr 40px 40px 40px 40px 60px 1fr',
-                        gap: 1,
-                        mb: 1,
-                        px: 1
+                        overflowX: 'auto',
+                        WebkitOverflowScrolling: 'touch',
+                        width: '100%',
+                        '&::-webkit-scrollbar': { height: 4 },
+                        '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
+                        '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
                       }}>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Batter</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>R</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>B</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>4s</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>6s</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>SR</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Dismissal</Typography>
+                        {/* Inner Content with minimum width */}
+                        <Box sx={{ minWidth: { xs: '600px', sm: '100%' } }}>
+                          {/* Batting Headers */}
+                          <Box sx={{
+                            display: 'grid',
+                            gridTemplateColumns: {
+                              xs: '180px repeat(5, 40px) 1fr',
+                              sm: '2fr 40px 40px 40px 40px 60px 1fr'
+                            },
+                            gap: { xs: 1, sm: 2 },
+                            mb: 1,
+                            px: 1
+                          }}>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>Batter</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>R</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>B</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>4s</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>6s</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>SR</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>Dismissal</Typography>
+                          </Box>
+
+                          {/* Batters */}
+                          <Stack spacing={0.5}>
+                            {matchData.players.home.slice(0, 4).map((player, idx) => (
+                              <Box
+                                key={idx}
+                                sx={{
+                                  display: 'grid',
+                                  gridTemplateColumns: {
+                                    xs: '180px repeat(5, 40px) 1fr',
+                                    sm: '2fr 40px 40px 40px 40px 60px 1fr'
+                                  },
+                                  gap: { xs: 1, sm: 2 },
+                                  p: { xs: 0.75, sm: 1 },
+                                  borderRadius: 1,
+                                  bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
+                                  '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
+                                }}
+                              >
+                                <Box sx={{ 
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  <Typography variant="body2" sx={{ 
+                                    color: themeColors.text.primary,
+                                    fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                  }}>
+                                    {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
+                                  </Typography>
+                                </Box>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.runs || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.balls || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.fours || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.sixes || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.strikeRate?.toFixed(2) || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.secondary,
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  {idx === 0 ? 'c Conway b Muzarabani' : idx === 1 ? 'b Raza' : idx === 2 ? 'lbw b Muzarabani' : 'not out'}
+                                </Typography>
+                            </Box>
+                            ))}
+                          </Stack>
+                        </Box>
                       </Box>
 
-                      {/* Batters */}
-                      <Stack spacing={0.5}>
-                        {matchData.players.home.slice(0, 4).map((player, idx) => (
-                          <Box
-                            key={idx}
-                            sx={{
-                          display: 'grid',
-                              gridTemplateColumns: '2fr 40px 40px 40px 40px 60px 1fr',
-                              gap: 1,
-                          p: 1,
-                          borderRadius: 1,
-                              bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
-                              '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
-                            }}
-                          >
-                            <Box>
-                              <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
-                                {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
-                              </Typography>
-                            </Box>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.runs || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.balls || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.fours || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.sixes || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.strikeRate?.toFixed(2) || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
-                              {idx === 0 ? 'c Conway b Muzarabani' : idx === 1 ? 'b Raza' : idx === 2 ? 'lbw b Muzarabani' : 'not out'}
-                            </Typography>
-                        </Box>
-                        ))}
-                      </Stack>
-
                       {/* Extras & Total */}
-                      <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${themeColors.border}` }}>
-                        <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                      <Box sx={{ 
+                        mt: { xs: 1.5, sm: 2 }, 
+                        pt: { xs: 1.5, sm: 2 },
+                        borderTop: `1px solid ${themeColors.border}`,
+                        fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                      }}>
+                        <Typography variant="body2" sx={{ 
+                          color: themeColors.text.secondary,
+                          fontSize: 'inherit',
+                          mb: 0.5
+                        }}>
                           Extras: 12 (b 4, lb 5, w 2, nb 1)
                         </Typography>
-                        <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                        <Typography variant="body2" sx={{ 
+                          color: themeColors.text.secondary,
+                          fontSize: 'inherit',
+                          mb: 1
+                        }}>
                           Total: 149 all out (52.5 ov)
                         </Typography>
-                        <Typography variant="body2" sx={{ color: themeColors.text.secondary, mt: 1 }}>
-                          Fall of wickets: 1-23 (Curran, 8.2 ov), 2-45 (Bennett, 15.3 ov), 3-67 (Welch, 22.1 ov), 4-98 (Williams, 32.4 ov)
+                        <Typography variant="body2" sx={{ 
+                          color: themeColors.text.secondary,
+                          fontSize: 'inherit',
+                          lineHeight: 1.4
+                        }}>
+                          Fall of wickets: 
+                          <Box component="span" sx={{ 
+                            display: { xs: 'block', sm: 'inline' },
+                            mt: { xs: 0.5, sm: 0 },
+                            ml: { sm: 0.5 }
+                          }}>
+                            1-23 (Curran, 8.2 ov), 2-45 (Bennett, 15.3 ov), 3-67 (Welch, 22.1 ov), 4-98 (Williams, 32.4 ov)
+                          </Box>
                         </Typography>
                       </Box>
                       </Box>
 
                     {/* Bowling Section */}
-                    <Box sx={{ p: 2, borderTop: `1px solid ${themeColors.border}` }}>
-                      <Typography variant="subtitle1" sx={{ mb: 2, color: themeColors.text.primary }}>
-                        Bowling
-                        </Typography>
-                      
-                      {/* Bowling Headers */}
-                      <Box sx={{
-                        display: 'grid',
-                        gridTemplateColumns: '2fr 40px 40px 40px 40px 60px',
-                        gap: 1,
-                        mb: 1,
-                        px: 1
+                    <Box sx={{ 
+                      p: { xs: 1, sm: 2 },
+                      borderTop: `1px solid ${themeColors.border}`,
+                      overflow: 'hidden'
+                    }}>
+                      <Typography variant="subtitle1" sx={{ 
+                        mb: { xs: 1.5, sm: 2 },
+                        color: themeColors.text.primary,
+                        fontSize: { xs: '1rem', sm: '1.1rem' }
                       }}>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>Bowler</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>O</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>M</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>R</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>W</Typography>
-                        <Typography variant="caption" sx={{ color: themeColors.text.secondary, textAlign: 'right' }}>ECON</Typography>
-                      </Box>
+                        Bowling
+                      </Typography>
 
-                      {/* Bowlers */}
-                      <Stack spacing={0.5}>
-                        {matchData.players.away.slice(0, 2).map((player, idx) => (
-                          <Box
-                            key={idx}
-                            sx={{
-                              display: 'grid',
-                              gridTemplateColumns: '2fr 40px 40px 40px 40px 60px',
-                              gap: 1,
-                              p: 1,
-                              borderRadius: 1,
-                              bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
-                              '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
-                            }}
-                          >
-                        <Typography variant="body2" sx={{ color: themeColors.text.primary }}>
-                              {player.name} {player.isCaptain ? '(c)' : ''}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.overs || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.maidens || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.runs || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.wickets || 0}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: themeColors.text.primary, textAlign: 'right' }}>
-                              {player.stats?.economy?.toFixed(2) || 0}
-                        </Typography>
+                      {/* Scrollable Container */}
+                      <Box sx={{
+                        overflowX: 'auto',
+                        WebkitOverflowScrolling: 'touch',
+                        width: '100%',
+                        '&::-webkit-scrollbar': { height: 4 },
+                        '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
+                        '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
+                      }}>
+                        {/* Inner Content with minimum width */}
+                        <Box sx={{ minWidth: { xs: '500px', sm: '100%' } }}>
+                          {/* Bowling Headers */}
+                          <Box sx={{
+                            display: 'grid',
+                            gridTemplateColumns: {
+                              xs: '180px repeat(5, 40px)',
+                              sm: '2fr repeat(5, 40px)'
+                            },
+                            gap: { xs: 1, sm: 2 },
+                            mb: 1,
+                            px: 1
+                          }}>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>Bowler</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>O</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>M</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>R</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>W</Typography>
+                            <Typography variant="caption" sx={{ 
+                              color: themeColors.text.secondary,
+                              textAlign: 'right',
+                              fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                            }}>ECON</Typography>
+                          </Box>
+
+                          {/* Bowlers */}
+                          <Stack spacing={0.5}>
+                            {matchData.players.away.slice(0, 2).map((player, idx) => (
+                              <Box
+                                key={idx}
+                                sx={{
+                                  display: 'grid',
+                                  gridTemplateColumns: {
+                                    xs: '180px repeat(5, 40px)',
+                                    sm: '2fr repeat(5, 40px)'
+                                  },
+                                  gap: { xs: 1, sm: 2 },
+                                  p: { xs: 0.75, sm: 1 },
+                                  borderRadius: 1,
+                                  bgcolor: idx % 2 === 0 ? 'transparent' : alpha(themeColors.surface, 0.3),
+                                  '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) }
+                                }}
+                              >
+                                <Box sx={{ 
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  <Typography variant="body2" sx={{ 
+                                    color: themeColors.text.primary,
+                                    fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                  }}>
+                                    {player.name} {player.isCaptain ? '(c)' : ''}
+                                  </Typography>
+                                </Box>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.overs || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.maidens || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.runs || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.wickets || 0}
+                                </Typography>
+                                <Typography variant="body2" sx={{ 
+                                  color: themeColors.text.primary,
+                                  textAlign: 'right',
+                                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                                }}>
+                                  {player.stats?.economy?.toFixed(2) || 0}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Stack>
+                        </Box>
                       </Box>
-                        ))}
-                      </Stack>
                     </Box>
                   </Card>
 
