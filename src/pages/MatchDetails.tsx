@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   Button,
-  Paper,
   Card,
   IconButton,
   Slider,
@@ -13,21 +12,15 @@ import {
   CircularProgress,
   LinearProgress,
   Avatar,
-  useMediaQuery,
-  Badge,
-  Tabs,
   CardHeader,
   CardContent,
   Divider,
   List
 } from "@mui/material";
 import { useTheme, styled, alpha } from '@mui/material/styles';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+
 import MessageIcon from '@mui/icons-material/Message';
 import StarIcon from '@mui/icons-material/Star';
 import TargetIcon from '@mui/icons-material/GpsFixed';
@@ -420,147 +413,18 @@ const TabPanel = styled(Box)({
   }
 });
 
-const VideoContainer = styled(Card)(({ theme }) => ({
-  ...commonStyles.card,
-  position: 'relative',
-  width: '100%',
-  height: '100%',
-  overflow: 'hidden',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  '&:hover .video-controls': {
-    opacity: 1,
-  }
-}));
 
-const VideoControls = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  padding: theme.spacing(1.5, 2),
-  background: `linear-gradient(transparent, ${alpha(themeColors.background, 0.9)})`,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(1),
-  opacity: 1,
-  backdropFilter: 'blur(4px)',
-  transition: 'opacity 0.3s ease-in-out',
-  className: 'video-controls',
-}));
 
 
 // --- UI COMPONENTS ---
 
-const VideoPlayer: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(70);
-  const [progress, setProgress] = useState(45);
-  const themeColor = '#3B82F6';
-
-  const handleVolumeChange = (_event: Event, newValue: number | number[]) => {
-    setVolume(newValue as number);
-  };
-  
-  const handleProgressChange = (_event: Event, newValue: number | number[]) => {
-    setProgress(newValue as number);
-  };
-
-  return (
-    <VideoContainer>
-      <Box
-        component="video"
-        sx={{
-            width: '100%',
-            // If you want to maintain aspect ratio strictly while filling height, use object-fit
-            // This will make the video itself fill while potentially showing black bars if aspect ratio doesn't match container
-            height: '100%', 
-            objectFit: 'contain', // or 'cover' depending on desired fill behavior
-            backgroundColor: '#000'
-        }}
-      />
-      <VideoControls>
-        <Slider
-          value={progress}
-          onChange={handleProgressChange}
-          sx={{ color: themeColor, '& .MuiSlider-thumb': { boxShadow: `0 0 8px ${themeColor}` } }}
-        />
-        <Stack direction="row" spacing={2} alignItems="center">
-          <IconButton onClick={() => setIsPlaying(!isPlaying)} sx={{ color: 'white' }}>
-            {isPlaying ? <PauseIcon fontSize="large" /> : <PlayArrowIcon fontSize="large" />}
-          </IconButton>
-          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: 120 }}>
-            <VolumeUpIcon sx={{ color: 'white' }} />
-            <Slider value={volume} onChange={handleVolumeChange} sx={{ color: 'white' }} />
-          </Stack>
-          <Typography variant="caption">1:23 / 3:45</Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <IconButton sx={{ color: 'white' }}>
-            <FullscreenIcon fontSize="large" />
-          </IconButton>
-        </Stack>
-      </VideoControls>
-    </VideoContainer>
-  );
-};
 
 
 
-const Probability: React.FC<{ data: MatchData }> = ({ data }) => (
-  <Card sx={{ bgcolor: alpha("#000000", 0.2), color: 'white', p: 3, borderRadius: 3 }}>
-    <Typography variant="h5" gutterBottom fontWeight="bold">Win Probability</Typography>
-    <Stack spacing={2} mt={2}>
-      <Box>
-        <Stack direction="row" justifyContent="space-between" mb={0.5}>
-            <Typography variant="body1">{data.teams.home.name}</Typography>
-            <Typography variant="body1"><strong>{data.winProbability.home}%</strong></Typography>
-        </Stack>
-        <LinearProgress variant="determinate" value={data.winProbability.home} sx={{ height: 8, borderRadius: 5, '& .MuiLinearProgress-bar': { backgroundColor: '#3B82F6' } }}/>
-      </Box>
-      <Box>
-        <Stack direction="row" justifyContent="space-between" mb={0.5}>
-            <Typography variant="body1">{data.teams.away.name}</Typography>
-            <Typography variant="body1"><strong>{data.winProbability.away}%</strong></Typography>
-        </Stack>
-        <LinearProgress variant="determinate" value={data.winProbability.away} sx={{ height: 8, borderRadius: 5, '& .MuiLinearProgress-bar': { backgroundColor: '#9CA3AF' } }}/>
-      </Box>
-    </Stack>
-  </Card>
-);
 
-const PredictAndBet: React.FC<{ data: MatchData }> = ({ data }) => (
-  <Card sx={{ bgcolor: alpha("#000000", 0.2), color: 'white', p: 3, borderRadius: 3 }}>
-    <Typography variant="h5" gutterBottom fontWeight="bold">Predict & Bet</Typography>
-    <Typography variant="subtitle1" gutterBottom sx={{color: '#bbb', mb: 3}}>Who will win this match?</Typography>
-    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-      {[
-        { team: data.teams.home, odds: data.bettingOdds.home },
-        { team: data.teams.away, odds: data.bettingOdds.away }
-      ].map(({ team, odds }) => (
-        <Button
-          key={team.name}
-          variant="contained"
-          fullWidth
-          sx={{
-            bgcolor: '#2D2D2D',
-            '&:hover': { bgcolor: '#3B82F6' },
-            borderRadius: 2,
-            py: 2,
-            px: 3,
-            boxShadow: '0 0 15px rgba(59, 130, 246, 0.2)',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Typography fontWeight="bold">{team.name}</Typography>
-          <Typography variant="h6" sx={{ bgcolor: '#121212', px: 1.5, py: 0.5, borderRadius: 1 }}>
-            {odds}x
-          </Typography>
-        </Button>
-      ))}
-    </Stack>
-  </Card>
-);
+
+
+
 
 
 // --- MAIN PAGE ---
@@ -1167,175 +1031,235 @@ const MatchDetailPage: React.FC = () => {
                     </CardContent>
                   </Card>
 
-                  {/* Last 20 Overs - Compact View */}
-                  <Card sx={{ ...commonStyles.card }}>
+                  {/* Over by Over View */}
+                  <Card sx={{ 
+                    bgcolor: 'rgba(15, 23, 42, 1)',
+                    border: 'none',
+                    borderRadius: 0,
+                    boxShadow: 'none'
+                  }}>
                     <CardHeader 
-                      title={<Typography variant="h6" sx={{ fontWeight: 600 }}>Last 20 Overs</Typography>} 
-                      sx={{ pb: 1 }}
+                      title={
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <Box sx={{
+                            p: 1,
+                            bgcolor: 'rgba(59, 130, 246, 0.2)',
+                            borderRadius: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}>
+                            <AccessTimeIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+                          </Box>
+                          <Typography variant="h6" sx={{
+                            color: '#FFFFFF',
+                            fontWeight: 600,
+                            letterSpacing: '0.5px'
+                          }}>
+                            Over by Over
+                          </Typography>
+                        </Stack>
+                      }
+                      sx={{
+                        bgcolor: 'rgba(15, 23, 42, 1)',
+                        borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                        py: 2.5
+                      }}
                     />
-                    <CardContent sx={{ pt: 0 }}>
-                      <Box sx={{ 
-                        display: 'grid', 
-                        gridTemplateColumns: {
-                          xs: 'repeat(2, 1fr)', // 2 columns on mobile
-                          sm: 'repeat(3, 1fr)', // 3 columns on tablet
-                          md: 'repeat(4, 1fr)', // 4 columns on small desktop
-                          lg: 'repeat(5, 1fr)'  // 5 columns on large desktop
-                        },
-                        gap: { xs: 1, sm: 1.5, md: 2 }, // Responsive gap
-                        mb: { xs: 2, sm: 2.5, md: 3 }, // Responsive margin
-                        p: { xs: 0.5, sm: 1, md: 1.5 }, // Responsive padding
-                        bgcolor: 'rgba(15, 23, 42, 0.2)',
-                        borderRadius: { xs: 0.5, sm: 1 }, // Smaller radius on mobile
-                        border: '1px solid rgba(59, 130, 246, 0.1)',
-                        overflowX: 'auto', // Allow horizontal scroll if needed
-                        WebkitOverflowScrolling: 'touch' // Smooth scroll on iOS
-                      }}>
-                        {Array.from({ length: 20 }, (_, i) => {
-                          const overRuns = [8, 12, 6, 15, 9, 7, 11, 4, 13, 8, 10, 5, 14, 6, 9, 12, 7, 8, 11, 6][i];
-                          const ballRuns = [
-                            [1,2,0,4,1,0], [6,1,0,4,1,0], [1,1,0,2,1,1], [4,6,1,0,4,0], [2,1,4,1,1,0],
-                            [1,0,2,1,2,1], [4,1,0,6,0,0], [1,0,1,1,0,1], [6,1,4,1,1,0], [2,1,1,2,1,1],
-                            [4,0,2,1,2,1], [1,1,0,1,1,1], [6,2,4,1,1,0], [1,1,1,1,1,1], [2,1,4,1,1,0],
-                            [4,1,0,6,1,0], [1,2,1,1,1,1], [2,1,1,2,1,1], [4,1,6,0,0,0], [1,1,1,1,1,1]
-                          ][i];
+                    <CardContent sx={{ p: 0 }}>
+                      {/* Scrollable container for overs */}
+                      <Box 
+                        sx={{ 
+                          height: '500px',
+                          overflowY: 'auto',
+                          '&::-webkit-scrollbar': {
+                            width: '8px',
+                          },
+                          '&::-webkit-scrollbar-track': {
+                            backgroundColor: 'rgba(15, 23, 42, 0.3)',
+                          },
+                          '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                            borderRadius: '4px',
+                            '&:hover': {
+                              backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            },
+                          }
+                        }}
+                      >
+                        {/* Overs list */}
+                        {Array.from({ length: 50 }, (_, i) => {
+                          const overIndex = 50 - i;
+                          const overRuns = Math.floor(Math.random() * 15);
+                          const ballRuns = Array.from({ length: 6 }, () => {
+                            const ballType = Math.floor(Math.random() * 5);
+                            return ballType === 0 ? 0 : // dot ball
+                                  ballType === 1 ? 1 : // single
+                                  ballType === 2 ? 4 : // four
+                                  ballType === 3 ? 6 : // six
+                                  'W'; // wicket
+                          });
                           
                           return (
-                            <Box key={i} sx={{ 
-                              textAlign: 'center',
-                              p: 1,
-                              borderRadius: 1,
-                              bgcolor: 'rgba(15, 23, 42, 0.3)',
-                              border: '1px solid rgba(59, 130, 246, 0.15)',
-                              transition: 'all 0.2s ease',
-                              '&:hover': {
-                                bgcolor: 'rgba(59, 130, 246, 0.1)',
-                                border: '1px solid rgba(59, 130, 246, 0.3)',
-                                transform: 'translateY(-1px)'
-                              }
-                            }}>
-                              <Box sx={{ 
-                                display: 'flex', 
-                                justifyContent: 'space-between', 
-                                alignItems: 'center', 
-                                mb: 1,
-                                px: 0.5
-                              }}>
-                                <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>
-                                  O{i+1}
-                                </Typography>
-                                <Typography variant="caption" fontWeight="bold" color="primary" sx={{ fontSize: '0.75rem' }}>
-                                  {overRuns}
+                            <Box 
+                              key={i}
+                              sx={{ 
+                                display: 'flex',
+                                bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                                p: 2
+                              }}
+                            >
+                              {/* Over number */}
+                              <Box 
+                                sx={{ 
+                                  width: '80px', 
+                                  mr: 3,
+                                  display: 'flex',
+                                  alignItems: 'center'
+                                }}
+                              >
+                                <Typography 
+                                  variant="body1" 
+                                  sx={{ 
+                                    color: '#94A3B8',
+                                    fontWeight: 'bold'
+                                  }}
+                                >
+                                  Over {overIndex}
                                 </Typography>
                               </Box>
+                              
+                              {/* Balls */}
                               <Box sx={{ 
                                 display: 'flex', 
-                                gap: 0.3, 
-                                justifyContent: 'center',
-                                flexWrap: 'wrap',
-                                maxWidth: '100%'
+                                gap: 2,
+                                flexGrow: 1,
+                                alignItems: 'center'
                               }}>
-                                {ballRuns.map((runs, idx) => (
-                                  <Box
-                                    key={idx}
-                                    sx={{
-                                      width: 18,
-                                      height: 18,
-                                      borderRadius: '50%',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      bgcolor: runs === 4 ? '#10B981' : 
-                                              runs === 6 ? '#8B5CF6' : 
-                                              runs === 0 ? '#6B7280' : '#3B82F6',
-                                      color: 'white',
-                                      fontWeight: 'bold',
-                                      fontSize: '0.65rem',
-                                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                                      border: '1px solid rgba(255,255,255,0.1)'
-                                    }}
-                                  >
-                                    {runs === 0 ? '.' : runs}
-                                  </Box>
-                                ))}
+                                {ballRuns.map((runs, ballIdx) => {
+                                  let bgColor = '#3B82F6'; // Default: 1 run (blue)
+                                  
+                                  if (runs === 0) bgColor = '#94A3B8'; // Dot ball (gray)
+                                  else if (runs === 4) bgColor = '#10B981'; // 4 runs (green)
+                                  else if (runs === 6) bgColor = '#8B5CF6'; // 6 runs (purple)
+                                  else if (runs === 'W') bgColor = '#EF4444'; // Wicket (red)
+                                  
+                                  return (
+                                    <Box
+                                      key={ballIdx}
+                                      sx={{
+                                        width: 28,
+                                        height: 28,
+                                        borderRadius: '50%',
+                                        bgcolor: bgColor,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: 'white',
+                                        fontSize: '0.85rem',
+                                        fontWeight: 'bold'
+                                      }}
+                                    >
+                                      {runs === 0 ? '•' : runs}
+                                    </Box>
+                                  );
+                                })}
+                              </Box>
+                              
+                              {/* Over total */}
+                              <Box 
+                                sx={{ 
+                                  width: '40px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'flex-end'
+                                }}
+                              >
+                                <Typography 
+                                  variant="body1" 
+                                  sx={{ 
+                                    color: '#3B82F6', 
+                                    fontWeight: 'bold'
+                                  }}
+                                >
+                                  {overRuns}
+                                </Typography>
                               </Box>
                             </Box>
                           );
                         })}
                       </Box>
                       
-                      <Divider sx={{ my: 2, borderColor: 'rgba(59, 130, 246, 0.2)' }} />
-                      
                       <Box sx={{ 
                         display: 'flex', 
                         justifyContent: 'space-between', 
                         alignItems: 'center',
-                        p: 1.5,
-                        bgcolor: 'rgba(15, 23, 42, 0.2)',
-                        borderRadius: 1,
-                        border: '1px solid rgba(59, 130, 246, 0.1)'
+                        p: 2,
+                        bgcolor: 'rgba(15, 23, 42, 0.9)',
+                        borderTop: '1px solid rgba(59, 130, 246, 0.3)'
                       }}>
-                        <Typography variant="body2" color="gray" sx={{ fontWeight: 500 }}>
-                          Total: <span style={{ color: '#3B82F6', fontWeight: 'bold' }}>180 runs</span> from last 20 overs
+                        <Typography variant="body2" sx={{ color: '#E2E8F0' }}>
+                          Total: <Box component="span" sx={{ color: '#3B82F6', fontWeight: 'bold' }}>180 runs</Box> from 50 overs
                         </Typography>
-                        <Typography variant="body2" color="gray" sx={{ fontWeight: 500 }}>
-                          RR: <span style={{ color: '#10B981', fontWeight: 'bold' }}>9.0</span> | SR: <span style={{ color: '#8B5CF6', fontWeight: 'bold' }}>112.5</span>
-                        </Typography>
+                        <Box>
+                          <Typography variant="body2" sx={{ color: '#E2E8F0', display: 'inline' }}>
+                            RR: <Box component="span" sx={{ color: '#10B981', fontWeight: 'bold' }}>9.0</Box> | SR: <Box component="span" sx={{ color: '#8B5CF6', fontWeight: 'bold' }}>112.5</Box>
+                          </Typography>
+                        </Box>
                       </Box>
                       
                       <Box sx={{ 
-                        mt: 2, 
                         display: 'flex', 
                         gap: 3, 
                         justifyContent: 'center',
-                        p: 1.5,
-                        bgcolor: 'rgba(15, 23, 42, 0.1)',
-                        borderRadius: 1,
-                        border: '1px solid rgba(59, 130, 246, 0.1)'
+                        p: 2,
+                        bgcolor: 'rgba(15, 23, 42, 0.8)'
                       }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                           <Box sx={{ 
                             width: 10, 
                             height: 10, 
                             borderRadius: '50%', 
-                            bgcolor: '#3B82F6',
-                            border: '1px solid rgba(255,255,255,0.2)',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                            bgcolor: '#94A3B8'
                           }} />
-                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>1-3</Typography>
+                          <Typography variant="caption" sx={{ color: '#94A3B8' }}>Dot</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                           <Box sx={{ 
                             width: 10, 
                             height: 10, 
                             borderRadius: '50%', 
-                            bgcolor: '#10B981',
-                            border: '1px solid rgba(255,255,255,0.2)',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                            bgcolor: '#3B82F6'
                           }} />
-                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>4</Typography>
+                          <Typography variant="caption" sx={{ color: '#94A3B8' }}>1-3</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                           <Box sx={{ 
                             width: 10, 
                             height: 10, 
                             borderRadius: '50%', 
-                            bgcolor: '#8B5CF6',
-                            border: '1px solid rgba(255,255,255,0.2)',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                            bgcolor: '#10B981'
                           }} />
-                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>6</Typography>
+                          <Typography variant="caption" sx={{ color: '#94A3B8' }}>4</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                           <Box sx={{ 
                             width: 10, 
                             height: 10, 
                             borderRadius: '50%', 
-                            bgcolor: '#6B7280',
-                            border: '1px solid rgba(255,255,255,0.2)',
-                            boxShadow: '0 1px 2px rgba(0,0,0,0.2)'
+                            bgcolor: '#8B5CF6'
                           }} />
-                          <Typography variant="caption" color="gray" sx={{ fontWeight: 500 }}>0</Typography>
+                          <Typography variant="caption" sx={{ color: '#94A3B8' }}>6</Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                          <Box sx={{ 
+                            width: 10, 
+                            height: 10, 
+                            borderRadius: '50%', 
+                            bgcolor: '#EF4444'
+                          }} />
+                          <Typography variant="caption" sx={{ color: '#94A3B8' }}>W</Typography>
                         </Box>
                       </Box>
                     </CardContent>
@@ -1390,17 +1314,17 @@ const MatchDetailPage: React.FC = () => {
                     mb: { xs: 2, sm: 1 }
                   }}>
                     {[
-                      { value: '85%', label: 'Win Probability' },
-                      { value: '2.85', label: 'Best Odds' },
-                      { value: '12K', label: 'Active Bets' }
+                      { value: '85%', label: 'Win Probability', color: '#3B82F6' },
+                      { value: '2.85', label: 'Best Odds', color: '#10B981' },
+                      { value: '12K', label: 'Active Bets', color: '#8B5CF6' }
                     ].map((stat, index) => (
                       <Box
                         key={index}
                         sx={{
                           p: { xs: 2, sm: 2.5 },
                           textAlign: 'center',
-                          bgcolor: 'transparent',
-                          border: '1px solid rgba(51, 65, 85, 0.4)',
+                          bgcolor: 'rgba(15, 23, 42, 0.6)',
+                          border: `1px solid rgba(${stat.color.replace('#', '').match(/.{2}/g)?.map(hex => parseInt(hex, 16)).join(', ')}, 0.3)`,
                           borderRadius: { xs: 1.5, sm: 2 },
                           transition: 'all 0.3s ease',
                           display: 'flex',
@@ -1408,17 +1332,18 @@ const MatchDetailPage: React.FC = () => {
                           alignItems: 'center',
                           justifyContent: { xs: 'space-between', sm: 'center' },
                           gap: { xs: 2, sm: 0 },
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
                           '&:hover': {
                             transform: 'translateY(-1px)',
-                            border: '1px solid rgba(51, 65, 85, 0.6)',
-                            bgcolor: 'rgba(51, 65, 85, 0.1)'
+                            boxShadow: `0 8px 24px rgba(${stat.color.replace('#', '').match(/.{2}/g)?.map(hex => parseInt(hex, 16)).join(', ')}, 0.2)`,
+                            bgcolor: 'rgba(15, 23, 42, 0.8)'
                           }
                         }}
                       >
                         <Typography 
                           variant="h3" 
                           sx={{ 
-                            color: '#E2E8F0',
+                            color: stat.color,
                             mb: { xs: 0, sm: 1 },
                             fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
                             fontWeight: 700,
@@ -1430,7 +1355,7 @@ const MatchDetailPage: React.FC = () => {
                         <Typography 
                           variant="body2" 
                           sx={{ 
-                            color: '#94A3B8',
+                            color: '#E2E8F0',
                             fontWeight: 500,
                             fontSize: { xs: '0.875rem', sm: '0.9rem' },
                             order: { xs: 1, sm: 2 }
@@ -1447,9 +1372,9 @@ const MatchDetailPage: React.FC = () => {
                     display: 'flex',
                     gap: 1,
                     p: 1,
-                    bgcolor: 'rgba(30, 41, 59, 0.6)',
+                    bgcolor: 'rgba(15, 23, 42, 0.8)',
                     borderRadius: 2,
-                    border: '1px solid rgba(51, 65, 85, 0.4)',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
                     backdropFilter: 'blur(12px)',
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
                   }}>
@@ -1462,25 +1387,25 @@ const MatchDetailPage: React.FC = () => {
                           py: 2,
                           px: 3,
                           bgcolor: type === activeBettingTab 
-                            ? '#475569'
+                            ? 'rgba(59, 130, 246, 0.2)'
                             : 'transparent',
                           color: type === activeBettingTab 
-                            ? '#F8FAFC' 
+                            ? '#FFFFFF' 
                             : '#94A3B8',
                           border: `1px solid ${type === activeBettingTab 
-                            ? 'transparent' 
+                            ? 'rgba(59, 130, 246, 0.4)' 
                             : 'rgba(51, 65, 85, 0.4)'}`,
                           borderRadius: 1.5,
                           fontWeight: type === activeBettingTab ? 600 : 500,
                           letterSpacing: '0.5px',
-                          transition: 'all 0.3s ease',
+                          transition: 'all 0.2s ease',
                           '&:hover': {
                             bgcolor: type === activeBettingTab 
-                              ? '#334155' 
+                              ? 'rgba(59, 130, 246, 0.25)' 
                               : 'rgba(51, 65, 85, 0.2)',
                             transform: 'translateY(-1px)',
                             boxShadow: type === activeBettingTab 
-                              ? '0 4px 12px rgba(51, 65, 85, 0.4)'
+                              ? '0 4px 12px rgba(59, 130, 246, 0.25)'
                               : '0 2px 8px rgba(51, 65, 85, 0.3)'
                           }
                         }}
@@ -1494,14 +1419,15 @@ const MatchDetailPage: React.FC = () => {
                     <>
                       {/* Match Winner Section */}
                       <Card sx={{ 
-                        bgcolor: 'rgba(30, 41, 59, 0.7)',
+                        bgcolor: 'rgba(15, 23, 42, 0.8)',
                         backdropFilter: 'blur(12px)',
-                        border: '1px solid rgba(51, 65, 85, 0.4)',
+                        border: '1px solid rgba(59, 130, 246, 0.3)',
                         borderRadius: 2,
                         transition: 'all 0.3s ease',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
                         '&:hover': {
                           transform: 'translateY(-2px)',
-                          boxShadow: '0 8px 24px rgba(30, 41, 59, 0.4)'
+                          boxShadow: '0 8px 24px rgba(59, 130, 246, 0.25)'
                         }
                       }}>
                         <CardHeader 
@@ -1509,16 +1435,16 @@ const MatchDetailPage: React.FC = () => {
                             <Stack direction="row" spacing={2} alignItems="center">
                               <Box sx={{ 
                                 p: 1, 
-                                bgcolor: 'rgba(51, 65, 85, 0.4)', 
+                                bgcolor: 'rgba(59, 130, 246, 0.2)', 
                                 borderRadius: 1,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center'
                               }}>
-                                <TrophyIcon sx={{ color: '#E2E8F0', fontSize: 24 }} />
+                                <TrophyIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
                               </Box>
                               <Typography variant="h6" sx={{ 
-                                color: '#F8FAFC',
+                                color: '#FFFFFF',
                                 fontWeight: 600,
                                 letterSpacing: '0.5px'
                               }}>
@@ -1527,8 +1453,8 @@ const MatchDetailPage: React.FC = () => {
                             </Stack>
                           }
                           sx={{ 
-                            bgcolor: 'rgba(30, 41, 59, 0.8)',
-                            borderBottom: '1px solid rgba(51, 65, 85, 0.4)',
+                            bgcolor: 'rgba(15, 23, 42, 0.9)',
+                            borderBottom: '1px solid rgba(59, 130, 246, 0.3)',
                             py: 2.5
                           }}
                         />
@@ -1540,60 +1466,68 @@ const MatchDetailPage: React.FC = () => {
                               justifyContent: 'space-between',
                               alignItems: 'center',
                               p: 2.5,
-                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              bgcolor: 'rgba(15, 23, 42, 0.7)',
                               borderRadius: 1.5,
-                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              border: '1px solid rgba(59, 130, 246, 0.25)',
                               transition: 'all 0.2s ease',
                               '&:hover': {
-                                bgcolor: 'rgba(15, 23, 42, 0.7)',
-                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                                bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                border: '1px solid rgba(59, 130, 246, 0.4)'
                               }
                             }}>
-                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
-                                India Women
-                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Avatar 
+                                  src="/teams/india.png" 
+                                  alt="India" 
+                                  sx={{ 
+                                    width: 32, 
+                                    height: 32, 
+                                    border: '1px solid rgba(59, 130, 246, 0.3)'
+                                  }}
+                                />
+                                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                                  India Women
+                                </Typography>
+                              </Box>
                               <Stack direction="row" spacing={1.5}>
                                 <Button
                                   variant="contained"
                                   size="small"
                                   sx={{
-                                    bgcolor: '#3B82F6',
+                                    bgcolor: 'rgba(59, 130, 246, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#2563EB',
+                                      bgcolor: 'rgba(59, 130, 246, 1)',
                                       transform: 'translateY(-1px)',
                                       boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
                                     }
                                   }}
                                 >
-                                  Back 2.85
+                                  <Typography variant="body2" fontWeight={600}>2.85</Typography>
                                 </Button>
                                 <Button
                                   sx={{
-                                    bgcolor: '#6B7280',
+                                    bgcolor: 'rgba(239, 68, 68, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     minWidth: 80,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#4B5563',
+                                      bgcolor: 'rgba(239, 68, 68, 1)',
                                       transform: 'translateY(-1px)',
-                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
                                     }
                                   }}
                                 >
-                                  <Stack alignItems="center" spacing={0.5}>
-                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
-                                    <Typography variant="caption">2.9</Typography>
-                                  </Stack>
+                                  <Typography variant="body2" fontWeight={600}>2.9</Typography>
                                 </Button>
                               </Stack>
                             </Box>
@@ -1604,77 +1538,163 @@ const MatchDetailPage: React.FC = () => {
                               justifyContent: 'space-between',
                               alignItems: 'center',
                               p: 2.5,
-                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              bgcolor: 'rgba(15, 23, 42, 0.7)',
                               borderRadius: 1.5,
-                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              border: '1px solid rgba(59, 130, 246, 0.25)',
                               transition: 'all 0.2s ease',
                               '&:hover': {
-                                bgcolor: 'rgba(15, 23, 42, 0.7)',
-                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                                bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                border: '1px solid rgba(59, 130, 246, 0.4)'
                               }
                             }}>
-                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
-                                Australia Women
-                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Avatar 
+                                  src="/teams/australia.png" 
+                                  alt="Australia" 
+                                  sx={{ 
+                                    width: 32, 
+                                    height: 32, 
+                                    border: '1px solid rgba(59, 130, 246, 0.3)'
+                                  }}
+                                />
+                                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                                  Australia Women
+                                </Typography>
+                              </Box>
                               <Stack direction="row" spacing={1.5}>
                                 <Button
                                   variant="contained"
                                   size="small"
                                   sx={{
-                                    bgcolor: '#3B82F6',
+                                    bgcolor: 'rgba(59, 130, 246, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#2563EB',
+                                      bgcolor: 'rgba(59, 130, 246, 1)',
                                       transform: 'translateY(-1px)',
                                       boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
                                     }
                                   }}
                                 >
-                                  Back 1.45
+                                  <Typography variant="body2" fontWeight={600}>1.45</Typography>
                                 </Button>
                                 <Button
                                   sx={{
-                                    bgcolor: '#6B7280',
+                                    bgcolor: 'rgba(239, 68, 68, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     minWidth: 80,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#4B5563',
+                                      bgcolor: 'rgba(239, 68, 68, 1)',
                                       transform: 'translateY(-1px)',
-                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
                                     }
                                   }}
                                 >
-                                  <Stack alignItems="center" spacing={0.5}>
-                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
-                                    <Typography variant="caption">1.47</Typography>
-                                  </Stack>
+                                  <Typography variant="body2" fontWeight={600}>1.47</Typography>
+                                </Button>
+                              </Stack>
+                            </Box>
+                            
+                            {/* Draw option */}
+                            <Box sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              p: 2.5,
+                              bgcolor: 'rgba(15, 23, 42, 0.7)',
+                              borderRadius: 1.5,
+                              border: '1px solid rgba(59, 130, 246, 0.25)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                border: '1px solid rgba(59, 130, 246, 0.4)'
+                              }
+                            }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Box sx={{ 
+                                  width: 32, 
+                                  height: 32, 
+                                  borderRadius: '50%',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  bgcolor: 'rgba(100, 116, 139, 0.3)',
+                                  border: '1px solid rgba(100, 116, 139, 0.5)'
+                                }}>
+                                  <Typography variant="body2" sx={{ color: '#CBD5E1', fontWeight: 600 }}>D</Typography>
+                                </Box>
+                                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                                  Draw
+                                </Typography>
+                              </Box>
+                              <Stack direction="row" spacing={1.5}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: 'rgba(59, 130, 246, 0.8)',
+                                    color: 'white',
+                                    px: 3,
+                                    py: 1.2,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: 'rgba(59, 130, 246, 1)',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  <Typography variant="body2" fontWeight={600}>3.50</Typography>
+                                </Button>
+                                <Button
+                                  sx={{
+                                    bgcolor: 'rgba(239, 68, 68, 0.8)',
+                                    color: 'white',
+                                    px: 3,
+                                    py: 1.2,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 80,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                      bgcolor: 'rgba(239, 68, 68, 1)',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  <Typography variant="body2" fontWeight={600}>3.55</Typography>
                                 </Button>
                               </Stack>
                             </Box>
                           </Stack>
+                          
+
                         </CardContent>
                       </Card>
 
                   {/* Toss Winner Section */}
                       <Card sx={{ 
-                        bgcolor: 'rgba(15, 23, 42, 0.4)',
+                        bgcolor: 'rgba(15, 23, 42, 0.8)',
                         backdropFilter: 'blur(12px)',
-                        border: '1px solid rgba(59, 130, 246, 0.2)',
+                        border: '1px solid rgba(59, 130, 246, 0.3)',
                         borderRadius: 2,
                         transition: 'all 0.3s ease',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
                         '&:hover': {
                           transform: 'translateY(-2px)',
-                          boxShadow: '0 8px 24px rgba(59, 130, 246, 0.15)'
+                          boxShadow: '0 8px 24px rgba(59, 130, 246, 0.25)'
                         }
                       }}>
                         <CardHeader 
@@ -1689,15 +1709,16 @@ const MatchDetailPage: React.FC = () => {
                                 justifyContent: 'center'
                               }}>
                                 <Box sx={{ 
-                                  width: 16, 
-                                  height: 16, 
+                                  width: 20, 
+                                  height: 20, 
                                   borderRadius: '50%', 
                                   bgcolor: '#3B82F6',
-                                  border: '2px solid white'
+                                  border: '2px solid rgba(255, 255, 255, 0.8)',
+                                  boxShadow: '0 0 10px rgba(59, 130, 246, 0.5)'
                                 }} />
                               </Box>
                               <Typography variant="h6" sx={{ 
-                                color: 'white',
+                                color: '#FFFFFF',
                                 fontWeight: 600,
                                 letterSpacing: '0.5px'
                               }}>
@@ -1706,8 +1727,8 @@ const MatchDetailPage: React.FC = () => {
                             </Stack>
                           }
                           sx={{ 
-                            bgcolor: 'rgba(15, 23, 42, 0.6)',
-                            borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
+                            bgcolor: 'rgba(15, 23, 42, 0.9)',
+                            borderBottom: '1px solid rgba(59, 130, 246, 0.3)',
                             py: 2.5
                           }}
                         />
@@ -1719,60 +1740,68 @@ const MatchDetailPage: React.FC = () => {
                               justifyContent: 'space-between',
                               alignItems: 'center',
                               p: 2.5,
-                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              bgcolor: 'rgba(15, 23, 42, 0.7)',
                               borderRadius: 1.5,
-                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              border: '1px solid rgba(59, 130, 246, 0.25)',
                               transition: 'all 0.2s ease',
                               '&:hover': {
-                                bgcolor: 'rgba(15, 23, 42, 0.7)',
-                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                                bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                border: '1px solid rgba(59, 130, 246, 0.4)'
                               }
                             }}>
-                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
-                                India Women
-                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Avatar 
+                                  src="/teams/india.png" 
+                                  alt="India" 
+                                  sx={{ 
+                                    width: 32, 
+                                    height: 32, 
+                                    border: '1px solid rgba(59, 130, 246, 0.3)'
+                                  }}
+                                />
+                                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                                  India Women
+                                </Typography>
+                              </Box>
                               <Stack direction="row" spacing={1.5}>
                                 <Button
                                   variant="contained"
                                   size="small"
                                   sx={{
-                                    bgcolor: '#3B82F6',
+                                    bgcolor: 'rgba(59, 130, 246, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#2563EB',
+                                      bgcolor: 'rgba(59, 130, 246, 1)',
                                       transform: 'translateY(-1px)',
                                       boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
                                     }
                                   }}
                                 >
-                                  Back 1.95
+                                  <Typography variant="body2" fontWeight={600}>1.95</Typography>
                                 </Button>
                                 <Button
                                   sx={{
-                                    bgcolor: '#6B7280',
+                                    bgcolor: 'rgba(239, 68, 68, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     minWidth: 80,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#4B5563',
+                                      bgcolor: 'rgba(239, 68, 68, 1)',
                                       transform: 'translateY(-1px)',
-                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
                                     }
                                   }}
                                 >
-                                  <Stack alignItems="center" spacing={0.5}>
-                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
-                                    <Typography variant="caption">1.98</Typography>
-                                  </Stack>
+                                  <Typography variant="body2" fontWeight={600}>1.98</Typography>
                                 </Button>
                               </Stack>
                             </Box>
@@ -1783,64 +1812,87 @@ const MatchDetailPage: React.FC = () => {
                               justifyContent: 'space-between',
                               alignItems: 'center',
                               p: 2.5,
-                              bgcolor: 'rgba(15, 23, 42, 0.5)',
+                              bgcolor: 'rgba(15, 23, 42, 0.7)',
                               borderRadius: 1.5,
-                              border: '1px solid rgba(59, 130, 246, 0.15)',
+                              border: '1px solid rgba(59, 130, 246, 0.25)',
                               transition: 'all 0.2s ease',
                               '&:hover': {
-                                bgcolor: 'rgba(15, 23, 42, 0.7)',
-                                border: '1px solid rgba(59, 130, 246, 0.3)'
+                                bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                border: '1px solid rgba(59, 130, 246, 0.4)'
                               }
                             }}>
-                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 500 }}>
-                                Australia Women
-                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Avatar 
+                                  src="/teams/australia.png" 
+                                  alt="Australia" 
+                                  sx={{ 
+                                    width: 32, 
+                                    height: 32, 
+                                    border: '1px solid rgba(59, 130, 246, 0.3)'
+                                  }}
+                                />
+                                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                                  Australia Women
+                                </Typography>
+                              </Box>
                               <Stack direction="row" spacing={1.5}>
                                 <Button
                                   variant="contained"
                                   size="small"
                                   sx={{
-                                    bgcolor: '#3B82F6',
+                                    bgcolor: 'rgba(59, 130, 246, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#2563EB',
+                                      bgcolor: 'rgba(59, 130, 246, 1)',
                                       transform: 'translateY(-1px)',
                                       boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
                                     }
                                   }}
                                 >
-                                  Back 1.85
+                                  <Typography variant="body2" fontWeight={600}>1.85</Typography>
                                 </Button>
                                 <Button
                                   sx={{
-                                    bgcolor: '#6B7280',
+                                    bgcolor: 'rgba(239, 68, 68, 0.8)',
                                     color: 'white',
-                                    px: 2.5,
-                                    py: 1,
+                                    px: 3,
+                                    py: 1.2,
                                     borderRadius: 1,
                                     fontWeight: 600,
                                     minWidth: 80,
                                     transition: 'all 0.2s ease',
                                     '&:hover': {
-                                      bgcolor: '#4B5563',
+                                      bgcolor: 'rgba(239, 68, 68, 1)',
                                       transform: 'translateY(-1px)',
-                                      boxShadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
+                                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
                                     }
                                   }}
                                 >
-                                  <Stack alignItems="center" spacing={0.5}>
-                                    <Typography variant="body2" fontWeight={600}>Lay</Typography>
-                                    <Typography variant="caption">1.88</Typography>
-                                  </Stack>
+                                  <Typography variant="body2" fontWeight={600}>1.88</Typography>
                                 </Button>
                               </Stack>
                             </Box>
                           </Stack>
+                          
+                          <Box sx={{ 
+                            mt: 3, 
+                            p: 2, 
+                            bgcolor: 'rgba(59, 130, 246, 0.1)', 
+                            borderRadius: 1.5,
+                            border: '1px solid rgba(59, 130, 246, 0.2)',
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center'
+                          }}>
+                            <Typography variant="body2" sx={{ color: '#FFFFFF', fontWeight: 500 }}>
+                              Est. 10:30 AM
+                            </Typography>
+                          </Box>
                         </CardContent>
                       </Card>
                     </>
@@ -2173,13 +2225,27 @@ const MatchDetailPage: React.FC = () => {
                   {activeBettingTab === 'Fancy' && (
                     <>
                       {/* Next Over Runs */}
-                      <Card sx={{ ...commonStyles.card }}>
-                        <CardHeader 
+                                            <Card sx={{
+                        bgcolor: 'rgba(15, 23, 42, 1)',
+                        border: 'none',
+                        borderRadius: 0,
+                        boxShadow: 'none'
+                      }}>
+                        <CardHeader
                           title={
                             <Stack direction="row" spacing={2} alignItems="center">
-                              <AccessTimeIcon sx={{ color: themeColors.warning }} />
-                              <Typography variant="h6" sx={{ 
-                                color: themeColors.text.primary,
+                              <Box sx={{
+                                p: 1,
+                                bgcolor: 'rgba(59, 130, 246, 0.2)',
+                                borderRadius: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}>
+                                <AccessTimeIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+                              </Box>
+                              <Typography variant="h6" sx={{
+                                color: '#FFFFFF',
                                 fontWeight: 600,
                                 letterSpacing: '0.5px'
                               }}>
@@ -2187,29 +2253,53 @@ const MatchDetailPage: React.FC = () => {
                               </Typography>
                             </Stack>
                           }
-                          sx={{ 
-                            bgcolor: alpha(themeColors.secondary, 0.5),
-                            borderBottom: `1px solid ${themeColors.border}`,
-                            py: 2
+                          sx={{
+                            bgcolor: 'rgba(15, 23, 42, 1)',
+                            borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                            py: 2.5
                           }}
                         />
-                        <CardContent>
-                          <Stack spacing={2}>
+                        <CardContent sx={{ p: 3 }}>
+                          <Stack spacing={2.5}>
                             <Box sx={{
                               display: 'flex',
                               justifyContent: 'space-between',
                               alignItems: 'center',
                               p: 2,
-                              bgcolor: 'rgba(239, 68, 68, 0.2)',
-                              borderRadius: 1,
-                              border: '1px solid rgba(239, 68, 68, 0.3)'
+                              bgcolor: 'rgba(15, 23, 42, 0.9)',
+                              borderRadius: 0,
+                              borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 1)'
+                              }
                             }}>
-                              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                 Under 8.5
                               </Typography>
-                              <Stack direction="row" spacing={1} alignItems="center">
-                                <Typography variant="caption" sx={{ color: 'gray' }}>8.5</Typography>
-                                <Typography variant="caption" sx={{ color: 'gray' }}>120</Typography>
+                              <Stack direction="row" spacing={2} alignItems="center">
+                                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>8.5</Typography>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: 'rgba(239, 68, 68, 0.8)',
+                                    color: 'white',
+                                    px: 2,
+                                    py: 0.5,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 50,
+                                    fontSize: '0.875rem',
+                                    '&:hover': {
+                                      bgcolor: 'rgba(239, 68, 68, 1)',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  120
+                                </Button>
                               </Stack>
                             </Box>
                             <Box sx={{
@@ -2217,16 +2307,40 @@ const MatchDetailPage: React.FC = () => {
                               justifyContent: 'space-between',
                               alignItems: 'center',
                               p: 2,
-                              bgcolor: 'rgba(59, 130, 246, 0.2)',
-                              borderRadius: 1,
-                              border: '1px solid rgba(59, 130, 246, 0.3)'
+                              bgcolor: 'rgba(15, 23, 42, 0.9)',
+                              borderRadius: 0,
+                              borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                bgcolor: 'rgba(15, 23, 42, 1)'
+                              }
                             }}>
-                              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                 Over 8.5
                               </Typography>
-                              <Stack direction="row" spacing={1} alignItems="center">
-                                <Typography variant="caption" sx={{ color: 'gray' }}>8.5</Typography>
-                                <Typography variant="caption" sx={{ color: 'gray' }}>85</Typography>
+                              <Stack direction="row" spacing={2} alignItems="center">
+                                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>8.5</Typography>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  sx={{
+                                    bgcolor: 'rgba(59, 130, 246, 0.8)',
+                                    color: 'white',
+                                    px: 2,
+                                    py: 0.5,
+                                    borderRadius: 1,
+                                    fontWeight: 600,
+                                    minWidth: 50,
+                                    fontSize: '0.875rem',
+                                    '&:hover': {
+                                      bgcolor: 'rgba(59, 130, 246, 1)',
+                                      transform: 'translateY(-1px)',
+                                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                    }
+                                  }}
+                                >
+                                  85
+                                </Button>
                               </Stack>
                             </Box>
                           </Stack>
@@ -2234,13 +2348,28 @@ const MatchDetailPage: React.FC = () => {
                       </Card>
 
                       {/* Fall of Wicket */}
-                      <Card sx={{ ...commonStyles.card }}>
-                        <CardHeader 
+                                            <Card sx={{
+                        bgcolor: 'rgba(15, 23, 42, 1)',
+                        border: 'none',
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        mt: 3
+                      }}>
+                        <CardHeader
                           title={
                             <Stack direction="row" spacing={2} alignItems="center">
-                              <TrophyIcon sx={{ color: themeColors.warning }} />
-                              <Typography variant="h6" sx={{ 
-                                color: themeColors.text.primary,
+                              <Box sx={{
+                                p: 1,
+                                bgcolor: 'rgba(59, 130, 246, 0.2)',
+                                borderRadius: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}>
+                                <TrophyIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+                              </Box>
+                              <Typography variant="h6" sx={{
+                                color: '#FFFFFF',
                                 fontWeight: 600,
                                 letterSpacing: '0.5px'
                               }}>
@@ -2248,35 +2377,59 @@ const MatchDetailPage: React.FC = () => {
                               </Typography>
                             </Stack>
                           }
-                          sx={{ 
-                            bgcolor: alpha(themeColors.secondary, 0.5),
-                            borderBottom: `1px solid ${themeColors.border}`,
-                            py: 2
+                          sx={{
+                            bgcolor: 'rgba(15, 23, 42, 1)',
+                            borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                            py: 2.5
                           }}
                         />
-                        <CardContent>
+                        <CardContent sx={{ p: 3 }}>
                           <Stack spacing={3}>
                             {/* Fall of Next Wicket */}
                             <Box>
-                              <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
+                              <Typography variant="subtitle1" sx={{ color: '#FFFFFF', mb: 2, fontWeight: 600 }}>
                                 Fall of Next Wicket
                               </Typography>
-                              <Stack spacing={2}>
+                              <Stack spacing={2.5}>
                                 <Box sx={{
                                   display: 'flex',
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
                                   p: 2,
-                                  bgcolor: 'rgba(239, 68, 68, 0.2)',
-                                  borderRadius: 1,
-                                  border: '1px solid rgba(239, 68, 68, 0.3)'
+                                  bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                  borderRadius: 0,
+                                  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(15, 23, 42, 1)'
+                                  }
                                 }}>
-                                  <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                                  <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                     1-3 Overs
                                   </Typography>
-                                  <Stack direction="row" spacing={1} alignItems="center">
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>122.0</Typography>
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>120</Typography>
+                                  <Stack direction="row" spacing={2} alignItems="center">
+                                    <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>122.0</Typography>
+                                    <Button
+                                      variant="contained"
+                                      size="small"
+                                      sx={{
+                                        bgcolor: 'rgba(239, 68, 68, 0.8)',
+                                        color: 'white',
+                                        px: 2,
+                                        py: 0.5,
+                                        borderRadius: 1,
+                                        fontWeight: 600,
+                                        minWidth: 50,
+                                        fontSize: '0.875rem',
+                                        '&:hover': {
+                                          bgcolor: 'rgba(239, 68, 68, 1)',
+                                          transform: 'translateY(-1px)',
+                                          boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
+                                        }
+                                      }}
+                                    >
+                                      120
+                                    </Button>
                                   </Stack>
                                 </Box>
                                 <Box sx={{
@@ -2284,16 +2437,40 @@ const MatchDetailPage: React.FC = () => {
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
                                   p: 2,
-                                  bgcolor: 'rgba(59, 130, 246, 0.2)',
-                                  borderRadius: 1,
-                                  border: '1px solid rgba(59, 130, 246, 0.3)'
+                                  bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                  borderRadius: 0,
+                                  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(15, 23, 42, 1)'
+                                  }
                                 }}>
-                                  <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                                  <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                     4+ Overs
                                   </Typography>
-                                  <Stack direction="row" spacing={1} alignItems="center">
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>122.0</Typography>
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>85</Typography>
+                                  <Stack direction="row" spacing={2} alignItems="center">
+                                    <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>122.0</Typography>
+                                    <Button
+                                      variant="contained"
+                                      size="small"
+                                      sx={{
+                                        bgcolor: 'rgba(59, 130, 246, 0.8)',
+                                        color: 'white',
+                                        px: 2,
+                                        py: 0.5,
+                                        borderRadius: 1,
+                                        fontWeight: 600,
+                                        minWidth: 50,
+                                        fontSize: '0.875rem',
+                                        '&:hover': {
+                                          bgcolor: 'rgba(59, 130, 246, 1)',
+                                          transform: 'translateY(-1px)',
+                                          boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                        }
+                                      }}
+                                    >
+                                      85
+                                    </Button>
                                   </Stack>
                                 </Box>
                               </Stack>
@@ -2301,25 +2478,49 @@ const MatchDetailPage: React.FC = () => {
 
                             {/* Method of Next Dismissal */}
                             <Box>
-                              <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
+                              <Typography variant="subtitle1" sx={{ color: '#FFFFFF', mb: 2, fontWeight: 600 }}>
                                 Method of Next Dismissal
                               </Typography>
-                              <Stack spacing={2}>
+                              <Stack spacing={2.5}>
                                 <Box sx={{
                                   display: 'flex',
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
                                   p: 2,
-                                  bgcolor: 'rgba(239, 68, 68, 0.2)',
-                                  borderRadius: 1,
-                                  border: '1px solid rgba(239, 68, 68, 0.3)'
+                                  bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                  borderRadius: 0,
+                                  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(15, 23, 42, 1)'
+                                  }
                                 }}>
-                                  <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                                  <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                     Bowled/LBW
                                   </Typography>
-                                  <Stack direction="row" spacing={1} alignItems="center">
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>3.2</Typography>
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>100</Typography>
+                                  <Stack direction="row" spacing={2} alignItems="center">
+                                    <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>3.2</Typography>
+                                    <Button
+                                      variant="contained"
+                                      size="small"
+                                      sx={{
+                                        bgcolor: 'rgba(239, 68, 68, 0.8)',
+                                        color: 'white',
+                                        px: 2,
+                                        py: 0.5,
+                                        borderRadius: 1,
+                                        fontWeight: 600,
+                                        minWidth: 50,
+                                        fontSize: '0.875rem',
+                                        '&:hover': {
+                                          bgcolor: 'rgba(239, 68, 68, 1)',
+                                          transform: 'translateY(-1px)',
+                                          boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
+                                        }
+                                      }}
+                                    >
+                                      100
+                                    </Button>
                                   </Stack>
                                 </Box>
                                 <Box sx={{
@@ -2327,16 +2528,40 @@ const MatchDetailPage: React.FC = () => {
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
                                   p: 2,
-                                  bgcolor: 'rgba(59, 130, 246, 0.2)',
-                                  borderRadius: 1,
-                                  border: '1px solid rgba(59, 130, 246, 0.3)'
+                                  bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                  borderRadius: 0,
+                                  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(15, 23, 42, 1)'
+                                  }
                                 }}>
-                                  <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                                  <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                     Caught
                                   </Typography>
-                                  <Stack direction="row" spacing={1} alignItems="center">
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>1.9</Typography>
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>110</Typography>
+                                  <Stack direction="row" spacing={2} alignItems="center">
+                                    <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>1.9</Typography>
+                                    <Button
+                                      variant="contained"
+                                      size="small"
+                                      sx={{
+                                        bgcolor: 'rgba(59, 130, 246, 0.8)',
+                                        color: 'white',
+                                        px: 2,
+                                        py: 0.5,
+                                        borderRadius: 1,
+                                        fontWeight: 600,
+                                        minWidth: 50,
+                                        fontSize: '0.875rem',
+                                        '&:hover': {
+                                          bgcolor: 'rgba(59, 130, 246, 1)',
+                                          transform: 'translateY(-1px)',
+                                          boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                        }
+                                      }}
+                                    >
+                                      110
+                                    </Button>
                                   </Stack>
                                 </Box>
                                 <Box sx={{
@@ -2344,16 +2569,40 @@ const MatchDetailPage: React.FC = () => {
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
                                   p: 2,
-                                  bgcolor: 'rgba(34, 197, 94, 0.2)',
-                                  borderRadius: 1,
-                                  border: '1px solid rgba(34, 197, 94, 0.3)'
+                                  bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                  borderRadius: 0,
+                                  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                                  transition: 'all 0.2s ease',
+                                  '&:hover': {
+                                    bgcolor: 'rgba(15, 23, 42, 1)'
+                                  }
                                 }}>
-                                  <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                                  <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
                                     Other
                                   </Typography>
-                                  <Stack direction="row" spacing={1} alignItems="center">
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>8.0</Typography>
-                                    <Typography variant="caption" sx={{ color: 'gray' }}>75</Typography>
+                                  <Stack direction="row" spacing={2} alignItems="center">
+                                    <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>8.0</Typography>
+                                    <Button
+                                      variant="contained"
+                                      size="small"
+                                      sx={{
+                                        bgcolor: 'rgba(16, 185, 129, 0.8)',
+                                        color: 'white',
+                                        px: 2,
+                                        py: 0.5,
+                                        borderRadius: 1,
+                                        fontWeight: 600,
+                                        minWidth: 50,
+                                        fontSize: '0.875rem',
+                                        '&:hover': {
+                                          bgcolor: 'rgba(16, 185, 129, 1)',
+                                          transform: 'translateY(-1px)',
+                                          boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                                        }
+                                      }}
+                                    >
+                                      75
+                                    </Button>
                                   </Stack>
                                 </Box>
                               </Stack>
@@ -2363,13 +2612,28 @@ const MatchDetailPage: React.FC = () => {
                       </Card>
 
                       {/* Quick Bets - Next Ball */}
-                      <Card sx={{ ...commonStyles.card }}>
-                        <CardHeader 
+                                            <Card sx={{
+                        bgcolor: 'rgba(15, 23, 42, 1)',
+                        border: 'none',
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        mt: 3
+                      }}>
+                        <CardHeader
                           title={
                             <Stack direction="row" spacing={2} alignItems="center">
-                              <StarIcon sx={{ color: themeColors.warning }} />
-                              <Typography variant="h6" sx={{ 
-                                color: themeColors.text.primary,
+                              <Box sx={{
+                                p: 1,
+                                bgcolor: 'rgba(59, 130, 246, 0.2)',
+                                borderRadius: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}>
+                                <StarIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+                              </Box>
+                              <Typography variant="h6" sx={{
+                                color: '#FFFFFF',
                                 fontWeight: 600,
                                 letterSpacing: '0.5px'
                               }}>
@@ -2377,137 +2641,145 @@ const MatchDetailPage: React.FC = () => {
                               </Typography>
                             </Stack>
                           }
-                          sx={{ 
-                            bgcolor: alpha(themeColors.secondary, 0.5),
-                            borderBottom: `1px solid ${themeColors.border}`,
-                            py: 2
+                          sx={{
+                            bgcolor: 'rgba(15, 23, 42, 1)',
+                            borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+                            py: 2.5
                           }}
                         />
-                        <CardContent>
-                          <Stack spacing={2}>
+                        <CardContent sx={{ p: 3 }}>
+                          <Stack spacing={2.5}>
                             <Stack direction="row" spacing={2}>
                               <Button
                                 sx={{
                                   flex: 1,
-                                  ...commonStyles.button,
-                                  bgcolor: alpha(themeColors.success, 0.15),
-                                  border: `1px solid ${alpha(themeColors.success, 0.3)}`,
+                                  bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                                  borderRadius: 1.5,
                                   p: 2,
                                   display: 'flex',
                                   flexDirection: 'column',
                                   gap: 0.5,
+                                  transition: 'all 0.2s ease',
                                   '&:hover': {
-                                    bgcolor: alpha(themeColors.success, 0.25),
+                                    bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                    border: '1px solid rgba(16, 185, 129, 0.5)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: `0 8px 24px ${alpha(themeColors.success, 0.25)}`
+                                    boxShadow: '0 8px 24px rgba(16, 185, 129, 0.2)'
                                   }
                                 }}
                               >
                                 <Typography 
                                   variant="body1" 
                                   fontWeight={600}
-                                  sx={{ color: themeColors.success }}
+                                  sx={{ color: '#10B981' }}
                                 >
                                   FOUR
                                 </Typography>
                                 <Typography 
-                                  variant="caption"
-                                  sx={{ color: alpha(themeColors.success, 0.8) }}
+                                  variant="body2"
+                                  sx={{ color: '#94A3B8', fontWeight: 500 }}
                                 >
                                   6.5
                                 </Typography>
                               </Button>
-                                                            <Button
+                              <Button
                                 sx={{
                                   flex: 1,
-                                  ...commonStyles.button,
-                                  bgcolor: alpha(themeColors.purple, 0.15),
-                                  border: `1px solid ${alpha(themeColors.purple, 0.3)}`,
+                                  bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                  border: '1px solid rgba(139, 92, 246, 0.3)',
+                                  borderRadius: 1.5,
                                   p: 2,
                                   display: 'flex',
                                   flexDirection: 'column',
                                   gap: 0.5,
+                                  transition: 'all 0.2s ease',
                                   '&:hover': {
-                                    bgcolor: alpha(themeColors.purple, 0.25),
+                                    bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                    border: '1px solid rgba(139, 92, 246, 0.5)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: `0 8px 24px ${alpha(themeColors.purple, 0.25)}`
+                                    boxShadow: '0 8px 24px rgba(139, 92, 246, 0.2)'
                                   }
                                 }}
                               >
                                 <Typography 
                                   variant="body1" 
                                   fontWeight={600}
-                                  sx={{ color: themeColors.purple }}
+                                  sx={{ color: '#8B5CF6' }}
                                 >
                                   SIX
                                 </Typography>
                                 <Typography 
-                                  variant="caption"
-                                  sx={{ color: alpha(themeColors.purple, 0.8) }}
+                                  variant="body2"
+                                  sx={{ color: '#94A3B8', fontWeight: 500 }}
                                 >
                                   12.0
                                 </Typography>
                               </Button>
                             </Stack>
                             <Stack direction="row" spacing={2}>
-                                                            <Button
+                              <Button
                                 sx={{
                                   flex: 1,
-                                  ...commonStyles.button,
-                                  bgcolor: alpha(themeColors.text.secondary, 0.15),
-                                  border: `1px solid ${alpha(themeColors.text.secondary, 0.3)}`,
+                                  bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                  border: '1px solid rgba(100, 116, 139, 0.3)',
+                                  borderRadius: 1.5,
                                   p: 2,
                                   display: 'flex',
                                   flexDirection: 'column',
                                   gap: 0.5,
+                                  transition: 'all 0.2s ease',
                                   '&:hover': {
-                                    bgcolor: alpha(themeColors.text.secondary, 0.25),
+                                    bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                    border: '1px solid rgba(100, 116, 139, 0.5)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: `0 8px 24px ${alpha(themeColors.text.secondary, 0.25)}`
+                                    boxShadow: '0 8px 24px rgba(100, 116, 139, 0.2)'
                                   }
                                 }}
                               >
                                 <Typography 
                                   variant="body1" 
                                   fontWeight={600}
-                                  sx={{ color: themeColors.text.secondary }}
+                                  sx={{ color: '#94A3B8' }}
                                 >
                                   DOT
                                 </Typography>
                                 <Typography 
-                                  variant="caption"
-                                  sx={{ color: alpha(themeColors.text.secondary, 0.8) }}
+                                  variant="body2"
+                                  sx={{ color: '#94A3B8', fontWeight: 500 }}
                                 >
                                   2.8
                                 </Typography>
                               </Button>
-                                                            <Button
+                              <Button
                                 sx={{
                                   flex: 1,
-                                  ...commonStyles.button,
-                                  bgcolor: alpha(themeColors.primary, 0.15),
-                                  border: `1px solid ${alpha(themeColors.primary, 0.3)}`,
+                                  bgcolor: 'rgba(15, 23, 42, 0.7)',
+                                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                                  borderRadius: 1.5,
                                   p: 2,
                                   display: 'flex',
                                   flexDirection: 'column',
                                   gap: 0.5,
+                                  transition: 'all 0.2s ease',
                                   '&:hover': {
-                                    bgcolor: alpha(themeColors.primary, 0.25),
+                                    bgcolor: 'rgba(15, 23, 42, 0.9)',
+                                    border: '1px solid rgba(239, 68, 68, 0.5)',
                                     transform: 'translateY(-2px)',
-                                    boxShadow: `0 8px 24px ${alpha(themeColors.primary, 0.25)}`
+                                    boxShadow: '0 8px 24px rgba(239, 68, 68, 0.2)'
                                   }
                                 }}
                               >
                                 <Typography 
                                   variant="body1" 
                                   fontWeight={600}
-                                  sx={{ color: themeColors.primary }}
+                                  sx={{ color: '#EF4444' }}
                                 >
                                   WICKET
                                 </Typography>
                                 <Typography 
-                                  variant="caption"
-                                  sx={{ color: alpha(themeColors.primary, 0.8) }}
+                                  variant="body2"
+                                  sx={{ color: '#94A3B8', fontWeight: 500 }}
                                 >
                                   8.5
                                 </Typography>
