@@ -1,7 +1,8 @@
 import React from "react";
-import { AppBar, Toolbar, IconButton } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { AppBar, Toolbar, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import Logo from "../../assets/images/Logo.png";
 
 const BackHeader: React.FC = () => {
   const navigate = useNavigate();
@@ -16,22 +17,53 @@ const BackHeader: React.FC = () => {
         backdropFilter: "blur(8px)"
       }}
     >
-      <Toolbar>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="go back" // Added for accessibility
+      <Toolbar sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        px: { xs: 1, sm: 2 }
+      }}>
+        <Box 
           onClick={() => navigate(-1)}
-          sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.08)",
-            borderRadius: "10px",
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.15)",
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            cursor: 'pointer',
+            p: 1,
+            '&:hover': {
+              opacity: 0.8
             }
           }}
         >
-          <ArrowBackIcon />
-        </IconButton>
+          <KeyboardBackspaceIcon 
+            sx={{ 
+              fontSize: 24,
+              color: 'white'
+            }}
+          />
+        </Box>
+
+        <Box 
+          component="img"
+          src={Logo}
+          alt="Zoddz Logo"
+          sx={{
+            height: { xs: 24, sm: 28, md: 32 },
+            width: 'auto',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            filter: 'brightness(0.95)',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              filter: 'brightness(1)',
+              transform: 'translateX(-50%) scale(1.02)'
+            }
+          }}
+        />
+
+        {/* Empty box for spacing */}
+        <Box sx={{ width: 40 }} />
       </Toolbar>
     </AppBar>
   );

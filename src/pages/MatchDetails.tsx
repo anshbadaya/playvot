@@ -905,64 +905,60 @@ const MatchDetailPage: React.FC = () => {
         <Box
           sx={{
             width: '100%',
-            display: 'flex',
-            justifyContent: { xs: 'flex-start', md: 'center' },
-            overflow: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            msOverflowStyle: 'none',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-              display: 'none'
-            },
-            px: { xs: 0.5, sm: 1, md: 2 }, // Responsive padding
-            py: { xs: 1, sm: 1.5, md: 2 }, // Add vertical padding
-            position: 'sticky', // Make tabs sticky on scroll
+            position: 'sticky',
             top: 0,
             zIndex: 10,
-            bgcolor: alpha(themeColors.background, 0.8),
-            backdropFilter: 'blur(12px)'
+            bgcolor: alpha(themeColors.background, 0.95),
+            backdropFilter: 'blur(12px)',
+            borderBottom: `1px solid ${alpha(themeColors.border, 0.1)}`,
+            py: { xs: 1, sm: 1.5 }
           }}
         >
-          <Box sx={{ 
-            display: 'flex',
-            gap: { xs: 0.5, sm: 1, md: 1.5 }, // Responsive gap
-            bgcolor: themeColors.surface,
-            p: { xs: 1, sm: 1.5, md: 1.5 }, // Responsive padding
-            borderRadius: { xs: 1.5, sm: 2 }, // Smaller radius on mobile
-            border: `1px solid ${themeColors.border}`,
-            backdropFilter: 'blur(12px)',
-            boxShadow: `0 4px 6px ${alpha(themeColors.background, 0.1)}`,
-            width: '100%', // Take full width
-            maxWidth: { xs: '100%', sm: '90%', md: '80%' }, // Responsive max width
-            mx: 'auto' // Center the tabs container
-          }}>
-            {tabs.map((tab) => (
-              <Button
-                key={tab.value}
-                onClick={() => setActiveTab(tab.value)}
-                sx={{ 
-                  minWidth: { xs: '80px', sm: '100px', md: '120px' }, // Smaller on mobile
-                  flex: { xs: '1 1 0', md: '1 1 0' }, // Equal flex on all screens
-                  fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' }, // Responsive font size
-                  color: activeTab === tab.value ? themeColors.text.primary : themeColors.text.secondary,
-                  ...commonStyles.button,
-                  py: { xs: 1, sm: 1.5 }, // Responsive padding
-                  px: { xs: 0.5, sm: 1, md: 2 }, // Responsive padding
-                  whiteSpace: 'nowrap',
-                  bgcolor: activeTab === tab.value ? themeColors.primary : 'transparent',
-                  border: `1px solid ${activeTab === tab.value ? 'transparent' : themeColors.border}`,
-                  '&:hover': {
-                    bgcolor: activeTab === tab.value 
-                      ? alpha(themeColors.primary, 0.9)
-                      : alpha(themeColors.primary, 0.1),
-                    transform: 'translateY(-1px)',
-                    boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.2)}`
-                  }
-                }}
-              >
-                {tab.label}
-              </Button>
-            ))}
+          <Box
+            sx={{
+              width: '100%',
+              overflowX: 'auto',
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+              px: { xs: 1, sm: 2 }
+            }}
+          >
+            <Box sx={{ 
+              display: 'flex',
+              minWidth: 'fit-content',
+              gap: { xs: 0.5, sm: 1 },
+              mx: 'auto',
+              width: 'fit-content'
+            }}>
+              {tabs.map((tab) => (
+                <Button
+                  key={tab.value}
+                  onClick={() => setActiveTab(tab.value)}
+                  sx={{ 
+                    minWidth: 'unset',
+                    px: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.25 },
+                    fontSize: { xs: '0.75rem', sm: '0.8rem' },
+                    fontWeight: 600,
+                    color: activeTab === tab.value ? themeColors.text.primary : alpha(themeColors.text.secondary, 0.7),
+                    bgcolor: activeTab === tab.value ? alpha(themeColors.primary, 0.15) : 'transparent',
+                    borderRadius: '100px',
+                    border: `1px solid ${activeTab === tab.value ? alpha(themeColors.primary, 0.3) : 'transparent'}`,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      bgcolor: activeTab === tab.value 
+                        ? alpha(themeColors.primary, 0.2)
+                        : alpha(themeColors.surface, 0.1),
+                      transform: 'translateY(-1px)'
+                    }
+                  }}
+                >
+                  {tab.label}
+                </Button>
+              ))}
+            </Box>
           </Box>
         </Box>
             </TopBar>
@@ -1386,70 +1382,64 @@ const MatchDetailPage: React.FC = () => {
                   {/* Quick Stats */}
                   <Box sx={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: 2,
-                    mb: 1
+                    gridTemplateColumns: {
+                      xs: 'repeat(1, 1fr)',
+                      sm: 'repeat(3, 1fr)'
+                    },
+                    gap: { xs: 1.5, sm: 2 },
+                    mb: { xs: 2, sm: 1 }
                   }}>
-                    <Box sx={{
-                      p: 2.5,
-                      textAlign: 'center',
-                      bgcolor: 'transparent',
-                      border: '1px solid rgba(51, 65, 85, 0.4)',
-                      borderRadius: 2,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-1px)',
-                        border: '1px solid rgba(51, 65, 85, 0.6)',
-                        bgcolor: 'rgba(51, 65, 85, 0.1)'
-                      }
-                    }}>
-                      <Typography variant="h3" sx={{ color: '#E2E8F0', mb: 1, fontWeight: 700 }}>
-                        85%
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>
-                        Win Probability
-                      </Typography>
-                    </Box>
-                    <Box sx={{
-                      p: 2.5,
-                      textAlign: 'center',
-                      bgcolor: 'transparent',
-                      border: '1px solid rgba(51, 65, 85, 0.4)',
-                      borderRadius: 2,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-1px)',
-                        border: '1px solid rgba(51, 65, 85, 0.6)',
-                        bgcolor: 'rgba(51, 65, 85, 0.1)'
-                      }
-                    }}>
-                      <Typography variant="h3" sx={{ color: '#E2E8F0', mb: 1, fontWeight: 700 }}>
-                        2.85
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>
-                        Best Odds
-                      </Typography>
-                    </Box>
-                    <Box sx={{
-                      p: 2.5,
-                      textAlign: 'center',
-                      bgcolor: 'transparent',
-                      border: '1px solid rgba(51, 65, 85, 0.4)',
-                      borderRadius: 2,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-1px)',
-                        border: '1px solid rgba(51, 65, 85, 0.6)',
-                        bgcolor: 'rgba(51, 65, 85, 0.1)'
-                      }
-                    }}>
-                      <Typography variant="h3" sx={{ color: '#E2E8F0', mb: 1, fontWeight: 700 }}>
-                        12K
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>
-                        Active Bets
-                      </Typography>
-                    </Box>
+                    {[
+                      { value: '85%', label: 'Win Probability' },
+                      { value: '2.85', label: 'Best Odds' },
+                      { value: '12K', label: 'Active Bets' }
+                    ].map((stat, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          p: { xs: 2, sm: 2.5 },
+                          textAlign: 'center',
+                          bgcolor: 'transparent',
+                          border: '1px solid rgba(51, 65, 85, 0.4)',
+                          borderRadius: { xs: 1.5, sm: 2 },
+                          transition: 'all 0.3s ease',
+                          display: 'flex',
+                          flexDirection: { xs: 'row', sm: 'column' },
+                          alignItems: 'center',
+                          justifyContent: { xs: 'space-between', sm: 'center' },
+                          gap: { xs: 2, sm: 0 },
+                          '&:hover': {
+                            transform: 'translateY(-1px)',
+                            border: '1px solid rgba(51, 65, 85, 0.6)',
+                            bgcolor: 'rgba(51, 65, 85, 0.1)'
+                          }
+                        }}
+                      >
+                        <Typography 
+                          variant="h3" 
+                          sx={{ 
+                            color: '#E2E8F0',
+                            mb: { xs: 0, sm: 1 },
+                            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                            fontWeight: 700,
+                            order: { xs: 2, sm: 1 }
+                          }}
+                        >
+                          {stat.value}
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: '#94A3B8',
+                            fontWeight: 500,
+                            fontSize: { xs: '0.875rem', sm: '0.9rem' },
+                            order: { xs: 1, sm: 2 }
+                          }}
+                        >
+                          {stat.label}
+                        </Typography>
+                      </Box>
+                    ))}
                   </Box>
 
                   {/* Betting Type Tabs */}
