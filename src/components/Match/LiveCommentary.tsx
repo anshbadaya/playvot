@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardContent,
   Stack,
-  IconButton,
   Divider,
   alpha
 } from "@mui/material";
@@ -15,11 +14,18 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { MatchData } from '../../types/match-details';
 import { themeColors, commonStyles } from './styles/theme-constants';
 
-interface LiveCommentaryProps {
-  data: MatchData;
+interface OverData {
+  overNumber: number;
+  runs: number;
+  balls: (number | 'W')[];
 }
 
-const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data }) => {
+interface LiveCommentaryProps {
+  data: MatchData;
+  oversData?: OverData[]; // Make overs data optional and passed as prop
+}
+
+const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = [] }) => {
   return (
     <Stack spacing={2}>
       {/* Live Commentary Section */}
@@ -131,20 +137,9 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data }) => {
               }
             }}
           >
-            {/* Overs list */}
-            {Array.from({ length: 50 }, (_, i) => {
-              const overIndex = 50 - i;
-              const overRuns = Math.floor(Math.random() * 15);
-              const ballRuns = Array.from({ length: 6 }, () => {
-                const ballType = Math.floor(Math.random() * 5);
-                return ballType === 0 ? 0 : // dot ball
-                      ballType === 1 ? 1 : // single
-                      ballType === 2 ? 4 : // four
-                      ballType === 3 ? 6 : // six
-                      'W'; // wicket
-              });
-              
-              return (
+            {/* Overs list - now using props data */}
+            {oversData.length > 0 ? (
+              oversData.map((over, i) => (
                 <Box 
                   key={i}
                   sx={{ 
@@ -170,7 +165,7 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data }) => {
                         fontWeight: 'bold'
                       }}
                     >
-                      Over {overIndex}
+                      Over {over.overNumber}
                     </Typography>
                   </Box>
                   
@@ -181,7 +176,7 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data }) => {
                     flexGrow: 1,
                     alignItems: 'center'
                   }}>
-                    {ballRuns.map((runs, ballIdx) => {
+                    {over.balls.map((runs, ballIdx) => {
                       let bgColor = '#3B82F6'; // Default: 1 run (blue)
                       
                       if (runs === 0) bgColor = '#94A3B8'; // Dot ball (gray)
@@ -201,110 +196,46 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data }) => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             color: 'white',
-                            fontSize: '0.85rem',
+                            fontSize: '12px',
                             fontWeight: 'bold'
                           }}
                         >
-                          {runs === 0 ? '•' : runs}
+                          {runs}
                         </Box>
                       );
                     })}
                   </Box>
                   
                   {/* Over total */}
-                  <Box 
-                    sx={{ 
-                      width: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end'
-                    }}
-                  >
+                  <Box sx={{ 
+                    width: '60px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end'
+                  }}>
                     <Typography 
-                      variant="body1" 
+                      variant="body2" 
                       sx={{ 
-                        color: '#3B82F6', 
+                        color: '#FFFFFF',
                         fontWeight: 'bold'
                       }}
                     >
-                      {overRuns}
+                      {over.runs}
                     </Typography>
                   </Box>
                 </Box>
-              );
-            })}
-          </Box>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            p: 2,
-            bgcolor: 'rgba(15, 23, 42, 0.9)',
-            borderTop: '1px solid rgba(59, 130, 246, 0.3)'
-          }}>
-            <Typography variant="body2" sx={{ color: '#E2E8F0' }}>
-              Total: <Box component="span" sx={{ color: '#3B82F6', fontWeight: 'bold' }}>180 runs</Box> from 50 overs
-            </Typography>
-            <Box>
-              <Typography variant="body2" sx={{ color: '#E2E8F0', display: 'inline' }}>
-                RR: <Box component="span" sx={{ color: '#10B981', fontWeight: 'bold' }}>9.0</Box> | SR: <Box component="span" sx={{ color: '#8B5CF6', fontWeight: 'bold' }}>112.5</Box>
-              </Typography>
-            </Box>
-          </Box>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            gap: 3, 
-            justifyContent: 'center',
-            p: 2,
-            bgcolor: 'rgba(15, 23, 42, 0.8)'
-          }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+              ))
+            ) : (
               <Box sx={{ 
-                width: 10, 
-                height: 10, 
-                borderRadius: '50%', 
-                bgcolor: '#94A3B8'
-              }} />
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>Dot</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-              <Box sx={{ 
-                width: 10, 
-                height: 10, 
-                borderRadius: '50%', 
-                bgcolor: '#3B82F6'
-              }} />
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>1-3</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-              <Box sx={{ 
-                width: 10, 
-                height: 10, 
-                borderRadius: '50%', 
-                bgcolor: '#10B981'
-              }} />
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>4</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-              <Box sx={{ 
-                width: 10, 
-                height: 10, 
-                borderRadius: '50%', 
-                bgcolor: '#8B5CF6'
-              }} />
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>6</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-              <Box sx={{ 
-                width: 10, 
-                height: 10, 
-                borderRadius: '50%', 
-                bgcolor: '#EF4444'
-              }} />
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>W</Typography>
-            </Box>
+                p: 3, 
+                textAlign: 'center',
+                color: '#94A3B8'
+              }}>
+                <Typography variant="body2">
+                  No over-by-over data available
+                </Typography>
+              </Box>
+            )}
           </Box>
         </CardContent>
       </Card>

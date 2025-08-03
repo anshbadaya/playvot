@@ -2,6 +2,17 @@ import React from "react";
 import { Box, Typography, Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+interface FooterLinkData {
+  text: string;
+  href: string;
+}
+
+interface FooterProps {
+  copyrightText?: string;
+  links?: FooterLinkData[];
+  companyName?: string;
+}
+
 const FooterContainer = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'component'
 })(({ theme }) => ({
@@ -32,20 +43,30 @@ const FooterLink = styled(Link)(({ theme }) => ({
   }
 }));
 
-const Footer: React.FC = () => {
+const Footer: React.FC<FooterProps> = ({ 
+  copyrightText = `© ${new Date().getFullYear()} All rights reserved.`,
+  links = [
+    { text: "Terms of Service", href: "/terms" },
+    { text: "Privacy Policy", href: "/privacy" }
+  ],
+  companyName
+}) => {
   return (
     <FooterContainer as="footer">
       <FooterText variant="body2">
-        © {new Date().getFullYear()} All rights reserved.
+        {companyName ? `${copyrightText} ${companyName}` : copyrightText}
       </FooterText>
       <FooterText variant="caption" sx={{ display: "flex", gap: 1, justifyContent: "center", alignItems: "center" }}>
-        <FooterLink href="/terms">
-          Terms of Service
-        </FooterLink>
-        <Box component="span" sx={{ color: "rgba(255, 255, 255, 0.4)" }}>|</Box>
-        <FooterLink href="/privacy">
-          Privacy Policy
-        </FooterLink>
+        {links.map((link, index) => (
+          <React.Fragment key={index}>
+            <FooterLink href={link.href}>
+              {link.text}
+            </FooterLink>
+            {index < links.length - 1 && (
+              <Box component="span" sx={{ color: "rgba(255, 255, 255, 0.4)" }}>|</Box>
+            )}
+          </React.Fragment>
+        ))}
       </FooterText>
     </FooterContainer>
   );

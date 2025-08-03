@@ -83,11 +83,18 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ data }) => {
             }}>
               <Typography variant="subtitle1" sx={{ mb: 2 }}>Match Summary</Typography>
               <Typography variant="body2">
-                Day 2, Lunch Break • New Zealand lead by 25 runs
+                {data.status}
               </Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                Zimbabwe were bowled out for 149 in their first innings. New Zealand are currently 174/3 with Conway (67*) and Latham (52*) at the crease.
-              </Typography>
+              {data.venue && (
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  Venue: {data.venue}
+                </Typography>
+              )}
+              {data.league && (
+                <Typography variant="body2" sx={{ mt: 0.5 }}>
+                  {data.league}
+                </Typography>
+              )}
             </Box>
           </Stack>
         </CardContent>
