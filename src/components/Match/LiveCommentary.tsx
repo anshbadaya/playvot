@@ -51,18 +51,18 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data }) => {
                 sx={{ 
                   p: 2,
                   borderRadius: 1,
-                  bgcolor: comment.type === 'goal' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(15, 23, 42, 0.3)',
-                  border: comment.type === 'goal' ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(59, 130, 246, 0.2)'
+                  bgcolor: comment.type === 'boundary' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(15, 23, 42, 0.3)',
+                  border: comment.type === 'boundary' ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(59, 130, 246, 0.2)'
                 }}
               >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                   <Typography
                     variant="caption"
-                    sx={{ fontWeight: 'bold', color: comment.type === 'goal' ? '#10B981' : 'gray' }}
+                    sx={{ fontWeight: 'bold', color: comment.type === 'boundary' ? '#10B981' : 'gray' }}
                   >
                     {comment.time}
                   </Typography>
-                  {comment.type === 'goal' && (
+                  {comment.type === 'boundary' && (
                     <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#10B981' }}>
                       BOUNDARY
                     </Typography>

@@ -21,34 +21,38 @@ export interface Player {
   isCaptain?: boolean;
   avatar?: string;
   stats?: {
-    // Batting stats
     runs?: number;
     balls?: number;
     fours?: number;
     sixes?: number;
     strikeRate?: number;
-    // Bowling stats
     overs?: string;
     maidens?: number;
     wickets?: number;
     economy?: number;
-    // Other stats
-    goals?: number;
-    assists?: number;
-    shots?: number;
-    passes?: number;
-    rating?: number;
   };
 }
 
 export interface Commentary {
   time: string;
   text: string;
-  type: 'goal' | 'card' | 'substitution' | 'normal';
+  type: 'normal' | 'highlight' | 'wicket' | 'boundary';
   team: 'home' | 'away';
 }
 
+export interface WinProbability {
+  home: number;
+  away: number;
+}
+
+export interface BettingOdds {
+  home: number;
+  draw: number;
+  away: number;
+}
+
 export interface MatchData {
+  id: string;
   teams: {
     home: Team;
     away: Team;
@@ -64,13 +68,96 @@ export interface MatchData {
     away: Player[];
   };
   commentary: Commentary[];
-  winProbability: {
-    home: number;
-    away: number;
-  };
-  bettingOdds: {
-    home: number;
-    draw: number;
-    away: number;
-  };
+  winProbability: WinProbability;
+  bettingOdds: BettingOdds;
+}
+
+// Scorecard specific types
+export interface BattingRow {
+  batter: string;
+  dismissalInfo: string;
+  runs: number;
+  balls: number;
+  fours: number;
+  sixes: number;
+  strikeRate: string;
+}
+
+export interface BowlingRow {
+  bowler: string;
+  overs: string;
+  maidens: number;
+  runs: number;
+  wickets: number;
+  economy: string;
+}
+
+export interface ActivePlayer {
+  name: string;
+  runs: number;
+  balls: number;
+  strikeRate: number;
+  isStriker: boolean;
+}
+
+export interface CurrentBowler {
+  name: string;
+  overs: string;
+  wickets: number;
+  economy: number;
+}
+
+export interface Innings {
+  teamName: string;
+  score: string;
+  battingRows: BattingRow[];
+  extras: string;
+  total: string;
+  yetToBat: string[];
+  fallOfWickets: string;
+  bowlingRows: BowlingRow[];
+  currentBatters?: ActivePlayer[];
+  currentBowler?: CurrentBowler;
+  currentPartnership?: string;
+}
+
+export interface MatchInfo {
+  venue: string;
+  time: string;
+  toss: string;
+  series: string;
+  points: string;
+}
+
+export interface ScorecardData {
+  innings: Innings[];
+  matchInfo: MatchInfo;
+}
+
+// Betting types
+export interface BettingTab {
+  id: string;
+  name: string;
+  label: string;
+}
+
+export interface BettingOption {
+  id: string;
+  label: string;
+  odds: number;
+  isSelected?: boolean;
+}
+
+export interface BettingSection {
+  id: string;
+  title: string;
+  icon: string;
+  options: BettingOption[];
+}
+
+export interface MatchDetailsResponse {
+  data: MatchData;
+  scorecard: ScorecardData;
+  success: boolean;
+  message?: string;
 }
