@@ -2,44 +2,16 @@ import React from 'react';
 import {
   Box,
   Typography,
-  Paper,
   Card,
   CardHeader,
   CardContent,
   Stack,
   Avatar,
-  Divider
+  Chip,
+  alpha
 } from "@mui/material";
-import { styled, alpha } from '@mui/material/styles';
-
-const themeColors = {
-  primary: '#3B82F6',
-  primaryLight: 'rgba(59, 130, 246, 0.1)',
-  primaryBorder: 'rgba(59, 130, 246, 0.2)',
-  secondary: '#1E293B',
-  background: '#0F172A',
-  surface: 'rgba(30, 41, 59, 0.4)',
-  border: 'rgba(59, 130, 246, 0.15)',
-  text: {
-    primary: '#FFFFFF',
-    secondary: '#94A3B8',
-  }
-};
-
-const commonStyles = {
-  card: {
-    backgroundColor: themeColors.surface,
-    borderRadius: '12px',
-    border: `1px solid ${themeColors.border}`,
-    backdropFilter: 'blur(8px)',
-  },
-  cardHeader: {
-    backgroundColor: themeColors.secondary,
-    borderBottom: `1px solid ${themeColors.border}`,
-    padding: '16px',
-    borderRadius: '12px 12px 0 0'
-  },
-};
+import { themeColors, commonStyles } from './styles/theme-constants';
+import PersonIcon from '@mui/icons-material/Person';
 
 interface Team {
   name: string;
@@ -106,35 +78,101 @@ const PlayerRow: React.FC<{ player: Player; isRight?: boolean }> = ({ player, is
   };
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'space-between',
-      flexDirection: isRight ? 'row-reverse' : 'row',
-      mb: 1.5
-    }}>
-      <Box sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        flexDirection: isRight ? 'row-reverse' : 'row',
-        gap: 1.5
-      }}>
+    <Box 
+      sx={{ 
+        p: 2, 
+        bgcolor: alpha(themeColors.secondary, 0.3),
+        borderRadius: 1,
+        border: `1px solid ${themeColors.border}`,
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          bgcolor: alpha(themeColors.secondary, 0.5),
+          border: `1px solid ${alpha(themeColors.primary, 0.3)}`,
+          transform: 'translateY(-1px)'
+        }
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Avatar 
           src={player.avatar} 
           alt={player.name}
           sx={{ 
             width: 40, 
             height: 40,
-            bgcolor: player.avatar ? 'transparent' : 'rgba(255, 255, 255, 0.1)'
+            border: `2px solid ${themeColors.border}`,
+            bgcolor: alpha(themeColors.primary, 0.2)
           }}
-        />
-        <Box sx={{ textAlign: isRight ? 'right' : 'left' }}>
-          <Typography variant="body1" sx={{ fontWeight: 500 }}>
-            {player.name}
+        >
+          <PersonIcon sx={{ color: themeColors.text.secondary }} />
+        </Avatar>
+        <Box sx={{ flex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+            <Typography variant="body2" sx={{ 
+              color: themeColors.text.primary,
+              fontWeight: 600
+            }}>
+              {player.name}
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 0.5 }}>
+              {player.isCaptain && (
+                <Chip 
+                  label="C" 
+                  size="small" 
+                  sx={{ 
+                    bgcolor: alpha(themeColors.warning, 0.2),
+                    color: themeColors.warning,
+                    fontSize: '0.6rem',
+                    height: 18,
+                    minWidth: 18
+                  }} 
+                />
+              )}
+              {player.isWicketKeeper && (
+                <Chip 
+                  label="WK" 
+                  size="small" 
+                  sx={{ 
+                    bgcolor: alpha(themeColors.success, 0.2),
+                    color: themeColors.success,
+                    fontSize: '0.6rem',
+                    height: 18,
+                    minWidth: 18
+                  }} 
+                />
+              )}
+            </Box>
+          </Box>
+          <Typography variant="caption" sx={{ 
+            color: themeColors.text.secondary,
+            display: 'block',
+            mb: 0.5
+          }}>
+            {player.position} • {getPlayerTitle()}
           </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {getPlayerTitle()}
-          </Typography>
+          {player.stats && (
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              {player.stats.runs !== undefined && (
+                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                  Runs: {player.stats.runs}
+                </Typography>
+              )}
+              {player.stats.wickets !== undefined && (
+                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                  Wickets: {player.stats.wickets}
+                </Typography>
+              )}
+              {player.stats.strikeRate !== undefined && (
+                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                  SR: {player.stats.strikeRate}
+                </Typography>
+              )}
+              {player.stats.economy !== undefined && (
+                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                  ECO: {player.stats.economy}
+                </Typography>
+              )}
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
@@ -147,92 +185,116 @@ const Squads: React.FC<{ data: MatchData }> = ({ data }) => {
   const homePlayers = data.players.home;
   const awayPlayers = data.players.away;
   
-  // Split players into playing XI and bench
-  const homePlayingXI = homePlayers.filter((p, i) => i < 11);
-  const homeBench = homePlayers.filter((p, i) => i >= 11);
-  const awayPlayingXI = awayPlayers.filter((p, i) => i < 11);
-  const awayBench = awayPlayers.filter((p, i) => i >= 11);
+  // Get all players (full squad of 11 for each team)
+  const homeSquad = homePlayers.slice(0, 11);
+  const awaySquad = awayPlayers.slice(0, 11);
 
   return (
-    <Card sx={{ ...commonStyles.card }}>
-      <CardHeader 
-        title="Playing XI" 
-        sx={{ 
-          ...commonStyles.cardHeader,
-          textAlign: 'center'
-        }} 
-      />
-      <CardContent sx={{ p: 3 }}>
-        {/* Team Flags */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          mb: 2
+    <Box sx={{ p: { xs: 1, sm: 2 } }}>
+      <Stack 
+        direction={{ xs: 'column', md: 'row' }} 
+        spacing={3}
+        sx={{ height: '100%' }}
+      >
+        {/* Home Team Squad */}
+        <Card sx={{ 
+          ...commonStyles.card,
+          flex: 1,
+          minHeight: { xs: 'auto', md: '600px' }
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box 
-              component="img" 
-              src={homeTeam.logo || "/teams/default.png"} 
-              alt={homeTeam.name}
-              sx={{ width: 24, height: 16, objectFit: 'contain' }}
-            />
-            <Typography variant="body2" fontWeight="bold">{homeTeam.name}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="body2" fontWeight="bold">{awayTeam.name}</Typography>
-            <Box 
-              component="img" 
-              src={awayTeam.logo || "/teams/default.png"} 
-              alt={awayTeam.name}
-              sx={{ width: 24, height: 16, objectFit: 'contain' }}
-            />
-          </Box>
-        </Box>
-
-        {/* Playing XI */}
-        <Box sx={{ mb: 3 }}>
-          {homePlayingXI.map((player, index) => (
-            <Box key={player.number} sx={{ display: 'flex' }}>
-              <Box sx={{ flex: 1 }}>
-                <PlayerRow player={player} />
-              </Box>
-              <Box sx={{ width: '1px', bgcolor: 'rgba(255, 255, 255, 0.1)', mx: 2 }} />
-              <Box sx={{ flex: 1 }}>
-                {awayPlayingXI[index] && (
-                  <PlayerRow player={awayPlayingXI[index]} isRight={true} />
-                )}
-              </Box>
-            </Box>
-          ))}
-        </Box>
-
-        {/* Bench Section */}
-        {(homeBench.length > 0 || awayBench.length > 0) && (
-          <>
-            <Divider sx={{ my: 3 }} />
-            <Typography variant="h6" sx={{ textAlign: 'center', mb: 2 }}>
-              Bench
-            </Typography>
-            <Box>
-              {homeBench.map((player, index) => (
-                <Box key={player.number} sx={{ display: 'flex' }}>
-                  <Box sx={{ flex: 1 }}>
-                    <PlayerRow player={player} />
-                  </Box>
-                  <Box sx={{ width: '1px', bgcolor: 'rgba(255, 255, 255, 0.1)', mx: 2 }} />
-                  <Box sx={{ flex: 1 }}>
-                    {awayBench[index] && (
-                      <PlayerRow player={awayBench[index]} isRight={true} />
-                    )}
-                  </Box>
+          <CardHeader
+            title={
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Avatar 
+                  src={homeTeam.logo} 
+                  alt={homeTeam.name}
+                  sx={{ 
+                    width: 48, 
+                    height: 48,
+                    border: `3px solid ${alpha(themeColors.primary, 0.3)}`
+                  }}
+                />
+                <Box>
+                  <Typography variant="h5" sx={{ 
+                    color: themeColors.text.primary,
+                    fontWeight: 700,
+                    letterSpacing: '0.5px'
+                  }}>
+                    {homeTeam.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                    Full Squad ({homeSquad.length} Players)
+                  </Typography>
                 </Box>
+              </Stack>
+            }
+            sx={{ 
+              ...commonStyles.cardHeader,
+              background: `linear-gradient(135deg, ${themeColors.secondary} 0%, ${alpha(themeColors.primary, 0.2)} 100%)`
+            }}
+          />
+          <CardContent sx={{ 
+            height: { xs: 'auto', md: 'calc(100% - 80px)' },
+            overflowY: 'auto'
+          }}>
+            <Stack spacing={2}>
+              {homeSquad.map((player) => (
+                <PlayerRow key={player.number} player={player} />
               ))}
-            </Box>
-          </>
-        )}
-      </CardContent>
-    </Card>
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* Away Team Squad */}
+        <Card sx={{ 
+          ...commonStyles.card,
+          flex: 1,
+          minHeight: { xs: 'auto', md: '600px' }
+        }}>
+          <CardHeader
+            title={
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Avatar 
+                  src={awayTeam.logo} 
+                  alt={awayTeam.name}
+                  sx={{ 
+                    width: 48, 
+                    height: 48,
+                    border: `3px solid ${alpha(themeColors.error, 0.3)}`
+                  }}
+                />
+                <Box>
+                  <Typography variant="h5" sx={{ 
+                    color: themeColors.text.primary,
+                    fontWeight: 700,
+                    letterSpacing: '0.5px'
+                  }}>
+                    {awayTeam.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                    Full Squad ({awaySquad.length} Players)
+                  </Typography>
+                </Box>
+              </Stack>
+            }
+            sx={{ 
+              ...commonStyles.cardHeader,
+              background: `linear-gradient(135deg, ${themeColors.secondary} 0%, ${alpha(themeColors.error, 0.2)} 100%)`
+            }}
+          />
+          <CardContent sx={{ 
+            height: { xs: 'auto', md: 'calc(100% - 80px)' },
+            overflowY: 'auto'
+          }}>
+            <Stack spacing={2}>
+              {awaySquad.map((player) => (
+                <PlayerRow key={player.number} player={player} />
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
+      </Stack>
+    </Box>
   );
 };
 

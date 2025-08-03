@@ -8,12 +8,18 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Paper,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
+  Card,
+  CardHeader,
+  CardContent,
+  Stack,
+  Chip,
+  alpha
 } from '@mui/material';
+import { themeColors, commonStyles } from './styles/theme-constants';
+import CricketIcon from '@mui/icons-material/SportsCricket';
+import LocationIcon from '@mui/icons-material/LocationOn';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 interface BattingRow {
   batter: string;
@@ -156,291 +162,459 @@ const dummySquads: SquadsProps = {
 };
 
 const ScorecardComponent: React.FC<ScorecardProps> = ({ innings, matchInfo, commentary = [], squads = dummySquads }) => {
+  const renderMatchInfo = () => (
+    <Card sx={{ 
+      ...commonStyles.card,
+      mb: 3,
+      background: `linear-gradient(135deg, ${themeColors.surface} 0%, ${alpha(themeColors.secondary, 0.8)} 100%)`
+    }}>
+      <CardHeader
+        title={
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box sx={{ 
+              p: 1, 
+              bgcolor: alpha(themeColors.primary, 0.2), 
+              borderRadius: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <CricketIcon sx={{ color: themeColors.primary, fontSize: 24 }} />
+            </Box>
+            <Typography variant="h6" sx={{ 
+              color: themeColors.text.primary,
+              fontWeight: 600,
+              letterSpacing: '0.5px'
+            }}>
+              Match Information
+            </Typography>
+          </Stack>
+        }
+        sx={{ 
+          ...commonStyles.cardHeader,
+          background: `linear-gradient(135deg, ${themeColors.secondary} 0%, ${alpha(themeColors.primary, 0.1)} 100%)`
+        }}
+      />
+      <CardContent>
+        <Stack spacing={2}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <LocationIcon sx={{ color: themeColors.text.secondary, fontSize: 20 }} />
+              <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                {matchInfo.venue}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <ScheduleIcon sx={{ color: themeColors.text.secondary, fontSize: 20 }} />
+              <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                {matchInfo.time}
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <EmojiEventsIcon sx={{ color: themeColors.warning, fontSize: 20 }} />
+            <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+              {matchInfo.toss}
+            </Typography>
+          </Box>
+          <Box sx={{ 
+            p: 2, 
+            bgcolor: alpha(themeColors.primary, 0.1), 
+            borderRadius: 1,
+            border: `1px solid ${alpha(themeColors.primary, 0.2)}`
+          }}>
+            <Typography variant="body1" sx={{ color: themeColors.text.primary, fontWeight: 600 }}>
+              {matchInfo.points}
+            </Typography>
+          </Box>
+        </Stack>
+      </CardContent>
+    </Card>
+  );
+
   const renderActivePlayers = (inning: InningsProps) => {
     if (!inning.currentBatters || !inning.currentBowler) return null;
 
     return (
-      <Box sx={{ mb: 3 }}>
-        {/* Current Batters */}
-        <Box sx={{ mb: 3, p: 2, bgcolor: '#1a1f2e', borderRadius: 1 }}>
-          <Typography variant="subtitle2" sx={{ mb: 2, color: '#fff' }}>
-            Current Batters
-          </Typography>
-          {inning.currentBatters.map((batter, idx) => (
-            <Box key={idx} sx={{ mb: 2 }}>
-              <Typography sx={{ 
-                color: '#fff',
-                fontWeight: batter.isStriker ? 500 : 400,
+      <Card sx={{ ...commonStyles.card, mb: 3 }}>
+        <CardHeader
+          title={
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Box sx={{ 
+                p: 1, 
+                bgcolor: alpha(themeColors.success, 0.2), 
+                borderRadius: 1,
                 display: 'flex',
-                justifyContent: 'space-between'
+                alignItems: 'center',
+                justifyContent: 'center'
               }}>
-                <span>{batter.name} {batter.isStriker && '•'}</span>
-                <span>{batter.runs}({batter.balls}) SR: {batter.strikeRate}</span>
+                <CricketIcon sx={{ color: themeColors.success, fontSize: 20 }} />
+              </Box>
+              <Typography variant="h6" sx={{ 
+                color: themeColors.text.primary,
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                Live Action
               </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        {/* Current Bowler */}
-        <Box sx={{ mb: 3, p: 2, bgcolor: '#1a1f2e', borderRadius: 1 }}>
-          <Typography variant="subtitle2" sx={{ mb: 1, color: '#fff' }}>
-            Current Bowler
-          </Typography>
-          <Typography sx={{ 
-            color: '#fff',
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}>
-            <span>{inning.currentBowler.name}</span>
-            <span>{inning.currentBowler.overs} • {inning.currentBowler.wickets}/{inning.currentBowler.runs} • ECO: {inning.currentBowler.economy}</span>
-          </Typography>
-        </Box>
-
-        {/* Current Partnership */}
-        {inning.currentPartnership && (
-          <Box sx={{ p: 2, bgcolor: '#1a1f2e', borderRadius: 1 }}>
-            <Typography variant="subtitle2" sx={{ mb: 1, color: '#fff' }}>
-              Current Partnership
-            </Typography>
-            <Typography sx={{ color: '#fff' }}>
-              {inning.currentPartnership}
-            </Typography>
-          </Box>
-        )}
-      </Box>
-    );
-  };
-
-  const renderSquads = () => {
-    if (!squads) return null;
-    
-    return (
-      <Box sx={{ mb: 3 }}>
-        <Paper elevation={0} sx={{ mb: 3, borderRadius: 1, border: '1px solid #e0e0e0' }}>
-          <Box sx={{ 
-            bgcolor: '#f8f9fa',
-            p: 2,
-            borderBottom: '1px solid #e0e0e0'
-          }}>
-            <Typography variant="h6" sx={{ fontWeight: 500 }}>
-              Squads
-            </Typography>
-          </Box>
-          
-          <Box sx={{ display: 'grid', gridTemplateColumns: {xs: '1fr', md: '1fr 1fr'}, gap: 3, p: 2 }}>
-            {/* Home Team */}
+            </Stack>
+          }
+          sx={{ ...commonStyles.cardHeader }}
+        />
+        <CardContent>
+          <Stack spacing={3}>
+            {/* Current Batters */}
             <Box>
-              <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-                {squads.home.name}
+              <Typography variant="subtitle2" sx={{ mb: 2, color: themeColors.text.primary, fontWeight: 600 }}>
+                Current Batters
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                {squads.home.players.map((player) => (
-                  <Paper 
-                    key={player.number} 
+              <Stack spacing={1.5}>
+                {inning.currentBatters.map((batter, idx) => (
+                  <Box 
+                    key={idx} 
                     sx={{ 
-                      p: 1.5, 
-                      bgcolor: 'rgba(248, 249, 250, 0.7)',
-                      border: '1px solid #e0e0e0'
+                      p: 2, 
+                      bgcolor: alpha(themeColors.secondary, 0.3),
+                      borderRadius: 1,
+                      border: `1px solid ${batter.isStriker ? alpha(themeColors.success, 0.3) : themeColors.border}`,
+                      transition: 'all 0.2s ease'
                     }}
                   >
-                    <Typography variant="body1">{player.name}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {player.position}
-                    </Typography>
-                  </Paper>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography sx={{ 
+                          color: themeColors.text.primary,
+                          fontWeight: batter.isStriker ? 600 : 500
+                        }}>
+                          {batter.name}
+                        </Typography>
+                        {batter.isStriker && (
+                          <Chip 
+                            label="STRIKER" 
+                            size="small" 
+                            sx={{ 
+                              bgcolor: alpha(themeColors.success, 0.2),
+                              color: themeColors.success,
+                              fontSize: '0.7rem',
+                              height: 20
+                            }} 
+                          />
+                        )}
+                      </Box>
+                      <Typography sx={{ 
+                        color: themeColors.text.secondary,
+                        fontWeight: 500
+                      }}>
+                        {batter.runs}({batter.balls}) • SR: {batter.strikeRate}
+                      </Typography>
+                    </Box>
+                  </Box>
                 ))}
+              </Stack>
+            </Box>
+
+            {/* Current Bowler */}
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 2, color: themeColors.text.primary, fontWeight: 600 }}>
+                Current Bowler
+              </Typography>
+              <Box sx={{ 
+                p: 2, 
+                bgcolor: alpha(themeColors.secondary, 0.3),
+                borderRadius: 1,
+                border: `1px solid ${themeColors.border}`
+              }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography sx={{ color: themeColors.text.primary, fontWeight: 500 }}>
+                    {inning.currentBowler.name}
+                  </Typography>
+                  <Typography sx={{ color: themeColors.text.secondary, fontWeight: 500 }}>
+                    {inning.currentBowler.overs} • {inning.currentBowler.wickets}/{inning.currentBowler.runs} • ECO: {inning.currentBowler.economy}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
 
-            {/* Away Team */}
-            <Box>
-              <Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-                {squads.away.name}
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                {squads.away.players.map((player) => (
-                  <Paper 
-                    key={player.number} 
-                    sx={{ 
-                      p: 1.5, 
-                      bgcolor: 'rgba(248, 249, 250, 0.7)',
-                      border: '1px solid #e0e0e0'
-                    }}
-                  >
-                    <Typography variant="body1">{player.name}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {player.position}
-                    </Typography>
-                  </Paper>
-                ))}
+            {/* Current Partnership */}
+            {inning.currentPartnership && (
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 2, color: themeColors.text.primary, fontWeight: 600 }}>
+                  Current Partnership
+                </Typography>
+                <Box sx={{ 
+                  p: 2, 
+                  bgcolor: alpha(themeColors.primary, 0.1),
+                  borderRadius: 1,
+                  border: `1px solid ${alpha(themeColors.primary, 0.2)}`
+                }}>
+                  <Typography sx={{ color: themeColors.text.primary, fontWeight: 500 }}>
+                    {inning.currentPartnership}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          </Box>
-        </Paper>
-      </Box>
+            )}
+          </Stack>
+        </CardContent>
+      </Card>
     );
   };
 
   const renderInnings = (inning: InningsProps, index: number) => (
-    <Box key={index}>
-      {/* Active Players Section */}
-      {renderActivePlayers(inning)}
+    <Card key={index} sx={{ ...commonStyles.card, mb: 3 }}>
+      <CardHeader
+        title={
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box sx={{ 
+              p: 1, 
+              bgcolor: alpha(themeColors.warning, 0.2), 
+              borderRadius: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Typography sx={{ color: themeColors.warning, fontWeight: 600, fontSize: '1.2rem' }}>
+                {index + 1}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ 
+                color: themeColors.text.primary,
+                fontWeight: 600,
+                letterSpacing: '0.5px'
+              }}>
+                {inning.teamName}
+              </Typography>
+              <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                {inning.score}
+              </Typography>
+            </Box>
+          </Stack>
+        }
+        sx={{ ...commonStyles.cardHeader }}
+      />
+      <CardContent>
+        <Stack spacing={3}>
+          {/* Active Players Section */}
+          {renderActivePlayers(inning)}
 
-      {/* Regular Scorecard */}
-      <Paper elevation={0} sx={{ mb: 3, borderRadius: 1, border: '1px solid #e0e0e0' }}>
-        <Box sx={{ 
-          bgcolor: '#f8f9fa',
-          p: 2,
-          borderBottom: '1px solid #e0e0e0'
-        }}>
-          <Typography variant="h6" sx={{ fontWeight: 500 }}>
-            {inning.teamName} - {inning.score}
-          </Typography>
-        </Box>
+          {/* Batting Section */}
+          <Box>
+            <Typography variant="h6" sx={{ 
+              mb: 2, 
+              color: themeColors.text.primary, 
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <CricketIcon sx={{ fontSize: 20, color: themeColors.primary }} />
+              Batting
+            </Typography>
+            <TableContainer sx={{ 
+              bgcolor: alpha(themeColors.secondary, 0.3),
+              borderRadius: 1,
+              border: `1px solid ${themeColors.border}`
+            }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ bgcolor: alpha(themeColors.secondary, 0.5) }}>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>Batter</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>R</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>B</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>4s</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>6s</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>SR</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {inning.battingRows.map((row, idx) => (
+                    <TableRow 
+                      key={idx}
+                      sx={{ 
+                        '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) },
+                        '&:nth-of-type(even)': { bgcolor: alpha(themeColors.secondary, 0.1) }
+                      }}
+                    >
+                      <TableCell sx={{ 
+                        color: themeColors.text.primary, 
+                        border: 'none',
+                        fontWeight: 500
+                      }}>
+                        <Box>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {row.batter}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
+                            {row.dismissalInfo}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.primary, border: 'none', fontWeight: 600 }}>
+                        {row.runs}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.balls}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.fours}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.sixes}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.strikeRate}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow sx={{ bgcolor: alpha(themeColors.primary, 0.1) }}>
+                    <TableCell sx={{ 
+                      color: themeColors.text.primary, 
+                      border: 'none',
+                      fontWeight: 600
+                    }}>
+                      Extras
+                    </TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, border: 'none', fontWeight: 600 }}>
+                      {inning.extras}
+                    </TableCell>
+                    <TableCell colSpan={4} sx={{ border: 'none' }} />
+                  </TableRow>
+                  <TableRow sx={{ bgcolor: alpha(themeColors.success, 0.1) }}>
+                    <TableCell sx={{ 
+                      color: themeColors.text.primary, 
+                      border: 'none',
+                      fontWeight: 700
+                    }}>
+                      Total
+                    </TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, border: 'none', fontWeight: 700 }}>
+                      {inning.total}
+                    </TableCell>
+                    <TableCell colSpan={4} sx={{ border: 'none' }} />
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-        {/* Batting Table */}
-        <TableContainer>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 500 }}>Batter</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>R</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>B</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>4s</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>6s</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>SR</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {inning.battingRows.map((row, idx) => (
-                <TableRow key={idx} hover>
-                  <TableCell>
-                    <Box>
-                      <Typography>{row.batter}</Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {row.dismissalInfo}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell align="right">{row.runs}</TableCell>
-                  <TableCell align="right">{row.balls}</TableCell>
-                  <TableCell align="right">{row.fours}</TableCell>
-                  <TableCell align="right">{row.sixes}</TableCell>
-                  <TableCell align="right">{row.strikeRate}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            {/* Yet to Bat */}
+            {inning.yetToBat.length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="subtitle2" sx={{ 
+                  mb: 1, 
+                  color: themeColors.text.secondary, 
+                  fontWeight: 600 
+                }}>
+                  Yet to Bat
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {inning.yetToBat.map((player, idx) => (
+                    <Chip 
+                      key={idx}
+                      label={player} 
+                      size="small" 
+                      sx={{ 
+                        bgcolor: alpha(themeColors.secondary, 0.3),
+                        color: themeColors.text.secondary,
+                        border: `1px solid ${themeColors.border}`
+                      }} 
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
 
-        {/* Extras and Total */}
-        <Box sx={{ p: 2, bgcolor: '#f8f9fa', borderTop: '1px solid #e0e0e0' }}>
-          <Typography sx={{ mb: 1 }}>Extras: {inning.extras}</Typography>
-          <Typography sx={{ mb: 1, fontWeight: 500 }}>Total: {inning.total}</Typography>
-          <Typography sx={{ mb: 1 }}>Yet to Bat: {inning.yetToBat.join(', ')}</Typography>
-          <Typography>Fall of Wickets: {inning.fallOfWickets}</Typography>
-        </Box>
+            {/* Fall of Wickets */}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" sx={{ 
+                mb: 1, 
+                color: themeColors.text.secondary, 
+                fontWeight: 600 
+              }}>
+                Fall of Wickets
+              </Typography>
+              <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                {inning.fallOfWickets}
+              </Typography>
+            </Box>
+          </Box>
 
-        {/* Bowling Table */}
-        <TableContainer sx={{ mt: 2 }}>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 500 }}>Bowler</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>O</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>M</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>R</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>W</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 500 }}>ECO</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {inning.bowlingRows.map((row, idx) => (
-                <TableRow key={idx} hover>
-                  <TableCell>{row.bowler}</TableCell>
-                  <TableCell align="right">{row.overs}</TableCell>
-                  <TableCell align="right">{row.maidens}</TableCell>
-                  <TableCell align="right">{row.runs}</TableCell>
-                  <TableCell align="right">{row.wickets}</TableCell>
-                  <TableCell align="right">{row.economy}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
+          {/* Bowling Section */}
+          <Box>
+            <Typography variant="h6" sx={{ 
+              mb: 2, 
+              color: themeColors.text.primary, 
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <CricketIcon sx={{ fontSize: 20, color: themeColors.error }} />
+              Bowling
+            </Typography>
+            <TableContainer sx={{ 
+              bgcolor: alpha(themeColors.secondary, 0.3),
+              borderRadius: 1,
+              border: `1px solid ${themeColors.border}`
+            }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ bgcolor: alpha(themeColors.secondary, 0.5) }}>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>Bowler</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>O</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>M</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>R</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>W</TableCell>
+                    <TableCell sx={{ color: themeColors.text.primary, fontWeight: 600, border: 'none' }}>ECO</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {inning.bowlingRows.map((row, idx) => (
+                    <TableRow 
+                      key={idx}
+                      sx={{ 
+                        '&:hover': { bgcolor: alpha(themeColors.primary, 0.05) },
+                        '&:nth-of-type(even)': { bgcolor: alpha(themeColors.secondary, 0.1) }
+                      }}
+                    >
+                      <TableCell sx={{ 
+                        color: themeColors.text.primary, 
+                        border: 'none',
+                        fontWeight: 500
+                      }}>
+                        {row.bowler}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.overs}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.maidens}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.runs}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.primary, border: 'none', fontWeight: 600 }}>
+                        {row.wickets}
+                      </TableCell>
+                      <TableCell sx={{ color: themeColors.text.secondary, border: 'none' }}>
+                        {row.economy}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      flexDirection: 'column',
-      minHeight: '100%',
-      p: 2
-    }}>
-      {/* Main Content */}
-      <Box sx={{ flex: 1 }}>
-        {renderSquads()}
+    <Box sx={{ p: { xs: 1, sm: 2 } }}>
+      <Stack spacing={3}>
+        {renderMatchInfo()}
         {innings.map((inning, index) => renderInnings(inning, index))}
-      </Box>
-
-      {/* Spacer */}
-      <Box sx={{ mt: 4 }}>
-        <Divider />
-      </Box>
-
-      {/* Match Info */}
-      <Box sx={{ mt: 4 }}>
-        <Paper elevation={0} sx={{ p: 2, bgcolor: '#f8f9fa', border: '1px solid #e0e0e0' }}>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-            <Box sx={{ minWidth: '200px' }}>
-              <Typography variant="subtitle2">Venue: {matchInfo.venue}</Typography>
-            </Box>
-            <Box sx={{ minWidth: '200px' }}>
-              <Typography variant="subtitle2">Time: {matchInfo.time}</Typography>
-            </Box>
-            <Box sx={{ minWidth: '200px' }}>
-              <Typography variant="subtitle2">Toss: {matchInfo.toss}</Typography>
-            </Box>
-            <Box sx={{ minWidth: '200px' }}>
-              <Typography variant="subtitle2">Series: {matchInfo.series}</Typography>
-            </Box>
-            <Box sx={{ minWidth: '200px' }}>
-              <Typography variant="subtitle2">Points: {matchInfo.points}</Typography>
-            </Box>
-          </Box>
-        </Paper>
-      </Box>
-
-      {/* Commentary Section */}
-      <Box sx={{ mt: 4 }}>
-        <Box sx={{ p: 2, bgcolor: '#1a1f2e', borderRadius: 1 }}>
-          <Typography variant="h6" sx={{ mb: 2, color: '#fff' }}>Live Commentary</Typography>
-          <Box sx={{ maxHeight: '300px', overflow: 'auto' }}>
-            {commentary.map((item, index) => (
-              <Box key={index} sx={{ 
-                py: 1.5,
-                borderBottom: index < commentary.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none'
-              }}>
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Typography sx={{ color: 'rgba(255,255,255,0.6)', minWidth: '40px' }}>
-                    {item.time}
-                  </Typography>
-                  <Typography sx={{ color: '#fff' }}>
-                    {item.text}
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
-            {commentary.length === 0 && (
-              <Typography sx={{ textAlign: 'center', py: 2, color: 'rgba(255,255,255,0.6)' }}>
-                No commentary available
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      </Box>
+      </Stack>
     </Box>
   );
 };
