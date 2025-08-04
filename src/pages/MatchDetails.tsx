@@ -19,7 +19,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 // Layout and components
 import { Layout } from '@/components/Layout';
-import { PageBackground, TopBar } from '@/components/Match/styles/StyledComponents';
+import { PageBackground, TopBar } from '@/styles/match.styles';
 import { MatchTabsNavigation } from '@/components/Match';
 import MatchInfo from '@/components/Match/MatchInfo';
 import { LiveCommentary, CommentaryTab } from '@/components/Match/Commentary';

@@ -35,4 +35,4 @@ export const TabPanel = styled(Box)({
     borderColor: themeColors.border,
     boxShadow: 'none'
   }
-});
+}); 

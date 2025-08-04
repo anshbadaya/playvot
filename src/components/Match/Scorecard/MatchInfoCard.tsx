@@ -13,10 +13,15 @@ import CricketIcon from '@mui/icons-material/SportsCricket';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { MatchInfoProps } from '@/components/Match/Scorecard/types';
 
 interface MatchInfoCardProps {
-  matchInfo: MatchInfoProps;
+  matchInfo: {
+    venue: string;
+    time: string;
+    toss: string;
+    series: string;
+    points: string;
+  };
 }
 
 const MatchInfoCard: React.FC<MatchInfoCardProps> = ({ matchInfo }) => {

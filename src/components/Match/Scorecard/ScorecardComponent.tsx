@@ -21,11 +21,36 @@ import LocationIcon from '@mui/icons-material/LocationOn';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { 
-  InningsProps, 
-  SquadsProps, 
-  ScorecardProps
-} from './types';
+  Innings, 
+  Player,
+  Commentary
+} from '@/types/match-details';
 import { dummyMatchData } from '@/data/matchDetailsData';
+
+// Component-specific interfaces
+interface InningsProps extends Innings {}
+interface SquadsProps {
+  home: {
+    name: string;
+    players: Player[];
+  };
+  away: {
+    name: string;
+    players: Player[];
+  };
+}
+interface ScorecardProps {
+  innings: InningsProps[];
+  matchInfo: {
+    venue: string;
+    time: string;
+    toss: string;
+    series: string;
+    points: string;
+  };
+  commentary?: Commentary[];
+  squads?: SquadsProps;
+}
 
 // Use dummy data from data folder instead of hardcoded data
 const dummySquads: SquadsProps = {

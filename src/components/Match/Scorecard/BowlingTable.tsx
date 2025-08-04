@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { themeColors, commonStyles } from '@/config/theme';
 import CricketIcon from '@mui/icons-material/SportsCricket';
-import { BowlingRow } from '@/components/Match/Scorecard/types';
+import { BowlingRow } from '@/types/match-details';
 
 interface BowlingTableProps {
   bowlingRows: BowlingRow[];

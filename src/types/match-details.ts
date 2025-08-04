@@ -104,6 +104,7 @@ export interface CurrentBowler {
   name: string;
   overs: string;
   wickets: number;
+  runs: number;
   economy: number;
 }
 

@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { themeColors, commonStyles } from '@/config/theme';
 import CricketIcon from '@mui/icons-material/SportsCricket';
-import { BattingRow } from '@/components/Match/Scorecard/types';
+import { BattingRow } from '@/types/match-details';
 
 interface BattingTableProps {
   battingRows: BattingRow[];

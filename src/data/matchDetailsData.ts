@@ -429,7 +429,7 @@ export const dummyScorecardData: ScorecardData = {
         { name: "D. Conway", runs: 67, balls: 89, strikeRate: 75.28, isStriker: true },
         { name: "T. Latham", runs: 52, balls: 78, strikeRate: 66.67, isStriker: false }
       ],
-      currentBowler: { name: "B. Muzarabani", overs: "16.0", wickets: 2, economy: 3.13 }
+      currentBowler: { name: "B. Muzarabani", overs: "16.0", wickets: 2, runs: 50, economy: 3.13 }
     },
     {
       teamName: "New Zealand",

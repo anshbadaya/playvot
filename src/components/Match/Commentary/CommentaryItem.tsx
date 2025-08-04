@@ -8,7 +8,7 @@ import {
   alpha
 } from '@mui/material';
 import { themeColors } from '@/config/theme';
-import { CommentaryItemProps } from '@/components/Match/Commentary/types';
+import { CommentaryItemProps } from '@/types/commentary';
 
 const CommentaryItem: React.FC<CommentaryItemProps> = ({ comment, index }) => {
   return (
