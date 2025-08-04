@@ -1,30 +1,42 @@
 import React from "react";
-import { AppBar, Toolbar, Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import Logo from "@/assets/images/Logo.png";
 
-const StyledAppBar = styled(AppBar)`
+const HeaderContainer = styled.header`
   background: linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid rgba(29, 78, 216, 0.2);
   backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 `;
 
-const StyledToolbar = styled(Toolbar)`
+const Toolbar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.breakpoints.up('sm') ? theme.spacing(0, 2) : theme.spacing(0, 1)};
+  padding: ${({ theme }) => theme.spacing.md};
+  
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  }
 `;
 
-const BackButton = styled(Box)`
+const BackButton = styled.button`
   display: flex;
   align-items: center;
+  background: transparent;
+  border: none;
   cursor: pointer;
-  padding: ${({ theme }) => theme.spacing(1)};
+  padding: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  transition: all ${({ theme }) => theme.transitions.normal};
+  
   &:hover {
+    background: rgba(255, 255, 255, 0.1);
     opacity: 0.8;
   }
 `;
@@ -34,21 +46,30 @@ const BackIcon = styled(KeyboardBackspaceIcon)`
   color: white;
 `;
 
-const LogoImage = styled('img')`
-  height: ${({ theme }) => theme.breakpoints.up('md') ? '32px' : theme.breakpoints.up('sm') ? '28px' : '24px'};
+const LogoImage = styled.img`
+  height: 32px;
   width: auto;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   filter: brightness(0.95);
-  transition: all 0.2s ease;
+  transition: all ${({ theme }) => theme.transitions.fast};
+  
   &:hover {
     filter: brightness(1);
     transform: translateX(-50%) scale(1.02);
   }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    height: 28px;
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    height: 24px;
+  }
 `;
 
-const SpacerBox = styled(Box)`
+const Spacer = styled.div`
   width: 40px;
 `;
 
@@ -56,8 +77,8 @@ const BackHeader: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <StyledAppBar position="sticky">
-      <StyledToolbar>
+    <HeaderContainer>
+      <Toolbar>
         <BackButton onClick={() => navigate(-1)}>
           <BackIcon />
         </BackButton>
@@ -67,9 +88,9 @@ const BackHeader: React.FC = () => {
           alt="Zoddz Logo"
         />
 
-        <SpacerBox />
-      </StyledToolbar>
-    </StyledAppBar>
+        <Spacer />
+      </Toolbar>
+    </HeaderContainer>
   );
 };
 

@@ -1,17 +1,8 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Box,
-  Button,
-  InputBase,
-  IconButton,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+import styled from "styled-components";
+import { useNavigate, Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { useNavigate, Link } from "react-router-dom";
-import { themeColors } from '@/config/theme';
 
 interface HeaderProps {
   searchPlaceholder?: string;
@@ -23,105 +14,152 @@ interface HeaderProps {
   loginPath?: string;
 }
 
-const StyledAppBar = styled(AppBar)`
+const HeaderContainer = styled.header`
   background: linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid rgba(29, 78, 216, 0.2);
   backdrop-filter: blur(10px);
-  height: ${({ theme }) => theme.breakpoints.up('sm') ? '72px' : '64px'};
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 `;
 
-const StyledToolbar = styled(Toolbar)`
-  min-height: ${({ theme }) => theme.breakpoints.up('sm') ? '72px !important' : '64px !important'};
-  gap: ${({ theme }) => theme.breakpoints.up('sm') ? theme.spacing(2.5) : theme.spacing(1.5)};
-  padding: ${({ theme }) => theme.breakpoints.up('sm') ? '0 32px' : '0 16px'};
+const Toolbar = styled.div`
+  display: flex;
   align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
+  min-height: 72px;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    gap: ${({ theme }) => theme.spacing.sm};
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    min-height: 64px;
+  }
 `;
 
-const LogoImage = styled('img')`
-  height: ${({ theme }) => theme.breakpoints.up('sm') ? '38px' : '28px'};
+const Logo = styled.img`
+  height: 38px;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform ${({ theme }) => theme.transitions.fast};
   filter: brightness(1.1);
+  
   &:hover {
     transform: scale(1.05);
     filter: brightness(1.2);
   }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    height: 28px;
+  }
 `;
 
-const SearchContainer = styled(Box)`
+const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   background-color: rgba(15, 23, 42, 0.3);
-  border-radius: 12px;
-  padding: ${({ theme }) => theme.breakpoints.up('sm') ? '7px 16px' : '6px 12px'};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  padding: 7px 16px;
   flex: 1;
-  max-width: ${({ theme }) => theme.breakpoints.up('sm') ? '540px' : '320px'};
-  margin: ${({ theme }) => theme.breakpoints.up('sm') ? '0 auto' : '0 8px'};
-  border: 1px solid ${themeColors.border};
-  transition: all 0.3s ease;
+  max-width: 540px;
+  margin: 0 auto;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  transition: all ${({ theme }) => theme.transitions.normal};
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
   &:hover {
     background-color: rgba(15, 23, 42, 0.4);
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   }
+  
   &:focus-within {
     background-color: rgba(15, 23, 42, 0.5);
-    border-color: ${themeColors.primaryBorder};
+    border-color: ${({ theme }) => theme.colors.primaryBorder};
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 6px 12px;
+    max-width: 320px;
+    margin: 0 8px;
   }
 `;
 
-const StyledInputBase = styled(InputBase)`
-  color: ${themeColors.text.primary};
+const SearchInput = styled.input`
+  background: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.text.primary};
   flex: 1;
-  font-size: ${({ theme }) => theme.breakpoints.up('sm') ? '14px' : '13px'};
+  font-size: 14px;
   font-weight: 400;
-  & input::placeholder {
-    color: ${themeColors.text.disabled};
+  outline: none;
+  
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.disabled};
     opacity: 1;
     font-weight: 400;
   }
-  & input:focus {
-    color: ${themeColors.text.primary};
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 13px;
   }
 `;
 
-const SearchButton = styled(IconButton)`
-  color: ${themeColors.text.secondary};
-  background-color: ${themeColors.primaryLight};
+const SearchButton = styled.button`
+  background: ${({ theme }) => theme.colors.primaryLight};
+  border: none;
+  border-radius: 50%;
+  color: ${({ theme }) => theme.colors.text.secondary};
   padding: 4px;
   margin-right: -4px;
-  transition: all 0.3s ease;
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.normal};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   &:hover {
-    color: ${themeColors.text.primary};
-    background-color: ${themeColors.primaryBorder};
+    color: ${({ theme }) => theme.colors.text.primary};
+    background: ${({ theme }) => theme.colors.primaryBorder};
     transform: translateY(-1px);
   }
+  
   &:active {
     transform: translateY(0);
   }
 `;
 
-const LoginButton = styled(Button)`
-  background: linear-gradient(135deg, ${themeColors.primary} 0%, #3B82F6 100%);
-  min-width: 0;
-  border-radius: 12px;
-  padding: ${({ theme }) => theme.breakpoints.up('sm') ? '10px' : '8px'};
-  box-shadow: 0 4px 12px ${themeColors.primaryLight};
-  transition: all 0.3s ease;
+const LoginButton = styled(Link)`
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary} 0%, #3B82F6 100%);
+  color: ${({ theme }) => theme.colors.text.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  padding: 10px;
+  box-shadow: 0 4px 12px ${({ theme }) => theme.colors.primaryLight};
+  transition: all ${({ theme }) => theme.transitions.normal};
   border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   &:hover {
     background: linear-gradient(135deg, #4B4EF9 0%, #3B82F6 100%);
-    box-shadow: 0 6px 16px ${themeColors.primaryLight};
+    box-shadow: 0 6px 16px ${({ theme }) => theme.colors.primaryLight};
     transform: translateY(-1px);
     border-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
+  
   &:active {
     transform: translateY(0);
-    box-shadow: 0 4px 12px ${themeColors.primaryLight};
+    box-shadow: 0 4px 12px ${({ theme }) => theme.colors.primaryLight};
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 8px;
   }
 `;
 
@@ -143,9 +181,9 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <StyledAppBar position="sticky">
-      <StyledToolbar>
-        <LogoImage
+    <HeaderContainer>
+      <Toolbar>
+        <Logo
           src={logoPath}
           alt={logoAlt}
           onClick={() => navigate("/")}
@@ -153,25 +191,23 @@ const Header: React.FC<HeaderProps> = ({
         
         {showSearch && (
           <SearchContainer>
-            <StyledInputBase
+            <SearchInput
               placeholder={searchPlaceholder}
               onChange={handleSearch}
             />
-            <SearchButton size="small">
+            <SearchButton>
               <SearchIcon sx={{ fontSize: "18px" }} />
             </SearchButton>
           </SearchContainer>
         )}
         
         {showLoginButton && (
-          <Link to={loginPath}>
-            <LoginButton variant="contained">
-              <PersonOutlineIcon sx={{ fontSize: { xs: "20px", sm: "24px" } }} />
-            </LoginButton>
-          </Link>
+          <LoginButton to={loginPath}>
+            <PersonOutlineIcon sx={{ fontSize: { xs: "20px", sm: "24px" } }} />
+          </LoginButton>
         )}
-      </StyledToolbar>
-    </StyledAppBar>
+      </Toolbar>
+    </HeaderContainer>
   );
 };
 

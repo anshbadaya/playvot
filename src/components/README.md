@@ -1,137 +1,226 @@
-# Component Organization
+# Components
 
-This document outlines the organized component structure for better maintainability and efficiency.
+This directory contains all the reusable components for the PlayVot application, now using styled-components for cleaner and more maintainable styling.
 
-## Directory Structure
+## Architecture
+
+### Styled Components
+
+We've migrated from Material-UI styled components to styled-components for better performance and cleaner code. The styling system includes:
+
+- **Theme System**: Centralized theme configuration in `src/config/styledTheme.ts`
+- **Common Components**: Reusable styled components in `src/components/UI/CommonStyles.tsx`
+- **Component Library**: Individual UI components in `src/components/UI/`
+
+### Directory Structure
 
 ```
 src/components/
-├── Auth/                    # Authentication components
-│   ├── index.ts            # Auth component exports
-│   ├── types.ts            # Auth-specific types
-│   ├── Login.tsx           # Main login component
-│   ├── LoginForm.tsx       # Login form sub-component
-│   ├── LoginBackground.tsx # Login background sub-component
-│   └── LoginHeader.tsx     # Login header sub-component
-│
-├── Layout/                  # Layout components
-│   ├── index.ts            # Layout component exports
-│   ├── types.ts            # Layout-specific types
-│   ├── Layout.tsx          # Main layout component
-│   ├── PageContainer.tsx   # Page container sub-component
-│   ├── Sidebar.tsx         # Sidebar sub-component
-│   └── ContentArea.tsx     # Content area sub-component
-│
-├── Match/                   # Match-related components
-│   ├── index.ts            # Match component exports
-│   ├── MatchCard.tsx       # Match card component
-│   ├── MatchInfo.tsx       # Match info component
-│   ├── MatchSummary.tsx    # Match summary component
-│   ├── MatchTabsNavigation.tsx # Match tabs navigation
-│   ├── Squads.tsx          # Squads component
-│   ├── WinProbabilityBar.tsx # Win probability bar
-│   ├── styles/             # Match-specific styles
-│   │
-│   ├── Scorecard/          # Scorecard sub-components
-│   │   ├── index.ts        # Scorecard exports
-│   │   ├── types.ts        # Scorecard types
-│   │   ├── ScorecardComponent.tsx # Main scorecard
-│   │   ├── BattingTable.tsx # Batting table
-│   │   ├── BowlingTable.tsx # Bowling table
-│   │   ├── MatchInfoCard.tsx # Match info card
-│   │   ├── ActivePlayersCard.tsx # Active players
-│   │   ├── InningsCard.tsx # Innings card
-│   │   └── SquadsCard.tsx  # Squads card
-│   │
-│   ├── Commentary/         # Commentary sub-components
-│   │   ├── index.ts        # Commentary exports
-│   │   ├── types.ts        # Commentary types
-│   │   ├── LiveCommentary.tsx # Main commentary
-│   │   ├── CommentaryTab.tsx # Commentary tab
-│   │   ├── CommentaryItem.tsx # Individual commentary item
-│   │   ├── OverByOverView.tsx # Over by over view
-│   │   └── CommentaryCard.tsx # Commentary card
-│   │
-│   └── Highlights/         # Highlights sub-components
-│       ├── index.ts        # Highlights exports
-│       ├── types.ts        # Highlights types
-│       ├── HighlightsTab.tsx # Main highlights tab
-│       ├── HighlightsCard.tsx # Highlights card
-│       ├── HighlightsSection.tsx # Highlights section
-│       └── HighlightItem.tsx # Individual highlight item
-│
-├── Shared/                  # Shared/common components
-│   ├── Header.tsx          # Header component
-│   ├── Footer.tsx          # Footer component
-│   ├── BackHeader.tsx      # Back header component
-│   └── StyledBackground.tsx # Styled background
-│
-├── UI/                      # Reusable UI components
-│   ├── index.ts            # UI component exports
-│   ├── types.ts            # UI-specific types
-│   ├── Card.tsx            # Card component
-│   ├── Button.tsx          # Button component
-│   ├── LoadingSpinner.tsx  # Loading spinner
-│   ├── ErrorBoundary.tsx   # Error boundary
-│   ├── EmptyState.tsx      # Empty state component
-│   └── Badge.tsx           # Badge component
-│
-└── index.ts                # Main component exports
+├── Auth/           # Authentication components
+├── Layout/         # Layout components
+├── Match/          # Match-related components
+├── Shared/         # Shared components (Header, Footer, etc.)
+├── UI/             # Reusable UI components
+│   ├── CommonStyles.tsx  # Common styled components
+│   ├── Button.tsx        # Button component
+│   ├── Card.tsx          # Card component
+│   ├── LoadingSpinner.tsx # Loading spinner
+│   └── Example.tsx       # Example usage
+└── index.ts        # Main exports
 ```
 
-## Component Organization Principles
+## Usage
 
-### 1. **Feature-Based Organization**
+### Theme Provider
 
-- Components are organized by feature/domain (Auth, Match, Layout, etc.)
-- Each feature has its own directory with sub-components
+The app is wrapped with styled-components ThemeProvider in `App.tsx`:
 
-### 2. **Separation of Concerns**
+```tsx
+import { ThemeProvider } from "styled-components";
+import { styledTheme } from "@/config/styledTheme";
 
-- Large components are broken down into smaller, focused sub-components
-- Each component has a single responsibility
-
-### 3. **Type Safety**
-
-- Each feature directory has its own `types.ts` file
-- Types are exported through index files for easy importing
-
-### 4. **Consistent Naming**
-
-- Components use descriptive, consistent naming conventions
-- Sub-components are clearly named with their parent context
-
-### 5. **Reusability**
-
-- UI components are separated for maximum reusability
-- Shared components are in their own directory
-
-## Benefits of This Organization
-
-1. **Maintainability**: Easier to find and modify specific components
-2. **Scalability**: New features can be added without affecting existing code
-3. **Reusability**: UI components can be reused across the application
-4. **Type Safety**: Better TypeScript support with organized types
-5. **Performance**: Smaller components can be optimized individually
-6. **Testing**: Easier to write unit tests for smaller, focused components
-
-## Usage Examples
-
-```typescript
-// Import main components
-import { Layout, Header, Footer } from "@/components";
-
-// Import feature-specific components
-import { Login, LoginForm } from "@/components/Auth";
-import { ScorecardComponent, BattingTable } from "@/components/Match/Scorecard";
-
-// Import UI components
-import { Card, Button, LoadingSpinner } from "@/components/UI";
+function App() {
+  return (
+    <ThemeProvider theme={styledTheme}>{/* Your app content */}</ThemeProvider>
+  );
+}
 ```
 
-## Migration Notes
+### Using Styled Components
 
-- Large monolithic components have been broken down into smaller, focused components
-- Types have been extracted to separate files for better organization
-- Each feature now has its own index file for clean exports
-- Component names have been made more descriptive and consistent
+#### Basic Usage
+
+```tsx
+import styled from "styled-components";
+
+const StyledButton = styled.button`
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text.primary};
+  padding: ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+`;
+```
+
+#### Using Common Components
+
+```tsx
+import { Button, Card, Flex, Container } from "@/components/UI";
+
+function MyComponent() {
+  return (
+    <Container>
+      <Flex gap="16px" direction="column">
+        <Card padding="md" hover>
+          <Button variant="primary">Click me</Button>
+        </Card>
+      </Flex>
+    </Container>
+  );
+}
+```
+
+## Available Components
+
+### UI Components
+
+#### Button
+
+```tsx
+<Button
+  variant="primary" | "secondary" | "outline" | "ghost"
+  size="sm" | "md" | "lg"
+  disabled={boolean}
+  fullWidth={boolean}
+  onClick={() => {}}
+>
+  Button Text
+</Button>
+```
+
+#### Card
+
+```tsx
+<Card
+  padding="sm" | "md" | "lg" | "xl"
+  hover={boolean}
+  onClick={() => {}}
+>
+  Card content
+</Card>
+```
+
+#### LoadingSpinner
+
+```tsx
+<LoadingSpinner
+  size="sm" | "md" | "lg"
+  color="custom-color"
+/>
+```
+
+### Common Styled Components
+
+#### Flex
+
+```tsx
+<Flex
+  direction="row" | "column"
+  align="flex-start" | "center" | "flex-end" | "stretch"
+  justify="flex-start" | "center" | "flex-end" | "space-between" | "space-around"
+  gap="16px"
+>
+  Content
+</Flex>
+```
+
+#### Container
+
+```tsx
+<Container>Responsive container with max-width and padding</Container>
+```
+
+#### Typography
+
+```tsx
+<Title>Main heading</Title>
+<Subtitle>Secondary heading</Subtitle>
+<Text>Body text</Text>
+```
+
+#### Badge
+
+```tsx
+<Badge variant="primary" | "secondary" | "success" | "warning" | "error">
+  Badge text
+</Badge>
+```
+
+## Theme
+
+The theme object provides consistent design tokens:
+
+```tsx
+const theme = {
+  colors: {
+    primary: "#1D4ED8",
+    background: { primary: "#0A0A23", secondary: "#111827" },
+    text: { primary: "#FFFFFF", secondary: "rgba(255, 255, 255, 0.8)" },
+    // ... more colors
+  },
+  spacing: {
+    xs: "4px",
+    sm: "8px",
+    md: "16px",
+    lg: "24px",
+    xl: "32px",
+  },
+  borderRadius: {
+    sm: "4px",
+    md: "8px",
+    lg: "12px",
+    xl: "16px",
+  },
+  breakpoints: {
+    xs: "0px",
+    sm: "600px",
+    md: "900px",
+    lg: "1200px",
+    xl: "1536px",
+  },
+  transitions: {
+    fast: "0.2s ease",
+    normal: "0.3s ease",
+    slow: "0.5s ease",
+  },
+};
+```
+
+## Benefits of Styled Components
+
+1. **Better Performance**: No runtime CSS-in-JS overhead
+2. **Cleaner Code**: Styles are co-located with components
+3. **Type Safety**: Full TypeScript support
+4. **Theme Integration**: Easy access to design tokens
+5. **Dynamic Styling**: Props-based styling
+6. **Maintainability**: Easier to refactor and maintain
+
+## Migration from Material-UI
+
+The components have been migrated from Material-UI styled components to styled-components:
+
+- Removed Material-UI dependencies where possible
+- Maintained the same visual design
+- Improved performance and bundle size
+- Simplified component APIs
+
+## Best Practices
+
+1. **Use Theme Tokens**: Always use theme values instead of hardcoded values
+2. **Component Composition**: Build complex components from simple styled components
+3. **Props for Variants**: Use props to control component variants
+4. **Responsive Design**: Use theme breakpoints for responsive styling
+5. **Performance**: Avoid creating styled components inside render functions
+
+## Example
+
+See `src/components/UI/Example.tsx` for a comprehensive example of all available components and their usage.
