@@ -31,6 +31,19 @@ import { ScorecardComponent } from '@/components/Match/Scorecard';
 import { useMatchDetails } from '@/hooks/useMatchDetails';
 import { themeColors, commonStyles } from '@/config/theme';
 
+// Dummy data imports
+import {
+  dummyQuickStatsData,
+  dummyBettingTabs,
+  dummyMatchWinnerOdds,
+  dummyTeamTotalRuns,
+  dummyPlayerPerformance,
+  dummyNextOverRuns,
+  dummyFallOfWicket,
+  dummyMethodOfDismissal,
+  dummyQuickBets
+} from '@/data/matchDetailsData';
+
 // Styles
 import {
   tabContentStyles,
@@ -59,16 +72,6 @@ import {
   matchDetailsErrorTextStyles,
   matchDetailsRetryButtonStyles
 } from '@/styles/matchDetails.styles';
-
-// Quick stats data
-const quickStatsData = [
-  { value: '85%', label: 'Win Probability', color: '#3B82F6' },
-  { value: '2.85', label: 'Best Odds', color: '#10B981' },
-  { value: '12K', label: 'Active Bets', color: '#8B5CF6' }
-];
-
-// Betting tabs data
-const bettingTabs = ['Main', 'Match', 'Fancy'];
 
 /**
  * Loading component
@@ -105,7 +108,7 @@ const ErrorState: React.FC<{ error: string; onRetry: () => void }> = ({ error, o
  */
 const QuickStats: React.FC = () => (
   <Box sx={quickStatsContainerStyles}>
-    {quickStatsData.map((stat, index) => (
+    {dummyQuickStatsData.map((stat, index) => (
       <Box key={index} sx={quickStatItemStyles(stat.color)}>
         <Typography variant="h3" sx={quickStatValueStyles(stat.color)}>
           {stat.value}
@@ -126,7 +129,7 @@ const BettingTabs: React.FC<{
   onTabChange: (tab: string) => void 
 }> = ({ activeTab, onTabChange }) => (
   <Box sx={bettingTabsContainerStyles}>
-    {bettingTabs.map((type) => (
+    {dummyBettingTabs.map((type) => (
       <Button
         key={type}
         onClick={() => onTabChange(type)}
@@ -169,57 +172,32 @@ const MatchWinnerSection: React.FC = () => (
     />
     <CardContent sx={{ p: 3 }}>
       <Stack spacing={2.5}>
-        {/* ZIM */}
-        <Box sx={matchWinnerTeamRowStyles}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Avatar 
-              src="/teams/zimbabwe.png" 
-              alt="Zimbabwe" 
-              sx={matchWinnerTeamAvatarStyles}
-            />
-            <Typography variant="body1" sx={matchWinnerTeamNameStyles}>
-              Zimbabwe
-            </Typography>
+        {dummyMatchWinnerOdds.map((odds, index) => (
+          <Box key={index} sx={matchWinnerTeamRowStyles}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar 
+                src={`/teams/${odds.team.toLowerCase().replace(' ', '')}.png`}
+                alt={odds.team} 
+                sx={matchWinnerTeamAvatarStyles}
+              />
+              <Typography variant="body1" sx={matchWinnerTeamNameStyles}>
+                {odds.team}
+              </Typography>
+            </Box>
+            <Stack direction="row" spacing={1.5}>
+              <Button
+                variant="contained"
+                size="small"
+                sx={oddsButtonStyles(true)}
+              >
+                <Typography variant="body2" fontWeight={600}>{odds.back}</Typography>
+              </Button>
+              <Button sx={oddsButtonStyles(false)}>
+                <Typography variant="body2" fontWeight={600}>{odds.lay}</Typography>
+              </Button>
+            </Stack>
           </Box>
-          <Stack direction="row" spacing={1.5}>
-            <Button
-              variant="contained"
-              size="small"
-              sx={oddsButtonStyles(true)}
-            >
-              <Typography variant="body2" fontWeight={600}>3.85</Typography>
-            </Button>
-            <Button sx={oddsButtonStyles(false)}>
-              <Typography variant="body2" fontWeight={600}>3.9</Typography>
-            </Button>
-          </Stack>
-        </Box>
-
-        {/* NZ */}
-        <Box sx={matchWinnerTeamRowStyles}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Avatar 
-              src="/teams/newzealand.png" 
-              alt="New Zealand" 
-              sx={matchWinnerTeamAvatarStyles}
-            />
-            <Typography variant="body1" sx={matchWinnerTeamNameStyles}>
-              New Zealand
-            </Typography>
-          </Box>
-          <Stack direction="row" spacing={1.5}>
-            <Button
-              variant="contained"
-              size="small"
-              sx={oddsButtonStyles(true)}
-            >
-              <Typography variant="body2" fontWeight={600}>1.45</Typography>
-            </Button>
-            <Button sx={oddsButtonStyles(false)}>
-              <Typography variant="body2" fontWeight={600}>1.47</Typography>
-            </Button>
-          </Stack>
-        </Box>
+        ))}
       </Stack>
     </CardContent>
   </Card>
@@ -251,139 +229,73 @@ const TeamTotalRunsSection: React.FC = () => (
     />
     <CardContent>
       <Stack spacing={3}>
-        {/* ZIM Total Runs */}
-        <Box>
-          <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
-            Zimbabwe Total Runs
-          </Typography>
-          <Stack spacing={2}>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Under 140.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 1.9
-              </Button>
-            </Box>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Over 140.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 1.9
-              </Button>
-            </Box>
-          </Stack>
-        </Box>
-
-        {/* NZ Total Runs */}
-        <Box>
-          <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
-            New Zealand Total Runs
-          </Typography>
-          <Stack spacing={2}>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Under 142.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 1.85
-              </Button>
-            </Box>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Over 142.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 1.95
-              </Button>
-            </Box>
-          </Stack>
-        </Box>
+        {dummyTeamTotalRuns.map((teamRuns, index) => (
+          <Box key={index}>
+            <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
+              {teamRuns.team} Total Runs
+            </Typography>
+            <Stack spacing={2}>
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                p: 2,
+                bgcolor: 'rgba(15, 23, 42, 0.5)',
+                borderRadius: 1,
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                  Under {teamRuns.under.runs}
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    ...commonStyles.button,
+                    bgcolor: themeColors.primary,
+                    color: themeColors.text.primary,
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.9)',
+                      transform: 'translateY(-1px)',
+                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
+                    }
+                  }}
+                >
+                  Back {teamRuns.under.odds}
+                </Button>
+              </Box>
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                p: 2,
+                bgcolor: 'rgba(15, 23, 42, 0.5)',
+                borderRadius: 1,
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                  Over {teamRuns.over.runs}
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    ...commonStyles.button,
+                    bgcolor: themeColors.primary,
+                    color: themeColors.text.primary,
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.9)',
+                      transform: 'translateY(-1px)',
+                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
+                    }
+                  }}
+                >
+                  Back {teamRuns.over.odds}
+                </Button>
+              </Box>
+            </Stack>
+          </Box>
+        ))}
       </Stack>
     </CardContent>
   </Card>
@@ -424,139 +336,73 @@ const PlayerPerformanceSection: React.FC = () => (
     />
     <CardContent>
       <Stack spacing={3}>
-        {/* Devon Conway Runs */}
-        <Box>
-          <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
-            Devon Conway Runs
-          </Typography>
-          <Stack spacing={2}>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Under 74.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 1.8
-              </Button>
-            </Box>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Over 74.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 2.0
-              </Button>
-            </Box>
-          </Stack>
-        </Box>
-
-        {/* Tom Latham Runs */}
-        <Box>
-          <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
-            Tom Latham Runs
-          </Typography>
-          <Stack spacing={2}>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Under 59.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 1.75
-              </Button>
-            </Box>
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 2,
-              bgcolor: 'rgba(15, 23, 42, 0.5)',
-              borderRadius: 1,
-              border: '1px solid rgba(59, 130, 246, 0.2)'
-            }}>
-              <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
-                Over 59.5
-              </Typography>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{
-                  ...commonStyles.button,
-                  bgcolor: themeColors.primary,
-                  color: themeColors.text.primary,
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.9)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-                  }
-                }}
-              >
-                Back 2.05
-              </Button>
-            </Box>
-          </Stack>
-        </Box>
+        {dummyPlayerPerformance.map((player, index) => (
+          <Box key={index}>
+            <Typography variant="subtitle1" sx={{ color: 'white', mb: 2 }}>
+              {player.player} Runs
+            </Typography>
+            <Stack spacing={2}>
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                p: 2,
+                bgcolor: 'rgba(15, 23, 42, 0.5)',
+                borderRadius: 1,
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                  Under {player.under.runs}
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    ...commonStyles.button,
+                    bgcolor: themeColors.primary,
+                    color: themeColors.text.primary,
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.9)',
+                      transform: 'translateY(-1px)',
+                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
+                    }
+                  }}
+                >
+                  Back {player.under.odds}
+                </Button>
+              </Box>
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                p: 2,
+                bgcolor: 'rgba(15, 23, 42, 0.5)',
+                borderRadius: 1,
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <Typography variant="body1" sx={{ color: 'white', flex: 1 }}>
+                  Over {player.over.runs}
+                </Typography>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    ...commonStyles.button,
+                    bgcolor: themeColors.primary,
+                    color: themeColors.text.primary,
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.9)',
+                      transform: 'translateY(-1px)',
+                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
+                    }
+                  }}
+                >
+                  Back {player.over.odds}
+                </Button>
+              </Box>
+            </Stack>
+          </Box>
+        ))}
       </Stack>
     </CardContent>
   </Card>
@@ -593,36 +439,23 @@ const NextOverRunsSection: React.FC = () => (
     />
     <CardContent sx={{ p: 3 }}>
       <Stack spacing={2.5}>
-        <Box sx={fancyRowStyles}>
-          <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-            Under 8.5
-          </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>8.5</Typography>
-            <Button
-              variant="contained"
-              size="small"
-              sx={fancyButtonStyles('rgba(239, 68, 68, ')}
-            >
-              120
-            </Button>
-          </Stack>
-        </Box>
-        <Box sx={fancyRowStyles}>
-          <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-            Over 8.5
-          </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>8.5</Typography>
-            <Button
-              variant="contained"
-              size="small"
-              sx={fancyButtonStyles('rgba(59, 130, 246, ')}
-            >
-              85
-            </Button>
-          </Stack>
-        </Box>
+        {dummyNextOverRuns.map((bet, index) => (
+          <Box key={index} sx={fancyRowStyles}>
+            <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+              {bet.type}
+            </Typography>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>{bet.description}</Typography>
+              <Button
+                variant="contained"
+                size="small"
+                sx={fancyButtonStyles('rgba(239, 68, 68, ')}
+              >
+                {bet.odds}
+              </Button>
+            </Stack>
+          </Box>
+        ))}
       </Stack>
     </CardContent>
   </Card>
@@ -665,36 +498,23 @@ const FallOfWicketSection: React.FC = () => (
             Fall of Next Wicket
           </Typography>
           <Stack spacing={2.5}>
-            <Box sx={fancyRowStyles}>
-              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-                1-3 Overs
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>122.0</Typography>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={fancyButtonStyles('rgba(239, 68, 68, ')}
-                >
-                  120
-                </Button>
-              </Stack>
-            </Box>
-            <Box sx={fancyRowStyles}>
-              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-                4+ Overs
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>122.0</Typography>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={fancyButtonStyles('rgba(59, 130, 246, ')}
-                >
-                  85
-                </Button>
-              </Stack>
-            </Box>
+            {dummyFallOfWicket.map((bet, index) => (
+              <Box key={index} sx={fancyRowStyles}>
+                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                  {bet.type}
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>{bet.description}</Typography>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={fancyButtonStyles('rgba(239, 68, 68, ')}
+                  >
+                    {bet.odds}
+                  </Button>
+                </Stack>
+              </Box>
+            ))}
           </Stack>
         </Box>
 
@@ -704,51 +524,23 @@ const FallOfWicketSection: React.FC = () => (
             Method of Next Dismissal
           </Typography>
           <Stack spacing={2.5}>
-            <Box sx={fancyRowStyles}>
-              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-                Bowled/LBW
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>3.2</Typography>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={fancyButtonStyles('rgba(239, 68, 68, ')}
-                >
-                  100
-                </Button>
-              </Stack>
-            </Box>
-            <Box sx={fancyRowStyles}>
-              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-                Caught
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>1.9</Typography>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={fancyButtonStyles('rgba(59, 130, 246, ')}
-                >
-                  110
-                </Button>
-              </Stack>
-            </Box>
-            <Box sx={fancyRowStyles}>
-              <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
-                Other
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>8.0</Typography>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={fancyButtonStyles('rgba(16, 185, 129, ')}
-                >
-                  75
-                </Button>
-              </Stack>
-            </Box>
+            {dummyMethodOfDismissal.map((bet, index) => (
+              <Box key={index} sx={fancyRowStyles}>
+                <Typography variant="body1" sx={{ color: 'white', fontWeight: 600 }}>
+                  {bet.type}
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>{bet.description}</Typography>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={fancyButtonStyles('rgba(239, 68, 68, ')}
+                  >
+                    {bet.odds}
+                  </Button>
+                </Stack>
+              </Box>
+            ))}
           </Stack>
         </Box>
       </Stack>
@@ -788,40 +580,28 @@ const QuickBetsSection: React.FC = () => (
     <CardContent sx={{ p: 3 }}>
       <Stack spacing={2.5}>
         <Stack direction="row" spacing={2}>
-          <Button sx={quickBetButtonStyles('rgba(16, 185, 129, ')}>
-            <Typography variant="body1" fontWeight={600} sx={quickBetLabelStyles('#10B981')}>
-              FOUR
-            </Typography>
-            <Typography variant="body2" sx={quickBetOddsStyles}>
-              6.5
-            </Typography>
-          </Button>
-          <Button sx={quickBetButtonStyles('rgba(139, 92, 246, ')}>
-            <Typography variant="body1" fontWeight={600} sx={quickBetLabelStyles('#8B5CF6')}>
-              SIX
-            </Typography>
-            <Typography variant="body2" sx={quickBetOddsStyles}>
-              12.0
-            </Typography>
-          </Button>
+          {dummyQuickBets.slice(0, 2).map((bet, index) => (
+            <Button key={index} sx={quickBetButtonStyles(bet.color.replace('#', 'rgba(').replace(')', ', 0.2)'))}>
+              <Typography variant="body1" fontWeight={600} sx={quickBetLabelStyles(bet.color)}>
+                {bet.type}
+              </Typography>
+              <Typography variant="body2" sx={quickBetOddsStyles}>
+                {bet.odds}
+              </Typography>
+            </Button>
+          ))}
         </Stack>
         <Stack direction="row" spacing={2}>
-          <Button sx={quickBetButtonStyles('rgba(100, 116, 139, ')}>
-            <Typography variant="body1" fontWeight={600} sx={quickBetLabelStyles('#94A3B8')}>
-              DOT
-            </Typography>
-            <Typography variant="body2" sx={quickBetOddsStyles}>
-              2.8
-            </Typography>
-          </Button>
-          <Button sx={quickBetButtonStyles('rgba(239, 68, 68, ')}>
-            <Typography variant="body1" fontWeight={600} sx={quickBetLabelStyles('#EF4444')}>
-              WICKET
-            </Typography>
-            <Typography variant="body2" sx={quickBetOddsStyles}>
-              8.5
-            </Typography>
-          </Button>
+          {dummyQuickBets.slice(2, 4).map((bet, index) => (
+            <Button key={index} sx={quickBetButtonStyles(bet.color.replace('#', 'rgba(').replace(')', ', 0.2)'))}>
+              <Typography variant="body1" fontWeight={600} sx={quickBetLabelStyles(bet.color)}>
+                {bet.type}
+              </Typography>
+              <Typography variant="body2" sx={quickBetOddsStyles}>
+                {bet.odds}
+              </Typography>
+            </Button>
+          ))}
         </Stack>
       </Stack>
     </CardContent>
@@ -832,23 +612,23 @@ const QuickBetsSection: React.FC = () => (
  * Odds Tab Content component
  */
 const OddsTabContent: React.FC<{ 
-  activeBettingTab: string; 
-  onBettingTabChange: (tab: string) => void 
-}> = ({ activeBettingTab, onBettingTabChange }) => (
+  activeTab: string; 
+  onTabChange: (tab: string) => void 
+}> = ({ activeTab, onTabChange }) => (
   <Stack spacing={3}>
     <QuickStats />
-    <BettingTabs activeTab={activeBettingTab} onTabChange={onBettingTabChange} />
+    <BettingTabs activeTab={activeTab} onTabChange={onTabChange} />
     
-    {activeBettingTab === 'Main' && <MatchWinnerSection />}
+    {activeTab === 'Main' && <MatchWinnerSection />}
     
-    {activeBettingTab === 'Match' && (
+    {activeTab === 'Match' && (
       <>
         <TeamTotalRunsSection />
         <PlayerPerformanceSection />
       </>
     )}
     
-    {activeBettingTab === 'Fancy' && (
+    {activeTab === 'Fancy' && (
       <>
         <NextOverRunsSection />
         <FallOfWicketSection />
@@ -926,8 +706,8 @@ const MatchDetails: React.FC = () => {
               {activeTab === 'highlights' && <HighlightsTab data={matchData} />}
               {activeTab === 'odds' && (
                 <OddsTabContent 
-                  activeBettingTab={activeBettingTab} 
-                  onBettingTabChange={setActiveBettingTab}
+                  activeTab={activeBettingTab} 
+                  onTabChange={setActiveBettingTab}
                 />
               )}
             </Box>

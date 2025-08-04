@@ -13,6 +13,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { MatchData } from '../../../types/match-details';
 import { themeColors, commonStyles } from '@/config/theme';
+import { dummyOversData, dummyMatchStats } from '@/data/matchDetailsData';
 
 interface OverData {
   overNumber: number;
@@ -25,7 +26,7 @@ interface LiveCommentaryProps {
   oversData?: OverData[]; // Make overs data optional and passed as prop
 }
 
-const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = [] }) => {
+const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummyOversData }) => {
   return (
     <Stack spacing={2}>
       {/* Live Commentary Section */}
@@ -247,11 +248,11 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = [] })
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <Typography variant="caption" color="gray">Current Run Rate</Typography>
-              <Typography variant="h5" fontWeight="bold">4.2</Typography>
+              <Typography variant="h5" fontWeight="bold">{dummyMatchStats.currentRunRate}</Typography>
             </Box>
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <Typography variant="caption" color="gray">Required Run Rate</Typography>
-              <Typography variant="h5" fontWeight="bold">5.8</Typography>
+              <Typography variant="h5" fontWeight="bold">{dummyMatchStats.requiredRunRate}</Typography>
             </Box>
           </Box>
           
@@ -260,12 +261,12 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = [] })
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <Typography variant="caption" color="gray">Boundaries</Typography>
-              <Typography variant="h5" fontWeight="bold">12 / 6</Typography>
+              <Typography variant="h5" fontWeight="bold">{dummyMatchStats.boundaries.fours} / {dummyMatchStats.boundaries.sixes}</Typography>
               <Typography variant="caption" color="gray">Fours / Sixes</Typography>
             </Box>
             <Box sx={{ textAlign: 'center', flex: 1 }}>
               <Typography variant="caption" color="gray">Last 5 overs</Typography>
-              <Typography variant="h5" fontWeight="bold">32/2</Typography>
+              <Typography variant="h5" fontWeight="bold">{dummyMatchStats.lastFiveOvers.runs}/{dummyMatchStats.lastFiveOvers.wickets}</Typography>
               <Typography variant="caption" color="gray">Runs / Wickets</Typography>
             </Box>
           </Box>

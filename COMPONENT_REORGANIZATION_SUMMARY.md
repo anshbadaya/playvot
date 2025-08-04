@@ -2,272 +2,154 @@
 
 ## Overview
 
-This document summarizes the reorganization of components to ensure consistency in the application by:
+This document summarizes the reorganization of components and the replacement of hardcoded data with centralized dummy data from the `@data/` folder.
 
-1. Moving all types to centralized type files
-2. Moving all styles to centralized style files
-3. Ensuring all components use mock data from the data folder
-4. Maintaining consistency across the application
+## Changes Made
 
-## ✅ Completed Reorganization
+### 1. Enhanced Data Structure (`src/data/matchDetailsData.ts`)
 
-### 1. Types Centralization
+- **Added comprehensive dummy data** for all components that previously had hardcoded data
+- **New data types and interfaces**:
 
-#### `src/types/match.ts`
+  - `OverData` - for over-by-over commentary data
+  - `Highlight` - for match highlights and key moments
+  - `QuickStat` - for betting statistics
+  - `BettingOdds` - for match winner odds
+  - `TeamTotalRuns` - for team total runs betting
+  - `PlayerPerformance` - for player performance betting
+  - `FancyBet` - for fancy betting options
+  - `QuickBet` - for quick betting options
 
-- ✅ `TeamInfo` interface
-- ✅ `MatchCardProps` interface
-- ✅ All existing match-related types
+- **New dummy data exports**:
+  - `dummyOversData` - 20 overs of ball-by-ball data
+  - `dummyHighlightsData` - 15 key moments from the match
+  - `dummyQuickStatsData` - win probability, best odds, active bets
+  - `dummyBettingTabs` - betting tab categories
+  - `dummyMatchWinnerOdds` - match winner betting odds
+  - `dummyTeamTotalRuns` - team total runs betting
+  - `dummyPlayerPerformance` - player performance betting
+  - `dummyNextOverRuns` - next over runs betting
+  - `dummyFallOfWicket` - fall of wicket betting
+  - `dummyMethodOfDismissal` - method of dismissal betting
+  - `dummyQuickBets` - quick betting options
+  - `dummyMatchStats` - match statistics
 
-#### `src/types/match-details.ts`
+### 2. Updated Components
 
-- ✅ `MatchInfoProps` interface
-- ✅ `MatchTabsNavigationProps` interface
-- ✅ `WinProbabilityBarProps` interface
-- ✅ `MatchSummaryProps` interface
-- ✅ `SquadsProps` interface
-- ✅ All existing match-details types
+#### ScorecardComponent (`src/components/Match/Scorecard/ScorecardComponent.tsx`)
 
-#### Already Centralized Types
+- **Removed**: Hardcoded `dummySquads` data with 28 hardcoded players
+- **Added**: Import from `@/data/matchDetailsData`
+- **Result**: Now uses centralized dummy data from `dummyMatchData`
 
-- ✅ `src/components/Match/Commentary/types.ts` - Commentary component types
-- ✅ `src/components/Match/Highlights/types.ts` - Highlights component types
-- ✅ `src/components/Match/Scorecard/types.ts` - Scorecard component types
+#### LiveCommentary (`src/components/Match/Commentary/LiveCommentary.tsx`)
 
-### 2. Styles Centralization
+- **Removed**: Hardcoded match stats (4.2, 5.8, 12/6, 32/2)
+- **Added**: Imports for `dummyOversData` and `dummyMatchStats`
+- **Result**: Now uses centralized dummy data for overs and match statistics
 
-#### `src/styles/matches.styles.ts`
+#### HighlightsTab (`src/components/Match/Highlights/HighlightsTab.tsx`)
 
-- ✅ `matchCardContainerStyles`
-- ✅ `matchCardShineStyles`
-- ✅ `matchCardStyles`
-- ✅ `matchCardContentStyles`
-- ✅ `matchTypeStyles`
-- ✅ `matchTitleStyles`
-- ✅ `teamsSectionStyles`
-- ✅ `teamRowStyles`
-- ✅ `teamNameStyles`
-- ✅ `matchStatusStyles`
+- **Removed**: Hardcoded empty highlights array
+- **Added**: Import for `dummyHighlightsData`
+- **Result**: Now uses centralized dummy data for match highlights
 
-#### `src/styles/matchDetails.styles.ts`
+#### MatchDetails Page (`src/pages/MatchDetails.tsx`)
 
-- ✅ `matchInfoTeamsContainerStyles`
-- ✅ `matchInfoTeamBoxStyles`
-- ✅ `matchInfoTeamAvatarStyles`
-- ✅ `matchInfoLiveBadgeStyles`
-- ✅ `matchInfoSummaryBoxStyles`
-- ✅ `matchInfoSummaryTitleStyles`
-- ✅ `matchInfoDetailsRowStyles`
-- ✅ `matchInfoDividerStyles`
-- ✅ `matchTabsContainerStyles`
-- ✅ `matchTabsScrollContainerStyles`
-- ✅ `matchTabsButtonContainerStyles`
-- ✅ `matchTabsButtonStyles`
-- ✅ `winProbabilityContainerStyles`
-- ✅ `winProbabilityCardStyles`
-- ✅ `winProbabilityTeamsRowStyles`
-- ✅ `winProbabilityTeamStyles`
-- ✅ `winProbabilityTeamPercentageStyles`
-- ✅ `winProbabilityDrawStyles`
-- ✅ `winProbabilityDrawPercentageStyles`
-- ✅ `winProbabilityProgressContainerStyles`
-- ✅ `winProbabilityHomeBarStyles`
-- ✅ `winProbabilityDrawBarStyles`
-- ✅ `winProbabilityAwayBarStyles`
-- ✅ `matchSummaryContainerStyles`
-- ✅ `matchSummaryHeaderStyles`
-- ✅ `matchSummarySubtitleStyles`
-- ✅ `matchSummaryScoreRowStyles`
-- ✅ `matchSummarySectionStyles`
-- ✅ `matchSummarySectionTitleStyles`
-- ✅ `matchSummaryStatsGridStyles`
-- ✅ `matchSummaryScrollContainerStyles`
-- ✅ `matchSummaryStatsHeaderStyles`
-- ✅ `matchSummaryStatsHeaderCellStyles`
-- ✅ `matchSummaryPlayerRowStyles`
-- ✅ `matchSummaryPlayerNameStyles`
-- ✅ `squadsPlayerRowStyles`
-- ✅ `squadsPlayerContentStyles`
-- ✅ `squadsPlayerAvatarStyles`
-- ✅ `squadsPlayerInfoStyles`
-- ✅ `squadsPlayerNameStyles`
-- ✅ `squadsPlayerDetailsStyles`
-- ✅ `squadsPlayerRoleStyles`
-- ✅ `squadsPlayerNumberStyles`
-- ✅ `squadsPlayerStatsStyles`
-- ✅ `squadsPlayerStatItemStyles`
-- ✅ `squadsTeamSectionStyles`
-- ✅ `squadsTeamHeaderStyles`
-- ✅ `squadsTeamAvatarStyles`
-- ✅ `squadsTeamInfoStyles`
-- ✅ `squadsTeamNameStyles`
-- ✅ `squadsTeamScoreStyles`
-- ✅ `squadsPlayersGridStyles`
+- **Removed**: All hardcoded betting data including:
 
-### 3. Components Updated
+  - `quickStatsData` array
+  - `bettingTabs` array
+  - Hardcoded team odds (Zimbabwe: 3.85/3.9, New Zealand: 1.45/1.47)
+  - Hardcoded team total runs (Zimbabwe: 140.5, New Zealand: 142.5)
+  - Hardcoded player performance (Devon Conway: 74.5, Tom Latham: 59.5)
+  - Hardcoded fancy bets (next over runs, fall of wicket, method of dismissal)
+  - Hardcoded quick bets (FOUR, SIX, DOT, WICKET)
 
-#### `src/components/Match/MatchCard.tsx`
+- **Added**: Imports for all dummy data from `@/data/matchDetailsData`
+- **Result**: All betting sections now use centralized dummy data
 
-- ✅ Removed inline types (moved to `src/types/match.ts`)
-- ✅ Removed inline styles (moved to `src/styles/matches.styles.ts`)
-- ✅ Uses centralized types and styles
-- ✅ Uses mock data from `src/data/matchesData.ts`
+### 3. Benefits Achieved
 
-#### `src/components/Match/MatchInfo.tsx`
+#### Centralized Data Management
 
-- ✅ Removed inline types (moved to `src/types/match-details.ts`)
-- ✅ Removed inline styles (moved to `src/styles/matchDetails.styles.ts`)
-- ✅ Uses centralized types and styles
-- ✅ Uses mock data from `src/data/matchDetailsData.ts`
+- **Single source of truth**: All dummy data is now in `src/data/matchDetailsData.ts`
+- **Easy maintenance**: Changes to dummy data only need to be made in one place
+- **Consistency**: All components use the same data structure
 
-#### `src/components/Match/MatchTabsNavigation.tsx`
+#### Improved Code Quality
 
-- ✅ Removed inline types (moved to `src/types/match-details.ts`)
-- ✅ Removed inline styles (moved to `src/styles/matchDetails.styles.ts`)
-- ✅ Uses centralized types and styles
+- **Reduced code duplication**: No more repeated hardcoded data across components
+- **Better maintainability**: Easy to update dummy data for testing or development
+- **Type safety**: All dummy data is properly typed with TypeScript interfaces
 
-#### `src/components/Match/WinProbabilityBar.tsx`
+#### Enhanced Flexibility
 
-- ✅ Removed inline types (moved to `src/types/match-details.ts`)
-- ✅ Removed inline styles (moved to `src/styles/matchDetails.styles.ts`)
-- ✅ Uses centralized types and styles
-- ✅ Uses mock data from `src/data/matchDetailsData.ts`
+- **Easy data switching**: Can easily swap between different dummy datasets
+- **Testing friendly**: Can create different dummy data sets for different scenarios
+- **API integration ready**: Structure supports easy transition to real API data
 
-#### `src/components/Match/MatchSummary.tsx`
+### 4. Data Structure Overview
 
-- ✅ Removed inline types (moved to `src/types/match-details.ts`)
-- ✅ Removed inline styles (moved to `src/styles/matchDetails.styles.ts`)
-- ✅ Uses centralized types and styles
-- ✅ Uses mock data from `src/data/matchDetailsData.ts`
+```typescript
+// Main match data
+dummyMatchData: MatchData
+├── teams (home/away)
+├── players (home/away)
+├── commentary
+├── winProbability
+└── bettingOdds
 
-#### `src/components/Match/Squads.tsx`
+// Scorecard data
+dummyScorecardData: ScorecardData
+├── innings[]
+├── matchInfo
+└── detailed batting/bowling data
 
-- ✅ Removed inline types (moved to `src/types/match-details.ts`)
-- ✅ Removed inline styles (moved to `src/styles/matchDetails.styles.ts`)
-- ✅ Uses centralized types and styles
-- ✅ Uses mock data from `src/data/matchDetailsData.ts`
-
-### 4. Data Usage Verification
-
-#### Mock Data Sources
-
-- ✅ `src/data/matchesData.ts` - Contains comprehensive match data for all sports
-- ✅ `src/data/matchDetailsData.ts` - Contains detailed match information and scorecard data
-
-#### Services Using Mock Data
-
-- ✅ `src/services/matchService.ts` - Uses `dummyMatchesData` from matchesData.ts
-- ✅ `src/services/matchDetailsService.ts` - Uses `dummyMatchData` and `dummyScorecardData` from matchDetailsData.ts
-
-#### Hooks Using Mock Data
-
-- ✅ `src/hooks/useMatchData.ts` - Uses services that fetch from mock data
-- ✅ `src/hooks/useMatchDetails.ts` - Uses services that fetch from mock data
-
-#### Pages Using Mock Data
-
-- ✅ `src/pages/Matches.tsx` - Uses `useMatches` hook which fetches from mock data
-- ✅ `src/pages/MatchDetails.tsx` - Uses `useMatchDetails` hook which fetches from mock data
-
-### 5. Consistency Achievements
-
-#### Type Consistency
-
-- ✅ All component props are defined in centralized type files
-- ✅ No inline interface definitions in components
-- ✅ Consistent naming conventions across all types
-- ✅ Proper TypeScript typing throughout the application
-
-#### Style Consistency
-
-- ✅ All component styles are defined in centralized style files
-- ✅ No inline styles in components
-- ✅ Consistent theme usage across all components
-- ✅ Proper Material-UI sx prop usage
-
-#### Data Consistency
-
-- ✅ All components use mock data from centralized data files
-- ✅ No hardcoded data in components
-- ✅ Consistent data structure across all components
-- ✅ Proper data flow from services → hooks → components
-
-#### Import Consistency
-
-- ✅ All components use absolute imports with `@/` prefix
-- ✅ Consistent import organization (React, MUI, types, styles, utils)
-- ✅ No relative imports for types or styles
-
-## 🎯 Benefits Achieved
-
-1. **Maintainability**: All types and styles are centralized, making them easy to find and modify
-2. **Consistency**: Uniform styling and typing across all components
-3. **Reusability**: Centralized styles and types can be reused across components
-4. **Scalability**: Easy to add new components following the established patterns
-5. **Data Management**: All mock data is properly organized and used consistently
-6. **Type Safety**: Comprehensive TypeScript typing throughout the application
-7. **Performance**: Optimized imports and no duplicate style definitions
-
-## 📁 File Structure After Reorganization
-
-```
-src/
-├── components/
-│   └── Match/
-│       ├── MatchCard.tsx ✅ (updated)
-│       ├── MatchInfo.tsx ✅ (updated)
-│       ├── MatchTabsNavigation.tsx ✅ (updated)
-│       ├── WinProbabilityBar.tsx ✅ (updated)
-│       ├── MatchSummary.tsx ✅ (updated)
-│       ├── Squads.tsx ✅ (updated)
-│       ├── Commentary/
-│       │   └── types.ts ✅ (already centralized)
-│       ├── Highlights/
-│       │   └── types.ts ✅ (already centralized)
-│       └── Scorecard/
-│           └── types.ts ✅ (already centralized)
-├── types/
-│   ├── match.ts ✅ (updated with new types)
-│   └── match-details.ts ✅ (updated with new types)
-├── styles/
-│   ├── matches.styles.ts ✅ (updated with new styles)
-│   └── matchDetails.styles.ts ✅ (updated with new styles)
-├── data/
-│   ├── matchesData.ts ✅ (mock data source)
-│   └── matchDetailsData.ts ✅ (mock data source)
-├── services/
-│   ├── matchService.ts ✅ (uses mock data)
-│   └── matchDetailsService.ts ✅ (uses mock data)
-├── hooks/
-│   ├── useMatchData.ts ✅ (uses services)
-│   └── useMatchDetails.ts ✅ (uses services)
-└── pages/
-    ├── Matches.tsx ✅ (uses hooks)
-    └── MatchDetails.tsx ✅ (uses hooks)
+// Additional dummy data
+├── dummyOversData: OverData[]
+├── dummyHighlightsData: Highlight[]
+├── dummyQuickStatsData: QuickStat[]
+├── dummyBettingTabs: string[]
+├── dummyMatchWinnerOdds: BettingOdds[]
+├── dummyTeamTotalRuns: TeamTotalRuns[]
+├── dummyPlayerPerformance: PlayerPerformance[]
+├── dummyNextOverRuns: FancyBet[]
+├── dummyFallOfWicket: FancyBet[]
+├── dummyMethodOfDismissal: FancyBet[]
+├── dummyQuickBets: QuickBet[]
+└── dummyMatchStats: MatchStats
 ```
 
-## ✅ Verification Checklist
+### 5. Components Using Dummy Data
 
-- [x] All component types moved to centralized type files
-- [x] All component styles moved to centralized style files
-- [x] No inline type definitions in components
-- [x] No inline styles in components
-- [x] All components use mock data from data folder
-- [x] No hardcoded data in components
-- [x] Consistent import patterns across all components
-- [x] Proper TypeScript typing throughout
-- [x] Consistent theme usage
-- [x] All linter errors resolved
-- [x] Application builds successfully
-- [x] All functionality preserved
+| Component          | Data Used                           | Previous State           |
+| ------------------ | ----------------------------------- | ------------------------ |
+| ScorecardComponent | `dummyMatchData.players`            | Hardcoded 28 players     |
+| LiveCommentary     | `dummyOversData`, `dummyMatchStats` | Hardcoded stats          |
+| HighlightsTab      | `dummyHighlightsData`               | Empty array              |
+| MatchDetails       | All betting dummy data              | Extensive hardcoded data |
 
-## 🚀 Next Steps
+### 6. Future Enhancements
 
-The component reorganization is complete. The application now has:
+#### API Integration Ready
 
-- Centralized type management
-- Centralized style management
-- Consistent data usage
-- Improved maintainability and scalability
+- All components now accept data as props
+- Dummy data can be easily replaced with API calls
+- TypeScript interfaces ensure data consistency
 
-All components follow the established patterns and can be easily extended or modified while maintaining consistency across the application.
+#### Additional Data Sets
+
+- Can create multiple dummy data sets for different scenarios
+- Easy to add new data types and structures
+- Support for different sports and match types
+
+#### Testing Support
+
+- Centralized dummy data makes testing easier
+- Can create specific test data sets
+- Components are more testable with injected data
+
+## Conclusion
+
+The reorganization successfully eliminated all hardcoded match data from components and centralized it in the `@data/` folder. This improves code maintainability, reduces duplication, and makes the application more flexible for future enhancements. All components now use a consistent data structure and are ready for API integration.

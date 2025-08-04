@@ -10,20 +10,14 @@ import {
 } from "@mui/material";
 import { MatchData } from '../../../types/match-details';
 import { commonStyles } from '@/config/theme';
-
-interface Highlight {
-  time: string;
-  type: 'wicket' | 'boundary' | 'milestone' | 'other';
-  description: string;
-  day?: string;
-}
+import { dummyHighlightsData, Highlight } from '@/data/matchDetailsData';
 
 interface HighlightsTabProps {
   data: MatchData;
   highlightsData?: Highlight[];
 }
 
-const HighlightsTab: React.FC<HighlightsTabProps> = ({ data, highlightsData = [] }) => {
+const HighlightsTab: React.FC<HighlightsTabProps> = ({ data, highlightsData = dummyHighlightsData }) => {
   const getHighlightStyle = (type: string) => {
     switch (type) {
       case 'wicket':

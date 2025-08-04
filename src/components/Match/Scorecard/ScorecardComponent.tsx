@@ -25,46 +25,17 @@ import {
   SquadsProps, 
   ScorecardProps
 } from './types';
+import { dummyMatchData } from '@/data/matchDetailsData';
 
-// Sample dummy data for squads
+// Use dummy data from data folder instead of hardcoded data
 const dummySquads: SquadsProps = {
   home: {
-    name: "ZIM",
-    players: [
-      { name: "Ben Curran", number: 1, position: "Opener", role: "Batter", avatar: "/teams/player1.png" },
-      { name: "Brian Bennett", number: 2, position: "Top Order", role: "Batting Allrounder", avatar: "/teams/player2.png" },
-      { name: "Nick Welch", number: 3, position: "Middle Order", role: "Batter", avatar: "/teams/player3.png" },
-      { name: "Sean Williams", number: 4, position: "Middle Order", role: "Batting Allrounder", avatar: "/teams/player4.png" },
-      { name: "Craig Ervine", number: 5, position: "Middle Order", role: "Batter", isCaptain: true, avatar: "/teams/player5.png" },
-      { name: "Sikandar Raza", number: 6, position: "Lower Order", role: "Batting Allrounder", avatar: "/teams/player6.png" },
-      { name: "Tadiwanashe Taibu", number: 7, position: "Lower Order", role: "WK-Batter", isWicketKeeper: true, avatar: "/teams/player7.png" },
-      { name: "Newman Nyamhuri", number: 8, position: "Tail", role: "Bowler", avatar: "/teams/player8.png" },
-      { name: "Vincent Masekesa", number: 9, position: "Tail", role: "Batting Allrounder", avatar: "/teams/player9.png" },
-      { name: "Blessing Muzarabani", number: 10, position: "Tail", role: "Bowler", avatar: "/teams/player10.png" },
-      { name: "Tanaka Chivanga", number: 11, position: "Tail", role: "Bowler", avatar: "/teams/player11.png" },
-      { name: "Clive Madande", number: 12, position: "Reserve", role: "WK-Batter", avatar: "/teams/player12.png" },
-      { name: "Wellington Masakadza", number: 13, position: "Reserve", role: "Bowler", avatar: "/teams/player13.png" },
-      { name: "Trevor Gwandu", number: 14, position: "Reserve", role: "Bowler", avatar: "/teams/player14.png" }
-    ]
+    name: dummyMatchData.teams.home.name,
+    players: dummyMatchData.players.home
   },
   away: {
-    name: "NZ",
-    players: [
-      { name: "Devon Conway", number: 1, position: "Opener", role: "WK-Batter", isWicketKeeper: true, avatar: "/teams/player15.png" },
-      { name: "Will Young", number: 2, position: "Top Order", role: "Batter", avatar: "/teams/player16.png" },
-      { name: "Henry Nicholls", number: 3, position: "Middle Order", role: "Batter", avatar: "/teams/player17.png" },
-      { name: "Rachin Ravindra", number: 4, position: "Middle Order", role: "Batting Allrounder", avatar: "/teams/player18.png" },
-      { name: "Daryl Mitchell", number: 5, position: "Middle Order", role: "Batting Allrounder", avatar: "/teams/player19.png" },
-      { name: "Tom Blundell", number: 6, position: "Lower Order", role: "WK-Batter", isWicketKeeper: true, avatar: "/teams/player20.png" },
-      { name: "Michael Bracewell", number: 7, position: "Lower Order", role: "Batting Allrounder", avatar: "/teams/player21.png" },
-      { name: "Mitchell Santner", number: 8, position: "Tail", role: "Bowling Allrounder", isCaptain: true, avatar: "/teams/player22.png" },
-      { name: "Nathan Smith", number: 9, position: "Tail", role: "Bowling Allrounder", avatar: "/teams/player23.png" },
-      { name: "Matt Henry", number: 10, position: "Tail", role: "Bowler", avatar: "/teams/player24.png" },
-      { name: "William O'Rourke", number: 11, position: "Tail", role: "Bowler", avatar: "/teams/player25.png" },
-      { name: "Ajaz Patel", number: 12, position: "Reserve", role: "Bowler", avatar: "/teams/player26.png" },
-      { name: "Jacob Duffy", number: 13, position: "Reserve", role: "Bowler", avatar: "/teams/player27.png" },
-      { name: "Matthew Fisher", number: 14, position: "Reserve", role: "Bowler", avatar: "/teams/player28.png" }
-    ]
+    name: dummyMatchData.teams.away.name,
+    players: dummyMatchData.players.away
   }
 };
 

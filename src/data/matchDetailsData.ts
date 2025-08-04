@@ -461,4 +461,165 @@ export const dummyScorecardData: ScorecardData = {
     series: "Test Series 2024",
     points: "New Zealand lead by 25 runs"
   }
+};
+
+// Additional dummy data for components that currently have hardcoded data
+
+export interface OverData {
+  overNumber: number;
+  runs: number;
+  balls: (number | 'W')[];
+}
+
+export interface Highlight {
+  time: string;
+  type: 'wicket' | 'boundary' | 'milestone' | 'other';
+  description: string;
+  day?: string;
+}
+
+export interface QuickStat {
+  value: string;
+  label: string;
+  color: string;
+}
+
+export interface BettingOdds {
+  team: string;
+  back: number;
+  lay: number;
+}
+
+export interface TeamTotalRuns {
+  team: string;
+  under: { runs: string; odds: number };
+  over: { runs: string; odds: number };
+}
+
+export interface PlayerPerformance {
+  player: string;
+  under: { runs: string; odds: number };
+  over: { runs: string; odds: number };
+}
+
+export interface FancyBet {
+  type: string;
+  description: string;
+  odds: number;
+}
+
+export interface QuickBet {
+  type: string;
+  odds: number;
+  color: string;
+}
+
+export const dummyOversData: OverData[] = [
+  { overNumber: 1, runs: 4, balls: [1, 0, 2, 0, 1, 0] },
+  { overNumber: 2, runs: 7, balls: [4, 1, 0, 1, 1, 0] },
+  { overNumber: 3, runs: 2, balls: [0, 1, 0, 0, 1, 0] },
+  { overNumber: 4, runs: 8, balls: [4, 0, 1, 2, 1, 0] },
+  { overNumber: 5, runs: 3, balls: [1, 0, 1, 0, 1, 0] },
+  { overNumber: 6, runs: 6, balls: [1, 4, 0, 1, 0, 0] },
+  { overNumber: 7, runs: 5, balls: [1, 1, 1, 1, 1, 0] },
+  { overNumber: 8, runs: 2, balls: [0, 1, 0, 1, 0, 0] },
+  { overNumber: 9, runs: 9, balls: [6, 1, 1, 1, 0, 0] },
+  { overNumber: 10, runs: 4, balls: [1, 1, 1, 1, 0, 0] },
+  { overNumber: 11, runs: 7, balls: [4, 1, 1, 1, 0, 0] },
+  { overNumber: 12, runs: 3, balls: [1, 1, 0, 1, 0, 0] },
+  { overNumber: 13, runs: 5, balls: [1, 1, 1, 1, 1, 0] },
+  { overNumber: 14, runs: 8, balls: [4, 1, 1, 1, 1, 0] },
+  { overNumber: 15, runs: 2, balls: [0, 1, 0, 1, 0, 0] },
+  { overNumber: 16, runs: 6, balls: [1, 4, 0, 1, 0, 0] },
+  { overNumber: 17, runs: 4, balls: [1, 1, 1, 1, 0, 0] },
+  { overNumber: 18, runs: 7, balls: [4, 1, 1, 1, 0, 0] },
+  { overNumber: 19, runs: 3, balls: [1, 1, 0, 1, 0, 0] },
+  { overNumber: 20, runs: 5, balls: [1, 1, 1, 1, 1, 0] }
+];
+
+export const dummyHighlightsData: Highlight[] = [
+  { time: '2.3', type: 'wicket', description: 'T. Marumani caught by Conway off Boult', day: 'Day 1' },
+  { time: '4.1', type: 'boundary', description: 'C. Ervine hits a beautiful four through covers', day: 'Day 1' },
+  { time: '8.5', type: 'boundary', description: 'S. Raza smashes a six over long-on', day: 'Day 1' },
+  { time: '12.2', type: 'wicket', description: 'S. Williams caught by Mitchell off Henry', day: 'Day 1' },
+  { time: '15.4', type: 'milestone', description: 'Zimbabwe reaches 100 runs', day: 'Day 1' },
+  { time: '18.1', type: 'boundary', description: 'C. Ervine hits another four', day: 'Day 1' },
+  { time: '22.3', type: 'wicket', description: 'C. Ervine caught by Latham off Santner', day: 'Day 1' },
+  { time: '25.6', type: 'boundary', description: 'S. Raza hits a four through mid-wicket', day: 'Day 1' },
+  { time: '28.2', type: 'wicket', description: 'S. Raza caught by Conway off Henry', day: 'Day 1' },
+  { time: '32.1', type: 'milestone', description: 'Zimbabwe all out for 149', day: 'Day 1' },
+  { time: '35.4', type: 'boundary', description: 'D. Conway hits his first four', day: 'Day 2' },
+  { time: '38.2', type: 'boundary', description: 'T. Latham hits a four through point', day: 'Day 2' },
+  { time: '42.1', type: 'wicket', description: 'K. Williamson caught by Ervine off Muzarabani', day: 'Day 2' },
+  { time: '45.3', type: 'boundary', description: 'D. Conway hits another four', day: 'Day 2' },
+  { time: '48.6', type: 'boundary', description: 'T. Latham hits a six over mid-wicket', day: 'Day 2' }
+];
+
+export const dummyQuickStatsData: QuickStat[] = [
+  { value: '85%', label: 'Win Probability', color: '#3B82F6' },
+  { value: '2.85', label: 'Best Odds', color: '#10B981' },
+  { value: '12K', label: 'Active Bets', color: '#8B5CF6' }
+];
+
+export const dummyBettingTabs = ['Main', 'Match', 'Fancy'];
+
+export const dummyMatchWinnerOdds: BettingOdds[] = [
+  { team: 'Zimbabwe', back: 3.85, lay: 3.9 },
+  { team: 'New Zealand', back: 1.45, lay: 1.47 }
+];
+
+export const dummyTeamTotalRuns: TeamTotalRuns[] = [
+  {
+    team: 'Zimbabwe',
+    under: { runs: '140.5', odds: 1.9 },
+    over: { runs: '140.5', odds: 1.9 }
+  },
+  {
+    team: 'New Zealand',
+    under: { runs: '142.5', odds: 1.85 },
+    over: { runs: '142.5', odds: 1.95 }
+  }
+];
+
+export const dummyPlayerPerformance: PlayerPerformance[] = [
+  {
+    player: 'Devon Conway',
+    under: { runs: '74.5', odds: 1.8 },
+    over: { runs: '74.5', odds: 2.0 }
+  },
+  {
+    player: 'Tom Latham',
+    under: { runs: '59.5', odds: 1.75 },
+    over: { runs: '59.5', odds: 2.05 }
+  }
+];
+
+export const dummyNextOverRuns: FancyBet[] = [
+  { type: 'Under 8.5', description: '8.5', odds: 120 },
+  { type: 'Over 8.5', description: '8.5', odds: 85 }
+];
+
+export const dummyFallOfWicket: FancyBet[] = [
+  { type: '1-3 Overs', description: '122.0', odds: 120 },
+  { type: '4+ Overs', description: '122.0', odds: 85 }
+];
+
+export const dummyMethodOfDismissal: FancyBet[] = [
+  { type: 'Bowled/LBW', description: '3.2', odds: 100 },
+  { type: 'Caught', description: '1.9', odds: 110 },
+  { type: 'Other', description: '8.0', odds: 75 }
+];
+
+export const dummyQuickBets: QuickBet[] = [
+  { type: 'FOUR', odds: 6.5, color: '#10B981' },
+  { type: 'SIX', odds: 12.0, color: '#8B5CF6' },
+  { type: 'DOT', odds: 2.8, color: '#94A3B8' },
+  { type: 'WICKET', odds: 8.5, color: '#EF4444' }
+];
+
+export const dummyMatchStats = {
+  currentRunRate: 4.2,
+  requiredRunRate: 5.8,
+  boundaries: { fours: 12, sixes: 6 },
+  lastFiveOvers: { runs: 32, wickets: 2 }
 }; 
