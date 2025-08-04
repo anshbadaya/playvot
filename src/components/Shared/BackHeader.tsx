@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar, Toolbar, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import Logo from "../../assets/images/Logo.png";
+import Logo from "@/assets/images/Logo.png";
 
 const BackHeader: React.FC = () => {
   const navigate = useNavigate();

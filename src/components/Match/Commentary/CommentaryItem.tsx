@@ -2,10 +2,13 @@ import React from 'react';
 import {
   Box,
   Typography,
+  Card,
+  CardContent,
+  Stack,
   alpha
 } from '@mui/material';
 import { themeColors } from '@/config/theme';
-import { CommentaryItemProps } from './types';
+import { CommentaryItemProps } from '@/components/Match/Commentary/types';
 
 const CommentaryItem: React.FC<CommentaryItemProps> = ({ comment, index }) => {
   return (

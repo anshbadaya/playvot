@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardContent,
   Stack,
-  Chip,
   alpha
 } from '@mui/material';
 import { themeColors, commonStyles } from '@/config/theme';
@@ -14,7 +13,7 @@ import CricketIcon from '@mui/icons-material/SportsCricket';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { MatchInfoProps } from './types';
+import { MatchInfoProps } from '@/components/Match/Scorecard/types';
 
 interface MatchInfoCardProps {
   matchInfo: MatchInfoProps;

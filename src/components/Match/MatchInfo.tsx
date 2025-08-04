@@ -7,12 +7,14 @@ import {
   CardHeader,
   CardContent,
   Divider,
-  Stack
+  Stack,
+  Chip,
+  alpha
 } from "@mui/material";
 import { MatchInfoProps } from '@/types/match-details';
-import { commonStyles } from '@/config/theme';
-import MatchSummary from './MatchSummary';
-import WinProbabilityBar from './WinProbabilityBar';
+import { themeColors, commonStyles } from '@/config/theme';
+import MatchSummary from '@/components/Match/MatchSummary';
+import WinProbabilityBar from '@/components/Match/WinProbabilityBar';
 import {
   matchInfoTeamsContainerStyles,
   matchInfoTeamBoxStyles,

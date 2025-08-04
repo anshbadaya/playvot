@@ -1,4 +1,4 @@
-import { MatchData } from '../../../types/match-details';
+import { MatchData } from '@/types/match-details';
 
 export interface OverData {
   overNumber: number;

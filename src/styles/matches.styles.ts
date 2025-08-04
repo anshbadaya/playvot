@@ -1,6 +1,6 @@
 import { SxProps, Theme } from '@mui/material';
 import { themeColors } from '@/config/theme';
-import { sharedStyles } from './shared.styles';
+import { sharedStyles } from '@/styles/shared.styles';
 
 // Main container styles
 export const matchesContainerStyles: SxProps<Theme> = {

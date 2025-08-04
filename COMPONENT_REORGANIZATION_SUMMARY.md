@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document summarizes the reorganization of components and the replacement of hardcoded data with centralized dummy data from the `@data/` folder.
+This document summarizes the reorganization of components and the replacement of hardcoded data with centralized dummy data from the `@data/` folder, as well as the standardization of import statements.
 
 ## Changes Made
 
@@ -69,7 +69,46 @@ This document summarizes the reorganization of components and the replacement of
 - **Added**: Imports for all dummy data from `@/data/matchDetailsData`
 - **Result**: All betting sections now use centralized dummy data
 
-### 3. Benefits Achieved
+### 3. Import Standardization
+
+#### Replaced All Relative Imports with Absolute Imports
+
+All relative imports using `./` and `../` notation have been replaced with absolute imports using the `@` alias:
+
+**Files Updated:**
+
+- `src/components/Match/Scorecard/BowlingTable.tsx`
+- `src/components/Match/Scorecard/BattingTable.tsx`
+- `src/components/Match/Scorecard/MatchInfoCard.tsx`
+- `src/components/Match/Highlights/HighlightsSection.tsx`
+- `src/components/Match/MatchInfo.tsx`
+- `src/components/Match/Commentary/CommentaryItem.tsx`
+- `src/components/Match/Commentary/types.ts`
+- `src/components/Match/Highlights/HighlightsTab.tsx`
+- `src/components/Match/Commentary/LiveCommentary.tsx`
+- `src/components/Shared/BackHeader.tsx`
+- `src/pages/Login.tsx`
+- `src/App.test.tsx`
+- `src/index.tsx`
+- `src/styles/matchDetails.styles.ts`
+- `src/styles/matches.styles.ts`
+- `src/utils/helpers.ts`
+
+**Import Changes Examples:**
+
+```typescript
+// Before (Relative)
+import { BowlingRow } from "./types";
+import { MatchData } from "../../../types/match-details";
+import Logo from "../../assets/images/Logo.png";
+
+// After (Absolute)
+import { BowlingRow } from "@/components/Match/Scorecard/types";
+import { MatchData } from "@/types/match-details";
+import Logo from "@/assets/images/Logo.png";
+```
+
+### 4. Benefits Achieved
 
 #### Centralized Data Management
 
@@ -89,7 +128,14 @@ This document summarizes the reorganization of components and the replacement of
 - **Testing friendly**: Can create different dummy data sets for different scenarios
 - **API integration ready**: Structure supports easy transition to real API data
 
-### 4. Data Structure Overview
+#### Import Consistency
+
+- **Standardized imports**: All imports now use absolute paths with `@` alias
+- **Better IDE support**: Absolute imports provide better autocomplete and refactoring
+- **Cleaner code**: No more confusing relative path calculations
+- **Easier maintenance**: Moving files doesn't require updating import paths
+
+### 5. Data Structure Overview
 
 ```typescript
 // Main match data
@@ -121,7 +167,7 @@ dummyScorecardData: ScorecardData
 └── dummyMatchStats: MatchStats
 ```
 
-### 5. Components Using Dummy Data
+### 6. Components Using Dummy Data
 
 | Component          | Data Used                           | Previous State           |
 | ------------------ | ----------------------------------- | ------------------------ |
@@ -130,7 +176,7 @@ dummyScorecardData: ScorecardData
 | HighlightsTab      | `dummyHighlightsData`               | Empty array              |
 | MatchDetails       | All betting dummy data              | Extensive hardcoded data |
 
-### 6. Future Enhancements
+### 7. Future Enhancements
 
 #### API Integration Ready
 
@@ -152,4 +198,4 @@ dummyScorecardData: ScorecardData
 
 ## Conclusion
 
-The reorganization successfully eliminated all hardcoded match data from components and centralized it in the `@data/` folder. This improves code maintainability, reduces duplication, and makes the application more flexible for future enhancements. All components now use a consistent data structure and are ready for API integration.
+The reorganization successfully eliminated all hardcoded match data from components and centralized it in the `@data/` folder. Additionally, all relative imports have been standardized to use absolute imports with the `@` alias. This improves code maintainability, reduces duplication, makes the application more flexible for future enhancements, and provides better IDE support and cleaner code structure. All components now use a consistent data structure and import pattern, making them ready for API integration.

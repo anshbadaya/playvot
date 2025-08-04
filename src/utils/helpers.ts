@@ -1,4 +1,4 @@
-import { SPORT_TYPES, MATCH_STATUS } from './constants';
+import { SPORT_TYPES, MATCH_STATUS } from '@/utils/constants';
 
 // Type guards
 export const isCricket = (sportType: string): boolean => sportType === SPORT_TYPES.CRICKET;

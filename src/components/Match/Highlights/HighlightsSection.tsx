@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import HighlightCard from "./HighlightsCard";
+import HighlightCard from "@/components/Match/Highlights/HighlightsCard";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
