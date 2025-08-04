@@ -2,8 +2,6 @@ import React from 'react';
 import { Box, Typography, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { commonStyles } from '@/config/theme';
-import { sharedStyles } from '@/styles/shared.styles';
 import { formatScore, SPORT_TYPES } from '@/utils';
 import { MatchCardProps, TeamInfo } from '@/types/match';
 

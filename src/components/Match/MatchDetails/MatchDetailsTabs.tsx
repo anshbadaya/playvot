@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from '@mui/material';
 import { MatchTabsNavigation } from '@/components/Match';
 import { TopBar } from '@/styles/match.styles';
 
