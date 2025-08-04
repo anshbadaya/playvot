@@ -30,7 +30,6 @@ const MatchDetailsContent: React.FC<MatchDetailsContentProps> = ({
   <Box sx={tabContentStyles}>
     {activeTab === 'info' && <MatchInfo data={matchData} />}
     {activeTab === 'live' && <LiveCommentary data={matchData} />}
-    {activeTab === 'comm' && <CommentaryTab />}
     {activeTab === 'scorecard' && scorecardData && (
       <ScorecardComponent 
         innings={scorecardData.innings}
