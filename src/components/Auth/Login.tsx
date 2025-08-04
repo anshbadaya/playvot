@@ -11,22 +11,17 @@ import {
   IconButton,
   Snackbar,
   Alert,
-  Tooltip,
   FormHelperText,
   CircularProgress,
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { 
-  EmailOutlined, 
   Visibility, 
   VisibilityOff,
-  ErrorOutline,
   MailOutlineRounded,
-  CheckCircleOutline,
 } from "@mui/icons-material";
 import { styled, keyframes } from "@mui/material/styles";
 import Logo from '@/assets/images/Logo.png';
-import { LOGIN_TITLE } from "@/config/config";
 import { Link, useNavigate } from "react-router-dom";
 
 // Floating animation for background elements
@@ -36,10 +31,7 @@ const float = keyframes`
   66% { transform: translateY(10px) rotate(-3deg); }
 `;
 
-const pulse = keyframes`
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
-`;
+
 
 const slideUp = keyframes`
   from { 
@@ -161,16 +153,7 @@ const LogoContainer = styled(Box)(({ theme }) => ({
   }
 }));
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   position: "relative",
@@ -340,18 +323,7 @@ const StyledAlert = styled(Alert)(({ theme }) => ({
 }));
 
 
-const IconContainer = styled(Box)(({ theme }) => ({
-  width: 20,
-  height: 20,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  marginRight: theme.spacing(1.5),
-  "& svg": {
-    fontSize: 20,
-    color: "rgba(255, 255, 255, 0.9)",
-  }
-}));
+
 
 const Login = () => {
   const navigate = useNavigate();
