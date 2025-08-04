@@ -10,7 +10,9 @@ import {
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { themeColors, commonStyles } from '@/config/theme';
+import { sharedStyles } from '@/styles/shared.styles';
 
 interface HeaderProps {
   searchPlaceholder?: string;
@@ -87,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({
               flex: 1,
               maxWidth: { xs: "320px", sm: "540px" },
               margin: { xs: "0 8px", sm: "0 auto" },
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              border: `1px solid ${themeColors.border}`,
               transition: "all 0.3s ease",
               backdropFilter: "blur(12px)",
               boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -98,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({
               },
               "&:focus-within": {
                 backgroundColor: "rgba(15, 23, 42, 0.5)",
-                borderColor: "rgba(29, 78, 216, 0.5)",
+                borderColor: `${themeColors.primaryBorder}`,
                 boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)"
               }
             }}
@@ -107,31 +109,31 @@ const Header: React.FC<HeaderProps> = ({
               placeholder={searchPlaceholder}
               onChange={handleSearch}
               sx={{
-                color: "rgba(255, 255, 255, 0.9)",
+                color: themeColors.text.primary,
                 flex: 1,
                 fontSize: { xs: "13px", sm: "14px" },
                 fontWeight: 400,
                 "& input::placeholder": {
-                  color: "rgba(100, 116, 139, 0.8)",
+                  color: themeColors.text.disabled,
                   opacity: 1,
                   fontWeight: 400
                 },
                 "& input:focus": {
-                  color: "rgba(255, 255, 255, 1)"
+                  color: themeColors.text.primary
                 }
               }}
             />
             <IconButton 
               size="small" 
               sx={{ 
-                color: "rgba(255, 255, 255, 0.7)",
-                backgroundColor: "rgba(29, 78, 216, 0.1)",
+                color: themeColors.text.secondary,
+                backgroundColor: themeColors.primaryLight,
                 padding: "4px",
                 marginRight: "-4px",
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  color: "rgba(255, 255, 255, 0.9)",
-                  backgroundColor: "rgba(29, 78, 216, 0.2)",
+                  color: themeColors.text.primary,
+                  backgroundColor: themeColors.primaryBorder,
                   transform: "translateY(-1px)"
                 },
                 "&:active": {
@@ -149,23 +151,22 @@ const Header: React.FC<HeaderProps> = ({
             <Button 
               variant="contained"
               sx={{ 
-                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, #3B82F6 100%)`,
+                background: `linear-gradient(135deg, ${themeColors.primary} 0%, #3B82F6 100%)`,
                 minWidth: 0,
                 borderRadius: "12px",
                 padding: { xs: "8px", sm: "10px" },
-                boxShadow: "0 4px 12px rgba(59, 130, 246, 0.25)",
+                boxShadow: `0 4px 12px ${themeColors.primaryLight}`,
                 transition: "all 0.3s ease",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
-
                 "&:hover": {
                   background: `linear-gradient(135deg, #4B4EF9 0%, #3B82F6 100%)`,
-                  boxShadow: "0 6px 16px rgba(59, 130, 246, 0.35)",
+                  boxShadow: `0 6px 16px ${themeColors.primaryLight}`,
                   transform: "translateY(-1px)",
                   borderColor: "rgba(255, 255, 255, 0.2)"
                 },
                 "&:active": {
                   transform: "translateY(0)",
-                  boxShadow: "0 4px 12px rgba(59, 130, 246, 0.2)"
+                  boxShadow: `0 4px 12px ${themeColors.primaryLight}`
                 }
               }}
             >

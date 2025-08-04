@@ -1,9 +1,11 @@
 import { SxProps, Theme } from '@mui/material';
+import { themeColors, commonStyles } from '@/config/theme';
+import { sharedStyles } from './shared.styles';
 
 // Main container styles
 export const matchDetailsContainerStyles: SxProps<Theme> = {
   minHeight: '100vh',
-  backgroundColor: '#0F1421'
+  backgroundColor: themeColors.background
 };
 
 // Tab content styles
@@ -32,25 +34,19 @@ export const tabContentStyles: SxProps<Theme> = {
 };
 
 // Loading state styles
-export const loadingContainerStyles: SxProps<Theme> = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+export const matchDetailsLoadingContainerStyles: SxProps<Theme> = {
+  ...sharedStyles.loadingContainer,
   minHeight: '100vh'
 };
 
-export const loadingSpinnerStyles: SxProps<Theme> = {
-  color: '#3B82F6'
+export const matchDetailsLoadingSpinnerStyles: SxProps<Theme> = {
+  color: themeColors.primary
 };
 
 // Odds section styles
 export const quickStatsContainerStyles: SxProps<Theme> = {
-  display: 'grid',
-  gridTemplateColumns: {
-    xs: 'repeat(1, 1fr)',
-    sm: 'repeat(3, 1fr)'
-  },
-  gap: { xs: 1.5, sm: 2 },
+  ...sharedStyles.gridContainer,
+  ...sharedStyles.grid3Cols,
   mb: { xs: 2, sm: 1 }
 };
 
@@ -83,7 +79,7 @@ export const quickStatValueStyles = (color: string): SxProps<Theme> => ({
 });
 
 export const quickStatLabelStyles: SxProps<Theme> = {
-  color: '#E2E8F0',
+  color: themeColors.text.primary,
   fontWeight: 500,
   fontSize: { xs: '0.875rem', sm: '0.9rem' },
   order: { xs: 1, sm: 2 }
@@ -96,7 +92,7 @@ export const bettingTabsContainerStyles: SxProps<Theme> = {
   p: 1,
   bgcolor: 'rgba(15, 23, 42, 0.8)',
   borderRadius: 2,
-  border: '1px solid rgba(59, 130, 246, 0.3)',
+  border: `1px solid ${themeColors.primaryBorder}`,
   backdropFilter: 'blur(12px)',
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
 };
@@ -106,13 +102,13 @@ export const bettingTabButtonStyles = (isActive: boolean): SxProps<Theme> => ({
   py: 2,
   px: 3,
   bgcolor: isActive 
-    ? 'rgba(59, 130, 246, 0.2)'
+    ? themeColors.primaryLight
     : 'transparent',
   color: isActive 
-    ? '#FFFFFF' 
-    : '#94A3B8',
+    ? themeColors.text.primary
+    : themeColors.text.secondary,
   border: `1px solid ${isActive 
-    ? 'rgba(59, 130, 246, 0.4)' 
+    ? themeColors.primaryBorder
     : 'rgba(51, 65, 85, 0.4)'}`,
   borderRadius: 1.5,
   fontWeight: isActive ? 600 : 500,
@@ -124,55 +120,51 @@ export const bettingTabButtonStyles = (isActive: boolean): SxProps<Theme> => ({
       : 'rgba(51, 65, 85, 0.2)',
     transform: 'translateY(-1px)',
     boxShadow: isActive 
-      ? '0 4px 12px rgba(59, 130, 246, 0.25)'
+      ? `0 4px 12px ${themeColors.primaryLight}`
       : '0 2px 8px rgba(51, 65, 85, 0.3)'
   }
 });
 
 // Match winner card styles
 export const matchWinnerCardStyles: SxProps<Theme> = {
+  ...sharedStyles.card,
   bgcolor: 'rgba(15, 23, 42, 0.8)',
-  backdropFilter: 'blur(12px)',
-  border: '1px solid rgba(59, 130, 246, 0.3)',
-  borderRadius: 2,
+  border: `1px solid ${themeColors.primaryBorder}`,
   transition: 'all 0.3s ease',
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
   '&:hover': {
     transform: 'translateY(-2px)',
-    boxShadow: '0 8px 24px rgba(59, 130, 246, 0.25)'
+    boxShadow: `0 8px 24px ${themeColors.primaryLight}`
   }
 };
 
 export const matchWinnerHeaderStyles: SxProps<Theme> = {
   bgcolor: 'rgba(15, 23, 42, 0.9)',
-  borderBottom: '1px solid rgba(59, 130, 246, 0.3)',
+  borderBottom: `1px solid ${themeColors.primaryBorder}`,
   py: 2.5
 };
 
 export const teamRowStyles: SxProps<Theme> = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
+  ...sharedStyles.flexBetween,
   p: 2.5,
   bgcolor: 'rgba(15, 23, 42, 0.7)',
   borderRadius: 1.5,
-  border: '1px solid rgba(59, 130, 246, 0.25)',
+  border: `1px solid ${themeColors.primaryBorder}`,
   transition: 'all 0.2s ease',
   '&:hover': {
     bgcolor: 'rgba(15, 23, 42, 0.9)',
-    border: '1px solid rgba(59, 130, 246, 0.4)'
+    border: `1px solid ${themeColors.primaryBorder}`
   }
 };
 
 export const teamAvatarStyles: SxProps<Theme> = {
   width: 32,
   height: 32,
-  border: '1px solid rgba(59, 130, 246, 0.3)'
+  border: `1px solid ${themeColors.primaryBorder}`
 };
 
 export const teamNameStyles: SxProps<Theme> = {
-  color: 'white',
-  fontWeight: 600
+  ...sharedStyles.heading
 };
 
 export const oddsButtonStyles = (isBack: boolean): SxProps<Theme> => ({
@@ -192,7 +184,7 @@ export const oddsButtonStyles = (isBack: boolean): SxProps<Theme> => ({
       : 'rgba(239, 68, 68, 1)',
     transform: 'translateY(-1px)',
     boxShadow: isBack 
-      ? '0 4px 12px rgba(59, 130, 246, 0.3)'
+      ? `0 4px 12px ${themeColors.primaryLight}`
       : '0 4px 12px rgba(239, 68, 68, 0.3)'
   }
 });
@@ -207,18 +199,16 @@ export const fancyCardStyles: SxProps<Theme> = {
 
 export const fancyHeaderStyles: SxProps<Theme> = {
   bgcolor: 'rgba(15, 23, 42, 1)',
-  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+  borderBottom: `1px solid ${themeColors.border}`,
   py: 2.5
 };
 
 export const fancyRowStyles: SxProps<Theme> = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
+  ...sharedStyles.flexBetween,
   p: 2,
   bgcolor: 'rgba(15, 23, 42, 0.9)',
   borderRadius: 0,
-  borderBottom: '1px solid rgba(59, 130, 246, 0.15)',
+  borderBottom: `1px solid ${themeColors.border}`,
   transition: 'all 0.2s ease',
   '&:hover': {
     bgcolor: 'rgba(15, 23, 42, 1)'
@@ -266,31 +256,24 @@ export const quickBetLabelStyles = (color: string): SxProps<Theme> => ({
 });
 
 export const quickBetOddsStyles: SxProps<Theme> = {
-  color: '#94A3B8',
+  color: themeColors.text.secondary,
   fontWeight: 500
 };
 
 // Error state styles
-export const errorContainerStyles: SxProps<Theme> = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  minHeight: '100vh',
-  color: '#EF4444',
-  textAlign: 'center',
-  p: 3
+export const matchDetailsErrorContainerStyles: SxProps<Theme> = {
+  ...sharedStyles.errorContainer,
 };
 
-export const errorTextStyles: SxProps<Theme> = {
-  color: '#EF4444',
+export const matchDetailsErrorTextStyles: SxProps<Theme> = {
+  color: themeColors.error,
   mb: 2
 };
 
-export const retryButtonStyles: SxProps<Theme> = {
+export const matchDetailsRetryButtonStyles: SxProps<Theme> = {
   mt: 2,
-  bgcolor: '#EF4444',
-  color: 'white',
+  ...sharedStyles.primaryButton,
+  bgcolor: themeColors.error,
   '&:hover': {
     bgcolor: '#DC2626'
   }

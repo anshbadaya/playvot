@@ -10,7 +10,7 @@ import {
   Stack
 } from "@mui/material";
 import { MatchData } from '../../types/match-details';
-import { commonStyles } from './styles/theme-constants';
+import { commonStyles } from '@/config/theme';
 import MatchSummary from './MatchSummary';
 import WinProbabilityBar from './WinProbabilityBar';
 

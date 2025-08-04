@@ -1,44 +1,28 @@
 import { SxProps, Theme } from '@mui/material';
+import { themeColors } from '@/config/theme';
+import { sharedStyles } from './shared.styles';
 
 // Main container styles
 export const matchesContainerStyles: SxProps<Theme> = {
-  backgroundColor: '#0F1421',
+  backgroundColor: themeColors.background,
   minHeight: '100vh',
   pt: { xs: 3, sm: 4 }
 };
 
 export const matchesContentStyles: SxProps<Theme> = {
-  px: { xs: 2, sm: 3 },
-  pb: { xs: 6, sm: 8 }
+  ...sharedStyles.container
 };
 
 // Section title styles
 export const sectionTitleContainerStyles: SxProps<Theme> = {
-  position: 'relative',
-  textAlign: 'center',
-  mb: { xs: 3, sm: 4 },
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: '50%',
-    height: '1px',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    zIndex: 0
-  }
+  ...sharedStyles.sectionTitle
 };
 
 export const sectionTitleStyles: SxProps<Theme> = {
-  color: '#FFFFFF',
+  ...sharedStyles.sectionTitleText,
+  color: themeColors.text.primary,
   fontSize: { xs: '0.875rem', sm: '1rem' },
-  fontWeight: 500,
-  letterSpacing: '0.1em',
-  backgroundColor: '#0F1421',
-  padding: '0 24px',
-  position: 'relative',
-  zIndex: 1,
-  textTransform: 'uppercase'
+  fontWeight: 500
 };
 
 // Swiper container styles
@@ -89,48 +73,33 @@ export const swiperContainerStyles: SxProps<Theme> = {
 
 // Grid layout styles
 export const gridContainerStyles: SxProps<Theme> = {
-  display: 'grid', 
-  gridTemplateColumns: {
-    sm: 'repeat(2, 1fr)',
-    md: 'repeat(3, 1fr)'
-  },
-  gap: { xs: 2, sm: 3 }
+  ...sharedStyles.gridContainer,
+  ...sharedStyles.grid3Cols
 };
 
 // Section wrapper styles
 export const sectionWrapperStyles: SxProps<Theme> = {
-  mb: { xs: 6, sm: 8 }
+  ...sharedStyles.section
 };
 
 // Loading and error states
 export const loadingContainerStyles: SxProps<Theme> = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  minHeight: '200px',
-  color: '#FFFFFF'
+  ...sharedStyles.loadingContainer
 };
 
 export const errorContainerStyles: SxProps<Theme> = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  minHeight: '200px',
-  color: '#EF4444',
-  textAlign: 'center',
-  p: 3
+  ...sharedStyles.errorContainer
 };
 
 export const errorTextStyles: SxProps<Theme> = {
-  color: '#EF4444',
+  color: themeColors.error,
   mb: 2
 };
 
 export const retryButtonStyles: SxProps<Theme> = {
   mt: 2,
-  bgcolor: '#EF4444',
-  color: 'white',
+  ...sharedStyles.primaryButton,
+  bgcolor: themeColors.error,
   '&:hover': {
     bgcolor: '#DC2626'
   }
@@ -138,22 +107,15 @@ export const retryButtonStyles: SxProps<Theme> = {
 
 // Empty state styles
 export const emptyStateContainerStyles: SxProps<Theme> = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  minHeight: '200px',
-  color: '#94A3B8',
-  textAlign: 'center',
-  p: 3
+  ...sharedStyles.emptyStateContainer
 };
 
 export const emptyStateTextStyles: SxProps<Theme> = {
-  color: '#94A3B8',
+  color: themeColors.text.secondary,
   mb: 1
 };
 
 export const emptyStateSubtextStyles: SxProps<Theme> = {
-  color: '#64748B',
+  color: themeColors.text.disabled,
   fontSize: '0.875rem'
 }; 

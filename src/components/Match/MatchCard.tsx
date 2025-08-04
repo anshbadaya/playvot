@@ -1,6 +1,9 @@
 import React from 'react';
 import { Box, Typography, Card, CardContent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { themeColors, commonStyles } from '@/config/theme';
+import { sharedStyles } from '@/styles/shared.styles';
+import { formatScore, SPORT_TYPES } from '@/utils';
 
 interface TeamInfo {
   name: string;
@@ -38,18 +41,17 @@ const MatchCard: React.FC<MatchCardProps> = ({
   };
 
   // Function to format score based on sport type
-  const formatScore = (team: TeamInfo, sport: string) => {
+  const getFormattedScore = (team: TeamInfo, sport: string) => {
     switch (sport) {
-      case 'cricket':
-        return team.score + (team.overs ? ` (${team.overs})` : '');
-      case 'football':
-        return team.goals?.toString() || '0';
-      case 'kabaddi':
-        return team.points?.toString() || '0';
-      case 'volleyball':
-        return team.points?.toString() || '0';
+      case SPORT_TYPES.CRICKET:
+        return formatScore(team.score, sport) + (team.overs ? ` (${team.overs})` : '');
+      case SPORT_TYPES.FOOTBALL:
+        return formatScore(team.goals, sport);
+      case SPORT_TYPES.KABADDI:
+      case SPORT_TYPES.VOLLEYBALL:
+        return formatScore(team.points, sport);
       default:
-        return team.score || '';
+        return formatScore(team.score, sport);
     }
   };
 
@@ -59,10 +61,11 @@ const MatchCard: React.FC<MatchCardProps> = ({
       sx={{
         position: 'relative',
         width: '100%',
+        cursor: 'pointer',
         '&:hover': {
           '& .card-content': {
             transform: 'translateY(-2px)',
-            boxShadow: '0 4px 20px rgba(0, 89, 255, 0.2)',
+            boxShadow: `0 4px 20px ${themeColors.primaryLight}`,
           },
           '& .shine': {
             opacity: 1,
@@ -78,7 +81,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
           inset: 0,
           padding: '1px',
           borderRadius: '12px',
-          background: 'linear-gradient(120deg, rgba(0, 89, 255, 0.2), rgba(0, 89, 255, 0.1) 25%, transparent 45%, transparent 55%, rgba(0, 89, 255, 0.1) 75%, rgba(0, 89, 255, 0.2))',
+          background: `linear-gradient(120deg, ${themeColors.primaryLight}, rgba(0, 89, 255, 0.1) 25%, transparent 45%, transparent 55%, rgba(0, 89, 255, 0.1) 75%, ${themeColors.primaryLight})`,
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
@@ -91,21 +94,17 @@ const MatchCard: React.FC<MatchCardProps> = ({
         className="card-content"
         sx={{ 
           width: '100%',
-          backgroundColor: '#181B20',
-          background: 'linear-gradient(180deg, rgba(0, 89, 255, 0.05) 0%, rgba(0, 89, 255, 0.02) 100%)',
-          borderRadius: '12px',
+          background: `linear-gradient(180deg, ${themeColors.primaryLight} 0%, rgba(0, 89, 255, 0.02) 100%)`,
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
           position: 'relative',
-          cursor: 'pointer',
-          transition: 'all 0.2s ease',
-          border: '1px solid rgba(0, 89, 255, 0.1)'
+          ...commonStyles.card
         }}
       >
         <CardContent sx={{ p: '16px !important' }}>
           {/* Match Type */}
           <Typography 
             sx={{ 
-              color: 'rgba(255, 255, 255, 0.7)',
+              ...sharedStyles.caption,
               fontSize: '13px',
               fontWeight: 500,
               mb: 0.5,
@@ -118,9 +117,8 @@ const MatchCard: React.FC<MatchCardProps> = ({
           {/* Match Title */}
           <Typography 
             sx={{ 
-              color: 'rgba(255, 255, 255, 0.7)',
+              ...sharedStyles.bodyText,
               fontSize: '14px',
-              fontWeight: 400,
               lineHeight: 1.4,
               mb: 2
             }}
@@ -132,16 +130,13 @@ const MatchCard: React.FC<MatchCardProps> = ({
           <Box sx={{ mb: 2 }}>
             {/* Team 1 */}
             <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between',
+              ...sharedStyles.flexBetween,
               mb: 1.5
             }}>
               <Typography 
                 sx={{ 
-                  color: '#FFFFFF',
+                  ...sharedStyles.heading,
                   fontSize: '15px',
-                  fontWeight: 500,
                   letterSpacing: '0.5px'
                 }}
               >
@@ -149,27 +144,23 @@ const MatchCard: React.FC<MatchCardProps> = ({
               </Typography>
               <Typography 
                 sx={{ 
-                  color: '#FFFFFF',
+                  ...sharedStyles.heading,
                   fontSize: '15px',
-                  fontWeight: 500,
                   letterSpacing: '0.5px'
                 }}
               >
-                {formatScore(team1, sportType)}
+                {getFormattedScore(team1, sportType)}
               </Typography>
             </Box>
 
             {/* Team 2 */}
             <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between'
+              ...sharedStyles.flexBetween
             }}>
               <Typography 
                 sx={{ 
-                  color: '#FFFFFF',
+                  ...sharedStyles.heading,
                   fontSize: '15px',
-                  fontWeight: 500,
                   letterSpacing: '0.5px'
                 }}
               >
@@ -177,13 +168,12 @@ const MatchCard: React.FC<MatchCardProps> = ({
               </Typography>
               <Typography 
                 sx={{ 
-                  color: '#FFFFFF',
+                  ...sharedStyles.heading,
                   fontSize: '15px',
-                  fontWeight: 500,
                   letterSpacing: '0.5px'
                 }}
               >
-                {formatScore(team2, sportType)}
+                {getFormattedScore(team2, sportType)}
               </Typography>
             </Box>
           </Box>
@@ -191,9 +181,8 @@ const MatchCard: React.FC<MatchCardProps> = ({
           {/* Match Status */}
           <Typography 
             sx={{ 
-              color: 'rgba(255, 255, 255, 0.7)',
-              fontSize: '13px',
-              fontWeight: 400
+              ...sharedStyles.caption,
+              fontSize: '13px'
             }}
           >
             {status}

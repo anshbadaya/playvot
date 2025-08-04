@@ -1,46 +1,260 @@
-# Getting Started with Create React App
+# PlayVot - Sports Betting Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive sports betting platform built with React, TypeScript, and Material-UI.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **Multi-Sport Support**: Cricket, Football, Kabaddi, Volleyball
+- **Live Match Updates**: Real-time commentary and score updates
+- **Betting Interface**: Comprehensive odds and betting options
+- **Responsive Design**: Optimized for all device sizes
+- **Dark Theme**: Modern dark UI with consistent styling
 
-### `npm start`
+## 🏗️ Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+src/
+├── components/          # React components
+│   ├── Auth/           # Authentication components
+│   ├── Match/          # Match-related components
+│   ├── Shared/         # Shared/common components
+│   └── ui/             # UI components
+├── config/             # Configuration files
+│   ├── theme.tsx       # Material-UI theme configuration
+│   └── config.tsx      # App configuration
+├── data/               # Static data and mock data
+├── hooks/              # Custom React hooks
+├── pages/              # Page components
+├── services/           # API services
+├── styles/             # Styling files
+├── types/              # TypeScript type definitions
+└── utils/              # Utility functions and constants
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🎨 Design System
 
-### `npm test`
+### Theme Configuration
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The application uses a centralized theme system located in `src/config/theme.tsx`:
 
-### `npm run build`
+- **Colors**: Consistent color palette with primary, secondary, and semantic colors
+- **Typography**: Standardized font weights and sizes
+- **Spacing**: Consistent spacing scale
+- **Components**: Pre-configured Material-UI component styles
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Styling Patterns
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### 1. Shared Styles (`src/styles/shared.styles.ts`)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Common styling patterns used across components:
 
-### `npm run eject`
+- Layout patterns (containers, grids, flex layouts)
+- Card patterns with consistent hover effects
+- Button patterns (primary, secondary)
+- Text patterns (headings, body text, captions)
+- Status patterns (success, warning, error, info)
+- Loading, error, and empty state patterns
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### 2. Component-Specific Styles
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Each major feature has its own style file:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- `src/styles/matches.styles.ts` - Matches page styles
+- `src/styles/matchDetails.styles.ts` - Match details page styles
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### 3. Global Styles (`src/styles/globals.css`)
 
-## Learn More
+CSS custom properties and utility classes for consistent theming.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Usage Examples
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```typescript
+// Using shared styles
+import { sharedStyles } from "@/styles/shared.styles";
+
+const MyComponent = () => (
+  <Box sx={sharedStyles.card}>
+    <Typography sx={sharedStyles.heading}>Title</Typography>
+    <Button sx={sharedStyles.primaryButton}>Click me</Button>
+  </Box>
+);
+
+// Using theme colors
+import { themeColors } from "@/config/theme";
+
+const StyledBox = styled(Box)({
+  backgroundColor: themeColors.surface,
+  color: themeColors.text.primary,
+  border: `1px solid ${themeColors.border}`,
+});
+```
+
+## 📝 Coding Standards
+
+### 1. Import Organization
+
+Imports should be organized in the following order:
+
+1. React and external libraries
+2. Material-UI components
+3. Internal components (using barrel exports)
+4. Hooks and utilities
+5. Types
+6. Styles
+
+```typescript
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { Layout, MatchCard } from "@/components";
+import { useMatches } from "@/hooks";
+import { Match } from "@/types";
+import { matchesStyles } from "@/styles";
+```
+
+### 2. Component Structure
+
+Components should follow this structure:
+
+1. Imports
+2. Type definitions
+3. Component definition
+4. Export
+
+```typescript
+import React from "react";
+import { Box } from "@mui/material";
+import { themeColors } from "@/config/theme";
+
+interface ComponentProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const Component: React.FC<ComponentProps> = ({ title, children }) => {
+  return (
+    <Box sx={{ color: themeColors.text.primary }}>
+      <h1>{title}</h1>
+      {children}
+    </Box>
+  );
+};
+
+export default Component;
+```
+
+### 3. Styling Guidelines
+
+- Use Material-UI's `sx` prop for component-specific styles
+- Use shared styles for common patterns
+- Use theme colors and constants for consistency
+- Prefer responsive design with breakpoint objects
+
+```typescript
+// Good
+<Box sx={{
+  ...sharedStyles.card,
+  padding: { xs: 2, sm: 3, md: 4 },
+  color: themeColors.text.primary
+}}>
+
+// Avoid inline styles
+<Box style={{ padding: '16px', color: '#FFFFFF' }}>
+```
+
+### 4. Type Safety
+
+- Use TypeScript interfaces for all props
+- Export types from barrel files
+- Use strict typing for API responses
+
+```typescript
+// Define interfaces
+interface MatchData {
+  id: string;
+  title: string;
+  status: "live" | "upcoming" | "completed";
+}
+
+// Use in components
+const MatchComponent: React.FC<{ match: MatchData }> = ({ match }) => {
+  // Component logic
+};
+```
+
+### 5. Utility Functions
+
+Use the centralized utility functions from `src/utils/`:
+
+- `formatScore()` - Format scores based on sport type
+- `formatDate()` - Format dates consistently
+- `isLiveMatch()` - Type guards for match status
+- `debounce()` - Performance optimization
+
+## 🔧 Development
+
+### Prerequisites
+
+- Node.js 16+
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development Server
+
+```bash
+npm start
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Testing
+
+```bash
+npm test
+```
+
+## 📦 Dependencies
+
+### Core
+
+- React 19.1.0
+- TypeScript 4.9.5
+- Material-UI 7.2.0
+- React Router DOM 6.30.1
+
+### Development
+
+- CRACO 7.1.0
+- ESLint
+- Prettier
+
+## 🎯 Best Practices
+
+1. **Consistency**: Always use shared styles and theme constants
+2. **Performance**: Use React.memo for expensive components
+3. **Accessibility**: Include proper ARIA labels and keyboard navigation
+4. **Responsive**: Design for mobile-first approach
+5. **Error Handling**: Implement proper error boundaries and loading states
+6. **Type Safety**: Use strict TypeScript configuration
+7. **Code Organization**: Follow the established folder structure
+8. **Naming**: Use descriptive names for components, functions, and variables
+
+## 🤝 Contributing
+
+1. Follow the established coding standards
+2. Use the shared styling patterns
+3. Write TypeScript interfaces for all new components
+4. Update documentation for new features
+5. Test on multiple device sizes
+
+## 📄 License
+
+This project is licensed under the MIT License.

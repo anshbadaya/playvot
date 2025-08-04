@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from "@mui/material";
 import { MatchData } from '../../types/match-details';
-import { themeColors } from './styles/theme-constants';
+import { themeColors } from '@/config/theme';
 
 interface MatchSummaryProps {
   data: MatchData;

@@ -1,6 +1,6 @@
 import { styled, alpha } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { themeColors, commonStyles } from './theme-constants';
+import { themeColors, commonStyles } from '@/config/theme';
 
 export const PageBackground = styled(Box)(({ theme }) => ({
   background: `linear-gradient(135deg, ${themeColors.background} 0%, ${themeColors.secondary} 100%)`,

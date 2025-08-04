@@ -30,13 +30,13 @@ import ScorecardComponent from '@/components/Match/ScorecardComponent';
 
 // Custom hook and types
 import { useMatchDetails } from '@/hooks/useMatchDetails';
-import { themeColors, commonStyles } from '@/components/Match/styles/theme-constants';
+import { themeColors, commonStyles } from '@/config/theme';
 
 // Styles
 import {
   tabContentStyles,
-  loadingContainerStyles,
-  loadingSpinnerStyles,
+  matchDetailsLoadingContainerStyles,
+  matchDetailsLoadingSpinnerStyles,
   quickStatsContainerStyles,
   quickStatItemStyles,
   quickStatValueStyles,
@@ -56,9 +56,9 @@ import {
   quickBetButtonStyles,
   quickBetLabelStyles,
   quickBetOddsStyles,
-  errorContainerStyles,
-  errorTextStyles,
-  retryButtonStyles
+  matchDetailsErrorContainerStyles,
+  matchDetailsErrorTextStyles,
+  matchDetailsRetryButtonStyles
 } from '@/styles/matchDetails.styles';
 
 // Quick stats data
@@ -75,8 +75,8 @@ const bettingTabs = ['Main', 'Match', 'Fancy'];
  * Loading component
  */
 const LoadingState: React.FC = () => (
-  <Box sx={loadingContainerStyles}>
-    <CircularProgress sx={loadingSpinnerStyles} />
+  <Box sx={matchDetailsLoadingContainerStyles}>
+    <CircularProgress sx={matchDetailsLoadingSpinnerStyles} />
   </Box>
 );
 
@@ -84,8 +84,8 @@ const LoadingState: React.FC = () => (
  * Error component
  */
 const ErrorState: React.FC<{ error: string; onRetry: () => void }> = ({ error, onRetry }) => (
-  <Box sx={errorContainerStyles}>
-    <Typography variant="h6" sx={errorTextStyles}>
+  <Box sx={matchDetailsErrorContainerStyles}>
+    <Typography variant="h6" sx={matchDetailsErrorTextStyles}>
       Something went wrong
     </Typography>
     <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
@@ -94,7 +94,7 @@ const ErrorState: React.FC<{ error: string; onRetry: () => void }> = ({ error, o
     <Button 
       variant="contained" 
       onClick={onRetry}
-      sx={retryButtonStyles}
+      sx={matchDetailsRetryButtonStyles}
     >
       Try Again
     </Button>

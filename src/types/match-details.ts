@@ -1,4 +1,4 @@
-export interface Team {
+export interface MatchDetailsTeam {
   name: string;
   logo: string;
   score: number;
@@ -54,8 +54,8 @@ export interface BettingOdds {
 export interface MatchData {
   id: string;
   teams: {
-    home: Team;
-    away: Team;
+    home: MatchDetailsTeam;
+    away: MatchDetailsTeam;
   };
   score: string;
   league: string;

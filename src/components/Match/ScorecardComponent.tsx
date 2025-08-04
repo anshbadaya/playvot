@@ -15,7 +15,7 @@ import {
   Chip,
   alpha
 } from '@mui/material';
-import { themeColors, commonStyles } from './styles/theme-constants';
+import { themeColors, commonStyles } from '@/config/theme';
 import CricketIcon from '@mui/icons-material/SportsCricket';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import ScheduleIcon from '@mui/icons-material/Schedule';

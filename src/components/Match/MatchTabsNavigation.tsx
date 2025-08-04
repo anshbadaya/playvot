@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, alpha } from '@mui/material';
-import { themeColors } from './styles/theme-constants';
+import { themeColors } from '@/config/theme';
 
 interface MatchTabsNavigationProps {
   activeTab: string;

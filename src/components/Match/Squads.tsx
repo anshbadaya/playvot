@@ -10,7 +10,7 @@ import {
   Chip,
   alpha
 } from "@mui/material";
-import { themeColors, commonStyles } from './styles/theme-constants';
+import { themeColors, commonStyles } from '@/config/theme';
 import PersonIcon from '@mui/icons-material/Person';
 
 interface Team {
