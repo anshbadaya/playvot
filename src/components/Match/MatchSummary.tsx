@@ -1,21 +1,112 @@
 import React from 'react';
 import { Box, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { MatchSummaryProps } from '@/types/match-details';
 import { themeColors } from '@/config/theme';
-import {
-  matchSummaryContainerStyles,
-  matchSummaryHeaderStyles,
-  matchSummarySubtitleStyles,
-  matchSummaryScoreRowStyles,
-  matchSummarySectionStyles,
-  matchSummarySectionTitleStyles,
-  matchSummaryStatsGridStyles,
-  matchSummaryScrollContainerStyles,
-  matchSummaryStatsHeaderStyles,
-  matchSummaryStatsHeaderCellStyles,
-  matchSummaryPlayerRowStyles,
-  matchSummaryPlayerNameStyles
-} from '@/styles/matchDetails.styles';
+
+const Container = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;
+
+const Header = styled(Box)`
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: ${({ theme }) => theme.spacing(2)};
+`;
+
+const Subtitle = styled(Typography)`
+  color: gray;
+  font-size: 0.875rem;
+  margin-bottom: ${({ theme }) => theme.spacing(1)};
+`;
+
+const ScoreRow = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Section = styled(Box)`
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: ${({ theme }) => theme.spacing(2)};
+`;
+
+const SectionTitle = styled(Typography)`
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  margin-bottom: ${({ theme }) => theme.spacing(1.5)};
+`;
+
+const StatsGrid = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(1)};
+`;
+
+const ScrollContainer = styled(Box)`
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.5);
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.7);
+  }
+`;
+
+const StatsHeader = styled(Box)`
+  display: grid;
+  grid-template-columns: 1fr repeat(5, 40px);
+  gap: ${({ theme }) => theme.spacing(2)};
+  padding: ${({ theme }) => theme.spacing(1, 0)};
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  min-width: min-content;
+`;
+
+const HeaderCell = styled(Box)`
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const PlayerRow = styled(Box)`
+  display: grid;
+  grid-template-columns: 1fr repeat(5, 40px);
+  gap: ${({ theme }) => theme.spacing(2)};
+  padding: ${({ theme }) => theme.spacing(1, 0)};
+  align-items: center;
+  min-width: min-content;
+`;
+
+const PlayerName = styled(Box)<{ $isSpecial?: boolean }>`
+  color: ${themeColors.text.primary};
+  font-weight: ${({ $isSpecial }) => $isSpecial ? '700' : '500'};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: ${({ theme }) => theme.spacing(0.25)};
+`;
+
+const StatsCell = styled(Box)`
+  text-align: right;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+`;
 
 const MatchSummary: React.FC<MatchSummaryProps> = ({ data }) => {
   // Find the top 2 batsmen based on runs
@@ -36,133 +127,103 @@ const MatchSummary: React.FC<MatchSummaryProps> = ({ data }) => {
     .slice(0, 2);
 
   return (
-    <Box sx={matchSummaryContainerStyles}>
-      <Box sx={matchSummaryHeaderStyles}>
-        <Typography variant="subtitle2" color="gray" sx={matchSummarySubtitleStyles}>
+    <Container>
+      <Header>
+        <Subtitle variant="subtitle2">
           Day 2, Lunch Break • New Zealand lead by 25 runs
-        </Typography>
+        </Subtitle>
         
         {/* Score summary */}
-        <Box sx={matchSummaryScoreRowStyles}>
+        <ScoreRow>
           <Typography variant="body2">
             {data.teams.home.name} 149
           </Typography>
           <Typography variant="body2">
             {data.teams.away.name} 174/3 (52)
           </Typography>
-        </Box>
-      </Box>
+        </ScoreRow>
+      </Header>
 
       {/* Top Batsmen */}
-      <Box sx={matchSummarySectionStyles}>
-        <Typography variant="subtitle2" sx={matchSummarySectionTitleStyles}>
+      <Section>
+        <SectionTitle variant="subtitle2">
           Batting
-        </Typography>
-        <Box sx={matchSummaryStatsGridStyles}>
+        </SectionTitle>
+        <StatsGrid>
           {/* Scrollable Container */}
-          <Box sx={matchSummaryScrollContainerStyles}>
+          <ScrollContainer>
             {/* Stats Header */}
-            <Box sx={matchSummaryStatsHeaderStyles}>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>R</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>B</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>4s</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>6s</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>SR</Box>
-            </Box>
+            <StatsHeader>
+              <Box />
+              <HeaderCell>R</HeaderCell>
+              <HeaderCell>B</HeaderCell>
+              <HeaderCell>4s</HeaderCell>
+              <HeaderCell>6s</HeaderCell>
+              <HeaderCell>SR</HeaderCell>
+            </StatsHeader>
             
             {/* Batsmen List */}
             {topBatsmen.map((player, index) => (
-              <Box key={index} sx={{
-                ...matchSummaryPlayerRowStyles,
+              <PlayerRow key={index} sx={{
                 borderBottom: index !== topBatsmen.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none'
               }}>
                 {/* Player Name */}
-                <Box sx={{ 
-                  ...matchSummaryPlayerNameStyles(Boolean(player.isWicketKeeper || player.isCaptain)),
-                  color: themeColors.text.primary,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  mb: 0.25 // Small margin bottom
-                }}>
+                <PlayerName $isSpecial={Boolean(player.isWicketKeeper || player.isCaptain)}>
                   {player.name} {player.isWicketKeeper ? '†' : ''} {player.isCaptain ? '(c)' : ''}
-                </Box>
+                </PlayerName>
                 
                 {/* Stats Row */}
-                <Box sx={{ 
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
-                  gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
-                  justifyContent: 'end',
-                  minWidth: 'min-content'
-                }}>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.balls}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.fours}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.sixes}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.strikeRate?.toFixed(2)}</Box>
-                </Box>
-              </Box>
+                <StatsCell>{player.stats?.runs}</StatsCell>
+                <StatsCell>{player.stats?.balls}</StatsCell>
+                <StatsCell>{player.stats?.fours}</StatsCell>
+                <StatsCell>{player.stats?.sixes}</StatsCell>
+                <StatsCell>{player.stats?.strikeRate?.toFixed(2)}</StatsCell>
+              </PlayerRow>
             ))}
-          </Box>
-        </Box>
-      </Box>
+          </ScrollContainer>
+        </StatsGrid>
+      </Section>
 
       {/* Top Bowlers */}
-      <Box sx={matchSummarySectionStyles}>
-        <Typography variant="subtitle2" sx={matchSummarySectionTitleStyles}>
+      <Section>
+        <SectionTitle variant="subtitle2">
           Bowling
-        </Typography>
-        <Box sx={matchSummaryStatsGridStyles}>
+        </SectionTitle>
+        <StatsGrid>
           {/* Scrollable Container */}
-          <Box sx={matchSummaryScrollContainerStyles}>
+          <ScrollContainer>
             {/* Stats Header */}
-            <Box sx={matchSummaryStatsHeaderStyles}>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>O</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>M</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>R</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>W</Box>
-              <Box sx={matchSummaryStatsHeaderCellStyles}>ECON</Box>
-            </Box>
+            <StatsHeader>
+              <Box />
+              <HeaderCell>O</HeaderCell>
+              <HeaderCell>M</HeaderCell>
+              <HeaderCell>R</HeaderCell>
+              <HeaderCell>W</HeaderCell>
+              <HeaderCell>ECON</HeaderCell>
+            </StatsHeader>
             
             {/* Bowlers List */}
             {topBowlers.map((player, index) => (
-              <Box key={index} sx={{
-                ...matchSummaryPlayerRowStyles,
+              <PlayerRow key={index} sx={{
                 borderBottom: index !== topBowlers.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none'
               }}>
                 {/* Bowler Name */}
-                                  <Box sx={{ 
-                    ...matchSummaryPlayerNameStyles(Boolean(player.isCaptain)),
-                    color: themeColors.text.primary,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  mb: 0.25 // Small margin bottom
-                }}>
+                <PlayerName $isSpecial={Boolean(player.isCaptain)}>
                   {player.name} {player.isCaptain ? '(c)' : ''}
-                </Box>
+                </PlayerName>
                 
                 {/* Stats Row */}
-                <Box sx={{ 
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
-                  gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
-                  justifyContent: 'end',
-                  minWidth: 'min-content'
-                }}>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.overs}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.maidens}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.runs}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.wickets}</Box>
-                  <Box sx={{ textAlign: 'right' }}>{player.stats?.economy?.toFixed(2)}</Box>
-                </Box>
-              </Box>
+                <StatsCell>{player.stats?.overs}</StatsCell>
+                <StatsCell>{player.stats?.maidens}</StatsCell>
+                <StatsCell>{player.stats?.runs}</StatsCell>
+                <StatsCell>{player.stats?.wickets}</StatsCell>
+                <StatsCell>{player.stats?.economy?.toFixed(2)}</StatsCell>
+              </PlayerRow>
             ))}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </ScrollContainer>
+        </StatsGrid>
+      </Section>
+    </Container>
   );
 };
 

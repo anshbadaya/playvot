@@ -1,19 +1,85 @@
 import React from 'react';
 import { Box, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { WinProbabilityBarProps } from '@/types/match-details';
-import {
-  winProbabilityContainerStyles,
-  winProbabilityCardStyles,
-  winProbabilityTeamsRowStyles,
-  winProbabilityTeamStyles,
-  winProbabilityTeamPercentageStyles,
-  winProbabilityDrawStyles,
-  winProbabilityDrawPercentageStyles,
-  winProbabilityProgressContainerStyles,
-  winProbabilityHomeBarStyles,
-  winProbabilityDrawBarStyles,
-  winProbabilityAwayBarStyles
-} from '@/styles/matchDetails.styles';
+
+const Container = styled(Box)`
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+`;
+
+const CardContainer = styled(Box)`
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: ${({ theme }) => theme.spacing(2)};
+`;
+
+const TeamsRow = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing(1.5)};
+`;
+
+const TeamText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+`;
+
+const TeamPercentage = styled(Typography)`
+  color: #10B981;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: ${({ theme }) => theme.spacing(0.5)};
+`;
+
+const DrawText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 0.5;
+`;
+
+const DrawPercentage = styled(Typography)`
+  color: #F59E0B;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: ${({ theme }) => theme.spacing(0.5)};
+`;
+
+const ProgressContainer = styled(Box)`
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.5);
+`;
+
+const HomeBar = styled(Box)`
+  background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+  height: 100%;
+  transition: width 0.3s ease;
+`;
+
+const DrawBar = styled(Box)`
+  background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+  height: 100%;
+  transition: width 0.3s ease;
+`;
+
+const AwayBar = styled(Box)`
+  background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%);
+  height: 100%;
+  transition: width 0.3s ease;
+`;
 
 const WinProbabilityBar: React.FC<WinProbabilityBarProps> = ({ data }) => {
   // Calculate total percentage (home + away + draw)
@@ -28,48 +94,48 @@ const WinProbabilityBar: React.FC<WinProbabilityBarProps> = ({ data }) => {
   const awayWidth = (data.winProbability.away / totalPercentage) * 100;
 
   return (
-    <Box sx={winProbabilityContainerStyles}>
+    <Container>
       {/* Live win probability section */}
-      <Box sx={winProbabilityCardStyles}>
+      <CardContainer>
         
         {/* Team names and percentages */}
-        <Box sx={winProbabilityTeamsRowStyles}>
-          <Typography variant="body2" sx={winProbabilityTeamStyles}>
+        <TeamsRow>
+          <TeamText variant="body2">
             {data.teams.home.name}
-            <Typography component="span" sx={winProbabilityTeamPercentageStyles}>
+            <TeamPercentage as="span">
               {data.winProbability.home}%
-            </Typography>
-          </Typography>
+            </TeamPercentage>
+          </TeamText>
           
           {drawPercentage > 0 && (
-            <Typography variant="body2" sx={winProbabilityDrawStyles}>
+            <DrawText variant="body2">
               Draw
-              <Typography component="span" sx={winProbabilityDrawPercentageStyles}>
+              <DrawPercentage as="span">
                 {drawPercentage}%
-              </Typography>
-            </Typography>
+              </DrawPercentage>
+            </DrawText>
           )}
           
-          <Typography variant="body2" sx={{ ...winProbabilityTeamStyles, textAlign: 'right' }}>
+          <TeamText variant="body2" sx={{ textAlign: 'right' }}>
             {data.teams.away.name}
-            <Typography component="span" sx={winProbabilityTeamPercentageStyles}>
+            <TeamPercentage as="span">
               {data.winProbability.away}%
-            </Typography>
-          </Typography>
-        </Box>
+            </TeamPercentage>
+          </TeamText>
+        </TeamsRow>
         
         {/* Progress bar */}
-        <Box sx={winProbabilityProgressContainerStyles}>
-          <Box sx={{ ...winProbabilityHomeBarStyles, width: `${homeWidth}%` }} />
+        <ProgressContainer>
+          <HomeBar sx={{ width: `${homeWidth}%` }} />
           
           {drawPercentage > 0 && (
-            <Box sx={{ ...winProbabilityDrawBarStyles, width: `${drawWidth}%` }} />
+            <DrawBar sx={{ width: `${drawWidth}%` }} />
           )}
           
-          <Box sx={{ ...winProbabilityAwayBarStyles, width: `${awayWidth}%` }} />
-        </Box>
-      </Box>
-    </Box>
+          <AwayBar sx={{ width: `${awayWidth}%` }} />
+        </ProgressContainer>
+      </CardContainer>
+    </Container>
   );
 };
 

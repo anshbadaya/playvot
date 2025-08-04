@@ -10,21 +10,10 @@ import {
   Chip,
   alpha
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { themeColors, commonStyles } from '@/config/theme';
 import PersonIcon from '@mui/icons-material/Person';
 import { SquadsProps } from '@/types/match-details';
-import {
-  squadsPlayerRowStyles,
-  squadsPlayerContentStyles,
-  squadsPlayerAvatarStyles,
-  squadsPlayerInfoStyles,
-  squadsPlayerNameStyles,
-  squadsPlayerDetailsStyles,
-  squadsPlayerRoleStyles,
-  squadsPlayerNumberStyles,
-  squadsPlayerStatsStyles,
-  squadsPlayerStatItemStyles
-} from '@/styles/matchDetails.styles';
 
 interface Player {
   name: string;
@@ -52,7 +41,130 @@ interface Player {
   };
 }
 
-const PlayerRow: React.FC<{ player: Player; isRight?: boolean }> = ({ player, isRight = false }) => {
+const Container = styled(Box)`
+  padding: ${({ theme }) => theme.breakpoints.up('sm') ? theme.spacing(2) : theme.spacing(1)};
+`;
+
+const StyledCard = styled(Card)`
+  ${commonStyles.card}
+  flex: 1;
+  min-height: ${({ theme }) => theme.breakpoints.up('md') ? '600px' : 'auto'};
+`;
+
+const StyledCardHeader = styled(CardHeader)`
+  ${commonStyles.cardHeader}
+  background: linear-gradient(135deg, ${themeColors.secondary} 0%, ${alpha(themeColors.primary, 0.2)} 100%);
+`;
+
+const StyledCardContent = styled(CardContent)`
+  height: ${({ theme }) => theme.breakpoints.up('md') ? 'calc(100% - 80px)' : 'auto'};
+  overflow-y: auto;
+`;
+
+const TeamAvatar = styled(Avatar)`
+  width: 48px;
+  height: 48px;
+  border: 3px solid ${alpha(themeColors.primary, 0.3)};
+`;
+
+const TeamName = styled(Typography)`
+  color: ${themeColors.text.primary};
+  font-weight: 700;
+  letter-spacing: 0.5px;
+`;
+
+const TeamSubtitle = styled(Typography)`
+  color: ${themeColors.text.secondary};
+`;
+
+const PlayerRow = styled(Box)`
+  display: flex;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing(1.5)};
+  background: rgba(15, 23, 42, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(15, 23, 42, 0.3);
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateY(-1px);
+  }
+`;
+
+const PlayerContent = styled(Box)`
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: ${({ theme }) => theme.spacing(1.5)};
+`;
+
+const PlayerAvatar = styled(Avatar)`
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+`;
+
+const PlayerInfo = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+const PlayerName = styled(Typography)`
+  color: ${themeColors.text.primary};
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: ${({ theme }) => theme.spacing(0.5)};
+`;
+
+const PlayerDetails = styled(Box)`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
+`;
+
+const PlayerRole = styled(Typography)`
+  color: ${themeColors.text.secondary};
+  font-size: 0.75rem;
+  font-weight: 500;
+`;
+
+const PlayerNumber = styled(Typography)`
+  color: rgba(59, 130, 246, 0.8);
+  font-size: 0.75rem;
+  font-weight: 600;
+`;
+
+const CaptainChip = styled(Chip)`
+  height: 16px;
+  font-size: 0.6rem;
+  background-color: rgba(59, 130, 246, 0.2);
+  color: rgba(59, 130, 246, 0.8);
+`;
+
+const WicketKeeperChip = styled(Chip)`
+  height: 16px;
+  font-size: 0.6rem;
+  background-color: rgba(16, 185, 129, 0.2);
+  color: rgba(16, 185, 129, 0.8);
+`;
+
+const PlayerStats = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: ${({ theme }) => theme.spacing(0.25)};
+`;
+
+const StatItem = styled(Typography)`
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 500;
+`;
+
+const PlayerRowComponent: React.FC<{ player: Player; isRight?: boolean }> = ({ player, isRight = false }) => {
   const getPlayerTitle = () => {
     let title = player.role;
     if (player.isCaptain && player.isWicketKeeper) {
@@ -66,82 +178,63 @@ const PlayerRow: React.FC<{ player: Player; isRight?: boolean }> = ({ player, is
   };
 
   return (
-    <Box sx={squadsPlayerRowStyles}>
-      <Box sx={squadsPlayerContentStyles}>
-        <Avatar 
+    <PlayerRow>
+      <PlayerContent>
+        <PlayerAvatar 
           src={player.avatar} 
           alt={player.name}
-          sx={squadsPlayerAvatarStyles}
         >
           <PersonIcon />
-        </Avatar>
+        </PlayerAvatar>
         
-        <Box sx={squadsPlayerInfoStyles}>
-          <Typography sx={squadsPlayerNameStyles}>
+        <PlayerInfo>
+          <PlayerName>
             {player.name}
-          </Typography>
+          </PlayerName>
           
-          <Box sx={squadsPlayerDetailsStyles}>
-            <Typography sx={squadsPlayerRoleStyles}>
+          <PlayerDetails>
+            <PlayerRole>
               {getPlayerTitle()}
-            </Typography>
-            <Typography sx={squadsPlayerNumberStyles}>
+            </PlayerRole>
+            <PlayerNumber>
               #{player.number}
-            </Typography>
+            </PlayerNumber>
             
             {/* Role badges */}
             {player.isCaptain && (
-              <Chip 
-                label="C" 
-                size="small" 
-                sx={{ 
-                  height: 16, 
-                  fontSize: '0.6rem',
-                  bgcolor: 'rgba(59, 130, 246, 0.2)',
-                  color: 'rgba(59, 130, 246, 0.8)'
-                }} 
-              />
+              <CaptainChip label="C" size="small" />
             )}
             {player.isWicketKeeper && (
-              <Chip 
-                label="WK" 
-                size="small" 
-                sx={{ 
-                  height: 16, 
-                  fontSize: '0.6rem',
-                  bgcolor: 'rgba(16, 185, 129, 0.2)',
-                  color: 'rgba(16, 185, 129, 0.8)'
-                }} 
-              />
+              <WicketKeeperChip label="WK" size="small" />
             )}
-          </Box>
-        </Box>
+          </PlayerDetails>
+        </PlayerInfo>
         
         {/* Player Stats */}
-        <Box sx={squadsPlayerStatsStyles}>
+        <PlayerStats>
           {player.stats?.runs !== undefined && (
-            <Typography sx={squadsPlayerStatItemStyles}>
+            <StatItem>
               {player.stats.runs} runs
-            </Typography>
+            </StatItem>
           )}
           {player.stats?.wickets !== undefined && (
-            <Typography sx={squadsPlayerStatItemStyles}>
+            <StatItem>
               {player.stats.wickets} wkts
-            </Typography>
+            </StatItem>
           )}
           {player.stats?.goals !== undefined && (
-            <Typography sx={squadsPlayerStatItemStyles}>
+            <StatItem>
               {player.stats.goals} goals
-            </Typography>
+            </StatItem>
           )}
           {player.stats?.rating !== undefined && (
-            <Typography sx={squadsPlayerStatItemStyles}>
+            <StatItem>
               {player.stats.rating.toFixed(1)} rating
-            </Typography>
+            </StatItem>
           )}
-        </Box>
-      </Box>
-    </Box>
+        </PlayerStats>
+      </PlayerContent>
+    </PlayerRow>
   );
 };
 
@@ -156,111 +249,75 @@ const Squads: React.FC<SquadsProps> = ({ data }) => {
   const awaySquad = awayPlayers.slice(0, 11);
 
   return (
-    <Box sx={{ p: { xs: 1, sm: 2 } }}>
+    <Container>
       <Stack 
         direction={{ xs: 'column', md: 'row' }} 
         spacing={3}
         sx={{ height: '100%' }}
       >
         {/* Home Team Squad */}
-        <Card sx={{ 
-          ...commonStyles.card,
-          flex: 1,
-          minHeight: { xs: 'auto', md: '600px' }
-        }}>
-          <CardHeader
+        <StyledCard>
+          <StyledCardHeader
             title={
               <Stack direction="row" spacing={2} alignItems="center">
-                <Avatar 
+                <TeamAvatar 
                   src={homeTeam.logo} 
                   alt={homeTeam.name}
-                  sx={{ 
-                    width: 48, 
-                    height: 48,
-                    border: `3px solid ${alpha(themeColors.primary, 0.3)}`
-                  }}
                 />
                 <Box>
-                  <Typography variant="h5" sx={{ 
-                    color: themeColors.text.primary,
-                    fontWeight: 700,
-                    letterSpacing: '0.5px'
-                  }}>
+                  <TeamName variant="h5">
                     {homeTeam.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                  </TeamName>
+                  <TeamSubtitle variant="body2">
                     Full Squad ({homeSquad.length} Players)
-                  </Typography>
+                  </TeamSubtitle>
                 </Box>
               </Stack>
             }
-            sx={{ 
-              ...commonStyles.cardHeader,
-              background: `linear-gradient(135deg, ${themeColors.secondary} 0%, ${alpha(themeColors.primary, 0.2)} 100%)`
-            }}
           />
-          <CardContent sx={{ 
-            height: { xs: 'auto', md: 'calc(100% - 80px)' },
-            overflowY: 'auto'
-          }}>
+          <StyledCardContent>
             <Stack spacing={2}>
               {homeSquad.map((player) => (
-                <PlayerRow key={player.number} player={player} />
+                <PlayerRowComponent key={player.number} player={player} />
               ))}
             </Stack>
-          </CardContent>
-        </Card>
+          </StyledCardContent>
+        </StyledCard>
 
         {/* Away Team Squad */}
-        <Card sx={{ 
-          ...commonStyles.card,
-          flex: 1,
-          minHeight: { xs: 'auto', md: '600px' }
-        }}>
-          <CardHeader
+        <StyledCard>
+          <StyledCardHeader
             title={
               <Stack direction="row" spacing={2} alignItems="center">
-                <Avatar 
+                <TeamAvatar 
                   src={awayTeam.logo} 
                   alt={awayTeam.name}
-                  sx={{ 
-                    width: 48, 
-                    height: 48,
-                    border: `3px solid ${alpha(themeColors.error, 0.3)}`
-                  }}
+                  sx={{ border: `3px solid ${alpha(themeColors.error, 0.3)}` }}
                 />
                 <Box>
-                  <Typography variant="h5" sx={{ 
-                    color: themeColors.text.primary,
-                    fontWeight: 700,
-                    letterSpacing: '0.5px'
-                  }}>
+                  <TeamName variant="h5">
                     {awayTeam.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: themeColors.text.secondary }}>
+                  </TeamName>
+                  <TeamSubtitle variant="body2">
                     Full Squad ({awaySquad.length} Players)
-                  </Typography>
+                  </TeamSubtitle>
                 </Box>
               </Stack>
             }
             sx={{ 
-              ...commonStyles.cardHeader,
               background: `linear-gradient(135deg, ${themeColors.secondary} 0%, ${alpha(themeColors.error, 0.2)} 100%)`
             }}
           />
-          <CardContent sx={{ 
-            height: { xs: 'auto', md: 'calc(100% - 80px)' },
-            overflowY: 'auto'
-          }}>
+          <StyledCardContent>
             <Stack spacing={2}>
               {awaySquad.map((player) => (
-                <PlayerRow key={player.number} player={player} />
+                <PlayerRowComponent key={player.number} player={player} />
               ))}
             </Stack>
-          </CardContent>
-        </Card>
+          </StyledCardContent>
+        </StyledCard>
       </Stack>
-    </Box>
+    </Container>
   );
 };
 
