@@ -25,7 +25,7 @@ export const fetchMatchDetails = async (matchId: string): Promise<MatchDetailsRe
       success: true
     };
   } catch (error) {
-    console.error('Error fetching match details:', error);
+    // console.error('Error fetching match details:', error);
     return {
       data: {} as MatchData,
       scorecard: {} as ScorecardData,
@@ -50,7 +50,7 @@ export const fetchMatchData = async (matchId: string): Promise<MatchData> => {
       throw new Error(response.message || 'Failed to fetch match data');
     }
   } catch (error) {
-    console.error('Error fetching match data:', error);
+    // console.error('Error fetching match data:', error);
     throw error;
   }
 };
@@ -70,7 +70,7 @@ export const fetchScorecardData = async (matchId: string): Promise<ScorecardData
       throw new Error(response.message || 'Failed to fetch scorecard data');
     }
   } catch (error) {
-    console.error('Error fetching scorecard data:', error);
+    // console.error('Error fetching scorecard data:', error);
     throw error;
   }
 };
@@ -95,7 +95,7 @@ export const fetchLiveCommentary = async (
     
     return [];
   } catch (error) {
-    console.error('Error fetching live commentary:', error);
+    // console.error('Error fetching live commentary:', error);
     return [];
   }
 };
@@ -120,7 +120,7 @@ export const fetchBettingOdds = async (matchId: string): Promise<BettingOdds> =>
       away: 3.8
     };
   } catch (error) {
-    console.error('Error fetching betting odds:', error);
+    // console.error('Error fetching betting odds:', error);
     throw error;
   }
 };
@@ -144,7 +144,7 @@ export const fetchWinProbability = async (matchId: string): Promise<WinProbabili
       away: 38
     };
   } catch (error) {
-    console.error('Error fetching win probability:', error);
+    // console.error('Error fetching win probability:', error);
     throw error;
   }
 }; 

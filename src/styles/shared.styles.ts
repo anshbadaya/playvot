@@ -1,4 +1,4 @@
-import { SxProps, Theme, useTheme } from '@mui/material';
+import { SxProps, Theme } from '@mui/material';
 import { themeColors, commonStyles } from '@/config/theme';
 
 // Common style patterns

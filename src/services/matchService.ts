@@ -60,7 +60,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
       success: true
     };
   } catch (error) {
-    console.error('Error fetching matches:', error);
+    // console.error('Error fetching matches:', error);
     return {
       data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
       total: 0,
@@ -84,7 +84,7 @@ export const fetchMatchesBySport = async (
     const allMatches = await fetchMatches({ ...filters, sportType });
     return allMatches;
   } catch (error) {
-    console.error(`Error fetching ${sportType} matches:`, error);
+    // console.error(`Error fetching ${sportType} matches:`, error);
     return {
       data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
       total: 0,
@@ -151,7 +151,7 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
       success: true
     };
   } catch (error) {
-    console.error('Error searching matches:', error);
+    // console.error('Error searching matches:', error);
     return {
       data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
       total: 0,

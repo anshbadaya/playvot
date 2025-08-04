@@ -18,15 +18,14 @@ import StarIcon from '@mui/icons-material/Star';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 // Layout and components
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 import { PageBackground, TopBar } from '@/components/Match/styles/StyledComponents';
 import { MatchTabsNavigation } from '@/components/Match';
 import MatchInfo from '@/components/Match/MatchInfo';
-import LiveCommentary from '@/components/Match/LiveCommentary';
-import CommentaryTab from '@/components/Match/CommentaryTab';
-import HighlightsTab from '@/components/Match/HighlightsTab';
+import { LiveCommentary, CommentaryTab } from '@/components/Match/Commentary';
+import { HighlightsTab } from '@/components/Match/Highlights';
 import Squads from '@/components/Match/Squads';
-import ScorecardComponent from '@/components/Match/ScorecardComponent';
+import { ScorecardComponent } from '@/components/Match/Scorecard';
 
 // Custom hook and types
 import { useMatchDetails } from '@/hooks/useMatchDetails';
@@ -45,9 +44,9 @@ import {
   bettingTabButtonStyles,
   matchWinnerCardStyles,
   matchWinnerHeaderStyles,
-  teamRowStyles,
-  teamAvatarStyles,
-  teamNameStyles,
+  matchWinnerTeamRowStyles,
+  matchWinnerTeamAvatarStyles,
+  matchWinnerTeamNameStyles,
   oddsButtonStyles,
   fancyCardStyles,
   fancyHeaderStyles,
@@ -171,14 +170,14 @@ const MatchWinnerSection: React.FC = () => (
     <CardContent sx={{ p: 3 }}>
       <Stack spacing={2.5}>
         {/* ZIM */}
-        <Box sx={teamRowStyles}>
+        <Box sx={matchWinnerTeamRowStyles}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Avatar 
               src="/teams/zimbabwe.png" 
               alt="Zimbabwe" 
-              sx={teamAvatarStyles}
+              sx={matchWinnerTeamAvatarStyles}
             />
-            <Typography variant="body1" sx={teamNameStyles}>
+            <Typography variant="body1" sx={matchWinnerTeamNameStyles}>
               Zimbabwe
             </Typography>
           </Box>
@@ -197,14 +196,14 @@ const MatchWinnerSection: React.FC = () => (
         </Box>
 
         {/* NZ */}
-        <Box sx={teamRowStyles}>
+        <Box sx={matchWinnerTeamRowStyles}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Avatar 
               src="/teams/newzealand.png" 
               alt="New Zealand" 
-              sx={teamAvatarStyles}
+              sx={matchWinnerTeamAvatarStyles}
             />
-            <Typography variant="body1" sx={teamNameStyles}>
+            <Typography variant="body1" sx={matchWinnerTeamNameStyles}>
               New Zealand
             </Typography>
           </Box>

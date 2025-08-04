@@ -1,11 +1,21 @@
 import React from 'react';
 import { Box, Typography } from "@mui/material";
-import { MatchData } from '../../types/match-details';
+import { MatchSummaryProps } from '@/types/match-details';
 import { themeColors } from '@/config/theme';
-
-interface MatchSummaryProps {
-  data: MatchData;
-}
+import {
+  matchSummaryContainerStyles,
+  matchSummaryHeaderStyles,
+  matchSummarySubtitleStyles,
+  matchSummaryScoreRowStyles,
+  matchSummarySectionStyles,
+  matchSummarySectionTitleStyles,
+  matchSummaryStatsGridStyles,
+  matchSummaryScrollContainerStyles,
+  matchSummaryStatsHeaderStyles,
+  matchSummaryStatsHeaderCellStyles,
+  matchSummaryPlayerRowStyles,
+  matchSummaryPlayerNameStyles
+} from '@/styles/matchDetails.styles';
 
 const MatchSummary: React.FC<MatchSummaryProps> = ({ data }) => {
   // Find the top 2 batsmen based on runs
@@ -26,20 +36,14 @@ const MatchSummary: React.FC<MatchSummaryProps> = ({ data }) => {
     .slice(0, 2);
 
   return (
-    <Box sx={{ 
-      mt: 2,
-      p: 2,
-      bgcolor: 'rgba(15, 23, 42, 0.3)',
-      borderRadius: 2,
-      border: '1px solid rgba(59, 130, 246, 0.3)'
-    }}>
-      <Box sx={{ mb: 2 }}>
-        <Typography variant="subtitle2" color="gray" sx={{ mb: 1 }}>
+    <Box sx={matchSummaryContainerStyles}>
+      <Box sx={matchSummaryHeaderStyles}>
+        <Typography variant="subtitle2" color="gray" sx={matchSummarySubtitleStyles}>
           Day 2, Lunch Break • New Zealand lead by 25 runs
         </Typography>
         
         {/* Score summary */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+        <Box sx={matchSummaryScoreRowStyles}>
           <Typography variant="body2">
             {data.teams.home.name} 149
           </Typography>
@@ -50,53 +54,31 @@ const MatchSummary: React.FC<MatchSummaryProps> = ({ data }) => {
       </Box>
 
       {/* Top Batsmen */}
-      <Box sx={{ mb: 2 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+      <Box sx={matchSummarySectionStyles}>
+        <Typography variant="subtitle2" sx={matchSummarySectionTitleStyles}>
           Batting
         </Typography>
-        <Box sx={{ 
-          display: 'grid',
-          gap: { xs: 1, sm: 1.5 }, // Reduced vertical gap
-          fontSize: '0.875rem',
-          overflow: 'hidden'
-        }}>
+        <Box sx={matchSummaryStatsGridStyles}>
           {/* Scrollable Container */}
-          <Box sx={{
-            overflowX: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            width: '100%',
-            '&::-webkit-scrollbar': { height: 4 }, // Reduced scrollbar height
-            '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
-            '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
-          }}>
+          <Box sx={matchSummaryScrollContainerStyles}>
             {/* Stats Header */}
-            <Box sx={{ 
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
-              gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
-              justifyContent: 'end',
-              borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
-              pb: 0.5, // Reduced padding
-              minWidth: 'min-content'
-            }}>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>B</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>4s</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>6s</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>SR</Box>
+            <Box sx={matchSummaryStatsHeaderStyles}>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>R</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>B</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>4s</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>6s</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>SR</Box>
             </Box>
             
             {/* Batsmen List */}
             {topBatsmen.map((player, index) => (
               <Box key={index} sx={{
-                display: 'grid',
-                gap: 0.5, // Reduced gap between name and stats
-                borderBottom: index !== topBatsmen.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none',
-                pb: 1 // Reduced bottom padding
+                ...matchSummaryPlayerRowStyles,
+                borderBottom: index !== topBatsmen.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none'
               }}>
                 {/* Player Name */}
                 <Box sx={{ 
-                  fontWeight: player.isWicketKeeper || player.isCaptain ? 'bold' : 'normal',
+                  ...matchSummaryPlayerNameStyles(Boolean(player.isWicketKeeper || player.isCaptain)),
                   color: themeColors.text.primary,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
@@ -127,54 +109,32 @@ const MatchSummary: React.FC<MatchSummaryProps> = ({ data }) => {
       </Box>
 
       {/* Top Bowlers */}
-      <Box>
-        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+      <Box sx={matchSummarySectionStyles}>
+        <Typography variant="subtitle2" sx={matchSummarySectionTitleStyles}>
           Bowling
         </Typography>
-        <Box sx={{ 
-          display: 'grid',
-          gap: { xs: 1, sm: 1.5 }, // Reduced vertical gap
-          fontSize: '0.875rem',
-          overflow: 'hidden'
-        }}>
+        <Box sx={matchSummaryStatsGridStyles}>
           {/* Scrollable Container */}
-          <Box sx={{
-            overflowX: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            width: '100%',
-            '&::-webkit-scrollbar': { height: 4 }, // Reduced scrollbar height
-            '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
-            '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
-          }}>
+          <Box sx={matchSummaryScrollContainerStyles}>
             {/* Stats Header */}
-            <Box sx={{ 
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 40px)', // Slightly reduced column width
-              gap: { xs: 2, sm: 2.5 }, // Reduced horizontal gap
-              justifyContent: 'end',
-              borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
-              pb: 0.5, // Reduced padding
-              minWidth: 'min-content'
-            }}>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>O</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>M</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>R</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>W</Box>
-              <Box sx={{ color: 'gray', textAlign: 'right' }}>ECON</Box>
+            <Box sx={matchSummaryStatsHeaderStyles}>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>O</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>M</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>R</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>W</Box>
+              <Box sx={matchSummaryStatsHeaderCellStyles}>ECON</Box>
             </Box>
             
             {/* Bowlers List */}
             {topBowlers.map((player, index) => (
               <Box key={index} sx={{
-                display: 'grid',
-                gap: 0.5, // Reduced gap between name and stats
-                borderBottom: index !== topBowlers.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none',
-                pb: 1 // Reduced bottom padding
+                ...matchSummaryPlayerRowStyles,
+                borderBottom: index !== topBowlers.length - 1 ? '1px solid rgba(59, 130, 246, 0.1)' : 'none'
               }}>
                 {/* Bowler Name */}
-                <Box sx={{ 
-                  fontWeight: player.isCaptain ? 'bold' : 'normal',
-                  color: themeColors.text.primary,
+                                  <Box sx={{ 
+                    ...matchSummaryPlayerNameStyles(Boolean(player.isCaptain)),
+                    color: themeColors.text.primary,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',

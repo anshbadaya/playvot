@@ -7,12 +7,11 @@ import {
   InputBase,
   IconButton,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+// import { useTheme } from "@mui/material/styles"; // Removed unused import
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useNavigate, Link } from "react-router-dom";
-import { themeColors, commonStyles } from '@/config/theme';
-import { sharedStyles } from '@/styles/shared.styles';
+import { themeColors } from '@/config/theme';
 
 interface HeaderProps {
   searchPlaceholder?: string;
@@ -34,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({
   loginPath = "/login"
 }) => {
   const navigate = useNavigate();
-  const theme = useTheme();
+  // const theme = useTheme(); // Removed unused variable
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (onSearch) {

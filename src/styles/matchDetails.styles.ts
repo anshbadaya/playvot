@@ -1,5 +1,5 @@
 import { SxProps, Theme } from '@mui/material';
-import { themeColors, commonStyles } from '@/config/theme';
+import { themeColors } from '@/config/theme';
 import { sharedStyles } from './shared.styles';
 
 // Main container styles
@@ -144,7 +144,7 @@ export const matchWinnerHeaderStyles: SxProps<Theme> = {
   py: 2.5
 };
 
-export const teamRowStyles: SxProps<Theme> = {
+export const matchWinnerTeamRowStyles: SxProps<Theme> = {
   ...sharedStyles.flexBetween,
   p: 2.5,
   bgcolor: 'rgba(15, 23, 42, 0.7)',
@@ -157,13 +157,13 @@ export const teamRowStyles: SxProps<Theme> = {
   }
 };
 
-export const teamAvatarStyles: SxProps<Theme> = {
+export const matchWinnerTeamAvatarStyles: SxProps<Theme> = {
   width: 32,
   height: 32,
   border: `1px solid ${themeColors.primaryBorder}`
 };
 
-export const teamNameStyles: SxProps<Theme> = {
+export const matchWinnerTeamNameStyles: SxProps<Theme> = {
   ...sharedStyles.heading
 };
 
@@ -277,4 +277,344 @@ export const matchDetailsRetryButtonStyles: SxProps<Theme> = {
   '&:hover': {
     bgcolor: '#DC2626'
   }
+}; 
+
+// MatchInfo Styles
+export const matchInfoTeamsContainerStyles: SxProps<Theme> = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  p: 2,
+  bgcolor: 'rgba(15, 23, 42, 0.3)',
+  borderRadius: 1,
+  border: '1px solid rgba(59, 130, 246, 0.2)'
+};
+
+export const matchInfoTeamBoxStyles: SxProps<Theme> = {
+  textAlign: 'center',
+  flex: 1
+};
+
+export const matchInfoTeamAvatarStyles: SxProps<Theme> = {
+  width: 48,
+  height: 48,
+  mx: 'auto',
+  mb: 1
+};
+
+export const matchInfoLiveBadgeStyles: SxProps<Theme> = {
+  mx: 2,
+  px: 2,
+  py: 0.5,
+  bgcolor: 'error.main',
+  borderRadius: 1,
+  alignSelf: 'center'
+};
+
+export const matchInfoSummaryBoxStyles: SxProps<Theme> = {
+  p: 2,
+  bgcolor: 'rgba(15, 23, 42, 0.3)',
+  borderRadius: 1,
+  border: '1px solid rgba(59, 130, 246, 0.2)'
+};
+
+export const matchInfoSummaryTitleStyles: SxProps<Theme> = {
+  mb: 2
+};
+
+export const matchInfoDetailsRowStyles: SxProps<Theme> = {
+  display: 'flex',
+  justifyContent: 'space-between'
+};
+
+export const matchInfoDividerStyles: SxProps<Theme> = {
+  borderColor: 'rgba(59, 130, 246, 0.2)'
+}; 
+
+// MatchTabsNavigation Styles
+export const matchTabsContainerStyles: SxProps<Theme> = {
+  width: '100%',
+  position: 'sticky',
+  top: 0,
+  zIndex: 10,
+  bgcolor: 'rgba(15, 23, 42, 0.95)',
+  backdropFilter: 'blur(12px)',
+  borderBottom: '1px solid rgba(59, 130, 246, 0.1)',
+  py: { xs: 1, sm: 1.5 }
+};
+
+export const matchTabsScrollContainerStyles: SxProps<Theme> = {
+  width: '100%',
+  overflowX: 'auto',
+  WebkitOverflowScrolling: 'touch',
+  msOverflowStyle: 'none',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': { display: 'none' },
+  px: { xs: 1, sm: 2 }
+};
+
+export const matchTabsButtonContainerStyles: SxProps<Theme> = {
+  display: 'flex',
+  minWidth: 'fit-content',
+  gap: { xs: 0.5, sm: 1 },
+  mx: 'auto',
+  width: 'fit-content'
+};
+
+export const matchTabsButtonStyles = (isActive: boolean): SxProps<Theme> => ({
+  minWidth: 'unset',
+  px: { xs: 2, sm: 3 },
+  py: { xs: 1, sm: 1.25 },
+  fontSize: { xs: '0.75rem', sm: '0.8rem' },
+  fontWeight: 600,
+  color: isActive ? '#F8FAFC' : 'rgba(148, 163, 184, 0.7)',
+  bgcolor: isActive ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+  borderRadius: '100px',
+  border: `1px solid ${isActive ? 'rgba(59, 130, 246, 0.3)' : 'transparent'}`,
+  transition: 'all 0.2s ease',
+  '&:hover': {
+    bgcolor: isActive ? 'rgba(59, 130, 246, 0.2)' : 'rgba(30, 41, 59, 0.1)',
+    transform: 'translateY(-1px)'
+  }
+}); 
+
+// WinProbabilityBar Styles
+export const winProbabilityContainerStyles: SxProps<Theme> = {
+  mt: 1
+};
+
+export const winProbabilityCardStyles: SxProps<Theme> = {
+  p: 2,
+  bgcolor: 'rgba(15, 23, 42, 0.3)',
+  borderRadius: 2,
+  border: '1px solid rgba(59, 130, 246, 0.3)'
+};
+
+export const winProbabilityTeamsRowStyles: SxProps<Theme> = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  mb: 1
+};
+
+export const winProbabilityTeamStyles: SxProps<Theme> = {
+  color: '#3B82F6'
+};
+
+export const winProbabilityTeamPercentageStyles: SxProps<Theme> = {
+  ml: 1,
+  color: '#3B82F6',
+  fontWeight: 'bold'
+};
+
+export const winProbabilityDrawStyles: SxProps<Theme> = {
+  color: 'gray'
+};
+
+export const winProbabilityDrawPercentageStyles: SxProps<Theme> = {
+  ml: 1,
+  color: 'gray',
+  fontWeight: 'bold'
+};
+
+export const winProbabilityProgressContainerStyles: SxProps<Theme> = {
+  display: 'flex',
+  height: 6,
+  borderRadius: 3,
+  overflow: 'hidden',
+  bgcolor: 'rgba(15, 23, 42, 0.5)'
+};
+
+export const winProbabilityHomeBarStyles: SxProps<Theme> = {
+  bgcolor: '#3B82F6',
+  height: '100%'
+};
+
+export const winProbabilityDrawBarStyles: SxProps<Theme> = {
+  bgcolor: '#6B7280',
+  height: '100%'
+};
+
+export const winProbabilityAwayBarStyles: SxProps<Theme> = {
+  bgcolor: '#3B82F6',
+  height: '100%'
+}; 
+
+// MatchSummary Styles
+export const matchSummaryContainerStyles: SxProps<Theme> = {
+  mt: 2,
+  p: 2,
+  bgcolor: 'rgba(15, 23, 42, 0.3)',
+  borderRadius: 2,
+  border: '1px solid rgba(59, 130, 246, 0.3)'
+};
+
+export const matchSummaryHeaderStyles: SxProps<Theme> = {
+  mb: 2
+};
+
+export const matchSummarySubtitleStyles: SxProps<Theme> = {
+  mb: 1
+};
+
+export const matchSummaryScoreRowStyles: SxProps<Theme> = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  mb: 1
+};
+
+export const matchSummarySectionStyles: SxProps<Theme> = {
+  mb: 2
+};
+
+export const matchSummarySectionTitleStyles: SxProps<Theme> = {
+  mb: 1,
+  fontWeight: 'bold'
+};
+
+export const matchSummaryStatsGridStyles: SxProps<Theme> = {
+  display: 'grid',
+  gap: { xs: 1, sm: 1.5 },
+  fontSize: '0.875rem',
+  overflow: 'hidden'
+};
+
+export const matchSummaryScrollContainerStyles: SxProps<Theme> = {
+  overflowX: 'auto',
+  WebkitOverflowScrolling: 'touch',
+  width: '100%',
+  '&::-webkit-scrollbar': { height: 4 },
+  '&::-webkit-scrollbar-track': { bgcolor: 'rgba(0,0,0,0.1)' },
+  '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(255,255,255,0.1)', borderRadius: 2 }
+};
+
+export const matchSummaryStatsHeaderStyles: SxProps<Theme> = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(5, 40px)',
+  gap: { xs: 2, sm: 2.5 },
+  justifyContent: 'end',
+  borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
+  pb: 0.5,
+  minWidth: 'min-content'
+};
+
+export const matchSummaryStatsHeaderCellStyles: SxProps<Theme> = {
+  color: 'gray',
+  textAlign: 'right'
+};
+
+export const matchSummaryPlayerRowStyles: SxProps<Theme> = {
+  display: 'grid',
+  gap: 0.5,
+  borderBottom: '1px solid rgba(59, 130, 246, 0.1)',
+  pb: 1
+};
+
+export const matchSummaryPlayerNameStyles = (isSpecial: boolean): SxProps<Theme> => ({
+  fontWeight: isSpecial ? 'bold' : 'normal'
+}); 
+
+// Squads Styles
+export const squadsPlayerRowStyles: SxProps<Theme> = {
+  p: 2,
+  bgcolor: 'rgba(30, 41, 59, 0.3)',
+  borderRadius: 1,
+  border: '1px solid rgba(59, 130, 246, 0.2)',
+  transition: 'all 0.2s ease',
+  '&:hover': {
+    bgcolor: 'rgba(30, 41, 59, 0.5)',
+    border: '1px solid rgba(59, 130, 246, 0.3)',
+    transform: 'translateY(-1px)'
+  }
+};
+
+export const squadsPlayerContentStyles: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 2
+};
+
+export const squadsPlayerAvatarStyles: SxProps<Theme> = {
+  width: 40,
+  height: 40
+};
+
+export const squadsPlayerInfoStyles: SxProps<Theme> = {
+  flex: 1,
+  minWidth: 0
+};
+
+export const squadsPlayerNameStyles: SxProps<Theme> = {
+  fontWeight: 'bold',
+  fontSize: '0.9rem',
+  mb: 0.5
+};
+
+export const squadsPlayerDetailsStyles: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 1,
+  flexWrap: 'wrap'
+};
+
+export const squadsPlayerRoleStyles: SxProps<Theme> = {
+  fontSize: '0.75rem',
+  color: 'rgba(148, 163, 184, 0.8)'
+};
+
+export const squadsPlayerNumberStyles: SxProps<Theme> = {
+  fontSize: '0.75rem',
+  color: 'rgba(59, 130, 246, 0.8)',
+  fontWeight: 'bold'
+};
+
+export const squadsPlayerStatsStyles: SxProps<Theme> = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-end',
+  gap: 0.5
+};
+
+export const squadsPlayerStatItemStyles: SxProps<Theme> = {
+  fontSize: '0.75rem',
+  color: 'rgba(148, 163, 184, 0.8)'
+};
+
+export const squadsTeamSectionStyles: SxProps<Theme> = {
+  mb: 3
+};
+
+export const squadsTeamHeaderStyles: SxProps<Theme> = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 2,
+  mb: 2,
+  p: 2,
+  bgcolor: 'rgba(15, 23, 42, 0.3)',
+  borderRadius: 1,
+  border: '1px solid rgba(59, 130, 246, 0.2)'
+};
+
+export const squadsTeamAvatarStyles: SxProps<Theme> = {
+  width: 48,
+  height: 48
+};
+
+export const squadsTeamInfoStyles: SxProps<Theme> = {
+  flex: 1
+};
+
+export const squadsTeamNameStyles: SxProps<Theme> = {
+  fontWeight: 'bold',
+  fontSize: '1.1rem',
+  mb: 0.5
+};
+
+export const squadsTeamScoreStyles: SxProps<Theme> = {
+  fontSize: '0.9rem',
+  color: 'rgba(148, 163, 184, 0.8)'
+};
+
+export const squadsPlayersGridStyles: SxProps<Theme> = {
+  display: 'grid',
+  gap: 1.5
 }; 

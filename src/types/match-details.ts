@@ -161,3 +161,24 @@ export interface MatchDetailsResponse {
   success: boolean;
   message?: string;
 }
+
+export interface MatchInfoProps {
+  data: MatchData;
+}
+
+export interface MatchTabsNavigationProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+export interface WinProbabilityBarProps {
+  data: MatchData;
+}
+
+export interface MatchSummaryProps {
+  data: MatchData;
+}
+
+export interface SquadsProps {
+  data: MatchData;
+}

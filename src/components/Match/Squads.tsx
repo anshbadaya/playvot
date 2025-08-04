@@ -12,20 +12,19 @@ import {
 } from "@mui/material";
 import { themeColors, commonStyles } from '@/config/theme';
 import PersonIcon from '@mui/icons-material/Person';
-
-interface Team {
-  name: string;
-  logo: string;
-  score: number;
-  stats: {
-    possession: number;
-    shots: number;
-    shotsOnTarget: number;
-    corners: number;
-    fouls: number;
-    wickets?: number;
-  };
-}
+import { SquadsProps } from '@/types/match-details';
+import {
+  squadsPlayerRowStyles,
+  squadsPlayerContentStyles,
+  squadsPlayerAvatarStyles,
+  squadsPlayerInfoStyles,
+  squadsPlayerNameStyles,
+  squadsPlayerDetailsStyles,
+  squadsPlayerRoleStyles,
+  squadsPlayerNumberStyles,
+  squadsPlayerStatsStyles,
+  squadsPlayerStatItemStyles
+} from '@/styles/matchDetails.styles';
 
 interface Player {
   name: string;
@@ -53,17 +52,6 @@ interface Player {
   };
 }
 
-interface MatchData {
-  teams: {
-    home: Team;
-    away: Team;
-  };
-  players: {
-    home: Player[];
-    away: Player[];
-  };
-}
-
 const PlayerRow: React.FC<{ player: Player; isRight?: boolean }> = ({ player, isRight = false }) => {
   const getPlayerTitle = () => {
     let title = player.role;
@@ -78,100 +66,78 @@ const PlayerRow: React.FC<{ player: Player; isRight?: boolean }> = ({ player, is
   };
 
   return (
-    <Box 
-      sx={{ 
-        p: 2, 
-        bgcolor: alpha(themeColors.secondary, 0.3),
-        borderRadius: 1,
-        border: `1px solid ${themeColors.border}`,
-        transition: 'all 0.2s ease',
-        '&:hover': {
-          bgcolor: alpha(themeColors.secondary, 0.5),
-          border: `1px solid ${alpha(themeColors.primary, 0.3)}`,
-          transform: 'translateY(-1px)'
-        }
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+    <Box sx={squadsPlayerRowStyles}>
+      <Box sx={squadsPlayerContentStyles}>
         <Avatar 
           src={player.avatar} 
           alt={player.name}
-          sx={{ 
-            width: 40, 
-            height: 40,
-            border: `2px solid ${themeColors.border}`,
-            bgcolor: alpha(themeColors.primary, 0.2)
-          }}
+          sx={squadsPlayerAvatarStyles}
         >
-          <PersonIcon sx={{ color: themeColors.text.secondary }} />
+          <PersonIcon />
         </Avatar>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-            <Typography variant="body2" sx={{ 
-              color: themeColors.text.primary,
-              fontWeight: 600
-            }}>
-              {player.name}
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {player.isCaptain && (
-                <Chip 
-                  label="C" 
-                  size="small" 
-                  sx={{ 
-                    bgcolor: alpha(themeColors.warning, 0.2),
-                    color: themeColors.warning,
-                    fontSize: '0.6rem',
-                    height: 18,
-                    minWidth: 18
-                  }} 
-                />
-              )}
-              {player.isWicketKeeper && (
-                <Chip 
-                  label="WK" 
-                  size="small" 
-                  sx={{ 
-                    bgcolor: alpha(themeColors.success, 0.2),
-                    color: themeColors.success,
-                    fontSize: '0.6rem',
-                    height: 18,
-                    minWidth: 18
-                  }} 
-                />
-              )}
-            </Box>
-          </Box>
-          <Typography variant="caption" sx={{ 
-            color: themeColors.text.secondary,
-            display: 'block',
-            mb: 0.5
-          }}>
-            {player.position} • {getPlayerTitle()}
+        
+        <Box sx={squadsPlayerInfoStyles}>
+          <Typography sx={squadsPlayerNameStyles}>
+            {player.name}
           </Typography>
-          {player.stats && (
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              {player.stats.runs !== undefined && (
-                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
-                  Runs: {player.stats.runs}
-                </Typography>
-              )}
-              {player.stats.wickets !== undefined && (
-                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
-                  Wickets: {player.stats.wickets}
-                </Typography>
-              )}
-              {player.stats.strikeRate !== undefined && (
-                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
-                  SR: {player.stats.strikeRate}
-                </Typography>
-              )}
-              {player.stats.economy !== undefined && (
-                <Typography variant="caption" sx={{ color: themeColors.text.secondary }}>
-                  ECO: {player.stats.economy}
-                </Typography>
-              )}
-            </Box>
+          
+          <Box sx={squadsPlayerDetailsStyles}>
+            <Typography sx={squadsPlayerRoleStyles}>
+              {getPlayerTitle()}
+            </Typography>
+            <Typography sx={squadsPlayerNumberStyles}>
+              #{player.number}
+            </Typography>
+            
+            {/* Role badges */}
+            {player.isCaptain && (
+              <Chip 
+                label="C" 
+                size="small" 
+                sx={{ 
+                  height: 16, 
+                  fontSize: '0.6rem',
+                  bgcolor: 'rgba(59, 130, 246, 0.2)',
+                  color: 'rgba(59, 130, 246, 0.8)'
+                }} 
+              />
+            )}
+            {player.isWicketKeeper && (
+              <Chip 
+                label="WK" 
+                size="small" 
+                sx={{ 
+                  height: 16, 
+                  fontSize: '0.6rem',
+                  bgcolor: 'rgba(16, 185, 129, 0.2)',
+                  color: 'rgba(16, 185, 129, 0.8)'
+                }} 
+              />
+            )}
+          </Box>
+        </Box>
+        
+        {/* Player Stats */}
+        <Box sx={squadsPlayerStatsStyles}>
+          {player.stats?.runs !== undefined && (
+            <Typography sx={squadsPlayerStatItemStyles}>
+              {player.stats.runs} runs
+            </Typography>
+          )}
+          {player.stats?.wickets !== undefined && (
+            <Typography sx={squadsPlayerStatItemStyles}>
+              {player.stats.wickets} wkts
+            </Typography>
+          )}
+          {player.stats?.goals !== undefined && (
+            <Typography sx={squadsPlayerStatItemStyles}>
+              {player.stats.goals} goals
+            </Typography>
+          )}
+          {player.stats?.rating !== undefined && (
+            <Typography sx={squadsPlayerStatItemStyles}>
+              {player.stats.rating.toFixed(1)} rating
+            </Typography>
           )}
         </Box>
       </Box>
@@ -179,7 +145,7 @@ const PlayerRow: React.FC<{ player: Player; isRight?: boolean }> = ({ player, is
   );
 };
 
-const Squads: React.FC<{ data: MatchData }> = ({ data }) => {
+const Squads: React.FC<SquadsProps> = ({ data }) => {
   const homeTeam = data.teams.home;
   const awayTeam = data.teams.away;
   const homePlayers = data.players.home;

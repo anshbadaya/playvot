@@ -119,3 +119,73 @@ export const emptyStateSubtextStyles: SxProps<Theme> = {
   color: themeColors.text.disabled,
   fontSize: '0.875rem'
 }; 
+
+// MatchCard Styles
+export const matchCardContainerStyles: SxProps<Theme> = {
+  position: 'relative',
+  width: '100%',
+  cursor: 'pointer',
+  '&:hover': {
+    '& .card-content': {
+      transform: 'translateY(-2px)',
+      boxShadow: `0 4px 20px ${themeColors.primaryLight}`,
+    },
+    '& .shine': {
+      opacity: 1,
+    }
+  }
+};
+
+export const matchCardShineStyles: SxProps<Theme> = {
+  position: 'absolute',
+  inset: 0,
+  padding: '1px',
+  borderRadius: '12px',
+  background: `linear-gradient(120deg, ${themeColors.primaryLight}, rgba(0, 89, 255, 0.1) 25%, transparent 45%, transparent 55%, rgba(0, 89, 255, 0.1) 75%, ${themeColors.primaryLight})`,
+  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+  WebkitMaskComposite: 'xor',
+  maskComposite: 'exclude',
+  opacity: 0.8,
+  transition: 'opacity 0.3s ease'
+};
+
+export const matchCardStyles: SxProps<Theme> = {
+  width: '100%',
+  background: `linear-gradient(180deg, ${themeColors.primaryLight} 0%, rgba(0, 89, 255, 0.02) 100%)`,
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+  position: 'relative'
+};
+
+export const matchCardContentStyles: SxProps<Theme> = {
+  p: '16px !important'
+};
+
+export const matchTypeStyles: SxProps<Theme> = {
+  fontSize: '13px',
+  fontWeight: 500,
+  mb: 0.5,
+  textTransform: 'uppercase'
+};
+
+export const matchTitleStyles: SxProps<Theme> = {
+  fontSize: '14px',
+  lineHeight: 1.4,
+  mb: 2
+};
+
+export const teamsSectionStyles: SxProps<Theme> = {
+  mb: 2
+};
+
+export const teamRowStyles: SxProps<Theme> = {
+  mb: 1.5
+};
+
+export const teamNameStyles: SxProps<Theme> = {
+  fontSize: '15px',
+  letterSpacing: '0.5px'
+};
+
+export const matchStatusStyles: SxProps<Theme> = {
+  fontSize: '13px'
+}; 

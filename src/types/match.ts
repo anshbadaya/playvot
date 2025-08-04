@@ -6,6 +6,14 @@ export interface Team {
   points?: number;
 }
 
+export interface TeamInfo {
+  name: string;
+  score?: string;
+  overs?: string;  // For cricket matches (e.g., "20" or "19.2")
+  goals?: number;   // For football matches
+  points?: number;  // For kabaddi matches
+}
+
 export interface Match {
   id: string;
   matchType: string;
@@ -19,6 +27,17 @@ export interface Match {
   venue?: string;
   dateTime?: string;
   league?: string;
+}
+
+export interface MatchCardProps {
+  matchType: string;      // e.g., "IPL", "PKL", "ISL"
+  matchTitle: string;     // e.g., "Mumbai Indians vs Chennai Super Kings"
+  team1: TeamInfo;
+  team2: TeamInfo;
+  status: string;        // e.g., "CSK won by 8 wickets", "Match in progress", "Today, 7:30 PM"
+  isLive?: boolean;
+  sportType: 'cricket' | 'football' | 'kabaddi' | 'volleyball';
+  slug: string; // Add slug prop for navigation
 }
 
 export interface MatchesByType {

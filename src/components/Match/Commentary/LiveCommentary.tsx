@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import MessageIcon from '@mui/icons-material/Message';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { MatchData } from '../../types/match-details';
+import { MatchData } from '../../../types/match-details';
 import { themeColors, commonStyles } from '@/config/theme';
 
 interface OverData {

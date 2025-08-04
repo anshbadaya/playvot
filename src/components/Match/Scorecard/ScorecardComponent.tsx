@@ -20,104 +20,11 @@ import CricketIcon from '@mui/icons-material/SportsCricket';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-
-interface BattingRow {
-  batter: string;
-  dismissalInfo: string;
-  runs: number;
-  balls: number;
-  fours: number;
-  sixes: number;
-  strikeRate: string;
-}
-
-interface BowlingRow {
-  bowler: string;
-  overs: string;
-  maidens: number;
-  runs: number;
-  wickets: number;
-  economy: string;
-}
-
-interface ActivePlayer {
-  name: string;
-  runs?: number;
-  balls?: number;
-  strikeRate?: number;
-  overs?: string;
-  wickets?: number;
-  economy?: number;
-  isStriker?: boolean;
-}
-
-interface InningsProps {
-  teamName: string;
-  score: string;
-  battingRows: BattingRow[];
-  extras: string;
-  total: string;
-  yetToBat: string[];
-  fallOfWickets: string;
-  bowlingRows: BowlingRow[];
-  currentPartnership?: string;
-  currentBatters?: ActivePlayer[];
-  currentBowler?: ActivePlayer;
-}
-
-interface MatchInfoProps {
-  venue: string;
-  time: string;
-  toss: string;
-  series: string;
-  points: string;
-}
-
-interface Player {
-  name: string;
-  number: number;
-  position: string;
-  role: string;
-  isWicketKeeper?: boolean;
-  isCaptain?: boolean;
-  avatar?: string;
-  stats?: {
-    runs?: number;
-    balls?: number;
-    fours?: number;
-    sixes?: number;
-    strikeRate?: number;
-    overs?: string;
-    maidens?: number;
-    wickets?: number;
-    economy?: number;
-  };
-}
-
-interface SquadsProps {
-  home: {
-    name: string;
-    players: Player[];
-  };
-  away: {
-    name: string;
-    players: Player[];
-  };
-}
-
-interface ScorecardProps {
-  innings: InningsProps[];
-  matchInfo: MatchInfoProps;
-  commentary?: Commentary[];
-  squads?: SquadsProps;
-}
-
-interface Commentary {
-  time: string;
-  text: string;
-  type: 'wicket' | 'boundary' | 'over' | 'normal';
-  team: 'home' | 'away';
-}
+import { 
+  InningsProps, 
+  SquadsProps, 
+  ScorecardProps
+} from './types';
 
 // Sample dummy data for squads
 const dummySquads: SquadsProps = {

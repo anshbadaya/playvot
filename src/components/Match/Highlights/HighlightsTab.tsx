@@ -8,7 +8,7 @@ import {
   Stack,
   List,
 } from "@mui/material";
-import { MatchData } from '../../types/match-details';
+import { MatchData } from '../../../types/match-details';
 import { commonStyles } from '@/config/theme';
 
 interface Highlight {

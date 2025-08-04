@@ -1,6 +1,6 @@
 // pages/Matches.tsx
 import React from "react";
-import Layout from "@/components/Layout";
+import { Layout } from "@/components/Layout";
 import MatchCard from "@/components/Match/MatchCard";
 import { 
   Box, 

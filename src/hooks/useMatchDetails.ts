@@ -75,7 +75,7 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
         }));
       }
     } catch (error) {
-      console.error('Error fetching commentary updates:', error);
+      // console.error('Error fetching commentary updates:', error);
     }
   }, [matchId, state.matchData]);
 
@@ -93,7 +93,7 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
         } : null
       }));
     } catch (error) {
-      console.error('Error fetching odds updates:', error);
+      // console.error('Error fetching odds updates:', error);
     }
   }, [matchId, state.matchData]);
 
@@ -111,7 +111,7 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
         } : null
       }));
     } catch (error) {
-      console.error('Error fetching probability updates:', error);
+      // console.error('Error fetching probability updates:', error);
     }
   }, [matchId, state.matchData]);
 
