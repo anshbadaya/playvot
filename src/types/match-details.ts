@@ -158,7 +158,7 @@ export interface BettingSection {
 
 export interface MatchDetailsResponse {
   data: MatchData;
-  scorecard: ScorecardData;
+  scorecard?: ScorecardData;
   success: boolean;
   message?: string;
 }

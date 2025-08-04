@@ -1,27 +1,6 @@
-// Application Constants
-export const APP_CONFIG = {
-  name: 'PlayVot',
-  version: '1.0.0',
-  apiBaseUrl: process.env.REACT_APP_API_BASE_URL || 'https://api.playvot.com',
-  defaultLocale: 'en',
-  supportedLocales: ['en', 'hi', 'bn', 'ta', 'te', 'ml', 'kn', 'gu', 'pa', 'or'],
-} as const;
-
-// Sport Types
-export const SPORT_TYPES = {
-  CRICKET: 'cricket',
-  FOOTBALL: 'football',
-  KABADDI: 'kabaddi',
-  VOLLEYBALL: 'volleyball',
-} as const;
-
-// Match Status
-export const MATCH_STATUS = {
-  UPCOMING: 'upcoming',
-  LIVE: 'live',
-  COMPLETED: 'completed',
-  CANCELLED: 'cancelled',
-} as const;
+// Re-export from organized constant files
+export * from './constants/app';
+export * from './constants/sports';
 
 // API Endpoints
 export const API_ENDPOINTS = {

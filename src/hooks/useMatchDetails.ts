@@ -4,7 +4,7 @@ import { fetchMatchDetails, fetchLiveCommentary, fetchBettingOdds, fetchWinProba
 
 interface UseMatchDetailsState {
   matchData: MatchData | null;
-  scorecardData: ScorecardData | null;
+  scorecardData: ScorecardData | undefined;
   loading: boolean;
   error: string | null;
 }
@@ -25,7 +25,7 @@ interface UseMatchDetailsReturn extends UseMatchDetailsState {
 export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
   const [state, setState] = useState<UseMatchDetailsState>({
     matchData: null,
-    scorecardData: null,
+    scorecardData: undefined,
     loading: false,
     error: null
   });
@@ -39,7 +39,7 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
       if (response.success) {
         setState({
           matchData: response.data,
-          scorecardData: response.scorecard,
+          scorecardData: response.scorecard || undefined,
           loading: false,
           error: null
         });

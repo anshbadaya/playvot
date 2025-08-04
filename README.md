@@ -1,260 +1,277 @@
-# PlayVot - Sports Betting Platform
+# PlayVot - Sports Betting & Match Tracking Platform
 
-A modern, responsive sports betting platform built with React, TypeScript, and Material-UI.
+A modern, responsive React application for sports betting and match tracking with real-time updates and comprehensive match details.
 
 ## 🚀 Features
 
 - **Multi-Sport Support**: Cricket, Football, Kabaddi, Volleyball
-- **Live Match Updates**: Real-time commentary and score updates
+- **Real-time Match Updates**: Live scores, commentary, and statistics
 - **Betting Interface**: Comprehensive odds and betting options
-- **Responsive Design**: Optimized for all device sizes
-- **Dark Theme**: Modern dark UI with consistent styling
+- **Responsive Design**: Mobile-first approach with Material-UI
+- **TypeScript**: Full type safety and better development experience
+- **Error Handling**: Robust error boundaries and fallback UI
+- **Performance Optimized**: Efficient rendering and data management
 
 ## 🏗️ Project Structure
 
 ```
 src/
-├── components/          # React components
-│   ├── Auth/           # Authentication components
-│   ├── Match/          # Match-related components
-│   ├── Shared/         # Shared/common components
-│   └── ui/             # UI components
-├── config/             # Configuration files
-│   ├── theme.tsx       # Material-UI theme configuration
-│   └── config.tsx      # App configuration
-├── data/               # Static data and mock data
-├── hooks/              # Custom React hooks
-├── pages/              # Page components
-├── services/           # API services
-├── styles/             # Styling files
-├── types/              # TypeScript type definitions
-└── utils/              # Utility functions and constants
+├── components/           # Reusable UI components
+│   ├── Auth/            # Authentication components
+│   ├── ErrorBoundary/   # Error handling components
+│   ├── Layout/          # Layout and navigation components
+│   ├── Match/           # Match-related components
+│   │   ├── Commentary/  # Live commentary components
+│   │   ├── Highlights/  # Match highlights components
+│   │   ├── MatchDetails/# Match details page components
+│   │   └── Scorecard/   # Scorecard components
+│   ├── Shared/          # Shared/common components
+│   └── UI/              # Basic UI components
+├── config/              # Configuration files
+│   ├── theme.tsx        # Material-UI theme configuration
+│   └── styledTheme.ts   # Styled-components theme
+├── data/                # Mock data and static data
+├── hooks/               # Custom React hooks
+├── pages/               # Page components
+├── services/            # API services and data fetching
+├── styles/              # Styled components and CSS
+├── types/               # TypeScript type definitions
+├── utils/               # Utility functions
+│   ├── constants/       # Application constants
+│   ├── formatters.ts    # Data formatting utilities
+│   ├── validators.ts    # Validation utilities
+│   ├── storage.ts       # Local storage utilities
+│   └── performance.ts   # Performance optimization utilities
+└── App.tsx              # Main application component
 ```
 
-## 🎨 Design System
+## 🛠️ Technology Stack
 
-### Theme Configuration
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Type-safe development
+- **Material-UI (MUI)** - Component library
+- **Styled Components** - CSS-in-JS styling
+- **React Router** - Client-side routing
+- **Swiper** - Touch slider for mobile
+- **CRACO** - Create React App Configuration Override
 
-The application uses a centralized theme system located in `src/config/theme.tsx`:
+## 📦 Installation
 
-- **Colors**: Consistent color palette with primary, secondary, and semantic colors
-- **Typography**: Standardized font weights and sizes
-- **Spacing**: Consistent spacing scale
-- **Components**: Pre-configured Material-UI component styles
+1. **Clone the repository**
 
-### Styling Patterns
+   ```bash
+   git clone <repository-url>
+   cd playvot
+   ```
 
-#### 1. Shared Styles (`src/styles/shared.styles.ts`)
+2. **Install dependencies**
 
-Common styling patterns used across components:
+   ```bash
+   npm install
+   ```
 
-- Layout patterns (containers, grids, flex layouts)
-- Card patterns with consistent hover effects
-- Button patterns (primary, secondary)
-- Text patterns (headings, body text, captions)
-- Status patterns (success, warning, error, info)
-- Loading, error, and empty state patterns
+3. **Start development server**
 
-#### 2. Component-Specific Styles
+   ```bash
+   npm start
+   ```
 
-Each major feature has its own style file:
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-- `src/styles/matches.styles.ts` - Matches page styles
-- `src/styles/matchDetails.styles.ts` - Match details page styles
+## 🔧 Configuration
 
-#### 3. Global Styles (`src/styles/globals.css`)
+### Environment Variables
 
-CSS custom properties and utility classes for consistent theming.
+Create a `.env` file in the root directory:
 
-### Usage Examples
-
-```typescript
-// Using shared styles
-import { sharedStyles } from "@/styles/shared.styles";
-
-const MyComponent = () => (
-  <Box sx={sharedStyles.card}>
-    <Typography sx={sharedStyles.heading}>Title</Typography>
-    <Button sx={sharedStyles.primaryButton}>Click me</Button>
-  </Box>
-);
-
-// Using theme colors
-import { themeColors } from "@/config/theme";
-
-const StyledBox = styled(Box)({
-  backgroundColor: themeColors.surface,
-  color: themeColors.text.primary,
-  border: `1px solid ${themeColors.border}`,
-});
+```env
+REACT_APP_API_BASE_URL=https://api.playvot.com
+REACT_APP_ENVIRONMENT=development
 ```
 
-## 📝 Coding Standards
+### TypeScript Configuration
 
-### 1. Import Organization
+The project uses strict TypeScript configuration with:
 
-Imports should be organized in the following order:
+- Path mapping for clean imports (`@/*`)
+- Strict type checking
+- Modern ES features
 
-1. React and external libraries
-2. Material-UI components
-3. Internal components (using barrel exports)
-4. Hooks and utilities
-5. Types
-6. Styles
+### ESLint Configuration
 
-```typescript
-import React from "react";
-import { Box, Typography } from "@mui/material";
-import { Layout, MatchCard } from "@/components";
-import { useMatches } from "@/hooks";
-import { Match } from "@/types";
-import { matchesStyles } from "@/styles";
+Comprehensive ESLint setup with:
+
+- TypeScript support
+- Import ordering
+- React best practices
+- Code quality rules
+
+## 🎨 Styling
+
+The application uses a hybrid approach:
+
+- **Material-UI**: For component library and theming
+- **Styled Components**: For custom styling and animations
+- **CSS Modules**: For component-specific styles
+
+### Theme System
+
+Centralized theme configuration in `src/config/theme.tsx` with:
+
+- Dark mode support
+- Consistent color palette
+- Typography system
+- Component overrides
+
+## 📱 Component Architecture
+
+### Component Organization
+
+Components are organized by feature and responsibility:
+
+1. **Page Components** (`src/pages/`): Main route components
+2. **Feature Components** (`src/components/Match/`): Feature-specific components
+3. **Shared Components** (`src/components/Shared/`): Reusable across features
+4. **UI Components** (`src/components/UI/`): Basic building blocks
+
+### Component Patterns
+
+- **Functional Components**: With TypeScript interfaces
+- **Custom Hooks**: For logic reuse and state management
+- **Error Boundaries**: For graceful error handling
+- **Loading States**: Consistent loading UI patterns
+
+## 🔄 State Management
+
+### Custom Hooks
+
+- `useMatches()`: Match data management
+- `useMatchDetails()`: Match details data management
+- Error handling and retry logic built-in
+
+### Data Flow
+
+1. **Services Layer**: API calls and data transformation
+2. **Hooks Layer**: State management and business logic
+3. **Component Layer**: UI rendering and user interactions
+
+## 🚨 Error Handling
+
+### Error Boundaries
+
+- Global error boundary in `App.tsx`
+- Feature-specific error boundaries
+- Graceful fallback UI
+- Development error details
+
+### Error Patterns
+
+- Loading states for async operations
+- Retry mechanisms for failed requests
+- User-friendly error messages
+- Console logging in development
+
+## 📊 Performance Optimizations
+
+### Code Splitting
+
+- Route-based code splitting
+- Component lazy loading
+- Dynamic imports for heavy components
+
+### Rendering Optimizations
+
+- React.memo for expensive components
+- useMemo and useCallback for expensive calculations
+- Efficient re-rendering patterns
+
+### Bundle Optimization
+
+- Tree shaking for unused code
+- Optimized imports
+- Efficient dependency management
+
+## 🧪 Testing
+
+### Test Structure
+
+```
+src/
+├── __tests__/           # Test files
+├── components/          # Component tests
+└── utils/              # Utility tests
 ```
 
-### 2. Component Structure
+### Testing Tools
 
-Components should follow this structure:
+- Jest for unit testing
+- React Testing Library for component testing
+- TypeScript support in tests
 
-1. Imports
-2. Type definitions
-3. Component definition
-4. Export
+## 📈 Code Quality
 
-```typescript
-import React from "react";
-import { Box } from "@mui/material";
-import { themeColors } from "@/config/theme";
+### Linting
 
-interface ComponentProps {
-  title: string;
-  children: React.ReactNode;
-}
+- ESLint with TypeScript support
+- Import ordering and organization
+- Code style consistency
+- Best practices enforcement
 
-const Component: React.FC<ComponentProps> = ({ title, children }) => {
-  return (
-    <Box sx={{ color: themeColors.text.primary }}>
-      <h1>{title}</h1>
-      {children}
-    </Box>
-  );
-};
+### Type Safety
 
-export default Component;
-```
+- Strict TypeScript configuration
+- Comprehensive type definitions
+- Interface-first development
+- Type guards for runtime safety
 
-### 3. Styling Guidelines
+## 🚀 Deployment
 
-- Use Material-UI's `sx` prop for component-specific styles
-- Use shared styles for common patterns
-- Use theme colors and constants for consistency
-- Prefer responsive design with breakpoint objects
+### Build Process
 
-```typescript
-// Good
-<Box sx={{
-  ...sharedStyles.card,
-  padding: { xs: 2, sm: 3, md: 4 },
-  color: themeColors.text.primary
-}}>
+1. **Type checking**: `npm run type-check`
+2. **Linting**: `npm run lint`
+3. **Testing**: `npm test`
+4. **Building**: `npm run build`
 
-// Avoid inline styles
-<Box style={{ padding: '16px', color: '#FFFFFF' }}>
-```
+### Deployment Options
 
-### 4. Type Safety
-
-- Use TypeScript interfaces for all props
-- Export types from barrel files
-- Use strict typing for API responses
-
-```typescript
-// Define interfaces
-interface MatchData {
-  id: string;
-  title: string;
-  status: "live" | "upcoming" | "completed";
-}
-
-// Use in components
-const MatchComponent: React.FC<{ match: MatchData }> = ({ match }) => {
-  // Component logic
-};
-```
-
-### 5. Utility Functions
-
-Use the centralized utility functions from `src/utils/`:
-
-- `formatScore()` - Format scores based on sport type
-- `formatDate()` - Format dates consistently
-- `isLiveMatch()` - Type guards for match status
-- `debounce()` - Performance optimization
-
-## 🔧 Development
-
-### Prerequisites
-
-- Node.js 16+
-- npm or yarn
-
-### Installation
-
-```bash
-npm install
-```
-
-### Development Server
-
-```bash
-npm start
-```
-
-### Build
-
-```bash
-npm run build
-```
-
-### Testing
-
-```bash
-npm test
-```
-
-## 📦 Dependencies
-
-### Core
-
-- React 19.1.0
-- TypeScript 4.9.5
-- Material-UI 7.2.0
-- React Router DOM 6.30.1
-
-### Development
-
-- CRACO 7.1.0
-- ESLint
-- Prettier
-
-## 🎯 Best Practices
-
-1. **Consistency**: Always use shared styles and theme constants
-2. **Performance**: Use React.memo for expensive components
-3. **Accessibility**: Include proper ARIA labels and keyboard navigation
-4. **Responsive**: Design for mobile-first approach
-5. **Error Handling**: Implement proper error boundaries and loading states
-6. **Type Safety**: Use strict TypeScript configuration
-7. **Code Organization**: Follow the established folder structure
-8. **Naming**: Use descriptive names for components, functions, and variables
+- **Static hosting**: Netlify, Vercel, GitHub Pages
+- **CDN**: For global performance
+- **Environment-specific builds**
 
 ## 🤝 Contributing
 
-1. Follow the established coding standards
-2. Use the shared styling patterns
-3. Write TypeScript interfaces for all new components
-4. Update documentation for new features
-5. Test on multiple device sizes
+### Development Workflow
+
+1. **Feature branches**: Create from `main`
+2. **Type safety**: Ensure all code is properly typed
+3. **Testing**: Add tests for new features
+4. **Documentation**: Update docs for API changes
+5. **Code review**: Submit pull requests for review
+
+### Code Standards
+
+- Follow TypeScript best practices
+- Use functional components with hooks
+- Maintain consistent naming conventions
+- Write self-documenting code
+- Add JSDoc comments for complex functions
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For support and questions:
+
+- Create an issue in the repository
+- Check the documentation
+- Review the code examples
+
+---
+
+**Built with ❤️ using modern React and TypeScript**

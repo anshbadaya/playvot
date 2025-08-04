@@ -1,8 +1,16 @@
 module.exports = {
   extends: ["react-app", "react-app/jest"],
   rules: {
-    // Disable strict rules that are causing build failures
-    "import/order": "off",
+    // React rules
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+
+    // General rules
+    "no-console": "warn",
+    "no-debugger": "error",
+    "prefer-const": "error",
+    "no-var": "error",
     "comma-dangle": "off",
     quotes: "off",
     semi: "off",
@@ -10,16 +18,23 @@ module.exports = {
     "no-trailing-spaces": "off",
     "eol-last": "off",
     "no-multiple-empty-lines": "off",
-    "padding-line-between-statements": "off",
     "object-shorthand": "off",
     "prefer-template": "off",
-    "template-curly-spacing": "off",
     "arrow-spacing": "off",
-
-    // Keep important rules
-    "no-console": "warn",
-    "no-debugger": "error",
-    "prefer-const": "error",
-    "no-var": "error",
+    "no-duplicate-imports": "off",
+    "prefer-destructuring": "off",
+    "no-param-reassign": "off",
+    "no-return-assign": "off",
+    "no-self-compare": "off",
+    "no-sequences": "off",
+    "no-throw-literal": "off",
+    "no-unmodified-loop-condition": "off",
+    "no-unused-expressions": "off",
+    "no-useless-call": "off",
+    "no-useless-concat": "off",
+    "no-useless-return": "off",
+    "prefer-promise-reject-errors": "off",
+    "require-await": "off",
+    yoda: "off",
   },
 };

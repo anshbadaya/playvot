@@ -28,7 +28,7 @@ export const fetchMatchDetails = async (matchId: string): Promise<MatchDetailsRe
     // console.error('Error fetching match details:', error);
     return {
       data: {} as MatchData,
-      scorecard: {} as ScorecardData,
+      scorecard: undefined,
       success: false,
       message: 'Failed to fetch match details'
     };
@@ -58,20 +58,20 @@ export const fetchMatchData = async (matchId: string): Promise<MatchData> => {
 /**
  * Fetch scorecard data only
  * @param matchId - The unique identifier for the match
- * @returns Promise<ScorecardData>
+ * @returns Promise<ScorecardData | undefined>
  */
-export const fetchScorecardData = async (matchId: string): Promise<ScorecardData> => {
+export const fetchScorecardData = async (matchId: string): Promise<ScorecardData | undefined> => {
   try {
     const response = await fetchMatchDetails(matchId);
     
-    if (response.success) {
+    if (response.success && response.scorecard) {
       return response.scorecard;
     } else {
-      throw new Error(response.message || 'Failed to fetch scorecard data');
+      return undefined;
     }
   } catch (error) {
     // console.error('Error fetching scorecard data:', error);
-    throw error;
+    return undefined;
   }
 };
 
