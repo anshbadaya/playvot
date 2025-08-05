@@ -1,543 +1,114 @@
 import { MatchesByType } from '@/types/match';
 
 export const dummyMatchesData: MatchesByType = {
-  cricket: [
+  cricket: [],
+  kabaddi: [],
+  football: [],
+  volleyball: [],
+  boxing: [
     {
-      id: 'cricket-1',
-      matchType: "IPL",
-      matchTitle: "Mumbai Indians vs Chennai Super Kings",
-      team1: { name: "MI", score: "186/4", overs: "20" },
-      team2: { name: "CSK", score: "189/2", overs: "19.2" },
-      status: "CSK won by 8 wickets",
-      sportType: "cricket",
-      slug: "mi-vs-csk-2024",
-      venue: "Wankhede Stadium",
-      dateTime: "2024-03-15T19:30:00Z",
-      league: "Indian Premier League"
+      card: "MAIN CARD",
+      fixture_no: 1,
+      match_date: "2025-08-05",
+      matches: [
+        {
+          match_no: 1,
+          player_a: {
+            code: 1091,
+            name: "Ashish Mehta",
+            team: "MUMBAI MUSCLE"
+          },
+          player_b: {
+            code: 1002,
+            name: "Akash Handique",
+            team: "MP HATHODAS"
+          },
+          pre_match_odds: {
+            a: 1.61,
+            b: 2.33
+          },
+          weight_category: "60 KG MEN"
+        },
+        {
+          match_no: 2,
+          player_a: {
+            code: 1093,
+            name: "Vijay Kumar",
+            team: "DELHI DYNAMOS"
+          },
+          player_b: {
+            code: 1004,
+            name: "Rahul Singh",
+            team: "PUNJAB PANTHERS"
+          },
+          pre_match_odds: {
+            a: 1.85,
+            b: 1.95
+          },
+          weight_category: "65 KG MEN"
+        }
+      ]
     },
     {
-      id: 'cricket-2',
-      matchType: "Ranji Trophy",
-      matchTitle: "Mumbai vs Karnataka",
-      team1: { name: "MUM", score: "324/6", overs: "90" },
-      team2: { name: "KAR", score: "156/3", overs: "45" },
-      status: "Day 2 - Karnataka trail by 168 runs",
-      sportType: "cricket",
-      slug: "mum-vs-kar-2024",
-      venue: "Brabourne Stadium",
-      dateTime: "2024-03-14T09:00:00Z",
-      league: "Ranji Trophy"
-    },
-    {
-      id: 'cricket-3',
-      matchType: "IPL",
-      matchTitle: "Royal Challengers vs Rajasthan Royals",
-      team1: { name: "RCB", score: "192/4", overs: "20" },
-      team2: { name: "RR", score: "156/8", overs: "20" },
-      status: "RCB won by 36 runs",
-      sportType: "cricket",
-      slug: "rcb-vs-rr-2024",
-      venue: "Chinnaswamy Stadium",
-      dateTime: "2024-03-13T19:30:00Z",
-      league: "Indian Premier League"
-    },
-    {
-      id: 'cricket-4',
-      matchType: "IPL",
-      matchTitle: "Gujarat Titans vs Punjab Kings",
-      team1: { name: "GT", score: "175/6", overs: "20" },
-      team2: { name: "PBKS", score: "0/0", overs: "0" },
-      status: "Match starts at 7:30 PM",
-      sportType: "cricket",
-      slug: "gt-vs-pbks-2024",
-      isLive: true,
-      venue: "Narendra Modi Stadium",
-      dateTime: "2024-03-16T19:30:00Z",
-      league: "Indian Premier League"
-    },
-    {
-      id: 'cricket-5',
-      matchType: "Test",
-      matchTitle: "India vs England",
-      team1: { name: "IND", score: "416/8", overs: "112" },
-      team2: { name: "ENG", score: "0/0", overs: "0" },
-      status: "Day 2 - Session 1",
-      sportType: "cricket",
-      slug: "ind-vs-eng-2024",
-      isLive: true,
-      venue: "Lord's Cricket Ground",
-      dateTime: "2024-03-15T10:00:00Z",
-      league: "Test Series"
-    },
-    {
-      id: 'cricket-6',
-      matchType: "IPL",
-      matchTitle: "Delhi Capitals vs Sunrisers Hyderabad",
-      team1: { name: "DC", score: "167/8", overs: "20" },
-      team2: { name: "SRH", score: "171/4", overs: "19.1" },
-      status: "SRH won by 6 wickets",
-      sportType: "cricket",
-      slug: "dc-vs-srh-2024",
-      venue: "Arun Jaitley Stadium",
-      dateTime: "2024-03-12T19:30:00Z",
-      league: "Indian Premier League"
-    },
-    {
-      id: 'cricket-7',
-      matchType: "IPL",
-      matchTitle: "Kolkata Knight Riders vs Lucknow Giants",
-      team1: { name: "KKR", score: "182/6", overs: "20" },
-      team2: { name: "LSG", score: "184/4", overs: "19.3" },
-      status: "LSG won by 6 wickets",
-      sportType: "cricket",
-      slug: "kkr-vs-lsg-2024",
-      venue: "Eden Gardens",
-      dateTime: "2024-03-11T19:30:00Z",
-      league: "Indian Premier League"
-    },
-    {
-      id: 'cricket-8',
-      matchType: "Ranji Trophy",
-      matchTitle: "Tamil Nadu vs Bengal",
-      team1: { name: "TN", score: "345/7", overs: "90" },
-      team2: { name: "BEN", score: "0/0", overs: "0" },
-      status: "Day 1 - Stumps",
-      sportType: "cricket",
-      slug: "tn-vs-ben-2024",
-      venue: "MA Chidambaram Stadium",
-      dateTime: "2024-03-14T09:00:00Z",
-      league: "Ranji Trophy"
-    },
-    {
-      id: 'cricket-9',
-      matchType: "Test",
-      matchTitle: "Australia vs New Zealand",
-      team1: { name: "AUS", score: "256/4", overs: "78" },
-      team2: { name: "NZ", score: "0/0", overs: "0" },
-      status: "Day 1 - Tea Break",
-      sportType: "cricket",
-      slug: "aus-vs-nz-2024",
-      isLive: true,
-      venue: "MCG",
-      dateTime: "2024-03-15T10:30:00Z",
-      league: "Test Series"
-    },
-    {
-      id: 'cricket-10',
-      matchType: "ODI",
-      matchTitle: "South Africa vs Pakistan",
-      team1: { name: "SA", score: "298/5", overs: "50" },
-      team2: { name: "PAK", score: "186/4", overs: "35" },
-      status: "Pakistan need 113 runs in 15 overs",
-      sportType: "cricket",
-      slug: "sa-vs-pak-2024",
-      isLive: true,
-      venue: "Newlands",
-      dateTime: "2024-03-15T13:00:00Z",
-      league: "ODI Series"
-    }
-  ],
-  kabaddi: [
-    {
-      id: 'kabaddi-1',
-      matchType: "PKL",
-      matchTitle: "Patna Pirates vs Bengal Warriors",
-      team1: { name: "Patna Pirates", points: 38 },
-      team2: { name: "Bengal Warriors", points: 42 },
-      status: "Bengal Warriors won",
-      sportType: "kabaddi",
-      slug: "patna-vs-bengal-2024",
-      venue: "Patliputra Sports Complex",
-      dateTime: "2024-03-14T19:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-2',
-      matchType: "PKL",
-      matchTitle: "U Mumba vs Jaipur Pink Panthers",
-      team1: { name: "U Mumba", points: 28 },
-      team2: { name: "Jaipur Pink Panthers", points: 32 },
-      status: "Match in progress",
-      sportType: "kabaddi",
-      slug: "mumba-vs-jaipur-2024",
-      isLive: true,
-      venue: "NSCI Dome",
-      dateTime: "2024-03-15T20:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-3',
-      matchType: "PKL",
-      matchTitle: "Telugu Titans vs Tamil Thalaivas",
-      team1: { name: "Telugu Titans", points: 45 },
-      team2: { name: "Tamil Thalaivas", points: 41 },
-      status: "Telugu Titans won",
-      sportType: "kabaddi",
-      slug: "telugu-vs-tamil-2024",
-      venue: "Gachibowli Indoor Stadium",
-      dateTime: "2024-03-13T19:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-4',
-      matchType: "PKL",
-      matchTitle: "Dabang Delhi vs Gujarat Giants",
-      team1: { name: "Dabang Delhi", points: 35 },
-      team2: { name: "Gujarat Giants", points: 35 },
-      status: "Match tied",
-      sportType: "kabaddi",
-      slug: "delhi-vs-gujarat-2024",
-      venue: "Thyagaraj Sports Complex",
-      dateTime: "2024-03-12T19:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-5',
-      matchType: "PKL",
-      matchTitle: "Puneri Paltan vs Haryana Steelers",
-      team1: { name: "Puneri Paltan", points: 42 },
-      team2: { name: "Haryana Steelers", points: 39 },
-      status: "Final minutes",
-      sportType: "kabaddi",
-      slug: "pune-vs-haryana-2024",
-      isLive: true,
-      venue: "Shree Shiv Chhatrapati Sports Complex",
-      dateTime: "2024-03-15T21:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-6',
-      matchType: "PKL",
-      matchTitle: "UP Yoddhas vs Bengaluru Bulls",
-      team1: { name: "UP Yoddhas", points: 0 },
-      team2: { name: "Bengaluru Bulls", points: 0 },
-      status: "Starts at 8:30 PM",
-      sportType: "kabaddi",
-      slug: "up-vs-bengaluru-2024",
-      venue: "Babu Banarasi Das Indoor Stadium",
-      dateTime: "2024-03-16T20:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-7',
-      matchType: "PKL",
-      matchTitle: "Bengal Warriors vs Gujarat Giants",
-      team1: { name: "Bengal Warriors", points: 0 },
-      team2: { name: "Gujarat Giants", points: 0 },
-      status: "Tomorrow, 7:30 PM",
-      sportType: "kabaddi",
-      slug: "bengal-vs-gujarat-2024",
-      venue: "Netaji Indoor Stadium",
-      dateTime: "2024-03-17T19:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-8',
-      matchType: "PKL",
-      matchTitle: "Patna Pirates vs U Mumba",
-      team1: { name: "Patna Pirates", points: 0 },
-      team2: { name: "U Mumba", points: 0 },
-      status: "Tomorrow, 8:30 PM",
-      sportType: "kabaddi",
-      slug: "patna-vs-mumba-2024",
-      venue: "Patliputra Sports Complex",
-      dateTime: "2024-03-17T20:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-9',
-      matchType: "PKL",
-      matchTitle: "Telugu Titans vs Dabang Delhi",
-      team1: { name: "Telugu Titans", points: 0 },
-      team2: { name: "Dabang Delhi", points: 0 },
-      status: "Day After, 7:30 PM",
-      sportType: "kabaddi",
-      slug: "telugu-vs-delhi-2024",
-      venue: "Gachibowli Indoor Stadium",
-      dateTime: "2024-03-18T19:30:00Z",
-      league: "Pro Kabaddi League"
-    },
-    {
-      id: 'kabaddi-10',
-      matchType: "PKL",
-      matchTitle: "Tamil Thalaivas vs Puneri Paltan",
-      team1: { name: "Tamil Thalaivas", points: 0 },
-      team2: { name: "Puneri Paltan", points: 0 },
-      status: "Day After, 8:30 PM",
-      sportType: "kabaddi",
-      slug: "tamil-vs-pune-2024",
-      venue: "Jawaharlal Nehru Indoor Stadium",
-      dateTime: "2024-03-18T20:30:00Z",
-      league: "Pro Kabaddi League"
-    }
-  ],
-  football: [
-    {
-      id: 'football-1',
-      matchType: "ISL",
-      matchTitle: "Mumbai City FC vs Bengaluru FC",
-      team1: { name: "Mumbai City FC", goals: 2 },
-      team2: { name: "Bengaluru FC", goals: 1 },
-      status: "75' - Second Half",
-      sportType: "football",
-      slug: "mumbai-vs-bengaluru-2024",
-      isLive: true,
-      venue: "Mumbai Football Arena",
-      dateTime: "2024-03-15T19:30:00Z",
-      league: "Indian Super League"
-    },
-    {
-      id: 'football-2',
-      matchType: "ISL",
-      matchTitle: "Kerala Blasters vs Chennaiyin FC",
-      team1: { name: "Kerala Blasters", goals: 0 },
-      team2: { name: "Chennaiyin FC", goals: 0 },
-      status: "Today, 7:30 PM",
-      sportType: "football",
-      slug: "kerala-vs-chennai-2024",
-      venue: "Jawaharlal Nehru Stadium",
-      dateTime: "2024-03-16T19:30:00Z",
-      league: "Indian Super League"
-    },
-    {
-      id: 'football-3',
-      matchType: "ISL",
-      matchTitle: "FC Goa vs NorthEast United",
-      team1: { name: "FC Goa", goals: 3 },
-      team2: { name: "NorthEast United", goals: 1 },
-      status: "Full Time",
-      sportType: "football",
-      slug: "goa-vs-northeast-2024",
-      venue: "Fatorda Stadium",
-      dateTime: "2024-03-14T19:30:00Z",
-      league: "Indian Super League"
-    },
-    {
-      id: 'football-4',
-      matchType: "ISL",
-      matchTitle: "Mohun Bagan vs East Bengal",
-      team1: { name: "Mohun Bagan", goals: 2 },
-      team2: { name: "East Bengal", goals: 2 },
-      status: "90' - Match Drawn",
-      sportType: "football",
-      slug: "mohun-vs-east-2024",
-      venue: "Salt Lake Stadium",
-      dateTime: "2024-03-13T19:30:00Z",
-      league: "Indian Super League"
-    },
-    {
-      id: 'football-5',
-      matchType: "ISL",
-      matchTitle: "Hyderabad FC vs Jamshedpur FC",
-      team1: { name: "Hyderabad FC", goals: 1 },
-      team2: { name: "Jamshedpur FC", goals: 1 },
-      status: "60' - Second Half",
-      sportType: "football",
-      slug: "hyderabad-vs-jamshedpur-2024",
-      isLive: true,
-      venue: "Gachibowli Athletic Stadium",
-      dateTime: "2024-03-15T20:30:00Z",
-      league: "Indian Super League"
-    },
-    {
-      id: 'football-6',
-      matchType: "I-League",
-      matchTitle: "Real Kashmir vs Churchill Brothers",
-      team1: { name: "Real Kashmir", goals: 2 },
-      team2: { name: "Churchill Brothers", goals: 0 },
-      status: "Full Time",
-      sportType: "football",
-      slug: "kashmir-vs-churchill-2024",
-      venue: "TRC Turf Ground",
-      dateTime: "2024-03-14T15:00:00Z",
-      league: "I-League"
-    },
-    {
-      id: 'football-7',
-      matchType: "I-League",
-      matchTitle: "Gokulam Kerala vs Punjab FC",
-      team1: { name: "Gokulam Kerala", goals: 0 },
-      team2: { name: "Punjab FC", goals: 0 },
-      status: "Today, 7:00 PM",
-      sportType: "football",
-      slug: "gokulam-vs-punjab-2024",
-      venue: "EMS Corporation Stadium",
-      dateTime: "2024-03-16T19:00:00Z",
-      league: "I-League"
-    },
-    {
-      id: 'football-8',
-      matchType: "I-League",
-      matchTitle: "Aizawl FC vs TRAU FC",
-      team1: { name: "Aizawl FC", goals: 1 },
-      team2: { name: "TRAU FC", goals: 1 },
-      status: "45' - Half Time",
-      sportType: "football",
-      slug: "aizawl-vs-trau-2024",
-      isLive: true,
-      venue: "Rajiv Gandhi Stadium",
-      dateTime: "2024-03-15T15:00:00Z",
-      league: "I-League"
-    },
-    {
-      id: 'football-9',
-      matchType: "I-League",
-      matchTitle: "Sreenidi Deccan vs Rajasthan United",
-      team1: { name: "Sreenidi Deccan", goals: 0 },
-      team2: { name: "Rajasthan United", goals: 0 },
-      status: "Tomorrow, 4:30 PM",
-      sportType: "football",
-      slug: "sreenidi-vs-rajasthan-2024",
-      venue: "Deccan Arena",
-      dateTime: "2024-03-17T16:30:00Z",
-      league: "I-League"
-    },
-    {
-      id: 'football-10',
-      matchType: "I-League",
-      matchTitle: "Delhi FC vs Mohammedan SC",
-      team1: { name: "Delhi FC", goals: 0 },
-      team2: { name: "Mohammedan SC", goals: 0 },
-      status: "Tomorrow, 7:00 PM",
-      sportType: "football",
-      slug: "delhi-vs-mohammedan-2024",
-      venue: "Ambedkar Stadium",
-      dateTime: "2024-03-17T19:00:00Z",
-      league: "I-League"
-    }
-  ],
-  volleyball: [
-    {
-      id: 'volleyball-1',
-      matchType: "PVL",
-      matchTitle: "Calicut Heroes vs Kochi Blue Spikers",
-      team1: { name: "Calicut Heroes", points: 2 },
-      team2: { name: "Kochi Blue Spikers", points: 3 },
-      status: "Match Complete",
-      sportType: "volleyball",
-      slug: "calicut-vs-kochi-2024",
-      venue: "Rajiv Gandhi Indoor Stadium",
-      dateTime: "2024-03-14T19:00:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-2',
-      matchType: "PVL",
-      matchTitle: "Ahmedabad Defenders vs Hyderabad Black Hawks",
-      team1: { name: "Ahmedabad Defenders", points: 2 },
-      team2: { name: "Hyderabad Black Hawks", points: 1 },
-      status: "3rd Set in progress",
-      sportType: "volleyball",
-      slug: "ahmedabad-vs-hyderabad-2024",
-      isLive: true,
-      venue: "TransStadia Arena",
-      dateTime: "2024-03-15T19:00:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-3',
-      matchType: "PVL",
-      matchTitle: "Chennai Blitz vs Bengaluru Torpedoes",
-      team1: { name: "Chennai Blitz", points: 0 },
-      team2: { name: "Bengaluru Torpedoes", points: 0 },
-      status: "Today, 6:30 PM",
-      sportType: "volleyball",
-      slug: "chennai-vs-bengaluru-2024",
-      venue: "Jawaharlal Nehru Indoor Stadium",
-      dateTime: "2024-03-16T18:30:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-4',
-      matchType: "PVL",
-      matchTitle: "Mumbai Meteors vs Kolkata Thunderbolts",
-      team1: { name: "Mumbai Meteors", points: 3 },
-      team2: { name: "Kolkata Thunderbolts", points: 1 },
-      status: "Match Complete",
-      sportType: "volleyball",
-      slug: "mumbai-vs-kolkata-2024",
-      venue: "NSCI Dome",
-      dateTime: "2024-03-13T19:00:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-5',
-      matchType: "PVL",
-      matchTitle: "Delhi Dynamos vs Pune Patriots",
-      team1: { name: "Delhi Dynamos", points: 2 },
-      team2: { name: "Pune Patriots", points: 2 },
-      status: "Final Set",
-      sportType: "volleyball",
-      slug: "delhi-vs-pune-2024",
-      isLive: true,
-      venue: "Thyagaraj Sports Complex",
-      dateTime: "2024-03-15T20:00:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-6',
-      matchType: "PVL",
-      matchTitle: "Calicut Heroes vs Ahmedabad Defenders",
-      team1: { name: "Calicut Heroes", points: 0 },
-      team2: { name: "Ahmedabad Defenders", points: 0 },
-      status: "Tomorrow, 7:00 PM",
-      sportType: "volleyball",
-      slug: "calicut-vs-ahmedabad-2024",
-      venue: "Rajiv Gandhi Indoor Stadium",
-      dateTime: "2024-03-17T19:00:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-7',
-      matchType: "PVL",
-      matchTitle: "Kochi Blue Spikers vs Chennai Blitz",
-      team1: { name: "Kochi Blue Spikers", points: 0 },
-      team2: { name: "Chennai Blitz", points: 0 },
-      status: "Tomorrow, 8:30 PM",
-      sportType: "volleyball",
-      slug: "kochi-vs-chennai-2024",
-      venue: "Rajiv Gandhi Indoor Stadium",
-      dateTime: "2024-03-17T20:30:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-8',
-      matchType: "PVL",
-      matchTitle: "Hyderabad Black Hawks vs Mumbai Meteors",
-      team1: { name: "Hyderabad Black Hawks", points: 0 },
-      team2: { name: "Mumbai Meteors", points: 0 },
-      status: "Day After, 7:00 PM",
-      sportType: "volleyball",
-      slug: "hyderabad-vs-mumbai-2024",
-      venue: "Gachibowli Indoor Stadium",
-      dateTime: "2024-03-18T19:00:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-9',
-      matchType: "PVL",
-      matchTitle: "Bengaluru Torpedoes vs Delhi Dynamos",
-      team1: { name: "Bengaluru Torpedoes", points: 0 },
-      team2: { name: "Delhi Dynamos", points: 0 },
-      status: "Day After, 8:30 PM",
-      sportType: "volleyball",
-      slug: "bengaluru-vs-delhi-2024",
-      venue: "Koramangala Indoor Stadium",
-      dateTime: "2024-03-18T20:30:00Z",
-      league: "Prime Volleyball League"
-    },
-    {
-      id: 'volleyball-10',
-      matchType: "PVL",
-      matchTitle: "Kolkata Thunderbolts vs Pune Patriots",
-      team1: { name: "Kolkata Thunderbolts", points: 0 },
-      team2: { name: "Pune Patriots", points: 0 },
-      status: "In 2 Days, 7:00 PM",
-      sportType: "volleyball",
-      slug: "kolkata-vs-pune-2024",
-      venue: "Netaji Indoor Stadium",
-      dateTime: "2024-03-19T19:00:00Z",
-      league: "Prime Volleyball League"
+      card: "UNDER CARD",
+      fixture_no: 2,
+      match_date: "2025-08-05",
+      matches: [
+        {
+          match_no: 3,
+          player_a: {
+            code: 1095,
+            name: "Ravi Kumar",
+            team: "CHENNAI CHAMPIONS"
+          },
+          player_b: {
+            code: 1006,
+            name: "Sanjay Verma",
+            team: "KOLKATA KINGS"
+          },
+          pre_match_odds: {
+            a: 2.10,
+            b: 1.75
+          },
+          weight_category: "70 KG MEN"
+        },
+        {
+          match_no: 4,
+          player_a: {
+            code: 1097,
+            name: "Ankit Sharma",
+            team: "BANGALORE BULLS"
+          },
+          player_b: {
+            code: 1008,
+            name: "Deepak Chahar",
+            team: "HYDERABAD HEROES"
+          },
+          pre_match_odds: {
+            a: 1.65,
+            b: 2.25
+          },
+          weight_category: "75 KG MEN"
+        },
+        {
+          match_no: 5,
+          player_a: {
+            code: 1099,
+            name: "Sunil Yadav",
+            team: "RAJASTHAN ROYALS"
+          },
+          player_b: {
+            code: 1010,
+            name: "Manish Patel",
+            team: "GUJARAT GIANTS"
+          },
+          pre_match_odds: {
+            a: 1.90,
+            b: 1.90
+          },
+          weight_category: "80 KG MEN"
+        }
+      ]
     }
   ]
 }; 

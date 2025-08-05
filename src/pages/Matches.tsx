@@ -19,7 +19,7 @@ import { Pagination, Navigation } from 'swiper/modules';
 
 // Custom hook and types
 import { useMatches } from '@/hooks/useMatchData';
-import { Match } from '@/types/match';
+import { BoxingCardGroup } from '@/types/match';
 
 // Styles
 import {
@@ -39,68 +39,15 @@ import {
   emptyStateSubtextStyles
 } from '@/styles/matches.styles';
 
-interface SportSectionProps {
+
+
+interface BoxingSectionProps {
   title: string;
-  matches: Match[];
+  cardGroups: BoxingCardGroup[];
   isMobile: boolean;
 }
 
-/**
- * SportSection component for displaying matches of a specific sport
- */
-const SportSection: React.FC<SportSectionProps> = ({ title, matches, isMobile }) => {
-  const showSwiper = matches.length > 3;
 
-  const swiperProps = {
-    modules: [Pagination, Navigation],
-    spaceBetween: 24,
-    slidesPerView: isMobile ? 1 : 3,
-    pagination: { 
-      clickable: true,
-      dynamicBullets: true
-    },
-    navigation: !isMobile,
-    loop: matches.length > (isMobile ? 1 : 3),
-    centeredSlides: isMobile
-  };
-
-  // Don't render section if no matches
-  if (matches.length === 0) {
-    return null;
-  }
-
-  return (
-    <Box sx={sectionWrapperStyles}>
-      <Box sx={sectionTitleContainerStyles}>
-        <Typography component="span" sx={sectionTitleStyles}>
-          {title}
-        </Typography>
-      </Box>
-      
-      <Box sx={swiperContainerStyles}>
-        {(isMobile || showSwiper) ? (
-          <Swiper {...swiperProps}>
-            {matches.map((match, index) => (
-              <SwiperSlide key={match.id || index}>
-                <Box sx={{ px: 1 }}>
-                  <MatchCard {...match} />
-                </Box>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <Box sx={gridContainerStyles}>
-            {matches.map((match, index) => (
-              <Box key={match.id || index}>
-                <MatchCard {...match} />
-              </Box>
-            ))}
-          </Box>
-        )}
-      </Box>
-    </Box>
-  );
-};
 
 /**
  * Loading component
@@ -148,6 +95,63 @@ const EmptyState: React.FC<{ message?: string }> = ({ message = "No matches foun
 );
 
 /**
+ * BoxingSection component for displaying boxing matches grouped by card
+ */
+const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobile }) => {
+  if (cardGroups.length === 0) {
+    return null;
+  }
+
+  return (
+    <Box sx={sectionWrapperStyles}>
+      <Box sx={sectionTitleContainerStyles}>
+        <Typography component="span" sx={sectionTitleStyles}>
+          {title}
+        </Typography>
+      </Box>
+
+      {cardGroups.map((cardGroup, groupIndex) => (
+        <Box key={`${cardGroup.card}-${cardGroup.fixture_no}`} sx={{ mb: 4 }}>
+          
+          <Box sx={swiperContainerStyles}>
+            {(isMobile || cardGroup.matches.length > 3) ? (
+              <Swiper
+                modules={[Pagination, Navigation]}
+                spaceBetween={24}
+                slidesPerView={isMobile ? 1 : 3}
+                pagination={{ 
+                  clickable: true,
+                  dynamicBullets: true
+                }}
+                navigation={!isMobile}
+                loop={cardGroup.matches.length > (isMobile ? 1 : 3)}
+                centeredSlides={isMobile}
+              >
+                {cardGroup.matches.map((match, index) => (
+                  <SwiperSlide key={`${match.match_no}-${index}`}>
+                    <Box sx={{ px: 1 }}>
+                      <MatchCard match={match} card={cardGroup.card} fixture_no={cardGroup.fixture_no} match_date={cardGroup.match_date} sportType="boxing" />
+                    </Box>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <Box sx={gridContainerStyles}>
+                {cardGroup.matches.map((match, index) => (
+                  <Box key={`${match.match_no}-${index}`}>
+                    <MatchCard match={match} card={cardGroup.card} fixture_no={cardGroup.fixture_no} match_date={cardGroup.match_date} sportType="boxing" />
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+/**
  * Main Matches page component
  */
 const Matches: React.FC = () => {
@@ -169,8 +173,8 @@ const Matches: React.FC = () => {
     refetch();
   };
 
-  // Calculate total matches across all sports
-  const totalMatches = Object.values(data).reduce((sum, matches) => sum + matches.length, 0);
+  // Calculate total boxing matches
+  const totalMatches = data.boxing ? data.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
 
   return (
     <Layout>
@@ -203,28 +207,13 @@ const Matches: React.FC = () => {
                 <EmptyState />
               )}
 
-              {/* Matches Sections */}
+              {/* Boxing Matches Section */}
               {totalMatches > 0 && (
                 <Box>
-                  <SportSection 
-                    title="Cricket" 
-                    matches={data.cricket} 
-                    isMobile={isMobile} 
-                  />
-                  <SportSection 
-                    title="Kabaddi" 
-                    matches={data.kabaddi} 
-                    isMobile={isMobile} 
-                  />
-                  <SportSection 
-                    title="Football" 
-                    matches={data.football} 
-                    isMobile={isMobile} 
-                  />
-                  <SportSection 
-                    title="Volleyball" 
-                    matches={data.volleyball} 
-                    isMobile={isMobile} 
+                  <BoxingSection
+                    title="Boxing"
+                    cardGroups={data.boxing}
+                    isMobile={isMobile}
                   />
                 </Box>
               )}

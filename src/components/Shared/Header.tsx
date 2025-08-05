@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "@/contexts/AuthContext";
+import { Menu, MenuItem, Avatar, IconButton, Badge, Tooltip } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 interface HeaderProps {
   searchPlaceholder?: string;
@@ -10,8 +15,6 @@ interface HeaderProps {
   logoAlt?: string;
   onSearch?: (query: string) => void;
   showSearch?: boolean;
-  showLoginButton?: boolean;
-  loginPath?: string;
 }
 
 const HeaderContainer = styled.header`
@@ -27,19 +30,30 @@ const HeaderContainer = styled.header`
 const Toolbar = styled.div`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
+  justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
   min-height: 72px;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    gap: ${({ theme }) => theme.spacing.sm};
     padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
     min-height: 64px;
   }
 `;
 
+const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
 const Logo = styled.img`
-  height: 38px;
+  height: 40px;
   cursor: pointer;
   transition: transform ${({ theme }) => theme.transitions.fast};
   filter: brightness(1.1);
@@ -50,7 +64,7 @@ const Logo = styled.img`
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    height: 28px;
+    height: 32px;
   }
 `;
 
@@ -59,10 +73,8 @@ const SearchContainer = styled.div`
   align-items: center;
   background-color: rgba(15, 23, 42, 0.3);
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: 7px 16px;
-  flex: 1;
-  max-width: 540px;
-  margin: 0 auto;
+  padding: 8px 16px;
+  width: 400px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   transition: all ${({ theme }) => theme.transitions.normal};
   backdrop-filter: blur(12px);
@@ -82,8 +94,11 @@ const SearchContainer = styled.div`
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: 6px 12px;
-    max-width: 320px;
-    margin: 0 8px;
+    width: 200px;
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.xs}) {
+    display: none;
   }
 `;
 
@@ -135,14 +150,16 @@ const LoginButton = styled(Link)`
   background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary} 0%, #3B82F6 100%);
   color: ${({ theme }) => theme.colors.text.primary};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
   box-shadow: 0 4px 12px ${({ theme }) => theme.colors.primaryLight};
   transition: all ${({ theme }) => theme.transitions.normal};
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-decoration: none;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   
   &:hover {
     background: linear-gradient(135deg, #4B4EF9 0%, #3B82F6 100%);
@@ -159,20 +176,60 @@ const LoginButton = styled(Link)`
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
   }
 `;
 
+const ProfileButton = styled(IconButton)`
+  padding: 8px;
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  background-color: rgba(15, 23, 42, 0.4);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.8);
+  }
+`;
+
+const NotificationBadge = styled(Badge)`
+  margin-right: 8px;
+  
+  .MuiBadge-badge {
+    background-color: #10B981;
+    color: white;
+  }
+`;
+
+const StyledMenuItem = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  
+  svg {
+    color: #3B82F6;
+  }
+`;
+
+const UserAvatar = styled(Avatar)`
+  width: 36px;
+  height: 36px;
+  border: 2px solid #3B82F6;
+`;
+
 const Header: React.FC<HeaderProps> = ({
-  searchPlaceholder = "Search for content...",
+  searchPlaceholder = "Search for matches...",
   logoPath = "/Logo.png",
-  logoAlt = "Zoddz Logo",
+  logoAlt = "Playvot Logo",
   onSearch,
   showSearch = true,
-  showLoginButton = true,
-  loginPath = "/login"
 }) => {
   const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (onSearch) {
@@ -180,32 +237,116 @@ const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handleProfileClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleClose();
+    navigate('/');
+  };
+
+  const handleProfileNavigate = () => {
+    handleClose();
+    navigate('/profile');
+  };
+
   return (
     <HeaderContainer>
       <Toolbar>
-        <Logo
-          src={logoPath}
-          alt={logoAlt}
-          onClick={() => navigate("/")}
-        />
+        <LeftSection>
+          <Logo
+            src={logoPath}
+            alt={logoAlt}
+            onClick={() => navigate("/")}
+          />
+          
+          {showSearch && (
+            <SearchContainer>
+              <SearchInput
+                placeholder={searchPlaceholder}
+                onChange={handleSearch}
+              />
+              <SearchButton>
+                <SearchIcon sx={{ fontSize: "18px" }} />
+              </SearchButton>
+            </SearchContainer>
+          )}
+        </LeftSection>
         
-        {showSearch && (
-          <SearchContainer>
-            <SearchInput
-              placeholder={searchPlaceholder}
-              onChange={handleSearch}
-            />
-            <SearchButton>
-              <SearchIcon sx={{ fontSize: "18px" }} />
-            </SearchButton>
-          </SearchContainer>
-        )}
-        
-        {showLoginButton && (
-          <LoginButton to={loginPath}>
-            <PersonOutlineIcon sx={{ fontSize: { xs: "20px", sm: "24px" } }} />
-          </LoginButton>
-        )}
+        <RightSection>
+          {isAuthenticated ? (
+            <>
+              <Tooltip title="Notifications">
+                <NotificationBadge badgeContent={3} color="primary">
+                  <IconButton 
+                    sx={{ 
+                      color: 'white',
+                      backgroundColor: 'rgba(15, 23, 42, 0.4)',
+                      '&:hover': { backgroundColor: 'rgba(59, 130, 246, 0.2)' }
+                    }}
+                  >
+                    <NotificationsIcon />
+                  </IconButton>
+                </NotificationBadge>
+              </Tooltip>
+              
+              <ProfileButton
+                onClick={handleProfileClick}
+                aria-controls={open ? 'profile-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+              >
+                {user?.avatar ? (
+                  <UserAvatar src={user.avatar} alt={user.name} />
+                ) : (
+                  <AccountCircleIcon sx={{ fontSize: 28, color: 'white' }} />
+                )}
+              </ProfileButton>
+              
+              <Menu
+                id="profile-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  'aria-labelledby': 'profile-button',
+                }}
+                PaperProps={{
+                  sx: {
+                    mt: 1.5,
+                    backgroundColor: '#1E293B',
+                    color: 'white',
+                    border: '1px solid rgba(59, 130, 246, 0.2)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                    minWidth: 180
+                  }
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <StyledMenuItem onClick={handleProfileNavigate}>
+                  <AccountCircleIcon fontSize="small" />
+                  My Profile
+                </StyledMenuItem>
+                <StyledMenuItem onClick={handleLogout}>
+                  <LogoutIcon fontSize="small" />
+                  Logout
+                </StyledMenuItem>
+              </Menu>
+            </>
+          ) : (
+            <LoginButton to="/login">
+              <PersonOutlineIcon sx={{ fontSize: { xs: "18px", sm: "20px" } }} />
+              Login
+            </LoginButton>
+          )}
+        </RightSection>
       </Toolbar>
     </HeaderContainer>
   );

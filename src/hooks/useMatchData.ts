@@ -21,7 +21,7 @@ interface UseMatchesReturn extends UseMatchesState {
  */
 export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
   const [state, setState] = useState<UseMatchesState>({
-    data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
+    data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
     loading: false,
     error: null,
     total: 0

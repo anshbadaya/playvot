@@ -27,7 +27,8 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
             cricket: sportType === 'cricket' ? filteredData.cricket : [],
             kabaddi: sportType === 'kabaddi' ? filteredData.kabaddi : [],
             football: sportType === 'football' ? filteredData.football : [],
-            volleyball: sportType === 'volleyball' ? filteredData.volleyball : []
+            volleyball: sportType === 'volleyball' ? filteredData.volleyball : [],
+            boxing: sportType === 'boxing' ? filteredData.boxing : []
           };
         }
       }
@@ -35,24 +36,42 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
       if (filters.isLive !== undefined) {
         Object.keys(filteredData).forEach(sportType => {
           const sportKey = sportType as keyof MatchesByType;
-          filteredData[sportKey] = filteredData[sportKey].filter(match => 
-            filters.isLive ? match.isLive : !match.isLive
-          );
+          if (sportKey !== 'boxing') {
+            filteredData[sportKey] = filteredData[sportKey].filter(match => 
+              filters.isLive ? match.isLive : !match.isLive
+            );
+          }
         });
       }
       
       if (filters.matchType) {
         Object.keys(filteredData).forEach(sportType => {
           const sportKey = sportType as keyof MatchesByType;
-          filteredData[sportKey] = filteredData[sportKey].filter(match => 
-            match.matchType === filters.matchType
-          );
+          if (sportKey !== 'boxing') {
+            filteredData[sportKey] = filteredData[sportKey].filter(match => 
+              match.matchType === filters.matchType
+            );
+          }
         });
+      }
+      
+      // Filter boxing matches by card type
+      if (filters.card && filteredData.boxing.length > 0) {
+        filteredData.boxing = filteredData.boxing.filter(cardGroup => 
+          cardGroup.card.toLowerCase() === filters.card?.toLowerCase()
+        );
       }
     }
     
     // Calculate total matches
-    const total = Object.values(filteredData).reduce((sum, matches) => sum + matches.length, 0);
+    const total = Object.entries(filteredData).reduce((sum, [sportType, matches]) => {
+      if (sportType === 'boxing') {
+        // For boxing, count the total number of matches across all card groups
+        const boxingMatches = matches as any[];
+        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      }
+      return sum + matches.length;
+    }, 0);
     
     return {
       data: filteredData,
@@ -62,7 +81,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
   } catch (error) {
     // console.error('Error fetching matches:', error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
       total: 0,
       success: false,
       message: 'Failed to fetch matches'
@@ -86,7 +105,7 @@ export const fetchMatchesBySport = async (
   } catch (error) {
     // console.error(`Error fetching ${sportType} matches:`, error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
       total: 0,
       success: false,
       message: `Failed to fetch ${sportType} matches`
@@ -140,7 +159,22 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
         match.matchTitle.toLowerCase().includes(searchQuery) ||
         match.team1.name.toLowerCase().includes(searchQuery) ||
         match.team2.name.toLowerCase().includes(searchQuery)
-      )
+      ),
+      boxing: allMatches.data.boxing.filter(cardGroup => {
+        // Search within card groups and their matches
+        if (cardGroup.card.toLowerCase().includes(searchQuery)) {
+          return true;
+        }
+        
+        // Search within individual boxing matches
+        return cardGroup.matches.some(match => 
+          match.player_a.name.toLowerCase().includes(searchQuery) ||
+          match.player_a.team.toLowerCase().includes(searchQuery) ||
+          match.player_b.name.toLowerCase().includes(searchQuery) ||
+          match.player_b.team.toLowerCase().includes(searchQuery) ||
+          match.weight_category.toLowerCase().includes(searchQuery)
+        );
+      })
     };
     
     const total = Object.values(filteredData).reduce((sum, matches) => sum + matches.length, 0);
@@ -153,7 +187,7 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
   } catch (error) {
     // console.error('Error searching matches:', error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
       total: 0,
       success: false,
       message: 'Failed to search matches'

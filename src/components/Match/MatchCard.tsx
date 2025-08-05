@@ -1,20 +1,20 @@
 import React from 'react';
-import { Box, Typography, Card, CardContent } from '@mui/material';
+import { Box, Typography, Card, CardContent, Chip, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { formatScore, SPORT_TYPES } from '@/utils';
-import { MatchCardProps, TeamInfo } from '@/types/match';
+import { formatScore } from '@/utils';
+import { BoxingMatchCardProps } from '@/types/match';
 
 const MatchCardContainer = styled(Box)`
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
   
   &:hover .shine {
@@ -40,41 +40,43 @@ const ShineEffect = styled(Box)`
 `;
 
 const StyledCard = styled(Card)`
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.9) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, rgba(13, 20, 36, 0.9) 0%, rgba(23, 32, 48, 0.95) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
   backdrop-filter: blur(12px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   position: relative;
   z-index: 2;
+  height: 100%;
   
   &:hover {
-    border-color: rgba(59, 130, 246, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   }
 `;
 
 const CardContentStyled = styled(CardContent)`
-  padding: ${({ theme }) => theme.spacing(2.5)};
+  padding: ${({ theme }) => theme.spacing(3)};
   position: relative;
   z-index: 2;
 `;
 
 const MatchTypeText = styled(Typography)`
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: ${({ theme }) => theme.spacing(1)};
+  margin-bottom: ${({ theme }) => theme.spacing(0.5)};
 `;
 
 const MatchTitleText = styled(Typography)`
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 1);
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
   margin-bottom: ${({ theme }) => theme.spacing(2)};
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 `;
 
 const TeamsSection = styled(Box)`
@@ -85,105 +87,156 @@ const TeamRow = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: ${({ theme }) => theme.spacing(1)};
+  margin-bottom: ${({ theme }) => theme.spacing(1.5)};
+  padding: ${({ theme }) => theme.spacing(1, 0)};
   
   &:last-child {
     margin-bottom: 0;
   }
 `;
 
-const TeamNameText = styled(Typography)`
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  font-weight: 600;
+const PlayerInfoContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
   flex: 1;
 `;
 
-const MatchStatusText = styled(Typography)`
-  color: #10B981;
-  font-size: 0.75rem;
+const PlayerNameText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.1rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing(0.5, 1)};
-  background: rgba(16, 185, 129, 0.1);
-  border-radius: 4px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
-const MatchCard: React.FC<MatchCardProps> = ({
-  matchType,
-  matchTitle,
-  team1,
-  team2,
-  status,
-  isLive = false,
-  sportType,
-  slug
-}) => {
-  const navigate = useNavigate();
+const TeamText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+`;
 
+const OddsText = styled(Typography)`
+  color: #10B981;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: ${({ theme }) => theme.spacing(0.8, 1.5)};
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  min-width: 70px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(16, 185, 129, 0.15);
+    transform: scale(1.05);
+  }
+`;
+
+const WeightCategoryChip = styled(Chip)`
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #3B82F6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: 28px;
+  margin-top: ${({ theme }) => theme.spacing(1.5)};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+`;
+
+const FixtureHeader = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing(1.2, 2)};
+  background-color: rgba(30, 41, 59, 0.8);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+`;
+
+const FixtureText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+`;
+
+const DateText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
+  const navigate = useNavigate();
+  const { card, fixture_no, match_date, match } = props;
+  const { match_no, player_a, player_b, pre_match_odds, weight_category } = match;
+  
+  // Generate a slug for navigation
+  const slug = `boxing-${match_no}-${player_a.name.toLowerCase().replace(/\\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\\s+/g, '-')}`;
+  
   const handleClick = () => {
     navigate(`/match/${slug}`);
   };
-
-  // Function to format score based on sport type
-  const getFormattedScore = (team: TeamInfo, sport: string) => {
-    switch (sport) {
-      case SPORT_TYPES.CRICKET:
-        return formatScore(team.score, sport) + (team.overs ? ` (${team.overs})` : '');
-      case SPORT_TYPES.FOOTBALL:
-        return formatScore(team.goals, sport);
-      case SPORT_TYPES.KABADDI:
-      case SPORT_TYPES.VOLLEYBALL:
-        return formatScore(team.points, sport);
-      default:
-        return formatScore(team.score, sport);
-    }
-  };
-
+  
   return (
-    <MatchCardContainer onClick={handleClick}>
+    <MatchCardContainer>
       <ShineEffect className="shine" />
       
-      <StyledCard>
-        <CardContentStyled>
-          <MatchTypeText>
-            {matchType}
-          </MatchTypeText>
-
-          <MatchTitleText>
-            {matchTitle}
-          </MatchTitleText>
-
-          <TeamsSection>
-            <TeamRow>
-              <TeamNameText>
-                {team1.name}
-              </TeamNameText>
-              <TeamNameText>
-                {getFormattedScore(team1, sportType)}
-              </TeamNameText>
-            </TeamRow>
-
-            <TeamRow>
-              <TeamNameText>
-                {team2.name}
-              </TeamNameText>
-              <TeamNameText>
-                {getFormattedScore(team2, sportType)}
-              </TeamNameText>
-            </TeamRow>
-          </TeamsSection>
-
-          <MatchStatusText>
-            {status}
-          </MatchStatusText>
-        </CardContentStyled>
-      </StyledCard>
+      <Box sx={{ borderRadius: '16px', overflow: 'hidden', height: '100%' }}>
+        <FixtureHeader>
+          <FixtureText>Fixture #{fixture_no}</FixtureText>
+          <DateText>
+            {new Date(match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </DateText>
+        </FixtureHeader>
+        
+        <StyledCard onClick={handleClick}>
+          <CardContentStyled>
+            <MatchTypeText>
+              Match #{match_no}
+            </MatchTypeText>
+            
+            <MatchTitleText>
+              {player_a.name} vs {player_b.name}
+            </MatchTitleText>
+            
+            <Divider sx={{ my: 1.8, opacity: 0.2 }} />
+            
+            <TeamsSection>
+              <TeamRow>
+                              <PlayerInfoContainer>
+                <PlayerNameText>{player_a.name}</PlayerNameText>
+                <TeamText>{player_a.team}</TeamText>
+                <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_a.code}</TeamText>
+              </PlayerInfoContainer>
+                <OddsText>{formatScore(pre_match_odds.a, 'boxing')}</OddsText>
+              </TeamRow>
+              
+              <Divider sx={{ my: 1.5, opacity: 0.1 }} />
+              
+              <TeamRow>
+                              <PlayerInfoContainer>
+                <PlayerNameText>{player_b.name}</PlayerNameText>
+                <TeamText>{player_b.team}</TeamText>
+                <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_b.code}</TeamText>
+              </PlayerInfoContainer>
+                <OddsText>{formatScore(pre_match_odds.b, 'boxing')}</OddsText>
+              </TeamRow>
+            </TeamsSection>
+            
+            <WeightCategoryChip label={weight_category} />
+          </CardContentStyled>
+        </StyledCard>
+      </Box>
     </MatchCardContainer>
   );
 };
 
-export default MatchCard; 
+export default MatchCard;

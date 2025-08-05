@@ -15,55 +15,87 @@ export const matchesContentStyles: SxProps<Theme> = {
 
 // Section title styles
 export const sectionTitleContainerStyles: SxProps<Theme> = {
-  ...sharedStyles.sectionTitle
+  mb: 3,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
 };
 
 export const sectionTitleStyles: SxProps<Theme> = {
-  ...sharedStyles.sectionTitleText,
-  color: themeColors.text.primary,
-  fontSize: { xs: '0.875rem', sm: '1rem' },
-  fontWeight: 500
+  color: '#fff',
+  fontSize: { xs: '1.5rem', sm: '2rem' },
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+  position: 'relative',
+  textAlign: 'center',
+  padding: '0 20px',
+  '&:before, &:after': {
+    content: '""',
+    position: 'absolute',
+    top: '50%',
+    width: { xs: '30px', sm: '50px' },
+    height: '2px',
+    background: 'linear-gradient(90deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 1))',
+    transform: 'translateY(-50%)'
+  },
+  '&:before': {
+    left: { xs: '-30px', sm: '-50px' },
+  },
+  '&:after': {
+    right: { xs: '-30px', sm: '-50px' },
+    background: 'linear-gradient(90deg, rgba(59, 130, 246, 1), rgba(59, 130, 246, 0))'
+  }
 };
 
 // Swiper container styles
 export const swiperContainerStyles: SxProps<Theme> = {
   position: 'relative',
   '.swiper': { 
-    pb: 4,
+    pb: 5,
     overflow: 'hidden !important',
-    px: { xs: 0, md: 5 }
+    px: { xs: 1, md: 6 },
+    pt: 1
   },
   '.swiper-pagination': {
     bottom: 0,
   },
   '.swiper-pagination-bullet': {
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(59, 130, 246, 0.5)',
     opacity: 0.5,
+    width: '10px',
+    height: '10px',
+    margin: '0 6px',
+    transition: 'all 0.3s ease',
     '&-active': {
-      backgroundColor: 'white',
-      opacity: 1
+      backgroundColor: '#3B82F6',
+      opacity: 1,
+      transform: 'scale(1.2)'
     }
   },
   '.swiper-button-next, .swiper-button-prev': {
-    color: 'rgba(255, 255, 255, 0.8)',
-    width: '32px',
-    height: '32px',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    color: '#3B82F6',
+    width: '40px',
+    height: '40px',
+    backgroundColor: 'rgba(15, 23, 42, 0.7)',
     borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+    transition: 'all 0.3s ease',
     '&:hover': {
       color: 'white',
-      backgroundColor: 'rgba(0, 0, 0, 0.6)'
+      backgroundColor: '#3B82F6',
+      transform: 'scale(1.1)'
     },
     '&::after': {
-      fontSize: '16px',
+      fontSize: '18px',
       fontWeight: 'bold'
     }
   },
   '.swiper-button-prev': {
-    left: { xs: 4, md: 0 }
+    left: { xs: 4, md: -5 }
   },
   '.swiper-button-next': {
-    right: { xs: 4, md: 0 }
+    right: { xs: 4, md: -5 }
   },
   '.swiper-button-disabled': {
     opacity: '0.35 !important',
@@ -73,13 +105,22 @@ export const swiperContainerStyles: SxProps<Theme> = {
 
 // Grid layout styles
 export const gridContainerStyles: SxProps<Theme> = {
-  ...sharedStyles.gridContainer,
-  ...sharedStyles.grid3Cols
+  display: 'grid',
+  gridTemplateColumns: { 
+    xs: '1fr', 
+    sm: 'repeat(2, 1fr)', 
+    md: 'repeat(3, 1fr)' 
+  },
+  gap: 3,
+  width: '100%',
+  mt: 2
 };
 
 // Section wrapper styles
 export const sectionWrapperStyles: SxProps<Theme> = {
-  ...sharedStyles.section
+  mb: 5,
+  pb: 3,
+  position: 'relative'
 };
 
 // Loading and error states

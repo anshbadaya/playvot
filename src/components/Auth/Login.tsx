@@ -22,6 +22,7 @@ import {
 } from '@mui/icons-material';
 import { styled, keyframes } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 import Logo from '@/assets/images/Logo.png';
 
@@ -321,6 +322,7 @@ const StyledAlert = styled(Alert)(({ theme }) => ({
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -389,20 +391,23 @@ const Login = () => {
 
     try {
       setIsLoading(true);
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Use the login function from auth context
+      const success = await login(username, password);
       
-      // Always succeed for now
-      setSnackbar({
-        open: true,
-        message: 'Login successful!',
-        severity: 'success',
-      });
+      if (success) {
+        setSnackbar({
+          open: true,
+          message: 'Login successful!',
+          severity: 'success',
+        });
 
-      // Navigate after a short delay
-      setTimeout(() => {
-        navigate('/');
-      }, 500);
+        // Navigate after a short delay
+        setTimeout(() => {
+          navigate('/');
+        }, 500);
+      } else {
+        throw new Error('Login failed');
+      }
     } catch (error) {
       setSnackbar({
         open: true,

@@ -9,9 +9,9 @@ export interface Team {
 export interface TeamInfo {
   name: string;
   score?: string;
-  overs?: string;  // For cricket matches (e.g., "20" or "19.2")
-  goals?: number;   // For football matches
-  points?: number;  // For kabaddi matches
+  overs?: string;
+  goals?: number;
+  points?: number;
 }
 
 export interface Match {
@@ -29,15 +29,12 @@ export interface Match {
   league?: string;
 }
 
-export interface MatchCardProps {
-  matchType: string;      // e.g., "IPL", "PKL", "ISL"
-  matchTitle: string;     // e.g., "Mumbai Indians vs Chennai Super Kings"
-  team1: TeamInfo;
-  team2: TeamInfo;
-  status: string;        // e.g., "CSK won by 8 wickets", "Match in progress", "Today, 7:30 PM"
-  isLive?: boolean;
-  sportType: 'cricket' | 'football' | 'kabaddi' | 'volleyball';
-  slug: string; // Add slug prop for navigation
+export interface BoxingMatchCardProps {
+  card: string;
+  fixture_no: number;
+  match_date: string;
+  match: BoxingMatch;
+  sportType?: 'boxing';
 }
 
 export interface MatchesByType {
@@ -45,12 +42,38 @@ export interface MatchesByType {
   kabaddi: Match[];
   football: Match[];
   volleyball: Match[];
+  boxing: BoxingCardGroup[];
 }
 
 export interface MatchFilters {
   sportType?: string;
   matchType?: string;
   isLive?: boolean;
+  card?: string;
+}
+
+export interface BoxingPlayer {
+  code: number;
+  name: string;
+  team: string;
+}
+
+export interface BoxingMatch {
+  match_no: number;
+  player_a: BoxingPlayer;
+  player_b: BoxingPlayer;
+  pre_match_odds: {
+    a: number;
+    b: number;
+  };
+  weight_category: string;
+}
+
+export interface BoxingCardGroup {
+  card: string;
+  fixture_no: number;
+  match_date: string;
+  matches: BoxingMatch[];
 }
 
 export interface MatchesResponse {
