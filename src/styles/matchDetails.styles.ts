@@ -35,8 +35,18 @@ export const tabContentStyles: SxProps<Theme> = {
 
 // Loading state styles
 export const matchDetailsLoadingContainerStyles: SxProps<Theme> = {
-  ...sharedStyles.loadingContainer,
-  minHeight: '100vh'
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '400px',
+  gap: 2
+};
+
+export const matchDetailsLoadingTextStyles: SxProps<Theme> = {
+  color: 'rgba(255, 255, 255, 0.7)',
+  fontSize: '16px',
+  fontWeight: 500
 };
 
 export const matchDetailsLoadingSpinnerStyles: SxProps<Theme> = {
@@ -259,25 +269,6 @@ export const quickBetOddsStyles: SxProps<Theme> = {
   color: themeColors.text.secondary,
   fontWeight: 500
 };
-
-// Error state styles
-export const matchDetailsErrorContainerStyles: SxProps<Theme> = {
-  ...sharedStyles.errorContainer,
-};
-
-export const matchDetailsErrorTextStyles: SxProps<Theme> = {
-  color: themeColors.error,
-  mb: 2
-};
-
-export const matchDetailsRetryButtonStyles: SxProps<Theme> = {
-  mt: 2,
-  ...sharedStyles.primaryButton,
-  bgcolor: themeColors.error,
-  '&:hover': {
-    bgcolor: '#DC2626'
-  }
-}; 
 
 // MatchInfo Styles
 export const matchInfoTeamsContainerStyles: SxProps<Theme> = {

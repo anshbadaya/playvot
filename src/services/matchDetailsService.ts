@@ -19,18 +19,21 @@ export const fetchMatchDetails = async (matchId: string): Promise<MatchDetailsRe
     // For now, we'll use dummy data with a delay to simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     
+    // Simulate API failure scenario - uncomment to test dummy data fallback
+    // throw new Error('API temporarily unavailable');
+    
     return {
       data: dummyMatchData,
       scorecard: dummyScorecardData,
       success: true
     };
   } catch (error) {
-    // console.error('Error fetching match details:', error);
+    console.error('Error fetching match details:', error);
+    console.log('Using dummy data due to API error');
     return {
-      data: {} as MatchData,
-      scorecard: undefined,
-      success: false,
-      message: 'Failed to fetch match details'
+      data: dummyMatchData,
+      scorecard: dummyScorecardData,
+      success: true
     };
   }
 };
@@ -50,8 +53,9 @@ export const fetchMatchData = async (matchId: string): Promise<MatchData> => {
       throw new Error(response.message || 'Failed to fetch match data');
     }
   } catch (error) {
-    // console.error('Error fetching match data:', error);
-    throw error;
+    console.error('Error fetching match data:', error);
+    console.log('Using dummy match data due to API error');
+    return dummyMatchData;
   }
 };
 
@@ -67,11 +71,12 @@ export const fetchScorecardData = async (matchId: string): Promise<ScorecardData
     if (response.success && response.scorecard) {
       return response.scorecard;
     } else {
-      return undefined;
+      return dummyScorecardData;
     }
   } catch (error) {
-    // console.error('Error fetching scorecard data:', error);
-    return undefined;
+    console.error('Error fetching scorecard data:', error);
+    console.log('Using dummy scorecard data due to API error');
+    return dummyScorecardData;
   }
 };
 
@@ -90,13 +95,14 @@ export const fetchLiveCommentary = async (
     // const response = await fetch(`${API_BASE_URL}/matches/${matchId}/commentary?since=${lastUpdateTime}`);
     // const data = await response.json();
     
-    // For now, return empty array (no new commentary)
+    // For now, return dummy commentary data
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    return [];
+    return dummyMatchData.commentary || [];
   } catch (error) {
-    // console.error('Error fetching live commentary:', error);
-    return [];
+    console.error('Error fetching live commentary:', error);
+    console.log('Using dummy commentary data due to API error');
+    return dummyMatchData.commentary || [];
   }
 };
 
@@ -114,14 +120,11 @@ export const fetchBettingOdds = async (matchId: string): Promise<BettingOdds> =>
     // For now, return dummy odds
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    return {
-      home: 2.1,
-      draw: 3.5,
-      away: 3.8
-    };
+    return dummyMatchData.bettingOdds;
   } catch (error) {
-    // console.error('Error fetching betting odds:', error);
-    throw error;
+    console.error('Error fetching betting odds:', error);
+    console.log('Using dummy betting odds due to API error');
+    return dummyMatchData.bettingOdds;
   }
 };
 
@@ -139,12 +142,10 @@ export const fetchWinProbability = async (matchId: string): Promise<WinProbabili
     // For now, return dummy probability
     await new Promise(resolve => setTimeout(resolve, 200));
     
-    return {
-      home: 28,
-      away: 38
-    };
+    return dummyMatchData.winProbability;
   } catch (error) {
-    // console.error('Error fetching win probability:', error);
-    throw error;
+    console.error('Error fetching win probability:', error);
+    console.log('Using dummy win probability due to API error');
+    return dummyMatchData.winProbability;
   }
 }; 

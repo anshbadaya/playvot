@@ -128,24 +128,6 @@ export const loadingContainerStyles: SxProps<Theme> = {
   ...sharedStyles.loadingContainer
 };
 
-export const errorContainerStyles: SxProps<Theme> = {
-  ...sharedStyles.errorContainer
-};
-
-export const errorTextStyles: SxProps<Theme> = {
-  color: themeColors.error,
-  mb: 2
-};
-
-export const retryButtonStyles: SxProps<Theme> = {
-  mt: 2,
-  ...sharedStyles.primaryButton,
-  bgcolor: themeColors.error,
-  '&:hover': {
-    bgcolor: '#DC2626'
-  }
-};
-
 // Empty state styles
 export const emptyStateContainerStyles: SxProps<Theme> = {
   ...sharedStyles.emptyStateContainer

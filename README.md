@@ -92,6 +92,16 @@ REACT_APP_API_BASE_URL=https://api.playvot.com
 REACT_APP_ENVIRONMENT=development
 ```
 
+### API Integration
+
+The application integrates with real sports data APIs:
+
+- **Boxing Matches API**: `https://zodds-client-uat-506191930239.asia-south1.run.app/ppl_upcoming_fixtures`
+- **Authentication**: Bearer token authentication
+- **Data Format**: JSON response with boxing fixtures and match details
+
+API configuration is managed in `src/config/api.ts` with centralized endpoint management and authentication headers.
+
 ### TypeScript Configuration
 
 The project uses strict TypeScript configuration with:

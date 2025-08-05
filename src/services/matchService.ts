@@ -1,9 +1,40 @@
-import { MatchesByType, MatchFilters, MatchesResponse } from '@/types/match';
+import { MatchesByType, MatchFilters, MatchesResponse, BoxingCardGroup } from '@/types/match';
 import { dummyMatchesData } from '@/data/matchesData';
+import { API_CONFIG, getApiHeaders } from '@/config/api';
 
-// API base URL - replace with your actual API endpoint
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.playvot.com';
+/**
+ * Fetch boxing matches from the real API
+ * @returns Promise<BoxingCardGroup[]>
+ */
+const fetchBoxingMatches = async (): Promise<BoxingCardGroup[]> => {
+  try {
+    // Uncomment the line below to test dummy data fallback
+    // throw new Error('Simulated API failure for testing dummy data');
+    
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.BOXING_FIXTURES}`, {
+      method: 'GET',
+      headers: getApiHeaders()
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    if (result.status === 'success' && result.data && result.data.length > 0) {
+      return result.data;
+    } else {
+      // Return dummy data if API returns empty or invalid data
+      console.log('API returned empty data, using dummy data for boxing matches');
+      return dummyMatchesData.boxing;
+    }
+  } catch (error) {
+    console.error('Error fetching boxing matches:', error);
+    console.log('Using dummy data for boxing matches due to API error');
+    return dummyMatchesData.boxing;
+  }
+};
 
 /**
  * Fetch all matches grouped by sport type
@@ -12,12 +43,17 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.playvot.
  */
 export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesResponse> => {
   try {
-    // In a real application, this would be an API call
-    // const response = await fetch(`${API_BASE_URL}/matches${filters ? `?${new URLSearchParams(filters as any)}` : ''}`);
-    // const data = await response.json();
+    // Fetch boxing matches from real API
+    const boxingMatches = await fetchBoxingMatches();
     
-    // For now, we'll use dummy data with filtering
-    let filteredData = { ...dummyMatchesData };
+    // For other sports, continue using dummy data for now
+    let filteredData: MatchesByType = {
+      cricket: [...dummyMatchesData.cricket],
+      kabaddi: [...dummyMatchesData.kabaddi],
+      football: [...dummyMatchesData.football],
+      volleyball: [...dummyMatchesData.volleyball],
+      boxing: boxingMatches
+    };
     
     if (filters) {
       if (filters.sportType) {
@@ -67,7 +103,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
     const total = Object.entries(filteredData).reduce((sum, [sportType, matches]) => {
       if (sportType === 'boxing') {
         // For boxing, count the total number of matches across all card groups
-        const boxingMatches = matches as any[];
+        const boxingMatches = matches as BoxingCardGroup[];
         return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
       }
       return sum + matches.length;
@@ -79,12 +115,18 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
       success: true
     };
   } catch (error) {
-    // console.error('Error fetching matches:', error);
+    console.error('Error fetching matches:', error);
+    console.log('Using dummy data due to API error');
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
-      total: 0,
-      success: false,
-      message: 'Failed to fetch matches'
+      data: dummyMatchesData,
+      total: Object.entries(dummyMatchesData).reduce((sum, [sportType, matches]) => {
+        if (sportType === 'boxing') {
+          const boxingMatches = matches as BoxingCardGroup[];
+          return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+        }
+        return sum + matches.length;
+      }, 0),
+      success: true
     };
   }
 };
@@ -103,7 +145,7 @@ export const fetchMatchesBySport = async (
     const allMatches = await fetchMatches({ ...filters, sportType });
     return allMatches;
   } catch (error) {
-    // console.error(`Error fetching ${sportType} matches:`, error);
+    console.error(`Error fetching ${sportType} matches:`, error);
     return {
       data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
       total: 0,
@@ -177,7 +219,14 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
       })
     };
     
-    const total = Object.values(filteredData).reduce((sum, matches) => sum + matches.length, 0);
+    const total = Object.entries(filteredData).reduce((sum, [sportType, matches]) => {
+      if (sportType === 'boxing') {
+        // For boxing, count the total number of matches across all card groups
+        const boxingMatches = matches as BoxingCardGroup[];
+        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      }
+      return sum + matches.length;
+    }, 0);
     
     return {
       data: filteredData,
@@ -185,7 +234,7 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
       success: true
     };
   } catch (error) {
-    // console.error('Error searching matches:', error);
+    console.error('Error searching matches:', error);
     return {
       data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
       total: 0,

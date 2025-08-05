@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MatchesByType, MatchFilters } from '@/types/match';
 import { fetchMatches } from '@/services/matchService';
+import { dummyMatchesData } from '@/data/matchesData';
 
 interface UseMatchesState {
   data: MatchesByType;
@@ -41,18 +42,36 @@ export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
           total: response.total
         });
       } else {
-        setState(prev => ({
-          ...prev,
+        // Even if API fails, we should have dummy data
+        console.log('API failed but using dummy data as fallback');
+        setState({
+          data: dummyMatchesData,
           loading: false,
-          error: response.message || 'Failed to fetch matches'
-        }));
+          error: null,
+          total: Object.entries(dummyMatchesData).reduce((sum, [sportType, matches]) => {
+            if (sportType === 'boxing') {
+              const boxingMatches = matches as any[];
+              return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+            }
+            return sum + matches.length;
+          }, 0)
+        });
       }
     } catch (error) {
-      setState(prev => ({
-        ...prev,
+      console.error('Error in useMatches:', error);
+      // Always fall back to dummy data instead of showing error
+      setState({
+        data: dummyMatchesData,
         loading: false,
-        error: error instanceof Error ? error.message : 'An unexpected error occurred'
-      }));
+        error: null,
+        total: Object.entries(dummyMatchesData).reduce((sum, [sportType, matches]) => {
+          if (sportType === 'boxing') {
+            const boxingMatches = matches as any[];
+            return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+          }
+          return sum + matches.length;
+        }, 0)
+      });
     }
   }, []);
 

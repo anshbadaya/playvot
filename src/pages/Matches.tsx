@@ -6,9 +6,7 @@ import {
   Box, 
   Container, 
   Typography, 
-  CircularProgress, 
-  Button,
-  Alert
+  CircularProgress
 } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -31,23 +29,16 @@ import {
   gridContainerStyles,
   sectionWrapperStyles,
   loadingContainerStyles,
-  errorContainerStyles,
-  errorTextStyles,
-  retryButtonStyles,
   emptyStateContainerStyles,
   emptyStateTextStyles,
   emptyStateSubtextStyles
 } from '@/styles/matches.styles';
-
-
 
 interface BoxingSectionProps {
   title: string;
   cardGroups: BoxingCardGroup[];
   isMobile: boolean;
 }
-
-
 
 /**
  * Loading component
@@ -56,27 +47,6 @@ const LoadingState: React.FC = () => (
   <Box sx={loadingContainerStyles}>
     <CircularProgress size={40} />
     <Typography sx={{ ml: 2 }}>Loading matches...</Typography>
-  </Box>
-);
-
-/**
- * Error component
- */
-const ErrorState: React.FC<{ error: string; onRetry: () => void }> = ({ error, onRetry }) => (
-  <Box sx={errorContainerStyles}>
-    <Typography variant="h6" sx={errorTextStyles}>
-      Something went wrong
-    </Typography>
-    <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
-      {error}
-    </Typography>
-    <Button 
-      variant="contained" 
-      onClick={onRetry}
-      sx={retryButtonStyles}
-    >
-      Try Again
-    </Button>
   </Box>
 );
 
@@ -162,16 +132,8 @@ const Matches: React.FC = () => {
   const { 
     data, 
     loading, 
-    error, 
-    refetch, 
-    clearError 
+    total 
   } = useMatches();
-
-  // Handle retry
-  const handleRetry = () => {
-    clearError();
-    refetch();
-  };
 
   // Calculate total boxing matches
   const totalMatches = data.boxing ? data.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
@@ -180,27 +142,11 @@ const Matches: React.FC = () => {
     <Layout>
       <Box sx={matchesContainerStyles}>
         <Container maxWidth="lg" sx={matchesContentStyles}>
-          {/* Error Alert */}
-          {error && (
-            <Alert 
-              severity="error" 
-              onClose={clearError}
-              sx={{ mb: 3 }}
-            >
-              {error}
-            </Alert>
-          )}
-
           {/* Loading State */}
           {loading && <LoadingState />}
 
-          {/* Error State */}
-          {!loading && error && (
-            <ErrorState error={error} onRetry={handleRetry} />
-          )}
-
           {/* Content */}
-          {!loading && !error && (
+          {!loading && (
             <>
               {/* Empty State */}
               {totalMatches === 0 && (
