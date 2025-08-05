@@ -96,7 +96,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
       </Box>
 
       {cardGroups.map((cardGroup, groupIndex) => (
-        <Box key={`${cardGroup.card}-${cardGroup.fixture_no}`} sx={{ mb: 4 }}>
+        <Box key={`${title}-${cardGroup.card}-${cardGroup.fixture_no}-${groupIndex}`} sx={{ mb: 4 }}>
           
           <Box sx={swiperContainerStyles}>
             {(isMobile || cardGroup.matches.length > 3) ? (
@@ -113,7 +113,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
                 centeredSlides={isMobile}
               >
                 {cardGroup.matches.map((match, index) => (
-                  <SwiperSlide key={`${match.match_no}-${index}`}>
+                  <SwiperSlide key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
                     <Box sx={{ px: 1 }}>
                       <MatchCard 
                         match={match} 
@@ -130,7 +130,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
             ) : (
               <Box sx={gridContainerStyles}>
                 {cardGroup.matches.map((match, index) => (
-                  <Box key={`${match.match_no}-${index}`}>
+                  <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
                     <MatchCard 
                       match={match} 
                       card={cardGroup.card} 
