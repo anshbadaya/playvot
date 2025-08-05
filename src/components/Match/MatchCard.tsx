@@ -230,7 +230,6 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
                 <PlayerInfoContainer>
                   <PlayerNameText>{player_a.name}</PlayerNameText>
                   <TeamText>{player_a.team}</TeamText>
-                  <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_a.code}</TeamText>
                 </PlayerInfoContainer>
                 <OddsText>{formatScore(pre_match_odds.a, 'boxing')}</OddsText>
               </TeamRow>
@@ -241,7 +240,6 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
                 <PlayerInfoContainer>
                   <PlayerNameText>{player_b.name}</PlayerNameText>
                   <TeamText>{player_b.team}</TeamText>
-                  <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_b.code}</TeamText>
                 </PlayerInfoContainer>
                 <OddsText>{formatScore(pre_match_odds.b, 'boxing')}</OddsText>
               </TeamRow>
