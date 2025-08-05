@@ -47,7 +47,7 @@ const slideUp = keyframes`
 const Background = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   width: '100vw',
-  background: '#0A0B1A',
+  background: '#0F172A',
   display: 'flex',
   alignItems: 'flex-start',
   justifyContent: 'center',
