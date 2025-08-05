@@ -34,7 +34,7 @@ import {
   emptyStateSubtextStyles
 } from '@/styles/matches.styles';
 
-interface BoxingSectionProps {
+interface SportsSectionProps {
   title: string;
   cardGroups: BoxingCardGroup[];
   isMobile: boolean;
@@ -66,9 +66,9 @@ const EmptyState: React.FC<{ message?: string }> = ({ message = "No matches foun
 );
 
 /**
- * BoxingSection component for displaying boxing matches grouped by card
+ * SportsSection component for displaying sports matches grouped by card
  */
-const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobile, isLive = false }) => {
+const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobile, isLive = false }) => {
   if (cardGroups.length === 0) {
     return null;
   }
@@ -192,7 +192,7 @@ const Matches: React.FC = () => {
                 {totalLiveMatches === 0 ? (
                   <EmptyState message="No live matches currently" />
                 ) : (
-                  <BoxingSection
+                  <SportsSection
                     title="Live Matches"
                     cardGroups={liveData.boxing}
                     isMobile={isMobile}
@@ -212,7 +212,7 @@ const Matches: React.FC = () => {
                 {totalUpcomingMatches === 0 ? (
                   <EmptyState message="No upcoming matches found" />
                 ) : (
-                  <BoxingSection
+                  <SportsSection
                     title="Upcoming Matches"
                     cardGroups={upcomingData.boxing}
                     isMobile={isMobile}
