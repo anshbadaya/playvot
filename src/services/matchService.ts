@@ -1,17 +1,15 @@
 import { MatchesByType, MatchFilters, MatchesResponse, BoxingCardGroup } from '@/types/match';
-import { dummyMatchesData } from '@/data/matchesData';
 import { API_CONFIG, getApiHeaders } from '@/config/api';
 
 /**
- * Fetch boxing matches from the real API
- * @returns Promise<BoxingCardGroup[]>
+ * Fetch all matches from the unified API endpoint
+ * @returns Promise<MatchesByType>
  */
-const fetchBoxingMatches = async (): Promise<BoxingCardGroup[]> => {
+const fetchAllMatches = async (): Promise<MatchesByType> => {
   try {
-    // Uncomment the line below to test dummy data fallback
-    // throw new Error('Simulated API failure for testing dummy data');
+    console.log('Fetching from API:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`);
     
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.BOXING_FIXTURES}`, {
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`, {
       method: 'GET',
       headers: getApiHeaders()
     });
@@ -21,18 +19,36 @@ const fetchBoxingMatches = async (): Promise<BoxingCardGroup[]> => {
     }
 
     const result = await response.json();
+    console.log('Raw API response:', result);
     
-    if (result.status === 'success' && result.data && result.data.length > 0) {
-      return result.data;
+    if (result.status === 'success' && result.data) {
+      console.log('API data received:', result.data);
+      console.log('Number of card groups:', result.data.length);
+      
+      // Since the API returns boxing data in the correct format, we can use it directly
+      const matchesByType: MatchesByType = {
+        cricket: [],
+        kabaddi: [],
+        football: [],
+        volleyball: [],
+        boxing: result.data // The API data is already in the correct boxing format
+      };
+
+      console.log('Processed matches by type:', matchesByType);
+      return matchesByType;
     } else {
-      // Return dummy data if API returns empty or invalid data
-      console.log('API returned empty data, using dummy data for boxing matches');
-      return dummyMatchesData.boxing;
+      console.log('API returned empty or invalid data');
+      return {
+        cricket: [],
+        kabaddi: [],
+        football: [],
+        volleyball: [],
+        boxing: []
+      };
     }
   } catch (error) {
-    console.error('Error fetching boxing matches:', error);
-    console.log('Using dummy data for boxing matches due to API error');
-    return dummyMatchesData.boxing;
+    console.error('Error fetching all matches:', error);
+    throw error;
   }
 };
 
@@ -43,17 +59,10 @@ const fetchBoxingMatches = async (): Promise<BoxingCardGroup[]> => {
  */
 export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesResponse> => {
   try {
-    // Fetch boxing matches from real API
-    const boxingMatches = await fetchBoxingMatches();
+    // Fetch all sports data from the unified API
+    const allMatches = await fetchAllMatches();
     
-    // For other sports, continue using dummy data for now
-    let filteredData: MatchesByType = {
-      cricket: [...dummyMatchesData.cricket],
-      kabaddi: [...dummyMatchesData.kabaddi],
-      football: [...dummyMatchesData.football],
-      volleyball: [...dummyMatchesData.volleyball],
-      boxing: boxingMatches
-    };
+    let filteredData: MatchesByType = { ...allMatches };
     
     if (filters) {
       if (filters.sportType) {
@@ -116,17 +125,11 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
     };
   } catch (error) {
     console.error('Error fetching matches:', error);
-    console.log('Using dummy data due to API error');
     return {
-      data: dummyMatchesData,
-      total: Object.entries(dummyMatchesData).reduce((sum, [sportType, matches]) => {
-        if (sportType === 'boxing') {
-          const boxingMatches = matches as BoxingCardGroup[];
-          return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
-        }
-        return sum + matches.length;
-      }, 0),
-      success: true
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      total: 0,
+      success: false,
+      message: 'Failed to fetch matches from API'
     };
   }
 };

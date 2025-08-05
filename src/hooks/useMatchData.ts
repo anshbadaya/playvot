@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MatchesByType, MatchFilters } from '@/types/match';
 import { fetchMatches } from '@/services/matchService';
-import { dummyMatchesData } from '@/data/matchesData';
 
 interface UseMatchesState {
   data: MatchesByType;
@@ -32,9 +31,12 @@ export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
     setState(prev => ({ ...prev, loading: true, error: null }));
     
     try {
+      console.log('Fetching matches with filters:', filters);
       const response = await fetchMatches(filters);
+      console.log('API Response:', response);
       
       if (response.success) {
+        console.log('Setting data:', response.data);
         setState({
           data: response.data,
           loading: false,
@@ -42,35 +44,21 @@ export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
           total: response.total
         });
       } else {
-        // Even if API fails, we should have dummy data
-        console.log('API failed but using dummy data as fallback');
+        console.log('API failed:', response.message);
         setState({
-          data: dummyMatchesData,
+          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
           loading: false,
-          error: null,
-          total: Object.entries(dummyMatchesData).reduce((sum, [sportType, matches]) => {
-            if (sportType === 'boxing') {
-              const boxingMatches = matches as any[];
-              return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
-            }
-            return sum + matches.length;
-          }, 0)
+          error: response.message || 'Failed to fetch matches',
+          total: 0
         });
       }
     } catch (error) {
       console.error('Error in useMatches:', error);
-      // Always fall back to dummy data instead of showing error
       setState({
-        data: dummyMatchesData,
+        data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
         loading: false,
-        error: null,
-        total: Object.entries(dummyMatchesData).reduce((sum, [sportType, matches]) => {
-          if (sportType === 'boxing') {
-            const boxingMatches = matches as any[];
-            return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
-          }
-          return sum + matches.length;
-        }, 0)
+        error: 'Failed to fetch matches from API',
+        total: 0
       });
     }
   }, []);

@@ -67,6 +67,7 @@ export interface BoxingMatch {
     b: number;
   };
   weight_category: string;
+  isLive?: boolean;
 }
 
 export interface BoxingCardGroup {
