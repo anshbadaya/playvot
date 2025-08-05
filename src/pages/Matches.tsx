@@ -18,6 +18,7 @@ import { Pagination, Navigation } from 'swiper/modules';
 // Custom hook and types
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
 import { BoxingCardGroup } from '@/types/match';
+import BackgroundRefreshIndicator from '@/components/Shared/BackgroundRefreshIndicator';
 
 // Styles
 import {
@@ -161,12 +162,14 @@ const Matches: React.FC = () => {
   const { 
     data: liveData, 
     loading: liveLoading, 
+    refreshing: liveRefreshing,
     total: liveTotal 
   } = useLiveMatches();
 
   const { 
     data: upcomingData, 
     loading: upcomingLoading, 
+    refreshing: upcomingRefreshing,
     total: upcomingTotal 
   } = useUpcomingMatches();
 
@@ -185,42 +188,46 @@ const Matches: React.FC = () => {
         <Container maxWidth="lg" sx={matchesContentStyles}>
           {/* Live Matches Section */}
           <Box sx={{ mb: 6 }}>
-            {liveLoading && <LoadingState />}
-            
-            {!liveLoading && (
-              <>
-                {totalLiveMatches === 0 ? (
-                  <EmptyState message="No live matches currently" />
-                ) : (
-                  <SportsSection
-                    title="Live Matches"
-                    cardGroups={liveData.boxing}
-                    isMobile={isMobile}
-                    isLive={true}
-                  />
-                )}
-              </>
-            )}
+            <BackgroundRefreshIndicator isRefreshing={liveRefreshing} showProgressBar={true}>
+              {liveLoading && <LoadingState />}
+              
+              {!liveLoading && (
+                <>
+                  {totalLiveMatches === 0 ? (
+                    <EmptyState message="No live matches currently" />
+                  ) : (
+                    <SportsSection
+                      title="Live Matches"
+                      cardGroups={liveData.boxing}
+                      isMobile={isMobile}
+                      isLive={true}
+                    />
+                  )}
+                </>
+              )}
+            </BackgroundRefreshIndicator>
           </Box>
 
           {/* Upcoming Matches Section */}
           <Box>
-            {upcomingLoading && <LoadingState />}
-            
-            {!upcomingLoading && (
-              <>
-                {totalUpcomingMatches === 0 ? (
-                  <EmptyState message="No upcoming matches found" />
-                ) : (
-                  <SportsSection
-                    title="Upcoming Matches"
-                    cardGroups={upcomingData.boxing}
-                    isMobile={isMobile}
-                    isLive={false}
-                  />
-                )}
-              </>
-            )}
+            <BackgroundRefreshIndicator isRefreshing={upcomingRefreshing} showProgressBar={true}>
+              {upcomingLoading && <LoadingState />}
+              
+              {!upcomingLoading && (
+                <>
+                  {totalUpcomingMatches === 0 ? (
+                    <EmptyState message="No upcoming matches found" />
+                  ) : (
+                    <SportsSection
+                      title="Upcoming Matches"
+                      cardGroups={upcomingData.boxing}
+                      isMobile={isMobile}
+                      isLive={false}
+                    />
+                  )}
+                </>
+              )}
+            </BackgroundRefreshIndicator>
           </Box>
         </Container>
       </Box>

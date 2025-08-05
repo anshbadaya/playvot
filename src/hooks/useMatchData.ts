@@ -79,23 +79,38 @@ export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
   };
 };
 
+interface UseLiveMatchesState extends UseMatchesState {
+  refreshing: boolean;
+}
+
+interface UseLiveMatchesReturn extends UseLiveMatchesState {
+  refetch: () => Promise<void>;
+  clearError: () => void;
+}
+
 /**
  * Custom hook for managing live match data (30-second refresh)
- * @returns UseMatchesReturn
+ * @returns UseLiveMatchesReturn
  */
-export const useLiveMatches = (): UseMatchesReturn => {
-  const [state, setState] = useState<UseMatchesState>({
+export const useLiveMatches = (): UseLiveMatchesReturn => {
+  const [state, setState] = useState<UseLiveMatchesState>({
     data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
     loading: false,
     error: null,
-    total: 0
+    total: 0,
+    refreshing: false
   });
 
-  const fetchLiveData = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+  const fetchLiveData = useCallback(async (backgroundRefresh = false) => {
+    // Only show loading state for initial load, not background refreshes
+    if (!backgroundRefresh) {
+      setState(prev => ({ ...prev, loading: true, error: null }));
+    } else {
+      setState(prev => ({ ...prev, refreshing: true }));
+    }
     
     try {
-      console.log('Fetching live matches');
+      console.log('Fetching live matches', backgroundRefresh ? '(background)' : '');
       const response = await fetchLiveMatchesResponse();
       console.log('Live API Response:', response);
       
@@ -105,25 +120,38 @@ export const useLiveMatches = (): UseMatchesReturn => {
           data: response.data,
           loading: false,
           error: null,
-          total: response.total
+          total: response.total,
+          refreshing: false
         });
       } else {
         console.log('Live API failed:', response.message);
-        setState({
-          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
-          loading: false,
-          error: response.message || 'Failed to fetch live matches',
-          total: 0
-        });
+        // Only update error state if it's not a background refresh
+        if (!backgroundRefresh) {
+          setState({
+            data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+            loading: false,
+            error: response.message || 'Failed to fetch live matches',
+            total: 0,
+            refreshing: false
+          });
+        } else {
+          setState(prev => ({ ...prev, refreshing: false }));
+        }
       }
     } catch (error) {
       console.error('Error in useLiveMatches:', error);
-      setState({
-        data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
-        loading: false,
-        error: 'Failed to fetch live matches from API',
-        total: 0
-      });
+      // Only update error state if it's not a background refresh
+      if (!backgroundRefresh) {
+        setState({
+          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+          loading: false,
+          error: 'Failed to fetch live matches from API',
+          total: 0,
+          refreshing: false
+        });
+      } else {
+        setState(prev => ({ ...prev, refreshing: false }));
+      }
     }
   }, []);
 
@@ -133,10 +161,10 @@ export const useLiveMatches = (): UseMatchesReturn => {
 
   // Initial data fetch and 30-second interval
   useEffect(() => {
-    fetchLiveData();
+    fetchLiveData(false); // Initial load with loading state
     
     const interval = setInterval(() => {
-      fetchLiveData();
+      fetchLiveData(true); // Background refresh without loading state
     }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
@@ -144,28 +172,43 @@ export const useLiveMatches = (): UseMatchesReturn => {
 
   return {
     ...state,
-    refetch: fetchLiveData,
+    refetch: () => fetchLiveData(false), // Manual refresh shows loading state
     clearError
   };
 };
 
+interface UseUpcomingMatchesState extends UseMatchesState {
+  refreshing: boolean;
+}
+
+interface UseUpcomingMatchesReturn extends UseUpcomingMatchesState {
+  refetch: () => Promise<void>;
+  clearError: () => void;
+}
+
 /**
  * Custom hook for managing upcoming match data (2-minute refresh)
- * @returns UseMatchesReturn
+ * @returns UseUpcomingMatchesReturn
  */
-export const useUpcomingMatches = (): UseMatchesReturn => {
-  const [state, setState] = useState<UseMatchesState>({
+export const useUpcomingMatches = (): UseUpcomingMatchesReturn => {
+  const [state, setState] = useState<UseUpcomingMatchesState>({
     data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
     loading: false,
     error: null,
-    total: 0
+    total: 0,
+    refreshing: false
   });
 
-  const fetchUpcomingData = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+  const fetchUpcomingData = useCallback(async (backgroundRefresh = false) => {
+    // Only show loading state for initial load, not background refreshes
+    if (!backgroundRefresh) {
+      setState(prev => ({ ...prev, loading: true, error: null }));
+    } else {
+      setState(prev => ({ ...prev, refreshing: true }));
+    }
     
     try {
-      console.log('Fetching upcoming matches');
+      console.log('Fetching upcoming matches', backgroundRefresh ? '(background)' : '');
       const response = await fetchUpcomingMatchesResponse();
       console.log('Upcoming API Response:', response);
       
@@ -175,25 +218,38 @@ export const useUpcomingMatches = (): UseMatchesReturn => {
           data: response.data,
           loading: false,
           error: null,
-          total: response.total
+          total: response.total,
+          refreshing: false
         });
       } else {
         console.log('Upcoming API failed:', response.message);
-        setState({
-          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
-          loading: false,
-          error: response.message || 'Failed to fetch upcoming matches',
-          total: 0
-        });
+        // Only update error state if it's not a background refresh
+        if (!backgroundRefresh) {
+          setState({
+            data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+            loading: false,
+            error: response.message || 'Failed to fetch upcoming matches',
+            total: 0,
+            refreshing: false
+          });
+        } else {
+          setState(prev => ({ ...prev, refreshing: false }));
+        }
       }
     } catch (error) {
       console.error('Error in useUpcomingMatches:', error);
-      setState({
-        data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
-        loading: false,
-        error: 'Failed to fetch upcoming matches from API',
-        total: 0
-      });
+      // Only update error state if it's not a background refresh
+      if (!backgroundRefresh) {
+        setState({
+          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+          loading: false,
+          error: 'Failed to fetch upcoming matches from API',
+          total: 0,
+          refreshing: false
+        });
+      } else {
+        setState(prev => ({ ...prev, refreshing: false }));
+      }
     }
   }, []);
 
@@ -203,10 +259,10 @@ export const useUpcomingMatches = (): UseMatchesReturn => {
 
   // Initial data fetch and 2-minute interval
   useEffect(() => {
-    fetchUpcomingData();
+    fetchUpcomingData(false); // Initial load with loading state
     
     const interval = setInterval(() => {
-      fetchUpcomingData();
+      fetchUpcomingData(true); // Background refresh without loading state
     }, 120000); // 2 minutes
 
     return () => clearInterval(interval);
@@ -214,7 +270,7 @@ export const useUpcomingMatches = (): UseMatchesReturn => {
 
   return {
     ...state,
-    refetch: fetchUpcomingData,
+    refetch: () => fetchUpcomingData(false), // Manual refresh shows loading state
     clearError
   };
 };

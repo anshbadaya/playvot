@@ -8,6 +8,7 @@ interface UseMatchDetailsState {
   scorecardData: ScorecardData | undefined;
   loading: boolean;
   error: string | null;
+  refreshing: boolean;
 }
 
 interface UseMatchDetailsReturn extends UseMatchDetailsState {
@@ -25,13 +26,20 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
     matchData: null,
     scorecardData: undefined,
     loading: false,
-    error: null
+    error: null,
+    refreshing: false
   });
 
-  const fetchData = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+  const fetchData = useCallback(async (backgroundRefresh = false) => {
+    // Only show loading state for initial load, not background refreshes
+    if (!backgroundRefresh) {
+      setState(prev => ({ ...prev, loading: true, error: null }));
+    } else {
+      setState(prev => ({ ...prev, refreshing: true }));
+    }
     
     try {
+      console.log('Fetching match details', backgroundRefresh ? '(background)' : '');
       const response = await fetchMatchDetails(matchId);
       
       if (response.success) {
@@ -39,27 +47,40 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
           matchData: response.data,
           scorecardData: response.scorecard || undefined,
           loading: false,
-          error: null
+          error: null,
+          refreshing: false
         });
       } else {
         // Even if API fails, we should have dummy data
         console.log('API failed but using dummy data as fallback');
-        setState({
-          matchData: dummyMatchData,
-          scorecardData: dummyScorecardData,
-          loading: false,
-          error: null
-        });
+        // Only update state if it's not a background refresh
+        if (!backgroundRefresh) {
+          setState({
+            matchData: dummyMatchData,
+            scorecardData: dummyScorecardData,
+            loading: false,
+            error: null,
+            refreshing: false
+          });
+        } else {
+          setState(prev => ({ ...prev, refreshing: false }));
+        }
       }
     } catch (error) {
       console.error('Error in useMatchDetails:', error);
       // Always fall back to dummy data instead of showing error
-      setState({
-        matchData: dummyMatchData,
-        scorecardData: dummyScorecardData,
-        loading: false,
-        error: null
-      });
+      // Only update state if it's not a background refresh
+      if (!backgroundRefresh) {
+        setState({
+          matchData: dummyMatchData,
+          scorecardData: dummyScorecardData,
+          loading: false,
+          error: null,
+          refreshing: false
+        });
+      } else {
+        setState(prev => ({ ...prev, refreshing: false }));
+      }
     }
   }, [matchId]);
 
@@ -67,16 +88,23 @@ export const useMatchDetails = (matchId: string): UseMatchDetailsReturn => {
     setState(prev => ({ ...prev, error: null }));
   }, []);
 
-  // Initial data fetch
+  // Initial data fetch and 30-second interval for live updates
   useEffect(() => {
     if (matchId) {
-      fetchData();
+      fetchData(false); // Initial load with loading state
+      
+      // Set up background refresh every 30 seconds for live match data
+      const interval = setInterval(() => {
+        fetchData(true); // Background refresh without loading state
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(interval);
     }
   }, [fetchData, matchId]);
 
   return {
     ...state,
-    refetch: fetchData,
+    refetch: () => fetchData(false), // Manual refresh shows loading state
     clearError
   };
 }; 

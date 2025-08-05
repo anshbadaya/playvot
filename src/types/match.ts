@@ -67,6 +67,10 @@ export interface BoxingMatch {
     a: number;
     b: number;
   };
+  live_match_odds?: {
+    a: number;
+    b: number;
+  };
   weight_category: string;
   isLive?: boolean;
 }

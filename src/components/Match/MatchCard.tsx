@@ -176,7 +176,10 @@ const DateText = styled(Typography)`
 const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
   const navigate = useNavigate();
   const { fixture_no, match_date, match, isLive } = props;
-  const { match_no, player_a, player_b, pre_match_odds, weight_category } = match;
+  const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category } = match;
+  
+  // Use live odds if available and match is live, otherwise fall back to pre-match odds
+  const oddsToDisplay = (live_match_odds && isLive) ? live_match_odds : pre_match_odds;
   
   // Generate a slug for navigation
   const slug = `boxing-${match_no}-${player_a.name.toLowerCase().replace(/\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\s+/g, '-')}`;
@@ -231,7 +234,7 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
                   <PlayerNameText>{player_a.name}</PlayerNameText>
                   <TeamText>{player_a.team}</TeamText>
                 </PlayerInfoContainer>
-                <OddsText>{formatScore(pre_match_odds.a, 'boxing')}</OddsText>
+                <OddsText>{formatScore(oddsToDisplay.a, 'boxing')}</OddsText>
               </TeamRow>
               
               <Divider sx={{ my: 1.5, opacity: 0.1 }} />
@@ -241,7 +244,7 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
                   <PlayerNameText>{player_b.name}</PlayerNameText>
                   <TeamText>{player_b.team}</TeamText>
                 </PlayerInfoContainer>
-                <OddsText>{formatScore(pre_match_odds.b, 'boxing')}</OddsText>
+                <OddsText>{formatScore(oddsToDisplay.b, 'boxing')}</OddsText>
               </TeamRow>
             </TeamsSection>
             

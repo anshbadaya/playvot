@@ -1,5 +1,6 @@
 import { MatchesByType, MatchFilters, MatchesResponse, BoxingCardGroup } from '@/types/match';
 import { API_CONFIG, getApiHeaders } from '@/config/api';
+import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
 
 /**
  * Fetch live matches from the API endpoint
@@ -36,18 +37,13 @@ const fetchLiveMatches = async (): Promise<MatchesByType> => {
       console.log('Processed live matches by type:', matchesByType);
       return matchesByType;
     } else {
-      console.log('Live API returned empty or invalid data');
-      return {
-        cricket: [],
-        kabaddi: [],
-        football: [],
-        volleyball: [],
-        boxing: []
-      };
+      console.log('Live API returned empty or invalid data, using dummy data');
+      return dummyMatchesData;
     }
   } catch (error) {
     console.error('Error fetching live matches:', error);
-    throw error;
+    console.log('Using dummy live matches data due to API error');
+    return dummyMatchesData;
   }
 };
 
@@ -86,18 +82,13 @@ const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
       console.log('Processed upcoming matches by type:', matchesByType);
       return matchesByType;
     } else {
-      console.log('Upcoming API returned empty or invalid data');
-      return {
-        cricket: [],
-        kabaddi: [],
-        football: [],
-        volleyball: [],
-        boxing: []
-      };
+      console.log('Upcoming API returned empty or invalid data, using dummy data');
+      return dummyUpcomingMatchesData;
     }
   } catch (error) {
     console.error('Error fetching upcoming matches:', error);
-    throw error;
+    console.log('Using dummy upcoming matches data due to API error');
+    return dummyUpcomingMatchesData;
   }
 };
 
