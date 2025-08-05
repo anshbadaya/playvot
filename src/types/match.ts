@@ -35,6 +35,7 @@ export interface BoxingMatchCardProps {
   match_date: string;
   match: BoxingMatch;
   sportType?: 'boxing';
+  isLive?: boolean;
 }
 
 export interface MatchesByType {

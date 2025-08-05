@@ -2,12 +2,62 @@ import { MatchesByType, MatchFilters, MatchesResponse, BoxingCardGroup } from '@
 import { API_CONFIG, getApiHeaders } from '@/config/api';
 
 /**
- * Fetch all matches from the unified API endpoint
+ * Fetch live matches from the API endpoint
  * @returns Promise<MatchesByType>
  */
-const fetchAllMatches = async (): Promise<MatchesByType> => {
+const fetchLiveMatches = async (): Promise<MatchesByType> => {
   try {
-    console.log('Fetching from API:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`);
+    console.log('Fetching live matches from API:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LIVE_FIXTURES}`);
+    
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LIVE_FIXTURES}`, {
+      method: 'GET',
+      headers: getApiHeaders()
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Raw live API response:', result);
+    
+    if (result.status === 'success' && result.data) {
+      console.log('Live API data received:', result.data);
+      console.log('Number of live card groups:', result.data.length);
+      
+      const matchesByType: MatchesByType = {
+        cricket: [],
+        kabaddi: [],
+        football: [],
+        volleyball: [],
+        boxing: result.data
+      };
+
+      console.log('Processed live matches by type:', matchesByType);
+      return matchesByType;
+    } else {
+      console.log('Live API returned empty or invalid data');
+      return {
+        cricket: [],
+        kabaddi: [],
+        football: [],
+        volleyball: [],
+        boxing: []
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching live matches:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch upcoming matches from the API endpoint
+ * @returns Promise<MatchesByType>
+ */
+const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
+  try {
+    console.log('Fetching upcoming matches from API:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`);
     
     const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`, {
       method: 'GET',
@@ -19,25 +69,24 @@ const fetchAllMatches = async (): Promise<MatchesByType> => {
     }
 
     const result = await response.json();
-    console.log('Raw API response:', result);
+    console.log('Raw upcoming API response:', result);
     
     if (result.status === 'success' && result.data) {
-      console.log('API data received:', result.data);
-      console.log('Number of card groups:', result.data.length);
+      console.log('Upcoming API data received:', result.data);
+      console.log('Number of upcoming card groups:', result.data.length);
       
-      // Since the API returns boxing data in the correct format, we can use it directly
       const matchesByType: MatchesByType = {
         cricket: [],
         kabaddi: [],
         football: [],
         volleyball: [],
-        boxing: result.data // The API data is already in the correct boxing format
+        boxing: result.data
       };
 
-      console.log('Processed matches by type:', matchesByType);
+      console.log('Processed upcoming matches by type:', matchesByType);
       return matchesByType;
     } else {
-      console.log('API returned empty or invalid data');
+      console.log('Upcoming API returned empty or invalid data');
       return {
         cricket: [],
         kabaddi: [],
@@ -47,20 +96,20 @@ const fetchAllMatches = async (): Promise<MatchesByType> => {
       };
     }
   } catch (error) {
-    console.error('Error fetching all matches:', error);
+    console.error('Error fetching upcoming matches:', error);
     throw error;
   }
 };
 
 /**
- * Fetch all matches grouped by sport type
+ * Fetch all matches grouped by sport type (legacy function)
  * @param filters - Optional filters for matches
  * @returns Promise<MatchesResponse>
  */
 export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesResponse> => {
   try {
-    // Fetch all sports data from the unified API
-    const allMatches = await fetchAllMatches();
+    // Fetch upcoming matches by default
+    const allMatches = await fetchUpcomingMatches();
     
     let filteredData: MatchesByType = { ...allMatches };
     
@@ -111,7 +160,6 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
     // Calculate total matches
     const total = Object.entries(filteredData).reduce((sum, [sportType, matches]) => {
       if (sportType === 'boxing') {
-        // For boxing, count the total number of matches across all card groups
         const boxingMatches = matches as BoxingCardGroup[];
         return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
       }
@@ -130,6 +178,70 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
       total: 0,
       success: false,
       message: 'Failed to fetch matches from API'
+    };
+  }
+};
+
+/**
+ * Fetch live matches only
+ * @returns Promise<MatchesResponse>
+ */
+export const fetchLiveMatchesResponse = async (): Promise<MatchesResponse> => {
+  try {
+    const liveMatches = await fetchLiveMatches();
+    
+    const total = Object.entries(liveMatches).reduce((sum, [sportType, matches]) => {
+      if (sportType === 'boxing') {
+        const boxingMatches = matches as BoxingCardGroup[];
+        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      }
+      return sum + matches.length;
+    }, 0);
+    
+    return {
+      data: liveMatches,
+      total,
+      success: true
+    };
+  } catch (error) {
+    console.error('Error fetching live matches:', error);
+    return {
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      total: 0,
+      success: false,
+      message: 'Failed to fetch live matches from API'
+    };
+  }
+};
+
+/**
+ * Fetch upcoming matches only
+ * @returns Promise<MatchesResponse>
+ */
+export const fetchUpcomingMatchesResponse = async (): Promise<MatchesResponse> => {
+  try {
+    const upcomingMatches = await fetchUpcomingMatches();
+    
+    const total = Object.entries(upcomingMatches).reduce((sum, [sportType, matches]) => {
+      if (sportType === 'boxing') {
+        const boxingMatches = matches as BoxingCardGroup[];
+        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      }
+      return sum + matches.length;
+    }, 0);
+    
+    return {
+      data: upcomingMatches,
+      total,
+      success: true
+    };
+  } catch (error) {
+    console.error('Error fetching upcoming matches:', error);
+    return {
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      total: 0,
+      success: false,
+      message: 'Failed to fetch upcoming matches from API'
     };
   }
 };
@@ -156,22 +268,6 @@ export const fetchMatchesBySport = async (
       message: `Failed to fetch ${sportType} matches`
     };
   }
-};
-
-/**
- * Fetch live matches only
- * @returns Promise<MatchesResponse>
- */
-export const fetchLiveMatches = async (): Promise<MatchesResponse> => {
-  return fetchMatches({ isLive: true });
-};
-
-/**
- * Fetch upcoming matches
- * @returns Promise<MatchesResponse>
- */
-export const fetchUpcomingMatches = async (): Promise<MatchesResponse> => {
-  return fetchMatches({ isLive: false });
 };
 
 /**

@@ -16,7 +16,7 @@ import 'swiper/css/navigation';
 import { Pagination, Navigation } from 'swiper/modules';
 
 // Custom hook and types
-import { useMatches } from '@/hooks/useMatchData';
+import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
 import { BoxingCardGroup } from '@/types/match';
 
 // Styles
@@ -38,6 +38,7 @@ interface BoxingSectionProps {
   title: string;
   cardGroups: BoxingCardGroup[];
   isMobile: boolean;
+  isLive?: boolean;
 }
 
 /**
@@ -67,7 +68,7 @@ const EmptyState: React.FC<{ message?: string }> = ({ message = "No matches foun
 /**
  * BoxingSection component for displaying boxing matches grouped by card
  */
-const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobile }) => {
+const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobile, isLive = false }) => {
   if (cardGroups.length === 0) {
     return null;
   }
@@ -77,6 +78,20 @@ const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobi
       <Box sx={sectionTitleContainerStyles}>
         <Typography component="span" sx={sectionTitleStyles}>
           {title}
+          {isLive && (
+            <Box component="span" sx={{ 
+              ml: 1, 
+              px: 1, 
+              py: 0.5, 
+              bgcolor: 'error.main', 
+              color: 'white', 
+              borderRadius: 1, 
+              fontSize: '0.8rem',
+              fontWeight: 'bold'
+            }}>
+              LIVE
+            </Box>
+          )}
         </Typography>
       </Box>
 
@@ -100,7 +115,14 @@ const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobi
                 {cardGroup.matches.map((match, index) => (
                   <SwiperSlide key={`${match.match_no}-${index}`}>
                     <Box sx={{ px: 1 }}>
-                      <MatchCard match={match} card={cardGroup.card} fixture_no={cardGroup.fixture_no} match_date={cardGroup.match_date} sportType="boxing" />
+                      <MatchCard 
+                        match={match} 
+                        card={cardGroup.card} 
+                        fixture_no={cardGroup.fixture_no} 
+                        match_date={cardGroup.match_date} 
+                        sportType="boxing" 
+                        isLive={isLive}
+                      />
                     </Box>
                   </SwiperSlide>
                 ))}
@@ -109,7 +131,14 @@ const BoxingSection: React.FC<BoxingSectionProps> = ({ title, cardGroups, isMobi
               <Box sx={gridContainerStyles}>
                 {cardGroup.matches.map((match, index) => (
                   <Box key={`${match.match_no}-${index}`}>
-                    <MatchCard match={match} card={cardGroup.card} fixture_no={cardGroup.fixture_no} match_date={cardGroup.match_date} sportType="boxing" />
+                    <MatchCard 
+                      match={match} 
+                      card={cardGroup.card} 
+                      fixture_no={cardGroup.fixture_no} 
+                      match_date={cardGroup.match_date} 
+                      sportType="boxing" 
+                      isLive={isLive}
+                    />
                   </Box>
                 ))}
               </Box>
@@ -128,43 +157,71 @@ const Matches: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // Use custom hook for data management
+  // Use custom hooks for live and upcoming matches
   const { 
-    data, 
-    loading, 
-    total 
-  } = useMatches();
+    data: liveData, 
+    loading: liveLoading, 
+    total: liveTotal 
+  } = useLiveMatches();
 
-  // Calculate total boxing matches
-  const totalMatches = data.boxing ? data.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
+  const { 
+    data: upcomingData, 
+    loading: upcomingLoading, 
+    total: upcomingTotal 
+  } = useUpcomingMatches();
+
+  // Calculate total matches for each section
+  const totalLiveMatches = liveData.boxing ? liveData.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
+  const totalUpcomingMatches = upcomingData.boxing ? upcomingData.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
+
+  console.log('Live matches data:', liveData);
+  console.log('Total live matches:', totalLiveMatches);
+  console.log('Upcoming matches data:', upcomingData);
+  console.log('Total upcoming matches:', totalUpcomingMatches);
 
   return (
     <Layout>
       <Box sx={matchesContainerStyles}>
         <Container maxWidth="lg" sx={matchesContentStyles}>
-          {/* Loading State */}
-          {loading && <LoadingState />}
-
-          {/* Content */}
-          {!loading && (
-            <>
-              {/* Empty State */}
-              {totalMatches === 0 && (
-                <EmptyState />
-              )}
-
-              {/* Boxing Matches Section */}
-              {totalMatches > 0 && (
-                <Box>
+          {/* Live Matches Section */}
+          <Box sx={{ mb: 6 }}>
+            {liveLoading && <LoadingState />}
+            
+            {!liveLoading && (
+              <>
+                {totalLiveMatches === 0 ? (
+                  <EmptyState message="No live matches currently" />
+                ) : (
                   <BoxingSection
-                    title="Boxing"
-                    cardGroups={data.boxing}
+                    title="Live Matches"
+                    cardGroups={liveData.boxing}
                     isMobile={isMobile}
+                    isLive={true}
                   />
-                </Box>
-              )}
-            </>
-          )}
+                )}
+              </>
+            )}
+          </Box>
+
+          {/* Upcoming Matches Section */}
+          <Box>
+            {upcomingLoading && <LoadingState />}
+            
+            {!upcomingLoading && (
+              <>
+                {totalUpcomingMatches === 0 ? (
+                  <EmptyState message="No upcoming matches found" />
+                ) : (
+                  <BoxingSection
+                    title="Upcoming Matches"
+                    cardGroups={upcomingData.boxing}
+                    isMobile={isMobile}
+                    isLive={false}
+                  />
+                )}
+              </>
+            )}
+          </Box>
         </Container>
       </Box>
     </Layout>

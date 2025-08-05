@@ -175,11 +175,11 @@ const DateText = styled(Typography)`
 
 const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
   const navigate = useNavigate();
-  const { card, fixture_no, match_date, match } = props;
+  const { card, fixture_no, match_date, match, isLive } = props;
   const { match_no, player_a, player_b, pre_match_odds, weight_category } = match;
   
   // Generate a slug for navigation
-  const slug = `boxing-${match_no}-${player_a.name.toLowerCase().replace(/\\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\\s+/g, '-')}`;
+  const slug = `boxing-${match_no}-${player_a.name.toLowerCase().replace(/\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\s+/g, '-')}`;
   
   const handleClick = () => {
     navigate(`/match/${slug}`);
@@ -192,9 +192,25 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
       <Box sx={{ borderRadius: '16px', overflow: 'hidden', height: '100%' }}>
         <FixtureHeader>
           <FixtureText>Fixture #{fixture_no}</FixtureText>
-          <DateText>
-            {new Date(match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-          </DateText>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {isLive && (
+              <Box sx={{ 
+                px: 1, 
+                py: 0.3, 
+                bgcolor: 'error.main', 
+                color: 'white', 
+                borderRadius: 0.5, 
+                fontSize: '0.7rem',
+                fontWeight: 'bold',
+                animation: 'pulse 2s infinite'
+              }}>
+                LIVE
+              </Box>
+            )}
+            <DateText>
+              {new Date(match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </DateText>
+          </Box>
         </FixtureHeader>
         
         <StyledCard onClick={handleClick}>
@@ -211,22 +227,22 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
             
             <TeamsSection>
               <TeamRow>
-                              <PlayerInfoContainer>
-                <PlayerNameText>{player_a.name}</PlayerNameText>
-                <TeamText>{player_a.team}</TeamText>
-                <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_a.code}</TeamText>
-              </PlayerInfoContainer>
+                <PlayerInfoContainer>
+                  <PlayerNameText>{player_a.name}</PlayerNameText>
+                  <TeamText>{player_a.team}</TeamText>
+                  <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_a.code}</TeamText>
+                </PlayerInfoContainer>
                 <OddsText>{formatScore(pre_match_odds.a, 'boxing')}</OddsText>
               </TeamRow>
               
               <Divider sx={{ my: 1.5, opacity: 0.1 }} />
               
               <TeamRow>
-                              <PlayerInfoContainer>
-                <PlayerNameText>{player_b.name}</PlayerNameText>
-                <TeamText>{player_b.team}</TeamText>
-                <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_b.code}</TeamText>
-              </PlayerInfoContainer>
+                <PlayerInfoContainer>
+                  <PlayerNameText>{player_b.name}</PlayerNameText>
+                  <TeamText>{player_b.team}</TeamText>
+                  <TeamText sx={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.5)', mt: 0.2 }}>Code: {player_b.code}</TeamText>
+                </PlayerInfoContainer>
                 <OddsText>{formatScore(pre_match_odds.b, 'boxing')}</OddsText>
               </TeamRow>
             </TeamsSection>
