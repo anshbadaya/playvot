@@ -175,7 +175,7 @@ const DateText = styled(Typography)`
 
 const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
   const navigate = useNavigate();
-  const { card, fixture_no, match_date, match, isLive } = props;
+  const { fixture_no, match_date, match, isLive } = props;
   const { match_no, player_a, player_b, pre_match_odds, weight_category } = match;
   
   // Generate a slug for navigation
@@ -213,7 +213,7 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
           </Box>
         </FixtureHeader>
         
-        <StyledCard onClick={handleClick}>
+        <StyledCard>
           <CardContentStyled>
             <MatchTypeText>
               Match #{match_no}
