@@ -1,6 +1,6 @@
-# PlayVot - Sports Betting & Match Tracking Platform
+# Zoddz - Premier Sports Betting Platform
 
-A modern, responsive React application for sports betting and match tracking with real-time updates and comprehensive match details.
+A modern, responsive React application for sports betting with real-time updates, live odds, and comprehensive match details. Zoddz is your premier destination for sports wagering across cricket, football, kabaddi, volleyball, and more.
 
 ## 🚀 Features
 
@@ -61,7 +61,7 @@ src/
 
    ```bash
    git clone <repository-url>
-   cd playvot
+   cd zoddz
    ```
 
 2. **Install dependencies**
@@ -88,7 +88,7 @@ src/
 Create a `.env` file in the root directory:
 
 ```env
-REACT_APP_API_BASE_URL=https://api.playvot.com
+REACT_APP_API_BASE_URL=https://api.zoddz.com
 REACT_APP_ENVIRONMENT=development
 ```
 
@@ -284,4 +284,4 @@ For support and questions:
 
 ---
 
-**Built with ❤️ using modern React and TypeScript**
+**Built with ❤️ by Zoddz Team using modern React and TypeScript**

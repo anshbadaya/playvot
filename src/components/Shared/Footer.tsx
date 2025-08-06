@@ -58,9 +58,12 @@ const Footer: React.FC<FooterProps> = ({
   copyrightText = `© ${new Date().getFullYear()} All rights reserved.`,
   links = [
     { text: "Terms of Service", href: "/terms" },
-    { text: "Privacy Policy", href: "/privacy" }
+    { text: "Privacy Policy", href: "/privacy" },
+    { text: "Responsible Gaming", href: "/responsible-gaming" },
+    { text: "About Us", href: "/about" },
+    { text: "Contact", href: "/contact" }
   ],
-  companyName
+  companyName = "Zoddz"
 }) => {
   return (
     <FooterContainer>

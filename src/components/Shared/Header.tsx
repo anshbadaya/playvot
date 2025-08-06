@@ -398,7 +398,7 @@ const MobileSearchInput = styled.input`
 const Header: React.FC<HeaderProps> = ({
   searchPlaceholder = "Search for matches...",
   logoPath = "/Logo.png",
-  logoAlt = "Playvot Logo",
+  logoAlt = "Zoddz Logo",
   onSearch,
   showSearch = true,
 }) => {
