@@ -3,7 +3,7 @@ import { Box, Typography, Card, CardContent, Chip, Divider } from '@mui/material
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { formatScore } from '@/utils';
-import { BoxingMatchCardProps } from '@/types/match';
+import { SportsMatchCardProps } from '@/types/match';
 
 const MatchCardContainer = styled(Box)`
   position: relative;
@@ -148,13 +148,14 @@ const WeightCategoryChip = styled(Chip)`
 
 const FixtureHeader = styled(Box)`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.spacing(1.2, 2)};
   background-color: rgba(30, 41, 59, 0.8);
   border-bottom: 1px solid rgba(59, 130, 246, 0.2);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  position: relative;
 `;
 
 const FixtureText = styled(Typography)`
@@ -171,18 +172,45 @@ const DateText = styled(Typography)`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
 `;
 
-const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
+const TimeText = styled(Typography)`
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+`;
+
+const TimeInfoContainer = styled(Box)`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing(1)};
+  margin-top: ${({ theme }) => theme.spacing(1.5)};
+  padding: ${({ theme }) => theme.spacing(1, 1.5)};
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+`;
+
+const TimeLabel = styled(Typography)`
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
   const navigate = useNavigate();
   const { fixture_no, match_date, match, isLive } = props;
-  const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category } = match;
+  const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category, start_time, end_time } = match;
   
   // Use live odds if available and match is live, otherwise fall back to pre-match odds
   const oddsToDisplay = (live_match_odds && isLive) ? live_match_odds : pre_match_odds;
   
   // Generate a slug for navigation
-  const slug = `boxing-${match_no}-${player_a.name.toLowerCase().replace(/\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\s+/g, '-')}`;
+  const slug = `sports-${match_no}-${player_a.name.toLowerCase().replace(/\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\s+/g, '-')}`;
   
   const handleClick = () => {
     navigate(`/match/${slug}`);
@@ -195,32 +223,64 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
       <Box sx={{ borderRadius: '16px', overflow: 'hidden', height: '100%' }}>
         <FixtureHeader>
           <FixtureText>Fixture #{fixture_no}</FixtureText>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {isLive && (
-              <Box sx={{ 
-                px: 1, 
-                py: 0.3, 
-                bgcolor: 'error.main', 
-                color: 'white', 
-                borderRadius: 0.5, 
-                fontSize: '0.7rem',
-                fontWeight: 'bold',
-                animation: 'pulse 2s infinite'
-              }}>
-                LIVE
-              </Box>
-            )}
-            <DateText>
-              {new Date(match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            </DateText>
-          </Box>
+          {isLive && (
+            <Box sx={{ 
+              position: 'absolute',
+              right: 16,
+              px: 1, 
+              py: 0.3, 
+              bgcolor: 'error.main', 
+              color: 'white', 
+              borderRadius: 0.5, 
+              fontSize: '0.7rem',
+              fontWeight: 'bold',
+              animation: 'pulse 2s infinite'
+            }}>
+              LIVE
+            </Box>
+          )}
         </FixtureHeader>
         
         <StyledCard>
           <CardContentStyled>
-            <MatchTypeText>
-              Match #{match_no}
-            </MatchTypeText>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <MatchTypeText>
+                Match #{match_no}
+              </MatchTypeText>
+              <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1,
+                padding: '4px 8px',
+                borderRadius: '6px',
+                background: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <Typography sx={{ 
+                  color: 'rgba(255, 255, 255, 0.7)', 
+                  fontSize: '0.75rem', 
+                  fontWeight: 500 
+                }}>
+                  {new Date(match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </Typography>
+                <Typography sx={{ 
+                  color: 'rgba(255, 255, 255, 0.6)', 
+                  fontSize: '0.65rem', 
+                  fontWeight: 500,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  at
+                </Typography>
+                <Typography sx={{ 
+                  color: 'rgba(255, 255, 255, 0.9)', 
+                  fontSize: '0.75rem', 
+                  fontWeight: 600 
+                }}>
+                  {start_time}
+                </Typography>
+              </Box>
+            </Box>
             
             <MatchTitleText>
               {player_a.name} vs {player_b.name}
@@ -234,7 +294,7 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
                   <PlayerNameText>{player_a.name}</PlayerNameText>
                   <TeamText>{player_a.team}</TeamText>
                 </PlayerInfoContainer>
-                <OddsText>{formatScore(oddsToDisplay.a, 'boxing')}</OddsText>
+                <OddsText>{oddsToDisplay.a}</OddsText>
               </TeamRow>
               
               <Divider sx={{ my: 1.5, opacity: 0.1 }} />
@@ -244,7 +304,7 @@ const MatchCard: React.FC<BoxingMatchCardProps> = (props) => {
                   <PlayerNameText>{player_b.name}</PlayerNameText>
                   <TeamText>{player_b.team}</TeamText>
                 </PlayerInfoContainer>
-                <OddsText>{formatScore(oddsToDisplay.b, 'boxing')}</OddsText>
+                <OddsText>{oddsToDisplay.b}</OddsText>
               </TeamRow>
             </TeamsSection>
             

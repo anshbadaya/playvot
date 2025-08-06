@@ -17,7 +17,7 @@ import { Pagination, Navigation } from 'swiper/modules';
 
 // Custom hook and types
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
-import { BoxingCardGroup } from '@/types/match';
+import { SportsCardGroup } from '@/types/match';
 import BackgroundRefreshIndicator from '@/components/Shared/BackgroundRefreshIndicator';
 
 // Styles
@@ -37,7 +37,7 @@ import {
 
 interface SportsSectionProps {
   title: string;
-  cardGroups: BoxingCardGroup[];
+  cardGroups: SportsCardGroup[];
   isMobile: boolean;
   isLive?: boolean;
 }
@@ -121,7 +121,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
                         card={cardGroup.card} 
                         fixture_no={cardGroup.fixture_no} 
                         match_date={cardGroup.match_date} 
-                        sportType="boxing" 
+                        sportType="sports" 
                         isLive={isLive}
                       />
                     </Box>
@@ -137,7 +137,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
                       card={cardGroup.card} 
                       fixture_no={cardGroup.fixture_no} 
                       match_date={cardGroup.match_date} 
-                      sportType="boxing" 
+                      sportType="sports" 
                       isLive={isLive}
                     />
                   </Box>
@@ -174,8 +174,8 @@ const Matches: React.FC = () => {
   } = useUpcomingMatches();
 
   // Calculate total matches for each section
-  const totalLiveMatches = liveData.boxing ? liveData.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
-  const totalUpcomingMatches = upcomingData.boxing ? upcomingData.boxing.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
+  const totalLiveMatches = liveData.sports ? liveData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
+  const totalUpcomingMatches = upcomingData.sports ? upcomingData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
 
   console.log('Live matches data:', liveData);
   console.log('Total live matches:', totalLiveMatches);
@@ -198,7 +198,7 @@ const Matches: React.FC = () => {
                   ) : (
                     <SportsSection
                       title="Live Matches"
-                      cardGroups={liveData.boxing}
+                      cardGroups={liveData.sports}
                       isMobile={isMobile}
                       isLive={true}
                     />
@@ -220,7 +220,7 @@ const Matches: React.FC = () => {
                   ) : (
                     <SportsSection
                       title="Upcoming Matches"
-                      cardGroups={upcomingData.boxing}
+                      cardGroups={upcomingData.sports}
                       isMobile={isMobile}
                       isLive={false}
                     />

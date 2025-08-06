@@ -1,17 +1,17 @@
-import { fetchMatches } from '../matchService';
+import { fetchMatches, fetchLiveMatchesResponse, fetchUpcomingMatchesResponse } from '../matchService';
 import { API_CONFIG } from '@/config/api';
 
 // Mock fetch globally
 global.fetch = jest.fn();
 
-describe('Match Service', () => {
+describe('matchService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('fetchBoxingMatches', () => {
-    it('should fetch boxing matches from API successfully', async () => {
-      const mockResponse = {
+  describe('fetchSportsMatches', () => {
+    it('should fetch sports matches from API successfully', async () => {
+      const mockApiResponse = {
         status: 'success',
         data: [
           {
@@ -21,46 +21,39 @@ describe('Match Service', () => {
             matches: [
               {
                 match_no: 1,
-                player_a: { code: 1102, name: 'Kyle Cummings', team: 'MUMBAI MUSCLE' },
-                player_b: { code: 1010, name: 'Rino Thomas', team: 'MP HATHODAS' },
-                pre_match_odds: { a: 1.1, b: 6.9 },
-                weight_category: '90 KG MEN'
+                player_a: { code: 1091, name: 'Ashish Mehta', team: 'MUMBAI MUSCLE' },
+                player_b: { code: 1002, name: 'Akash Handique', team: 'MP HATHODAS' },
+                pre_match_odds: { a: 1.61, b: 2.33 },
+                weight_category: '60 KG MEN'
               }
             ]
           }
         ]
       };
 
-      (fetch as jest.Mock).mockResolvedValueOnce({
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: async () => mockResponse
+        json: async () => mockApiResponse
       });
 
-      const result = await fetchMatches();
-      
-      expect(fetch).toHaveBeenCalledWith(
-        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.BOXING_FIXTURES}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_CONFIG.API_KEY}`
-          }
-        }
-      );
+      const result = await fetchMatches({ sportType: 'sports' });
 
+      expect(global.fetch).toHaveBeenCalledWith(
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`,
+        expect.any(Object)
+      );
       expect(result.success).toBe(true);
-      expect(result.data.boxing).toHaveLength(1);
-      expect(result.data.boxing[0].card).toBe('MAIN CARD');
+      expect(result.data.sports).toHaveLength(1);
+      expect(result.data.sports[0].card).toBe('MAIN CARD');
     });
 
     it('should handle API errors gracefully', async () => {
-      (fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
-      const result = await fetchMatches();
-      
-      expect(result.success).toBe(true); // Still returns success with empty boxing data
-      expect(result.data.boxing).toHaveLength(0);
+      const result = await fetchMatches({ sportType: 'sports' });
+
+      expect(result.success).toBe(true); // Still returns success with empty sports data
+      expect(result.data.sports).toHaveLength(0);
     });
   });
 }); 

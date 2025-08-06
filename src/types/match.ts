@@ -29,12 +29,12 @@ export interface Match {
   league?: string;
 }
 
-export interface BoxingMatchCardProps {
+export interface SportsMatchCardProps {
   card: string;
   fixture_no: number;
   match_date: string;
-  match: BoxingMatch;
-  sportType?: 'boxing';
+  match: SportsMatch;
+  sportType?: 'sports';
   isLive?: boolean;
 }
 
@@ -43,7 +43,7 @@ export interface MatchesByType {
   kabaddi: Match[];
   football: Match[];
   volleyball: Match[];
-  boxing: BoxingCardGroup[];
+  sports: SportsCardGroup[];
 }
 
 export interface MatchFilters {
@@ -53,16 +53,16 @@ export interface MatchFilters {
   card?: string;
 }
 
-export interface BoxingPlayer {
+export interface SportsPlayer {
   code: number;
   name: string;
   team: string;
 }
 
-export interface BoxingMatch {
+export interface SportsMatch {
   match_no: number;
-  player_a: BoxingPlayer;
-  player_b: BoxingPlayer;
+  player_a: SportsPlayer;
+  player_b: SportsPlayer;
   pre_match_odds: {
     a: number;
     b: number;
@@ -72,14 +72,16 @@ export interface BoxingMatch {
     b: number;
   };
   weight_category: string;
+  start_time: string;
+  end_time: string;
   isLive?: boolean;
 }
 
-export interface BoxingCardGroup {
+export interface SportsCardGroup {
   card: string;
   fixture_no: number;
   match_date: string;
-  matches: BoxingMatch[];
+  matches: SportsMatch[];
 }
 
 export interface MatchesResponse {

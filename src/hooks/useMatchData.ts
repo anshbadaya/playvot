@@ -21,7 +21,7 @@ interface UseMatchesReturn extends UseMatchesState {
  */
 export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
   const [state, setState] = useState<UseMatchesState>({
-    data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+    data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
     loading: false,
     error: null,
     total: 0
@@ -46,7 +46,7 @@ export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
       } else {
         console.log('API failed:', response.message);
         setState({
-          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+          data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
           loading: false,
           error: response.message || 'Failed to fetch matches',
           total: 0
@@ -55,7 +55,7 @@ export const useMatches = (initialFilters?: MatchFilters): UseMatchesReturn => {
     } catch (error) {
       console.error('Error in useMatches:', error);
       setState({
-        data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+        data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
         loading: false,
         error: 'Failed to fetch matches from API',
         total: 0
@@ -94,7 +94,7 @@ interface UseLiveMatchesReturn extends UseLiveMatchesState {
  */
 export const useLiveMatches = (): UseLiveMatchesReturn => {
   const [state, setState] = useState<UseLiveMatchesState>({
-    data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+    data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
     loading: false,
     error: null,
     total: 0,
@@ -128,7 +128,7 @@ export const useLiveMatches = (): UseLiveMatchesReturn => {
         // Only update error state if it's not a background refresh
         if (!backgroundRefresh) {
           setState({
-            data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+            data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
             loading: false,
             error: response.message || 'Failed to fetch live matches',
             total: 0,
@@ -143,7 +143,7 @@ export const useLiveMatches = (): UseLiveMatchesReturn => {
       // Only update error state if it's not a background refresh
       if (!backgroundRefresh) {
         setState({
-          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+          data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
           loading: false,
           error: 'Failed to fetch live matches from API',
           total: 0,
@@ -192,7 +192,7 @@ interface UseUpcomingMatchesReturn extends UseUpcomingMatchesState {
  */
 export const useUpcomingMatches = (): UseUpcomingMatchesReturn => {
   const [state, setState] = useState<UseUpcomingMatchesState>({
-    data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+    data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
     loading: false,
     error: null,
     total: 0,
@@ -226,7 +226,7 @@ export const useUpcomingMatches = (): UseUpcomingMatchesReturn => {
         // Only update error state if it's not a background refresh
         if (!backgroundRefresh) {
           setState({
-            data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+            data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
             loading: false,
             error: response.message || 'Failed to fetch upcoming matches',
             total: 0,
@@ -241,7 +241,7 @@ export const useUpcomingMatches = (): UseUpcomingMatchesReturn => {
       // Only update error state if it's not a background refresh
       if (!backgroundRefresh) {
         setState({
-          data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+          data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
           loading: false,
           error: 'Failed to fetch upcoming matches from API',
           total: 0,

@@ -4,7 +4,7 @@ export const SPORT_TYPES = {
   FOOTBALL: 'football',
   KABADDI: 'kabaddi',
   VOLLEYBALL: 'volleyball',
-  BOXING: 'boxing',
+  SPORTS: 'sports',
 } as const;
 
 // Match status
@@ -26,7 +26,7 @@ export const formatScore = (score: string | number | undefined, sportType: strin
     case SPORT_TYPES.KABADDI:
     case SPORT_TYPES.VOLLEYBALL:
       return score.toString();
-    case SPORT_TYPES.BOXING:
+    case SPORT_TYPES.SPORTS:
       return typeof score === 'number' ? score.toFixed(2) : score.toString();
     default:
       return score.toString();

@@ -5,7 +5,7 @@ export const dummyMatchesData: MatchesByType = {
   kabaddi: [],
   football: [],
   volleyball: [],
-  boxing: [
+  sports: [
     {
       card: "MAIN CARD",
       fixture_no: 1,
@@ -31,7 +31,9 @@ export const dummyMatchesData: MatchesByType = {
             a: 1.45,
             b: 2.85
           },
-          weight_category: "60 KG MEN"
+          weight_category: "60 KG MEN",
+          start_time: "18:10:00",
+          end_time: "18:50:00"
         },
         {
           match_no: 2,
@@ -53,7 +55,9 @@ export const dummyMatchesData: MatchesByType = {
             a: 1.72,
             b: 2.15
           },
-          weight_category: "65 KG MEN"
+          weight_category: "65 KG MEN",
+          start_time: "19:00:00",
+          end_time: "19:40:00"
         }
       ]
     },
@@ -82,7 +86,9 @@ export const dummyMatchesData: MatchesByType = {
             a: 1.95,
             b: 1.88
           },
-          weight_category: "70 KG MEN"
+          weight_category: "70 KG MEN",
+          start_time: "20:00:00",
+          end_time: "20:40:00"
         },
         {
           match_no: 4,
@@ -104,7 +110,9 @@ export const dummyMatchesData: MatchesByType = {
             a: 1.58,
             b: 2.42
           },
-          weight_category: "75 KG MEN"
+          weight_category: "75 KG MEN",
+          start_time: "21:00:00",
+          end_time: "21:40:00"
         },
         {
           match_no: 5,
@@ -126,7 +134,9 @@ export const dummyMatchesData: MatchesByType = {
             a: 1.82,
             b: 2.05
           },
-          weight_category: "80 KG MEN"
+          weight_category: "80 KG MEN",
+          start_time: "22:00:00",
+          end_time: "22:40:00"
         }
       ]
     }
@@ -139,7 +149,7 @@ export const dummyUpcomingMatchesData: MatchesByType = {
   kabaddi: [],
   football: [],
   volleyball: [],
-  boxing: [
+  sports: [
     {
       card: "MAIN CARD",
       fixture_no: 3,
@@ -161,7 +171,9 @@ export const dummyUpcomingMatchesData: MatchesByType = {
             a: 1.75,
             b: 2.10
           },
-          weight_category: "55 KG MEN"
+          weight_category: "55 KG MEN",
+          start_time: "18:30:00",
+          end_time: "19:10:00"
         },
         {
           match_no: 7,
@@ -179,7 +191,9 @@ export const dummyUpcomingMatchesData: MatchesByType = {
             a: 2.20,
             b: 1.65
           },
-          weight_category: "85 KG MEN"
+          weight_category: "85 KG MEN",
+          start_time: "19:30:00",
+          end_time: "20:10:00"
         }
       ]
     },
@@ -204,7 +218,29 @@ export const dummyUpcomingMatchesData: MatchesByType = {
             a: 1.95,
             b: 1.85
           },
-          weight_category: "90 KG MEN"
+          weight_category: "90 KG MEN",
+          start_time: "20:30:00",
+          end_time: "21:10:00"
+        },
+        {
+          match_no: 9,
+          player_a: {
+            code: 1126,
+            name: "Deepanker Mech",
+            team: "ROHTAK ROWDIES"
+          },
+          player_b: {
+            code: 1155,
+            name: "Sanu Joy",
+            team: "SHER-E-LUDHIANA"
+          },
+          pre_match_odds: {
+            a: 1.1,
+            b: 6.9
+          },
+          weight_category: "70 KG MEN",
+          start_time: "18:10:00",
+          end_time: "18:50:00"
         }
       ]
     }

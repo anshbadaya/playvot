@@ -22,7 +22,7 @@ describe('useMatchData hooks with background refresh', () => {
     it('should show loading state on initial load but not on background refresh', async () => {
       const mockResponse = {
         success: true,
-        data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+        data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
         total: 0
       };
 
@@ -94,7 +94,7 @@ describe('useMatchData hooks with background refresh', () => {
     it('should show loading state on initial load but not on background refresh', async () => {
       const mockResponse = {
         success: true,
-        data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+        data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
         total: 0
       };
 

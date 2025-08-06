@@ -1,4 +1,4 @@
-import { MatchesByType, MatchFilters, MatchesResponse, BoxingCardGroup } from '@/types/match';
+import { MatchesByType, MatchFilters, MatchesResponse, SportsCardGroup } from '@/types/match';
 import { API_CONFIG, getApiHeaders } from '@/config/api';
 import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
 
@@ -31,7 +31,7 @@ const fetchLiveMatches = async (): Promise<MatchesByType> => {
         kabaddi: [],
         football: [],
         volleyball: [],
-        boxing: result.data
+        sports: result.data
       };
 
       console.log('Processed live matches by type:', matchesByType);
@@ -76,7 +76,7 @@ const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
         kabaddi: [],
         football: [],
         volleyball: [],
-        boxing: result.data
+        sports: result.data
       };
 
       console.log('Processed upcoming matches by type:', matchesByType);
@@ -113,7 +113,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
             kabaddi: sportType === 'kabaddi' ? filteredData.kabaddi : [],
             football: sportType === 'football' ? filteredData.football : [],
             volleyball: sportType === 'volleyball' ? filteredData.volleyball : [],
-            boxing: sportType === 'boxing' ? filteredData.boxing : []
+            sports: sportType === 'sports' ? filteredData.sports : []
           };
         }
       }
@@ -121,7 +121,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
       if (filters.isLive !== undefined) {
         Object.keys(filteredData).forEach(sportType => {
           const sportKey = sportType as keyof MatchesByType;
-          if (sportKey !== 'boxing') {
+          if (sportKey !== 'sports') {
             filteredData[sportKey] = filteredData[sportKey].filter(match => 
               filters.isLive ? match.isLive : !match.isLive
             );
@@ -132,7 +132,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
       if (filters.matchType) {
         Object.keys(filteredData).forEach(sportType => {
           const sportKey = sportType as keyof MatchesByType;
-          if (sportKey !== 'boxing') {
+          if (sportKey !== 'sports') {
             filteredData[sportKey] = filteredData[sportKey].filter(match => 
               match.matchType === filters.matchType
             );
@@ -140,9 +140,9 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
         });
       }
       
-      // Filter boxing matches by card type
-      if (filters.card && filteredData.boxing.length > 0) {
-        filteredData.boxing = filteredData.boxing.filter(cardGroup => 
+      // Filter sports matches by card type
+      if (filters.card && filteredData.sports.length > 0) {
+        filteredData.sports = filteredData.sports.filter(cardGroup => 
           cardGroup.card.toLowerCase() === filters.card?.toLowerCase()
         );
       }
@@ -150,9 +150,9 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
     
     // Calculate total matches
     const total = Object.entries(filteredData).reduce((sum, [sportType, matches]) => {
-      if (sportType === 'boxing') {
-        const boxingMatches = matches as BoxingCardGroup[];
-        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      if (sportType === 'sports') {
+        const sportsMatches = matches as SportsCardGroup[];
+        return sum + sportsMatches.reduce((sportsSum, cardGroup) => sportsSum + cardGroup.matches.length, 0);
       }
       return sum + matches.length;
     }, 0);
@@ -165,7 +165,7 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
   } catch (error) {
     console.error('Error fetching matches:', error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
       total: 0,
       success: false,
       message: 'Failed to fetch matches from API'
@@ -182,9 +182,9 @@ export const fetchLiveMatchesResponse = async (): Promise<MatchesResponse> => {
     const liveMatches = await fetchLiveMatches();
     
     const total = Object.entries(liveMatches).reduce((sum, [sportType, matches]) => {
-      if (sportType === 'boxing') {
-        const boxingMatches = matches as BoxingCardGroup[];
-        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      if (sportType === 'sports') {
+        const sportsMatches = matches as SportsCardGroup[];
+        return sum + sportsMatches.reduce((sportsSum, cardGroup) => sportsSum + cardGroup.matches.length, 0);
       }
       return sum + matches.length;
     }, 0);
@@ -197,7 +197,7 @@ export const fetchLiveMatchesResponse = async (): Promise<MatchesResponse> => {
   } catch (error) {
     console.error('Error fetching live matches:', error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
       total: 0,
       success: false,
       message: 'Failed to fetch live matches from API'
@@ -214,9 +214,9 @@ export const fetchUpcomingMatchesResponse = async (): Promise<MatchesResponse> =
     const upcomingMatches = await fetchUpcomingMatches();
     
     const total = Object.entries(upcomingMatches).reduce((sum, [sportType, matches]) => {
-      if (sportType === 'boxing') {
-        const boxingMatches = matches as BoxingCardGroup[];
-        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      if (sportType === 'sports') {
+        const sportsMatches = matches as SportsCardGroup[];
+        return sum + sportsMatches.reduce((sportsSum, cardGroup) => sportsSum + cardGroup.matches.length, 0);
       }
       return sum + matches.length;
     }, 0);
@@ -229,7 +229,7 @@ export const fetchUpcomingMatchesResponse = async (): Promise<MatchesResponse> =
   } catch (error) {
     console.error('Error fetching upcoming matches:', error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
       total: 0,
       success: false,
       message: 'Failed to fetch upcoming matches from API'
@@ -253,7 +253,7 @@ export const fetchMatchesBySport = async (
   } catch (error) {
     console.error(`Error fetching ${sportType} matches:`, error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
       total: 0,
       success: false,
       message: `Failed to fetch ${sportType} matches`
@@ -292,13 +292,13 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
         match.team1.name.toLowerCase().includes(searchQuery) ||
         match.team2.name.toLowerCase().includes(searchQuery)
       ),
-      boxing: allMatches.data.boxing.filter(cardGroup => {
+      sports: allMatches.data.sports.filter(cardGroup => {
         // Search within card groups and their matches
         if (cardGroup.card.toLowerCase().includes(searchQuery)) {
           return true;
         }
         
-        // Search within individual boxing matches
+        // Search within individual sports matches
         return cardGroup.matches.some(match => 
           match.player_a.name.toLowerCase().includes(searchQuery) ||
           match.player_a.team.toLowerCase().includes(searchQuery) ||
@@ -310,10 +310,10 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
     };
     
     const total = Object.entries(filteredData).reduce((sum, [sportType, matches]) => {
-      if (sportType === 'boxing') {
-        // For boxing, count the total number of matches across all card groups
-        const boxingMatches = matches as BoxingCardGroup[];
-        return sum + boxingMatches.reduce((boxingSum, cardGroup) => boxingSum + cardGroup.matches.length, 0);
+      if (sportType === 'sports') {
+        // For sports, count the total number of matches across all card groups
+        const sportsMatches = matches as SportsCardGroup[];
+        return sum + sportsMatches.reduce((sportsSum, cardGroup) => sportsSum + cardGroup.matches.length, 0);
       }
       return sum + matches.length;
     }, 0);
@@ -326,7 +326,7 @@ export const searchMatches = async (query: string): Promise<MatchesResponse> => 
   } catch (error) {
     console.error('Error searching matches:', error);
     return {
-      data: { cricket: [], kabaddi: [], football: [], volleyball: [], boxing: [] },
+      data: { cricket: [], kabaddi: [], football: [], volleyball: [], sports: [] },
       total: 0,
       success: false,
       message: 'Failed to search matches'
