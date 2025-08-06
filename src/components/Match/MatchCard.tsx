@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, Chip, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { formatScore } from '@/utils';
+import { formatScore, formatTimeToAMPM } from '@/utils';
 import { SportsMatchCardProps } from '@/types/match';
 
 const MatchCardContainer = styled(Box)`
@@ -277,7 +277,7 @@ const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
                   fontSize: '0.75rem', 
                   fontWeight: 600 
                 }}>
-                  {start_time}
+                  {formatTimeToAMPM(start_time)}
                 </Typography>
               </Box>
             </Box>
