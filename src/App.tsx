@@ -15,8 +15,8 @@ function App() {
         <AuthProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<Match />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/match" element={<Match />} />
               <Route path="/match/:slug" element={<MatchDetailPage />} />
             </Routes>
           </Router>

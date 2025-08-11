@@ -1,6 +1,6 @@
 import React from "react";
-import Login from "@/components/Auth/Login";
+import LandingPage from "@/components/Auth/LandingPage";
 
-const LoginPage = () => <Login />;
+const LoginPage = () => <LandingPage />;
 
 export default LoginPage;
