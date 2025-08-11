@@ -16,8 +16,8 @@ import {
   FeaturesSection,
   WhyZoddzSection,
   EventsCalendarSection,
-  LoginModal,
-} from '@/components/Auth/components';
+} from '@/components/Landing';
+import { LoginModal } from '@/components/Auth';
 
 // Animations
 const float = keyframes`

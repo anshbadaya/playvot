@@ -1,11 +1,17 @@
 // Auth Components
 export * from './Auth';
 
+// Landing Components
+export * from './Landing';
+
 // Layout Components
 export * from './Layout';
 
 // Match Components
 export * from './Match';
+
+// UI Components
+export * from './UI';
 
 // Shared Components
 export { default as Header } from './Shared/Header';

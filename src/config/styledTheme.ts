@@ -3,6 +3,7 @@ import { DefaultTheme } from 'styled-components';
 export const styledTheme: DefaultTheme = {
   colors: {
     primary: '#1D4ED8',
+    primaryHover: '#1E40AF',
     primaryLight: 'rgba(29, 78, 216, 0.1)',
     primaryBorder: 'rgba(29, 78, 216, 0.3)',
     secondary: '#8B5CF6',
@@ -60,6 +61,7 @@ declare module 'styled-components' {
   export interface DefaultTheme {
     colors: {
       primary: string;
+      primaryHover: string;
       primaryLight: string;
       primaryBorder: string;
       secondary: string;

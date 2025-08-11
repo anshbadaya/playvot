@@ -17,6 +17,17 @@ We've migrated from Material-UI styled components to styled-components for bette
 ```
 src/components/
 ├── Auth/           # Authentication components
+│   └── components/
+│       ├── LoginModal.tsx
+│       └── index.ts
+├── Landing/        # Landing page components
+│   ├── Header.tsx
+│   ├── HeroSection.tsx
+│   ├── WhatIsZoddzSection.tsx
+│   ├── FeaturesSection.tsx
+│   ├── WhyZoddzSection.tsx
+│   ├── EventsCalendarSection.tsx
+│   └── index.ts
 ├── Layout/         # Layout components
 ├── Match/          # Match-related components
 ├── Shared/         # Shared components (Header, Footer, etc.)
@@ -25,7 +36,7 @@ src/components/
 │   ├── Button.tsx        # Button component
 │   ├── Card.tsx          # Card component
 │   ├── LoadingSpinner.tsx # Loading spinner
-│   └── Example.tsx       # Example usage
+│   └── index.ts
 └── index.ts        # Main exports
 ```
 

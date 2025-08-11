@@ -8,7 +8,7 @@ import Login from "@/pages/Landing";
 import Match from "@/pages/Matches";
 import MatchDetailPage from "@/pages/MatchDetails";
 import AboutPage from "@/pages/About";
-import { LandingPage } from "./components";
+import LandingPage from "./pages/Landing";
 
 function App() {
   return (
