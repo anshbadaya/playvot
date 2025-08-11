@@ -10,6 +10,7 @@ import MatchDetailPage from "@/pages/MatchDetails";
 import AboutPage from "@/pages/About";
 import LandingPage from "./pages/Landing";
 import TournamentsPage from "@/pages/Tournaments";
+import AllMatchesPage from "@/pages/AllMatches";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/tournaments" element={<TournamentsPage />} />
+              <Route path="/matches" element={<AllMatchesPage />} />
               <Route path="/match" element={<Match />} />
               <Route path="/match/:slug" element={<MatchDetailPage />} />
               <Route path="/about" element={<AboutPage />} />
