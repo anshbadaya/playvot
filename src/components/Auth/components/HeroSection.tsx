@@ -101,7 +101,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
     >
       <Container maxWidth="lg">
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'} gap={6} alignItems="center">
-          <Box flex={1} sx={{ animation: `${slideUp} 0.8s ease-out` }}>
+          <Box 
+            flex={1} 
+            sx={{ 
+              animation: `${slideUp} 0.8s ease-out`,
+              order: isMobile ? 2 : 1
+            }}
+          >
             <Typography 
               variant="h1" 
               fontWeight={700}
@@ -154,7 +160,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
             flex={1}
             display="flex" 
             justifyContent="center"
-            sx={{ animation: `${slideUp} 0.8s ease-out 0.2s both` }}
+            sx={{ 
+              animation: `${slideUp} 0.8s ease-out 0.2s both`,
+              order: isMobile ? 1 : 2
+            }}
           >
             <img 
               src={Artboard1} 
