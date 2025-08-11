@@ -8,9 +8,9 @@ import {
 import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { Layout } from '@/components/Layout';
 
 import {
-  Header,
   HeroSection,
   WhatIsZoddzSection,
   FeaturesSection,
@@ -177,50 +177,50 @@ const LandingPage = () => {
   };
 
   return (
-    <Background>
-      <FloatingElement />
-      <FloatingElement />
-      <FloatingElement />
-      
-      <Header onLoginClick={() => setShowLoginModal(true)} />
-      
-      <HeroSection onLoginClick={() => setShowLoginModal(true)} />
-      
-      <WhatIsZoddzSection />
-      
-      <FeaturesSection />
-      
-      <WhyZoddzSection />
-      
-      <EventsCalendarSection />
+    <Layout onLoginClick={() => setShowLoginModal(true)}>
+      <Background>
+        <FloatingElement />
+        <FloatingElement />
+        <FloatingElement />
+        
+        <HeroSection onLoginClick={() => setShowLoginModal(true)} />
+        
+        <WhatIsZoddzSection />
+        
+        <FeaturesSection />
+        
+        <WhyZoddzSection />
+        
+        <EventsCalendarSection />
 
-      <LoginModal
-        open={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onSubmit={handleLoginSubmit}
-        isLoading={isLoading}
-        errors={errors}
-        touched={touched}
-        onFieldChange={handleFieldChange}
-        onFieldBlur={handleFieldBlur}
-      />
+        <LoginModal
+          open={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          onSubmit={handleLoginSubmit}
+          isLoading={isLoading}
+          errors={errors}
+          touched={touched}
+          onFieldChange={handleFieldChange}
+          onFieldBlur={handleFieldBlur}
+        />
 
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <StyledAlert
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
           onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          variant="filled"
-          sx={{ width: '100%' }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          {snackbar.message}
-        </StyledAlert>
-      </Snackbar>
-    </Background>
+          <StyledAlert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {snackbar.message}
+          </StyledAlert>
+        </Snackbar>
+      </Background>
+    </Layout>
   );
 };
 

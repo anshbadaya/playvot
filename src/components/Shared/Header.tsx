@@ -16,6 +16,7 @@ interface HeaderProps {
   logoAlt?: string;
   onSearch?: (query: string) => void;
   showSearch?: boolean;
+  onLoginClick?: () => void; // ← Add this for login callback
 }
 
 const HeaderContainer = styled.header`
@@ -33,16 +34,16 @@ const Toolbar = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.xl};
-  min-height: 72px;
+  min-height: 32px;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-    min-height: 64px;
+    min-height: 24px;
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.sm};
-    min-height: 56px;
+    min-height: 20px;
   }
 `;
 
@@ -401,6 +402,7 @@ const Header: React.FC<HeaderProps> = ({
   logoAlt = "Zoddz Logo",
   onSearch,
   showSearch = true,
+  onLoginClick,
 }) => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
@@ -516,7 +518,10 @@ const Header: React.FC<HeaderProps> = ({
               </Menu>
             </>
           ) : (
-            <LoginButton to="/login">
+            <LoginButton 
+              to={onLoginClick ? "#" : "/login"} 
+              onClick={onLoginClick}
+            >
               <PersonOutlineIcon sx={{ fontSize: { xs: "18px", sm: "20px" } }} />
               Login
             </LoginButton>

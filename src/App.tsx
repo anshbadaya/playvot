@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Login from "@/pages/Login";
 import Match from "@/pages/Matches";
 import MatchDetailPage from "@/pages/MatchDetails";
+import AboutPage from "@/pages/About";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/match" element={<Match />} />
               <Route path="/match/:slug" element={<MatchDetailPage />} />
+              <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Router>
         </AuthProvider>
