@@ -1,3 +1,4 @@
 // Custom Hooks
 export * from './useMatchData';
-export * from './useMatchDetails'; 
+export * from './useMatchDetails';
+export * from './useTournaments'; 

@@ -9,6 +9,7 @@ import Match from "@/pages/Matches";
 import MatchDetailPage from "@/pages/MatchDetails";
 import AboutPage from "@/pages/About";
 import LandingPage from "./pages/Landing";
+import TournamentsPage from "@/pages/Tournaments";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/tournaments" element={<TournamentsPage />} />
               <Route path="/match" element={<Match />} />
               <Route path="/match/:slug" element={<MatchDetailPage />} />
               <Route path="/about" element={<AboutPage />} />

@@ -4,7 +4,8 @@ export const API_CONFIG = {
   API_KEY: 'd5651733-9ba2-4831-b7f0-9b9614c75053',
   ENDPOINTS: {
     ALL_FIXTURES: '/ppl_upcoming_fixtures',
-    LIVE_FIXTURES: '/ppl_live_fixtures'
+    LIVE_FIXTURES: '/ppl_live_fixtures',
+    TOURNAMENTS: '/tournaments'
   }
 } as const;
 
