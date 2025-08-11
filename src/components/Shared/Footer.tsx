@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Typography, Container, Link, Grid, Paper } from "@mui/material";
+import { Box, Typography, Container, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Link as RouterLink } from "react-router-dom";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 
@@ -41,7 +42,7 @@ const FooterLinks = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-const FooterLink = styled(Link)(({ theme }) => ({
+const FooterLink = styled(RouterLink)(({ theme }) => ({
   color: 'rgba(255, 255, 255, 0.7)',
   textDecoration: 'none',
   transition: 'all 0.2s ease',
@@ -99,7 +100,7 @@ const Footer: React.FC<FooterProps> = ({
         </FooterText>
         <FooterLinks>
           {links.map((link, index) => (
-            <FooterLink key={index} href={link.href}>
+            <FooterLink key={index} to={link.href}>
               {link.text}
             </FooterLink>
           ))}

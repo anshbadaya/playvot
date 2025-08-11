@@ -131,7 +131,7 @@ const AboutPage: React.FC = () => {
               component="h1" 
               gutterBottom 
               sx={{ 
-                fontWeight: 700, 
+                fontWeight: 400, 
                 mb: 3,
                 fontFamily: 'Inter, sans-serif',
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
@@ -145,7 +145,7 @@ const AboutPage: React.FC = () => {
               variant="h4" 
               sx={{ 
                 color: '#3B82F6', 
-                fontWeight: 600, 
+                fontWeight: 400, 
                 mb: 4,
                 fontFamily: 'Inter, sans-serif',
                 fontSize: { xs: '1.5rem', md: '2rem' },
@@ -164,7 +164,7 @@ const AboutPage: React.FC = () => {
                   component="h2" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 600, 
+                    fontWeight: 400, 
                     mb: 3,
                     color: '#3B82F6',
                     fontFamily: 'Inter, sans-serif',
@@ -179,6 +179,7 @@ const AboutPage: React.FC = () => {
                     lineHeight: 1.6,
                     color: 'rgba(255, 255, 255, 0.9)',
                     fontFamily: 'Inter, sans-serif',
+                    fontWeight: 300,
                   }}
                 >
                   We deliver the fastest, most secure, and most credible pre-game & live-game betting/gaming odds for the Indian sports market.
@@ -187,7 +188,7 @@ const AboutPage: React.FC = () => {
                   variant="h6" 
                   sx={{ 
                     color: '#8B5CF6', 
-                    fontWeight: 500,
+                    fontWeight: 400,
                     fontFamily: 'Inter, sans-serif',
                   }}
                 >
@@ -206,7 +207,7 @@ const AboutPage: React.FC = () => {
                   component="h2" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 600, 
+                    fontWeight: 400, 
                     mb: 3,
                     color: '#3B82F6',
                     fontFamily: 'Inter, sans-serif',
@@ -221,6 +222,7 @@ const AboutPage: React.FC = () => {
                     lineHeight: 1.6,
                     color: 'rgba(255, 255, 255, 0.9)',
                     fontFamily: 'Inter, sans-serif',
+                    fontWeight: 300,
                   }}
                 >
                   Founded by veterans from the online gaming and sports data industry, with deep expertise in:
@@ -233,7 +235,7 @@ const AboutPage: React.FC = () => {
                       color: '#3B82F6', 
                       padding: '8px 16px', 
                       borderRadius: 1,
-                      fontWeight: 500,
+                      fontWeight: 400,
                       border: '1px solid rgba(59, 130, 246, 0.2)',
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -247,7 +249,7 @@ const AboutPage: React.FC = () => {
                       color: '#8B5CF6', 
                       padding: '8px 16px', 
                       borderRadius: 1,
-                      fontWeight: 500,
+                      fontWeight: 400,
                       border: '1px solid rgba(139, 92, 246, 0.2)',
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -261,7 +263,7 @@ const AboutPage: React.FC = () => {
                       color: '#10B981', 
                       padding: '8px 16px', 
                       borderRadius: 1,
-                      fontWeight: 500,
+                      fontWeight: 400,
                       border: '1px solid rgba(16, 185, 129, 0.2)',
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -273,7 +275,7 @@ const AboutPage: React.FC = () => {
                   variant="h6" 
                   sx={{ 
                     color: '#10B981', 
-                    fontWeight: 600,
+                    fontWeight: 400,
                     fontFamily: 'Inter, sans-serif',
                   }}
                 >
@@ -290,7 +292,7 @@ const AboutPage: React.FC = () => {
               component="h2" 
               gutterBottom 
               sx={{ 
-                fontWeight: 600, 
+                fontWeight: 400, 
                 mb: 6,
                 textAlign: 'center',
                 color: '#3B82F6',
@@ -311,7 +313,7 @@ const AboutPage: React.FC = () => {
                       component="h3" 
                       gutterBottom 
                       sx={{ 
-                        fontWeight: 600, 
+                        fontWeight: 400, 
                         mb: 2,
                         color: '#3B82F6',
                         fontFamily: 'Inter, sans-serif',
@@ -325,6 +327,7 @@ const AboutPage: React.FC = () => {
                         color: 'rgba(255, 255, 255, 0.8)', 
                         lineHeight: 1.6,
                         fontFamily: 'Inter, sans-serif',
+                        fontWeight: 300,
                       }}
                     >
                       {feature.description}
@@ -344,7 +347,7 @@ const AboutPage: React.FC = () => {
                   component="h2" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 600, 
+                    fontWeight: 400, 
                     mb: 3,
                     color: '#3B82F6',
                     fontFamily: 'Inter, sans-serif',
@@ -365,6 +368,7 @@ const AboutPage: React.FC = () => {
                           sx: { 
                             color: '#FFFFFF',
                             fontFamily: 'Inter, sans-serif',
+                            fontWeight: 300,
                           } 
                         }} 
                       />
@@ -384,7 +388,7 @@ const AboutPage: React.FC = () => {
                   component="h2" 
                   gutterBottom 
                   sx={{ 
-                    fontWeight: 600, 
+                    fontWeight: 400, 
                     mb: 2,
                     textAlign: 'center',
                     color: '#3B82F6',
@@ -400,6 +404,7 @@ const AboutPage: React.FC = () => {
                     mb: 3, 
                     color: '#8B5CF6',
                     fontFamily: 'Inter, sans-serif',
+                    fontWeight: 300,
                   }}
                 >
                   We're powering odds for 2500+ matches across:
@@ -413,7 +418,7 @@ const AboutPage: React.FC = () => {
                       color: 'white', 
                       padding: '8px 16px', 
                       borderRadius: 1,
-                      fontWeight: 600,
+                      fontWeight: 400,
                       display: 'inline-block',
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -433,7 +438,7 @@ const AboutPage: React.FC = () => {
                         padding: '8px 16px', 
                         borderRadius: 1,
                         border: '1px solid rgba(255, 255, 255, 0.2)',
-                        fontWeight: 500,
+                        fontWeight: 400,
                         fontFamily: 'Inter, sans-serif',
                       }}
                     >
@@ -447,7 +452,7 @@ const AboutPage: React.FC = () => {
                     variant="h6" 
                     sx={{ 
                       color: '#8B5CF6', 
-                      fontWeight: 600, 
+                      fontWeight: 300, 
                       mb: 2,
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -457,7 +462,7 @@ const AboutPage: React.FC = () => {
                   <Typography 
                     variant="h5" 
                     sx={{ 
-                      fontWeight: 600, 
+                      fontWeight: 400, 
                       color: '#3B82F6',
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -476,7 +481,7 @@ const AboutPage: React.FC = () => {
               component="h2" 
               gutterBottom 
               sx={{ 
-                fontWeight: 600, 
+                fontWeight: 400, 
                 mb: 6,
                 textAlign: 'center',
                 color: '#3B82F6',
@@ -498,7 +503,7 @@ const AboutPage: React.FC = () => {
                       component="h3" 
                       gutterBottom 
                       sx={{ 
-                        fontWeight: 600, 
+                        fontWeight: 400, 
                         mb: 2, 
                         textAlign: 'center',
                         color: '#3B82F6',
@@ -516,7 +521,7 @@ const AboutPage: React.FC = () => {
                           color: 'white', 
                           padding: '4px 8px', 
                           borderRadius: 1,
-                          fontWeight: 600,
+                          fontWeight: 400,
                           fontSize: '0.75rem',
                           fontFamily: 'Inter, sans-serif',
                         }}
@@ -532,6 +537,7 @@ const AboutPage: React.FC = () => {
                         textAlign: 'center', 
                         color: 'rgba(255, 255, 255, 0.8)',
                         fontFamily: 'Inter, sans-serif',
+                        fontWeight: 300,
                       }}
                     >
                       {sport.description}
@@ -550,6 +556,7 @@ const AboutPage: React.FC = () => {
                               sx: { 
                                 color: 'rgba(255, 255, 255, 0.7)',
                                 fontFamily: 'Inter, sans-serif',
+                                fontWeight: 300,
                               } 
                             }} 
                           />
@@ -568,7 +575,7 @@ const AboutPage: React.FC = () => {
             <Typography 
               variant="h4" 
               sx={{ 
-                fontWeight: 600, 
+                fontWeight: 400, 
                 mb: 2,
                 color: '#FFFFFF',
                 fontFamily: 'Inter, sans-serif',
@@ -579,7 +586,7 @@ const AboutPage: React.FC = () => {
             <Typography 
               variant="h3" 
               sx={{ 
-                fontWeight: 700, 
+                fontWeight: 400, 
                 color: '#3B82F6',
                 fontFamily: 'Inter, sans-serif',
               }}
