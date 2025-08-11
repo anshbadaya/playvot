@@ -4,10 +4,11 @@ import { ThemeProvider } from "styled-components";
 import { styledTheme } from "@/config/styledTheme";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/contexts/AuthContext";
-import Login from "@/pages/Login";
+import Login from "@/pages/Landing";
 import Match from "@/pages/Matches";
 import MatchDetailPage from "@/pages/MatchDetails";
 import AboutPage from "@/pages/About";
+import { LandingPage } from "./components";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <AuthProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<LandingPage />} />
               <Route path="/match" element={<Match />} />
               <Route path="/match/:slug" element={<MatchDetailPage />} />
               <Route path="/about" element={<AboutPage />} />
