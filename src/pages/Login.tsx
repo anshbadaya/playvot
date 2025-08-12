@@ -6,12 +6,10 @@ import {
   Typography,
   InputAdornment,
   IconButton,
-  Divider,
   CircularProgress,
   useMediaQuery,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
-import { Visibility, VisibilityOff, MailOutlineRounded, ArrowBack } from '@mui/icons-material';
+import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -207,29 +205,7 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-// Secondary button for alternative login methods
-const SecondaryButton = styled(Button)(({ theme }) => ({
-  background: 'rgba(255, 255, 255, 0.02)',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
-  borderRadius: '12px',
-  padding: '14px 24px',
-  color: colors.text.primary,
-  textTransform: 'uppercase',
-  fontWeight: 600,
-  fontSize: '13px',
-  transition: 'all 0.2s ease',
-  height: '56px',
-  '&:hover': {
-    background: 'rgba(255, 255, 255, 0.05)',
-    borderColor: 'rgba(255, 255, 255, 0.12)',
-    color: colors.text.primary,
-  },
-  [theme.breakpoints.down('sm')]: {
-    padding: '12px 20px',
-    fontSize: '12px',
-    height: '48px',
-  },
-}));
+
 
 // Back button
 const BackButton = styled(Button)(({ theme }) => ({
@@ -401,39 +377,6 @@ const Login: React.FC = () => {
             >
               {isLoading ? <CircularProgress size={20} color="inherit" /> : 'LOGIN'}
             </PrimaryButton>
-            
-            <Divider sx={{ 
-              my: 3, 
-              '&::before, &::after': { borderColor: 'rgba(255, 255, 255, 0.08)' },
-              '& .MuiDivider-wrapper': { 
-                color: 'rgba(255, 255, 255, 0.4)', 
-                fontSize: '12px',
-                fontWeight: 500,
-                textTransform: 'uppercase'
-              }
-            }}>
-              OR
-            </Divider>
-            
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <SecondaryButton
-                variant="outlined"
-                fullWidth
-                startIcon={<MailOutlineRounded />}
-                onClick={() => alert('Email login not implemented')}
-              >
-                LOGIN WITH EMAIL
-              </SecondaryButton>
-              
-              <SecondaryButton
-                variant="outlined"
-                fullWidth
-                startIcon={<GoogleIcon />}
-                onClick={() => alert('Google login not implemented')}
-              >
-                LOGIN WITH GOOGLE
-              </SecondaryButton>
-            </Box>
           </Box>
         </LoginCard>
         
