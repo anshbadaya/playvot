@@ -93,9 +93,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        padding: theme.spacing(12, 0),
+        padding: theme.spacing(1, 0),
         [theme.breakpoints.down('md')]: {
-          padding: theme.spacing(10, 0),
+          padding: theme.spacing(1, 0),
         },
       }}
     >
