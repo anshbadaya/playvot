@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import { Stack, Card, CardHeader, CardContent, Typography, Button, Box } from '@mui/material';
 import TrophyIcon from '@mui/icons-material/EmojiEvents';
@@ -20,7 +21,7 @@ export const PlayerPerformanceSection: React.FC = () => (
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <TrophyIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+            <TrophyIcon sx={{ color: 'colors.primary', fontSize: 24 }} />
           </Box>
           <Typography variant="h6" sx={{ 
             color: themeColors.text.primary,

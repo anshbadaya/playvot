@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import styled from 'styled-components';
 
 // Flex container with common flexbox properties
@@ -29,14 +30,14 @@ export const Container = styled.div`
 export const Title = styled.h1`
   font-size: 2rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors?.text?.primary || '#FFFFFF'};
+  color: ${({ theme }) => theme.colors?.text?.primary || 'colors.text.primary'};
   margin: 0;
 `;
 
 export const Subtitle = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors?.text?.primary || '#FFFFFF'};
+  color: ${({ theme }) => theme.colors?.text?.primary || 'colors.text.primary'};
   margin: 0;
 `;
 
@@ -57,13 +58,13 @@ export const Badge = styled.span<{
   font-weight: 500;
   background-color: ${({ variant = 'primary', theme }) => {
     switch (variant) {
-      case 'primary': return theme.colors?.primary || '#1D4ED8';
+      case 'primary': return theme.colors?.primary || 'colors.primaryDark';
       case 'secondary': return 'rgba(255, 255, 255, 0.1)';
       case 'success': return '#16A34A';
-      case 'warning': return '#F59E0B';
-      case 'error': return '#DC2626';
-      default: return theme.colors?.primary || '#1D4ED8';
+      case 'warning': return 'colors.warning';
+      case 'error': return 'colors.errorHover';
+      default: return theme.colors?.primary || 'colors.primaryDark';
     }
   }};
-  color: ${({ variant }) => variant === 'secondary' ? 'rgba(255, 255, 255, 0.8)' : '#FFFFFF'};
+  color: ${({ variant }) => variant === 'secondary' ? 'rgba(255, 255, 255, 0.8)' : 'colors.text.primary'};
 `;

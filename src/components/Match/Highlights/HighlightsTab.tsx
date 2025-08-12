@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -22,22 +23,22 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({ data, highlightsData = du
     switch (type) {
       case 'wicket':
         return {
-          color: '#8B5CF6',
+          color: 'colors.secondary',
           label: 'WICKET!'
         };
       case 'boundary':
         return {
-          color: '#10B981',
+          color: 'colors.success',
           label: 'BOUNDARY!'
         };
       case 'milestone':
         return {
-          color: '#3B82F6',
+          color: 'colors.primary',
           label: 'MILESTONE!'
         };
       default:
         return {
-          color: '#94A3B8',
+          color: 'colors.text.muted',
           label: ''
         };
     }
@@ -63,7 +64,7 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({ data, highlightsData = du
             {Object.keys(groupedHighlights).length > 0 ? (
               Object.entries(groupedHighlights).map(([day, highlights]) => (
                 <Box key={day}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#3B82F6' }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: 'colors.primary' }}>
                     {day}
                   </Typography>
                   
@@ -109,7 +110,7 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({ data, highlightsData = du
               <Box sx={{
                 p: 3,
                 textAlign: 'center',
-                color: '#94A3B8',
+                color: 'colors.text.muted',
                 bgcolor: 'rgba(15, 23, 42, 0.3)',
                 borderRadius: 1,
                 border: '1px solid rgba(59, 130, 246, 0.2)'

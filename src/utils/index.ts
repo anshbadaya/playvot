@@ -2,4 +2,7 @@
 export * from './constants';
 
 // Helper Functions
-export * from './helpers'; 
+export * from './helpers';
+
+// Color utilities
+export * from './colors'; 

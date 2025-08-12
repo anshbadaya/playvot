@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React, { useState } from 'react';
 import {
   Box,
@@ -67,7 +68,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     '&.Mui-focused': {
       background: 'rgba(255, 255, 255, 0.07)',
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: '#4B4EF9',
+        borderColor: 'colors.primary',
         borderWidth: '2px',
       },
     },
@@ -90,13 +91,13 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     fontSize: '14px',
     color: 'rgba(255, 255, 255, 0.5)',
     '&.Mui-focused': {
-      color: '#4B4EF9',
+      color: 'colors.primary',
     },
   },
 }));
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
-  background: '#4461F2',
+  background: 'colors.primary',
   borderRadius: '8px',
   padding: '12px 24px',
   fontWeight: 600,
@@ -105,14 +106,14 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
   textTransform: 'uppercase',
   boxShadow: 'none',
   transition: 'all 0.2s ease',
-  color: '#FFFFFF',
+  color: 'colors.text.primary',
   '&:hover': {
-    background: '#3451E2',
+    background: 'colors.primaryHover',
     boxShadow: '0 4px 12px rgba(68, 97, 242, 0.3)',
-    color: '#FFFFFF',
+    color: 'colors.text.primary',
   },
   '& .MuiButton-label': {
-    color: '#FFFFFF',
+    color: 'colors.text.primary',
   },
 }));
 
@@ -121,7 +122,7 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   border: '1px solid rgba(255, 255, 255, 0.08)',
   borderRadius: '8px',
   padding: '12px 24px',
-  color: '#FFFFFF',
+  color: 'colors.text.primary',
   textTransform: 'uppercase',
   fontWeight: 600,
   fontSize: '13px',
@@ -129,10 +130,10 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     background: 'rgba(255, 255, 255, 0.05)',
     borderColor: 'rgba(255, 255, 255, 0.12)',
-    color: '#FFFFFF',
+    color: 'colors.text.primary',
   },
   '& .MuiButton-label': {
-    color: '#FFFFFF',
+    color: 'colors.text.primary',
   },
 }));
 

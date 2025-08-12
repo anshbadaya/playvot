@@ -1,21 +1,78 @@
-import React from 'react';
-import { Box, Typography, Card, CardContent, Chip, Divider } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { colors } from '@/utils/colors';
+import React, { useState } from 'react';
+import { 
+  Box, 
+  Typography, 
+  Card, 
+  CardContent, 
+  Chip, 
+  Divider,
+  Modal,
+  IconButton,
+  Paper
+} from '@mui/material';
+import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { formatScore, formatTimeToAMPM } from '@/utils';
 import { SportsMatchCardProps } from '@/types/match';
+import CloseIcon from '@mui/icons-material/Close';
 
-const MatchCardContainer = styled(Box)`
+// Live pulse animation
+const livePulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+`;
+
+const liveGlow = keyframes`
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  }
+`;
+
+const liveBorderGlow = keyframes`
+  0%, 100% {
+    border-color: rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    border-color: rgba(59, 130, 246, 0.8);
+  }
+`;
+
+const MatchCardContainer = styled(Box)<{ isLive?: boolean }>`
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 16px;
   overflow: hidden;
   
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  }
+  ${({ isLive }) => isLive ? `
+    animation: ${liveGlow} 3s ease-in-out infinite;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+    }
+  ` : `
+    opacity: 0.9;
+    filter: grayscale(0.1);
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      opacity: 1;
+      filter: grayscale(0);
+    }
+  `}
   
   &:hover .shine {
     transform: translateX(100%);
@@ -39,20 +96,39 @@ const ShineEffect = styled(Box)`
   pointer-events: none;
 `;
 
-const StyledCard = styled(Card)`
-  background: linear-gradient(135deg, rgba(13, 20, 36, 0.9) 0%, rgba(23, 32, 48, 0.95) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+const StyledCard = styled(Card)<{ isLive?: boolean }>`
+  background: ${({ isLive }) => isLive 
+    ? 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%)'
+    : 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%)'
+  };
+  border: 1px solid ${({ isLive }) => isLive 
+    ? 'rgba(59, 130, 246, 0.5)' 
+    : 'rgba(100, 116, 139, 0.4)'
+  };
   backdrop-filter: blur(12px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: ${({ isLive }) => isLive 
+    ? '0 8px 32px rgba(59, 130, 246, 0.2)' 
+    : '0 8px 32px rgba(0, 0, 0, 0.2)'
+  };
   transition: all 0.3s ease;
   position: relative;
   z-index: 2;
   height: 100%;
   
-  &:hover {
-    border-color: rgba(59, 130, 246, 0.5);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  }
+  ${({ isLive }) => isLive ? `
+    animation: ${liveBorderGlow} 2s ease-in-out infinite;
+    
+    &:hover {
+      border-color: rgba(59, 130, 246, 0.8);
+      box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 1) 0%, rgba(30, 41, 59, 1) 100%);
+    }
+  ` : `
+    &:hover {
+      border-color: rgba(100, 116, 139, 0.6);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+  `}
 `;
 
 const CardContentStyled = styled(CardContent)`
@@ -115,44 +191,76 @@ const TeamText = styled(Typography)`
   letter-spacing: 0.3px;
 `;
 
-const OddsText = styled(Typography)`
-  color: #10B981;
+const OddsText = styled(Typography)<{ isLive?: boolean }>`
+  color: ${({ isLive }) => isLive ? '#10B981' : 'rgba(255, 255, 255, 0.8)'};
   font-size: 1rem;
   font-weight: 700;
   padding: ${({ theme }) => theme.spacing(0.8, 1.5)};
-  background: rgba(16, 185, 129, 0.1);
+  background: ${({ isLive }) => isLive 
+    ? 'rgba(16, 185, 129, 0.15)' 
+    : 'rgba(100, 116, 139, 0.15)'
+  };
   border-radius: 6px;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid ${({ isLive }) => isLive 
+    ? 'rgba(16, 185, 129, 0.4)' 
+    : 'rgba(100, 116, 139, 0.3)'
+  };
   min-width: 70px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ isLive }) => isLive 
+    ? '0 2px 8px rgba(16, 185, 129, 0.2)' 
+    : '0 2px 6px rgba(0, 0, 0, 0.15)'
+  };
   transition: all 0.2s ease;
   
-  &:hover {
-    background: rgba(16, 185, 129, 0.15);
-    transform: scale(1.05);
-  }
+  ${({ isLive }) => isLive ? `
+    &:hover {
+      background: rgba(16, 185, 129, 0.25);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+  ` : `
+    &:hover {
+      background: rgba(100, 116, 139, 0.2);
+      transform: scale(1.02);
+    }
+  `}
 `;
 
-const WeightCategoryChip = styled(Chip)`
-  background-color: rgba(59, 130, 246, 0.15);
-  color: #3B82F6;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+const WeightCategoryChip = styled(Chip)<{ isLive?: boolean }>`
+  background-color: ${({ isLive }) => isLive 
+    ? 'rgba(59, 130, 246, 0.2)' 
+    : 'rgba(100, 116, 139, 0.2)'
+  };
+  color: ${({ isLive }) => isLive ? '#3B82F6' : 'rgba(255, 255, 255, 0.8)'};
+  border: 1px solid ${({ isLive }) => isLive 
+    ? 'rgba(59, 130, 246, 0.4)' 
+    : 'rgba(100, 116, 139, 0.3)'
+  };
   font-size: 0.75rem;
   font-weight: 600;
   height: 28px;
   margin-top: ${({ theme }) => theme.spacing(1.5)};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ isLive }) => isLive 
+    ? '0 2px 8px rgba(59, 130, 246, 0.2)' 
+    : '0 2px 6px rgba(0, 0, 0, 0.15)'
+  };
   letter-spacing: 0.5px;
 `;
 
-const FixtureHeader = styled(Box)`
+const FixtureHeader = styled(Box)<{ isLive?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.spacing(1.2, 2)};
-  background-color: rgba(30, 41, 59, 0.8);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  background-color: ${({ isLive }) => isLive 
+    ? 'rgba(15, 23, 42, 0.95)' 
+    : 'rgba(30, 41, 59, 0.95)'
+  };
+  border-bottom: 1px solid ${({ isLive }) => isLive 
+    ? 'rgba(59, 130, 246, 0.3)' 
+    : 'rgba(100, 116, 139, 0.3)'
+  };
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   position: relative;
@@ -201,10 +309,61 @@ const TimeLabel = styled(Typography)`
   letter-spacing: 0.5px;
 `;
 
+const ModalContainer = styled(Box)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+`;
+
+const ModalHeader = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing(2, 3)};
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(15, 23, 42, 0.9);
+`;
+
+const ModalContent = styled(Box)`
+  padding: ${({ theme }) => theme.spacing(3)};
+  max-height: 70vh;
+  overflow-y: auto;
+`;
+
+const IframeContainer = styled(Box)`
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+`;
+
+const VideoContainer = styled(Box)`
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+`;
+
 const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
   const navigate = useNavigate();
   const { fixture_no, match_date, match, isLive } = props;
   const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category, start_time, end_time } = match;
+  
+  // Modal states
+  const [scorecardModalOpen, setScorecardModalOpen] = useState(false);
+  const [streamsModalOpen, setStreamsModalOpen] = useState(false);
   
   // Use live odds if available and match is live, otherwise fall back to pre-match odds
   const oddsToDisplay = (live_match_odds && isLive) ? live_match_odds : pre_match_odds;
@@ -216,77 +375,158 @@ const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
     navigate(`/match/${slug}`);
   };
   
+  const handleScorecardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setScorecardModalOpen(true);
+  };
+  
+  const handleStreamsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setStreamsModalOpen(true);
+  };
+  
+  const handleCloseScorecardModal = () => {
+    setScorecardModalOpen(false);
+  };
+  
+  const handleCloseStreamsModal = () => {
+    setStreamsModalOpen(false);
+  };
+  
   return (
-    <MatchCardContainer>
+    <MatchCardContainer isLive={isLive}>
       <ShineEffect className="shine" />
       
       <Box sx={{ borderRadius: '16px', overflow: 'hidden', height: '100%' }}>
-        <FixtureHeader>
-          <FixtureText>Fixture #{fixture_no}</FixtureText>
-          {isLive && (
+        <FixtureHeader isLive={isLive}>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 2,
+            width: '100%',
+            justifyContent: 'space-between'
+          }}>
             <Box sx={{ 
-              position: 'absolute',
-              right: 16,
-              px: 1, 
-              py: 0.3, 
-              bgcolor: 'error.main', 
-              color: 'white', 
-              borderRadius: 0.5, 
-              fontSize: '0.7rem',
-              fontWeight: 'bold',
-              animation: 'pulse 2s infinite'
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1
             }}>
-              LIVE
+              <Typography sx={{ 
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                Match #{match_no}
+              </Typography>
+              <Typography sx={{ 
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontSize: '0.8rem',
+                fontWeight: 600
+              }}>
+                |
+              </Typography>
+              <FixtureText>Fixture #{fixture_no}</FixtureText>
             </Box>
-          )}
+            {isLive && (
+              <Box sx={{ 
+                px: 1.5, 
+                py: 0.5, 
+                bgcolor: '#EF4444', 
+                color: 'white', 
+                borderRadius: 1, 
+                fontSize: '0.7rem',
+                fontWeight: 'bold',
+                animation: `${livePulse} 2s infinite`,
+                boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)'
+              }}>
+                LIVE
+              </Box>
+            )}
+          </Box>
         </FixtureHeader>
         
-        <StyledCard>
+        <StyledCard isLive={isLive}>
           <CardContentStyled>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <MatchTypeText>
-                Match #{match_no}
-              </MatchTypeText>
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              mb: 2,
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 0 }
+            }}>
               <Box sx={{ 
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: 1,
-                padding: '4px 8px',
-                borderRadius: '6px',
-                background: 'rgba(59, 130, 246, 0.1)',
-                border: '1px solid rgba(59, 130, 246, 0.2)'
+                padding: { xs: '4px 8px', sm: '6px 12px' },
+                borderRadius: '8px',
+                background: isLive ? 'rgba(59, 130, 246, 0.2)' : 'rgba(100, 116, 139, 0.15)',
+                border: `1px solid ${isLive ? 'rgba(59, 130, 246, 0.4)' : 'rgba(100, 116, 139, 0.2)'}`,
+                boxShadow: isLive ? '0 2px 8px rgba(59, 130, 246, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
+                minWidth: { xs: '70px', sm: 'auto' }
               }}>
                 <Typography sx={{ 
-                  color: 'rgba(255, 255, 255, 0.7)', 
-                  fontSize: '0.75rem', 
-                  fontWeight: 500 
+                  color: isLive ? '#3B82F6' : 'rgba(255, 255, 255, 0.6)',
+                  fontSize: { xs: '0.65rem', sm: '0.75rem' }, 
+                  fontWeight: 600,
+                  letterSpacing: '0.5px',
+                  textAlign: 'center',
+                  lineHeight: { xs: 1.2, sm: 1.4 }
                 }}>
-                  {new Date(match_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                </Typography>
-                <Typography sx={{ 
-                  color: 'rgba(255, 255, 255, 0.6)', 
-                  fontSize: '0.65rem', 
-                  fontWeight: 500,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
-                  at
-                </Typography>
-                <Typography sx={{ 
-                  color: 'rgba(255, 255, 255, 0.9)', 
-                  fontSize: '0.75rem', 
-                  fontWeight: 600 
-                }}>
-                  {formatTimeToAMPM(start_time)}
+                  {weight_category}
                 </Typography>
               </Box>
+                             <Box sx={{ 
+                 display: 'flex', 
+                 alignItems: 'center', 
+                 gap: { xs: 0.5, sm: 1 },
+                 padding: { xs: '3px 6px', sm: '4px 8px' },
+                 borderRadius: '6px',
+                 background: isLive ? 'rgba(59, 130, 246, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                 border: `1px solid ${isLive ? 'rgba(59, 130, 246, 0.3)' : 'rgba(100, 116, 139, 0.25)'}`,
+                 flexDirection: 'row',
+                 minWidth: { xs: '120px', sm: 'auto' }
+               }}>
+                 <Typography sx={{ 
+                   color: isLive ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.7)', 
+                   fontSize: { xs: '0.65rem', sm: '0.75rem' }, 
+                   fontWeight: 500,
+                   whiteSpace: 'nowrap'
+                 }}>
+                   {new Date(match_date).toLocaleDateString('en-US', { 
+                     month: 'short', 
+                     day: 'numeric', 
+                     year: 'numeric' 
+                   })}
+                 </Typography>
+                 <Typography sx={{ 
+                   color: isLive ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.5)', 
+                   fontSize: { xs: '0.55rem', sm: '0.65rem' }, 
+                   fontWeight: 500,
+                   textTransform: 'uppercase',
+                   letterSpacing: '0.5px'
+                 }}>
+                   at
+                 </Typography>
+                 <Typography sx={{ 
+                   color: isLive ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.8)', 
+                   fontSize: { xs: '0.65rem', sm: '0.75rem' }, 
+                   fontWeight: 600,
+                   whiteSpace: 'nowrap'
+                 }}>
+                   {formatTimeToAMPM(start_time)}
+                 </Typography>
+               </Box>
             </Box>
             
             <MatchTitleText>
               {player_a.name} vs {player_b.name}
             </MatchTitleText>
             
-            <Divider sx={{ my: 1.8, opacity: 0.2 }} />
+            <Divider sx={{ my: 1.8, opacity: isLive ? 0.2 : 0.1 }} />
             
             <TeamsSection>
               <TeamRow>
@@ -294,24 +534,158 @@ const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
                   <PlayerNameText>{player_a.name}</PlayerNameText>
                   <TeamText>{player_a.team}</TeamText>
                 </PlayerInfoContainer>
-                <OddsText>{oddsToDisplay.a}</OddsText>
+                <OddsText isLive={isLive}>{oddsToDisplay.a}</OddsText>
               </TeamRow>
               
-              <Divider sx={{ my: 1.5, opacity: 0.1 }} />
+              <Divider sx={{ my: 1.5, opacity: isLive ? 0.1 : 0.05 }} />
               
               <TeamRow>
                 <PlayerInfoContainer>
                   <PlayerNameText>{player_b.name}</PlayerNameText>
                   <TeamText>{player_b.team}</TeamText>
                 </PlayerInfoContainer>
-                <OddsText>{oddsToDisplay.b}</OddsText>
+                <OddsText isLive={isLive}>{oddsToDisplay.b}</OddsText>
               </TeamRow>
             </TeamsSection>
             
-            <WeightCategoryChip label={weight_category} />
+            {/* Action Buttons */}
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 1, 
+              mt: 2,
+              pt: 2,
+              borderTop: `1px solid ${isLive ? 'rgba(59, 130, 246, 0.2)' : 'rgba(100, 116, 139, 0.2)'}`
+            }}>
+              <Box 
+                onClick={handleScorecardClick}
+                sx={{
+                  flex: 1,
+                  py: 1,
+                  px: 1.5,
+                  borderRadius: '6px',
+                                  background: isLive ? 'rgba(59, 130, 246, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                border: `1px solid ${isLive ? 'rgba(59, 130, 246, 0.3)' : 'rgba(100, 116, 139, 0.25)'}`,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textAlign: 'center',
+                  '&:hover': {
+                    background: isLive ? 'rgba(59, 130, 246, 0.25)' : 'rgba(100, 116, 139, 0.15)',
+                    transform: 'translateY(-1px)',
+                    boxShadow: isLive ? '0 4px 12px rgba(59, 130, 246, 0.2)' : '0 2px 8px rgba(0, 0, 0, 0.2)'
+                  }
+                }}
+              >
+                <Typography sx={{
+                  color: isLive ? '#3B82F6' : 'rgba(255, 255, 255, 0.7)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.3px'
+                }}>
+                  Scorecard
+                </Typography>
+              </Box>
+              
+              <Box 
+                onClick={handleStreamsClick}
+                sx={{
+                  flex: 1,
+                  py: 1,
+                  px: 1.5,
+                  borderRadius: '6px',
+                                  background: isLive ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                border: `1px solid ${isLive ? 'rgba(16, 185, 129, 0.3)' : 'rgba(100, 116, 139, 0.25)'}`,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textAlign: 'center',
+                  '&:hover': {
+                    background: isLive ? 'rgba(16, 185, 129, 0.25)' : 'rgba(100, 116, 139, 0.15)',
+                    transform: 'translateY(-1px)',
+                    boxShadow: isLive ? '0 4px 12px rgba(16, 185, 129, 0.2)' : '0 2px 8px rgba(0, 0, 0, 0.2)'
+                  }
+                }}
+              >
+                <Typography sx={{
+                  color: isLive ? '#10B981' : 'rgba(255, 255, 255, 0.7)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.3px'
+                }}>
+                  Streams
+                </Typography>
+              </Box>
+            </Box>
           </CardContentStyled>
         </StyledCard>
       </Box>
+      
+      {/* Scorecard Modal */}
+      <Modal
+        open={scorecardModalOpen}
+        onClose={handleCloseScorecardModal}
+        aria-labelledby="scorecard-modal-title"
+        aria-describedby="scorecard-modal-description"
+      >
+        <ModalContainer>
+          <ModalHeader>
+            <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
+              Live Scorecard - {player_a.name} vs {player_b.name}
+            </Typography>
+            <IconButton
+              onClick={handleCloseScorecardModal}
+              sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </ModalHeader>
+          <ModalContent>
+            <IframeContainer>
+              <iframe
+                src="https://www.cricbuzz.com/live-cricket-scores"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                title="Live Cricket Scorecard"
+                allowFullScreen
+              />
+            </IframeContainer>
+          </ModalContent>
+        </ModalContainer>
+      </Modal>
+      
+      {/* Streams Modal */}
+      <Modal
+        open={streamsModalOpen}
+        onClose={handleCloseStreamsModal}
+        aria-labelledby="streams-modal-title"
+        aria-describedby="streams-modal-description"
+      >
+        <ModalContainer>
+          <ModalHeader>
+            <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
+              Live Stream - {player_a.name} vs {player_b.name}
+            </Typography>
+            <IconButton
+              onClick={handleCloseStreamsModal}
+              sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </ModalHeader>
+          <ModalContent>
+            <VideoContainer>
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                title="Live Match Stream"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </VideoContainer>
+          </ModalContent>
+        </ModalContainer>
+      </Modal>
     </MatchCardContainer>
   );
 };

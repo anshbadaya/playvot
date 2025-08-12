@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import { Box, Typography, Card, CardContent, Chip, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -84,13 +85,13 @@ const StatusChip = styled(Chip)<{ status: string }>`
   color: ${({ status }) => {
     switch (status) {
       case 'upcoming':
-        return '#3B82F6';
+        return 'colors.primary';
       case 'ongoing':
-        return '#10B981';
+        return 'colors.success';
       case 'completed':
-        return '#6B7280';
+        return 'colors.text.muted';
       default:
-        return '#3B82F6';
+        return 'colors.primary';
     }
   }};
   border: 1px solid ${({ status }) => {
@@ -151,7 +152,7 @@ const InfoIcon = styled(Box)`
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.3);
   margin-right: 16px;
-  color: #3B82F6;
+  color: colors.primary;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
@@ -194,12 +195,12 @@ const ActionButton = styled(Button)`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   
   &.primary {
-    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+    background: linear-gradient(135deg, colors.primary 0%, colors.primaryDark 100%);
     color: white;
     border: 1px solid rgba(59, 130, 246, 0.5);
     
     &:hover {
-      background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+      background: linear-gradient(135deg, colors.primaryHover 0%, colors.primaryHover 100%);
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
     }
@@ -228,7 +229,7 @@ const SportIcon = styled(Box)`
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
   border: 2px solid rgba(59, 130, 246, 0.4);
-  color: #3B82F6;
+  color: colors.primary;
   font-size: 1.5rem;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 `;

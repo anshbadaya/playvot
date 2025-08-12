@@ -9,6 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
 import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
+import { colors } from '@/utils/colors';
 
 // Import styled components
 import {
@@ -63,8 +64,6 @@ const AllMatches: React.FC = () => {
     navigate(`/match`);
   };
 
-
-
   return (
     <Layout>
       <PageBackground>
@@ -93,8 +92,8 @@ const AllMatches: React.FC = () => {
                             label="LIVE" 
                             size="small" 
                             sx={{ 
-                              bgcolor: 'error.main', 
-                              color: 'white',
+                              bgcolor: colors.error,
+                              color: colors.text.primary,
                               fontWeight: 'bold'
                             }} 
                           />
@@ -107,7 +106,7 @@ const AllMatches: React.FC = () => {
                           </TeamRow>
                           
                           <Box sx={{ textAlign: 'center', my: 2 }}>
-                            <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '1rem', fontWeight: 600 }}>
+                            <Typography variant="h6" sx={{ color: colors.text.secondary, fontSize: '1rem', fontWeight: 600 }}>
                               VS
                             </Typography>
                           </Box>
@@ -150,7 +149,7 @@ const AllMatches: React.FC = () => {
                       </TeamRow>
                       
                       <Box sx={{ textAlign: 'center', my: 2 }}>
-                        <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '1rem', fontWeight: 600 }}>
+                        <Typography variant="h6" sx={{ color: colors.text.secondary, fontSize: '1rem', fontWeight: 600 }}>
                           VS
                         </Typography>
                       </Box>

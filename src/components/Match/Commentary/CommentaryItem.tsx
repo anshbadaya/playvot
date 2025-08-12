@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -36,7 +37,7 @@ const TimeStamp = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
   fontSize: '0.75rem',
   '&.boundary': {
-    color: '#10B981',
+    color: 'colors.success',
   },
   '&.regular': {
     color: 'gray',
@@ -45,7 +46,7 @@ const TimeStamp = styled(Typography)(({ theme }) => ({
 
 const BoundaryBadge = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
-  color: '#10B981',
+  color: 'colors.success',
   fontSize: '0.75rem',
 }));
 

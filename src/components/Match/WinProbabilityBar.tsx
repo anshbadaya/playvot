@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -32,7 +33,7 @@ const TeamText = styled(Typography)`
 `;
 
 const TeamPercentage = styled(Typography)`
-  color: #10B981;
+  color: colors.success;
   font-weight: 700;
   font-size: 1.25rem;
   margin-top: ${({ theme }) => theme.spacing(0.5)};
@@ -49,7 +50,7 @@ const DrawText = styled(Typography)`
 `;
 
 const DrawPercentage = styled(Typography)`
-  color: #F59E0B;
+  color: colors.warning;
   font-weight: 700;
   font-size: 1.25rem;
   margin-top: ${({ theme }) => theme.spacing(0.5)};
@@ -64,19 +65,19 @@ const ProgressContainer = styled(Box)`
 `;
 
 const HomeBar = styled(Box)`
-  background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+  background: linear-gradient(90deg, colors.success 0%, colors.successHover 100%);
   height: 100%;
   transition: width 0.3s ease;
 `;
 
 const DrawBar = styled(Box)`
-  background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+  background: linear-gradient(90deg, colors.warning 0%, colors.warningHover 100%);
   height: 100%;
   transition: width 0.3s ease;
 `;
 
 const AwayBar = styled(Box)`
-  background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%);
+  background: linear-gradient(90deg, colors.primary 0%, colors.primaryHover 100%);
   height: 100%;
   transition: width 0.3s ease;
 `;

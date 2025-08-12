@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import { Stack, Card, CardHeader, CardContent, Typography, Button, Box } from '@mui/material';
 import TrophyIcon from '@mui/icons-material/EmojiEvents';
@@ -25,10 +26,10 @@ export const FallOfWicketSection: React.FC = () => (
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <TrophyIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+            <TrophyIcon sx={{ color: 'colors.primary', fontSize: 24 }} />
           </Box>
           <Typography variant="h6" sx={{
-            color: '#FFFFFF',
+            color: 'colors.text.primary',
             fontWeight: 600,
             letterSpacing: '0.5px'
           }}>
@@ -42,7 +43,7 @@ export const FallOfWicketSection: React.FC = () => (
       <Stack spacing={3}>
         {/* Fall of Next Wicket */}
         <Box>
-          <Typography variant="subtitle1" sx={{ color: '#FFFFFF', mb: 2, fontWeight: 600 }}>
+          <Typography variant="subtitle1" sx={{ color: 'colors.text.primary', mb: 2, fontWeight: 600 }}>
             Fall of Next Wicket
           </Typography>
           <Stack spacing={2.5}>
@@ -52,7 +53,7 @@ export const FallOfWicketSection: React.FC = () => (
                   {bet.type}
                 </Typography>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>{bet.description}</Typography>
+                  <Typography variant="body2" sx={{ color: 'colors.text.muted', fontWeight: 500 }}>{bet.description}</Typography>
                   <Button
                     variant="contained"
                     size="small"
@@ -68,7 +69,7 @@ export const FallOfWicketSection: React.FC = () => (
 
         {/* Method of Next Dismissal */}
         <Box>
-          <Typography variant="subtitle1" sx={{ color: '#FFFFFF', mb: 2, fontWeight: 600 }}>
+          <Typography variant="subtitle1" sx={{ color: 'colors.text.primary', mb: 2, fontWeight: 600 }}>
             Method of Next Dismissal
           </Typography>
           <Stack spacing={2.5}>
@@ -78,7 +79,7 @@ export const FallOfWicketSection: React.FC = () => (
                   {bet.type}
                 </Typography>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>{bet.description}</Typography>
+                  <Typography variant="body2" sx={{ color: 'colors.text.muted', fontWeight: 500 }}>{bet.description}</Typography>
                   <Button
                     variant="contained"
                     size="small"

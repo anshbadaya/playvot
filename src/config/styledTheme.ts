@@ -1,28 +1,84 @@
 import { DefaultTheme } from 'styled-components';
 
-export const styledTheme: DefaultTheme = {
-  colors: {
-    primary: '#1D4ED8',
-    primaryHover: '#1E40AF',
-    primaryLight: 'rgba(29, 78, 216, 0.1)',
-    primaryBorder: 'rgba(29, 78, 216, 0.3)',
-    secondary: '#8B5CF6',
-    success: '#10B981',
-    warning: '#F59E0B',
-    error: '#EF4444',
-    background: {
-      primary: '#0A0A23',
-      secondary: '#111827',
-      tertiary: '#0F172A',
-      card: 'rgba(15, 23, 42, 0.3)',
-    },
-    text: {
-      primary: '#FFFFFF',
-      secondary: 'rgba(255, 255, 255, 0.8)',
-      disabled: 'rgba(255, 255, 255, 0.5)',
-    },
-    border: 'rgba(255, 255, 255, 0.1)',
+// Single source of truth for all colors
+export const colors = {
+  // Primary colors
+  primary: '#3B82F6',
+  primaryHover: '#2563EB',
+  primaryLight: 'rgba(59, 130, 246, 0.1)',
+  primaryBorder: 'rgba(59, 130, 246, 0.2)',
+  primaryDark: '#1D4ED8',
+  
+  // Secondary colors
+  secondary: '#8B5CF6',
+  secondaryHover: '#7C3AED',
+  secondaryLight: 'rgba(139, 92, 246, 0.1)',
+  secondaryBorder: 'rgba(139, 92, 246, 0.2)',
+  
+  // Status colors
+  success: '#10B981',
+  successHover: '#059669',
+  successLight: 'rgba(16, 185, 129, 0.1)',
+  successBorder: 'rgba(16, 185, 129, 0.2)',
+  
+  warning: '#F59E0B',
+  warningHover: '#D97706',
+  warningLight: 'rgba(245, 158, 11, 0.1)',
+  warningBorder: 'rgba(245, 158, 11, 0.2)',
+  
+  error: '#EF4444',
+  errorHover: '#DC2626',
+  errorLight: 'rgba(239, 68, 68, 0.1)',
+  errorBorder: 'rgba(239, 68, 68, 0.2)',
+  
+  // Background colors
+  background: {
+    primary: '#0A0A23',
+    secondary: '#111827',
+    tertiary: '#0F172A',
+    card: 'rgba(15, 23, 42, 0.3)',
+    surface: 'rgba(30, 41, 59, 0.4)',
+    overlay: 'rgba(0, 0, 0, 0.5)',
   },
+  
+  // Text colors
+  text: {
+    primary: '#FFFFFF',
+    secondary: 'rgba(255, 255, 255, 0.8)',
+    disabled: 'rgba(255, 255, 255, 0.5)',
+    muted: '#94A3B8',
+    inverse: '#0F172A',
+  },
+  
+  // Border colors
+  border: {
+    primary: 'rgba(255, 255, 255, 0.1)',
+    secondary: 'rgba(59, 130, 246, 0.15)',
+    accent: 'rgba(139, 92, 246, 0.15)',
+  },
+  
+  // Gradient definitions
+  gradients: {
+    primary: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+    secondary: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
+    success: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+    background: 'linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%)',
+    rainbow: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #10B981 100%)',
+    card: 'linear-gradient(135deg, rgba(13, 20, 36, 0.9) 0%, rgba(23, 32, 48, 0.95) 100%)',
+  },
+  
+  // Shadow colors
+  shadows: {
+    primary: 'rgba(59, 130, 246, 0.2)',
+    secondary: 'rgba(139, 92, 246, 0.2)',
+    success: 'rgba(16, 185, 129, 0.2)',
+    error: 'rgba(239, 68, 68, 0.2)',
+    dark: 'rgba(0, 0, 0, 0.3)',
+  }
+};
+
+export const styledTheme: DefaultTheme = {
+  colors,
   spacing: {
     xs: '4px',
     sm: '8px',
@@ -59,28 +115,7 @@ export const styledTheme: DefaultTheme = {
 // Extend the DefaultTheme interface
 declare module 'styled-components' {
   export interface DefaultTheme {
-    colors: {
-      primary: string;
-      primaryHover: string;
-      primaryLight: string;
-      primaryBorder: string;
-      secondary: string;
-      success: string;
-      warning: string;
-      error: string;
-      background: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        card: string;
-      };
-      text: {
-        primary: string;
-        secondary: string;
-        disabled: string;
-      };
-      border: string;
-    };
+    colors: typeof colors;
     spacing: {
       xs: string;
       sm: string;

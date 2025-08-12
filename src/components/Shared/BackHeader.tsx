@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -5,9 +6,9 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import Logo from "@/assets/images/Logo.png";
 
 const HeaderContainer = styled.header`
-  background: linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%);
+  background: ${colors.gradients.background};
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(29, 78, 216, 0.2);
+  border-bottom: 1px solid ${colors.primaryBorder};
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
@@ -36,14 +37,14 @@ const BackButton = styled.button`
   transition: all ${({ theme }) => theme.transitions.normal};
   
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${colors.background.secondary};
     opacity: 0.8;
   }
 `;
 
 const BackIcon = styled(KeyboardBackspaceIcon)`
   font-size: 24px;
-  color: white;
+  color: ${colors.text.primary};
 `;
 
 const LogoImage = styled.img`

@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -16,7 +17,7 @@ import {
 import { styled } from '@mui/material/styles';
 
 const GlowText = styled('span')(({ theme }) => ({
-  background: 'linear-gradient(135deg, #4461F2 0%, #8B5CF6 50%, #10B981 100%)',
+  background: colors.gradients.rainbow,
   backgroundClip: 'text',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
@@ -44,15 +45,15 @@ const FeatureCard = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+    background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.secondaryLight} 100%)`,
     opacity: 0,
     transition: 'opacity 0.4s ease',
   },
   '&:hover': {
     transform: 'translateY(-12px) scale(1.02)',
     background: 'rgba(255, 255, 255, 0.08)',
-    borderColor: 'rgba(68, 97, 242, 0.4)',
-    boxShadow: '0 20px 40px rgba(68, 97, 242, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2)',
+    borderColor: colors.primaryBorder,
+    boxShadow: `0 20px 40px ${colors.shadows.primary}, 0 8px 16px rgba(0, 0, 0, 0.2)`,
     '&::before': {
       opacity: 1,
     },
@@ -71,25 +72,25 @@ const FeaturesSection: React.FC = () => {
 
   const keyFeatures = [
     {
-      icon: <Security sx={{ fontSize: 40, color: '#4461F2' }} />,
+      icon: <Security sx={{ fontSize: 40, color: colors.primary }} />,
       title: 'Secure Interface',
       description: 'Private & Secure login for each client with enterprise-grade encryption',
       highlight: '100% Secure',
     },
     {
-      icon: <Speed sx={{ fontSize: 40, color: '#10B981' }} />,
+      icon: <Speed sx={{ fontSize: 40, color: colors.success }} />,
       title: 'LIVE Manual Support',
       description: 'Full 360° degree support Pre game and during LIVE game. Quick Support options on Teams, Google Chats Or Whatsapp.',
       highlight: '24/7 Support',
     },
     {
-      icon: <TrendingUp sx={{ fontSize: 40, color: '#F59E0B' }} />,
+      icon: <TrendingUp sx={{ fontSize: 40, color: colors.warning }} />,
       title: 'Micro-level pre-game data sheets',
       description: 'Advanced analytics & accuracy with real-time data feeds and predictive modeling',
       highlight: 'Data-Driven',
     },
     {
-      icon: <SportsCricket sx={{ fontSize: 40, color: '#EF4444' }} />,
+      icon: <SportsCricket sx={{ fontSize: 40, color: colors.error }} />,
       title: 'LIVE Game odds',
       description: 'Real-time LIVE GAME Odds Management with instant updates and market analysis',
       highlight: 'Real-Time',
@@ -102,113 +103,153 @@ const FeaturesSection: React.FC = () => {
         padding: theme.spacing(12, 0),
         position: 'relative',
         [theme.breakpoints.down('md')]: {
-          padding: theme.spacing(10, 0),
+          padding: theme.spacing(8, 0),
         },
       }}
     >
       <Container maxWidth="lg">
-        <Box textAlign="center" mb={8}>
-          <Typography 
-            variant="h2" 
-            fontWeight={600}
-            sx={{ 
-              color: '#FFFFFF',
-              mb: 3,
-              fontSize: isMobile ? '2rem' : '2.5rem',
-              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-              fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+        <Box
+          sx={{
+            textAlign: 'center',
+            marginBottom: theme.spacing(8),
+            [theme.breakpoints.down('md')]: {
+              marginBottom: theme.spacing(6),
+            },
+          }}
+        >
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: isMobile ? '2rem' : '3rem',
+              fontWeight: 700,
+              marginBottom: theme.spacing(3),
+              color: colors.text.primary,
+              textShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
             }}
           >
-            Why Choose{' '}
-            <GlowText>
-              Zoddz?
-            </GlowText>
+            Why Choose <GlowText>Zoddz</GlowText>?
+          </Typography>
+          
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: isMobile ? '1.1rem' : '1.3rem',
+              fontWeight: 400,
+              color: colors.text.secondary,
+              maxWidth: '800px',
+              margin: '0 auto',
+              lineHeight: 1.6,
+            }}
+          >
+            Experience the next generation of sports betting with cutting-edge features designed for modern bettors.
           </Typography>
         </Box>
-        
-        <Box 
-          display="grid" 
-          gridTemplateColumns={isMobile ? '1fr' : 'repeat(4, 1fr)'} 
-          gap={4}
+
+        <Box
           sx={{
-            maxWidth: '1200px',
-            mx: 'auto',
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+            gap: theme.spacing(4),
+            [theme.breakpoints.up('lg')]: {
+              gridTemplateColumns: 'repeat(2, 1fr)',
+            },
           }}
         >
           {keyFeatures.map((feature, index) => (
-            <FeatureCard key={index}>
-              <Box textAlign="center" mb={3}>
-                <Box 
-                  sx={{ 
-                    display: 'inline-flex',
+            <FeatureCard
+              key={index}
+              sx={{
+                animation: `slideUp 0.6s ease-out ${index * 0.1}s both`,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+              >
+                <Box
+                  className="feature-icon"
+                  sx={{
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 70,
-                    height: 70,
-                    borderRadius: '50%',
-                    background: 'rgba(68, 97, 242, 0.1)',
-                    border: '2px solid rgba(68, 97, 242, 0.3)',
-                    mb: 2,
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '20px',
+                    background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.secondaryLight} 100%)`,
+                    marginBottom: theme.spacing(3),
                     position: 'relative',
                     '&::before': {
                       content: '""',
                       position: 'absolute',
-                      top: -2,
-                      left: -2,
-                      right: -2,
-                      bottom: -2,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.3), rgba(139, 92, 246, 0.3))',
-                      zIndex: -1,
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      borderRadius: '20px',
+                      background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
                       opacity: 0,
-                      transition: 'opacity 0.3s ease',
+                      transition: 'opacity 0.4s ease',
                     },
                   }}
-                  className="feature-icon"
                 >
                   {feature.icon}
                 </Box>
-                <Typography 
-                  variant="caption" 
-                  sx={{ 
-                    color: '#4461F2',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: 1,
-                    fontSize: '0.75rem',
+
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontSize: '1.5rem',
+                    fontWeight: 600,
+                    marginBottom: theme.spacing(2),
+                    color: colors.text.primary,
                   }}
                 >
-                  {feature.highlight}
+                  {feature.title}
                 </Typography>
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    marginBottom: theme.spacing(3),
+                    color: colors.text.secondary,
+                    flex: 1,
+                  }}
+                >
+                  {feature.description}
+                </Typography>
+
+                <Box
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: theme.spacing(1, 2),
+                    borderRadius: '20px',
+                    background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.secondaryLight} 100%)`,
+                    border: `1px solid ${colors.primaryBorder}`,
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      color: colors.primary,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
+                    {feature.highlight}
+                  </Typography>
+                </Box>
               </Box>
-              <Typography 
-                variant="h5" 
-                fontWeight={600}
-                sx={{ 
-                  color: '#FFFFFF',
-                  mb: 2,
-                  textAlign: 'center',
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
-                  fontSize: isMobile ? '1rem' : '1.1rem',
-                  fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-                }}
-              >
-                {feature.title}
-              </Typography>
-              <Typography 
-                variant="body1" 
-                sx={{ 
-                  color: '#FFFFFF',
-                  textAlign: 'center',
-                  lineHeight: 1.6,
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
-                  fontSize: isMobile ? '0.875rem' : '0.9rem',
-                  opacity: 0.9,
-                  fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-                }}
-              >
-                {feature.description}
-              </Typography>
             </FeatureCard>
           ))}
         </Box>

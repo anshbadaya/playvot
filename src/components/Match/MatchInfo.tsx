@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -42,7 +43,7 @@ const TeamAvatar = styled(Avatar)`
 `;
 
 const LiveBadge = styled(Box)`
-  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  background: linear-gradient(135deg, colors.error 0%, colors.errorHover 100%);
   padding: ${({ theme }) => theme.spacing(0.5, 1)};
   border-radius: 20px;
   margin: ${({ theme }) => theme.spacing(0, 2)};

@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import { Stack, Card, CardHeader, CardContent, Typography, Button, Box } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
@@ -26,10 +27,10 @@ export const QuickBetsSection: React.FC = () => (
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <StarIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+            <StarIcon sx={{ color: 'colors.primary', fontSize: 24 }} />
           </Box>
           <Typography variant="h6" sx={{
-            color: '#FFFFFF',
+            color: 'colors.text.primary',
             fontWeight: 600,
             letterSpacing: '0.5px'
           }}>

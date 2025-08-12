@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -23,19 +24,19 @@ const CommentaryTab: React.FC<CommentaryTabProps> = ({ commentaryData = [] }) =>
         return {
           bgcolor: 'rgba(34, 197, 94, 0.1)',
           border: '1px solid rgba(34, 197, 94, 0.3)',
-          badgeColor: '#10B981'
+          badgeColor: 'colors.success'
         };
       case 'wicket':
         return {
           bgcolor: 'rgba(239, 68, 68, 0.1)',
           border: '1px solid rgba(239, 68, 68, 0.3)',
-          badgeColor: '#EF4444'
+          badgeColor: 'colors.error'
         };
       default:
         return {
           bgcolor: 'rgba(15, 23, 42, 0.3)',
           border: '1px solid rgba(59, 130, 246, 0.3)',
-          badgeColor: '#3B82F6'
+          badgeColor: 'colors.primary'
         };
     }
   };
@@ -127,7 +128,7 @@ const CommentaryTab: React.FC<CommentaryTabProps> = ({ commentaryData = [] }) =>
           <Box sx={{
             p: 3,
             textAlign: 'center',
-            color: '#94A3B8',
+            color: 'colors.text.muted',
             bgcolor: 'rgba(15, 23, 42, 0.3)',
             borderRadius: 1,
             border: '1px solid rgba(59, 130, 246, 0.3)'

@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from "react";
 import { Box, Typography, Container, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -17,17 +18,17 @@ interface FooterProps {
 }
 
 const FooterContainer = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%)',
-  color: 'rgba(255, 255, 255, 0.9)',
+  background: colors.gradients.background,
+  color: colors.text.primary,
   padding: theme.spacing(4, 2),
   textAlign: 'center',
   marginTop: 'auto',
-  borderTop: '1px solid rgba(29, 78, 216, 0.2)',
+  borderTop: `1px solid ${colors.primaryBorder}`,
   backdropFilter: 'blur(8px)',
 }));
 
 const FooterText = styled(Typography)(({ theme }) => ({
-  color: 'rgba(255, 255, 255, 0.7)',
+  color: colors.text.secondary,
   fontSize: '0.875rem',
   marginBottom: theme.spacing(2),
   margin: 0,
@@ -43,15 +44,15 @@ const FooterLinks = styled(Box)(({ theme }) => ({
 }));
 
 const FooterLink = styled(RouterLink)(({ theme }) => ({
-  color: 'rgba(255, 255, 255, 0.7)',
+  color: colors.text.secondary,
   textDecoration: 'none',
   transition: 'all 0.2s ease',
   padding: theme.spacing(0.5, 1),
   borderRadius: theme.spacing(0.5),
   
   '&:hover': {
-    color: '#4461F2',
-    backgroundColor: 'rgba(29, 78, 216, 0.1)',
+    color: colors.primary,
+    backgroundColor: colors.primaryLight,
     textDecoration: 'none',
   },
 }));
@@ -59,19 +60,19 @@ const FooterLink = styled(RouterLink)(({ theme }) => ({
 const ContactSection = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(3),
   paddingTop: theme.spacing(3),
-  borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+  borderTop: `1px solid ${colors.border.secondary}`,
 }));
 
 const ContactItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   gap: theme.spacing(1),
-  color: 'rgba(255, 255, 255, 0.8)',
+  color: colors.text.secondary,
   marginBottom: theme.spacing(1),
   justifyContent: 'center',
   
   '& svg': {
-    color: '#4461F2',
+    color: colors.primary,
     fontSize: '1.2rem',
   },
 }));
@@ -80,7 +81,7 @@ const MapContainer = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(2),
   borderRadius: theme.spacing(1),
   overflow: 'hidden',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
+  border: `1px solid ${colors.border.secondary}`,
   maxWidth: '400px',
   margin: '0 auto',
 }));
@@ -98,6 +99,7 @@ const Footer: React.FC<FooterProps> = ({
         <FooterText>
           {companyName ? `${copyrightText} ${companyName}` : copyrightText}
         </FooterText>
+        
         <FooterLinks>
           {links.map((link, index) => (
             <FooterLink key={index} to={link.href}>
@@ -107,10 +109,6 @@ const Footer: React.FC<FooterProps> = ({
         </FooterLinks>
         
         <ContactSection>
-          <Typography variant="h6" sx={{ color: 'white', mb: 2, fontWeight: 600 }}>
-            Contact Us
-          </Typography>
-          
           <ContactItem>
             <LocationOnIcon />
             <Typography variant="body2">
@@ -121,23 +119,23 @@ const Footer: React.FC<FooterProps> = ({
           <ContactItem>
             <PhoneIcon />
             <Typography variant="body2">
-              WhatsApp: Coming Soon
+              +91
             </Typography>
           </ContactItem>
-          
-          <MapContainer>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3608.1234567890123!2d56.3322!3d25.1289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDA3JzQ0LjAiTiA1NsKwMTknNTYuMCJF!5e0!3m2!1sen!2sae!4v1234567890123"
-              width="100%"
-              height="200"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Zoddz Office Location - Creative Tower, Fujairah"
-            />
-          </MapContainer>
         </ContactSection>
+        
+        <MapContainer>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.5!2d56.3328!3d25.1289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ef4c8c8c8c8c8c8%3A0x8c8c8c8c8c8c8c8c!2sFujairah%2C%20United%20Arab%20Emirates!5e0!3m2!1sen!2sae!4v1234567890"
+            width="100%"
+            height="200"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Zoddz Location - Creative Tower, Fujairah"
+          />
+        </MapContainer>
       </Container>
     </FooterContainer>
   );

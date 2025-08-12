@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import { Stack, Card, CardHeader, CardContent, Typography, Button, Box } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -25,10 +26,10 @@ export const NextOverRunsSection: React.FC = () => (
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <AccessTimeIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+            <AccessTimeIcon sx={{ color: 'colors.primary', fontSize: 24 }} />
           </Box>
           <Typography variant="h6" sx={{
-            color: '#FFFFFF',
+            color: 'colors.text.primary',
             fontWeight: 600,
             letterSpacing: '0.5px'
           }}>
@@ -46,7 +47,7 @@ export const NextOverRunsSection: React.FC = () => (
               {bet.type}
             </Typography>
             <Stack direction="row" spacing={2} alignItems="center">
-              <Typography variant="body2" sx={{ color: '#94A3B8', fontWeight: 500 }}>{bet.description}</Typography>
+              <Typography variant="body2" sx={{ color: 'colors.text.muted', fontWeight: 500 }}>{bet.description}</Typography>
               <Button
                 variant="contained"
                 size="small"

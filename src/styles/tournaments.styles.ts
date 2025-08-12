@@ -1,10 +1,10 @@
+import { colors, gradients } from '@/utils/colors';
 import { SxProps, Theme } from '@mui/material';
-import { themeColors } from '@/config/theme';
 import { sharedStyles } from '@/styles/shared.styles';
 
 // Main container styles
 export const tournamentsContainerStyles: SxProps<Theme> = {
-  backgroundColor: themeColors.background,
+  backgroundColor: colors.background.primary,
   minHeight: '100vh',
   pt: { xs: 3, sm: 4 },
   pb: { xs: 4, sm: 6 }
@@ -25,33 +25,33 @@ export const pageHeaderStyles: SxProps<Theme> = {
 };
 
 export const pageTitleStyles: SxProps<Theme> = {
-  color: '#fff',
+  color: colors.text.primary,
   fontSize: { xs: '2rem', sm: '3rem' },
   fontWeight: 800,
   mb: 2,
-  textShadow: '0px 4px 12px rgba(0, 0, 0, 0.5)',
-  background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+  textShadow: '0px 4px 8px rgba(0, 0, 0, 0.5)',
+  background: colors.gradients.rainbow,
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text'
 };
 
 export const pageSubtitleStyles: SxProps<Theme> = {
-  color: 'rgba(255, 255, 255, 0.7)',
-  fontSize: { xs: '1rem', sm: '1.2rem' },
-  fontWeight: 500,
-  maxWidth: 600,
-  mx: 'auto',
-  lineHeight: 1.6
+  color: colors.text.secondary,
+  fontSize: { xs: '1.1rem', sm: '1.3rem' },
+  fontWeight: 400,
+  maxWidth: '800px',
+  margin: '0 auto',
+  lineHeight: 1.6,
 };
 
 // Controls section styles
 export const controlsSectionStyles: SxProps<Theme> = {
   mb: 6,
   p: { xs: 3, sm: 4 },
-  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+  backgroundColor: colors.background.secondary,
   borderRadius: '20px',
-  border: '1px solid rgba(59, 130, 246, 0.2)',
+  border: `1px solid ${colors.primaryBorder}`,
   backdropFilter: 'blur(12px)',
   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
 };
@@ -64,9 +64,9 @@ export const sportSelectorStyles: SxProps<Theme> = {
   gap: 1,
   justifyContent: 'center',
   '& .MuiToggleButton-root': {
-    color: 'rgba(255, 255, 255, 0.8)',
-    backgroundColor: 'rgba(15, 23, 42, 0.8)',
-    border: '1px solid rgba(59, 130, 246, 0.3)',
+    color: colors.text.secondary,
+    backgroundColor: colors.background.secondary,
+    border: `1px solid ${colors.primaryBorder}`,
     borderRadius: '12px',
     padding: '12px 24px',
     fontWeight: 600,
@@ -75,18 +75,18 @@ export const sportSelectorStyles: SxProps<Theme> = {
     transition: 'all 0.3s ease',
     minWidth: '120px',
     '&:hover': {
-      backgroundColor: 'rgba(59, 130, 246, 0.2)',
-      borderColor: 'rgba(59, 130, 246, 0.5)',
+      backgroundColor: colors.primaryLight,
+      borderColor: colors.primaryBorder,
       transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
     },
     '&.Mui-selected': {
-      background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
-      color: 'white',
-      borderColor: 'rgba(59, 130, 246, 0.8)',
-      boxShadow: '0 8px 20px rgba(59, 130, 246, 0.3)',
+      background: colors.gradients.primary,
+      color: colors.text.primary,
+      borderColor: colors.primaryBorder,
+      boxShadow: `0 8px 20px ${colors.shadows.primary}`,
       '&:hover': {
-        background: 'linear-gradient(135deg, #2563EB 0%, #1E40AF 100%)'
+        background: gradients.primaryHover
       }
     }
   }
@@ -95,31 +95,33 @@ export const sportSelectorStyles: SxProps<Theme> = {
 // Search field styles
 export const searchFieldStyles: SxProps<Theme> = {
   '& .MuiOutlinedInput-root': {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: colors.background.secondary,
     borderRadius: '12px',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    color: 'rgba(255, 255, 255, 0.9)',
-    padding: '16px 20px',
+    border: `1px solid ${colors.border.secondary}`,
+    transition: 'all 0.3s ease',
     '&:hover': {
-      borderColor: 'rgba(59, 130, 246, 0.5)'
+      borderColor: colors.primaryBorder,
+      backgroundColor: colors.background.tertiary,
     },
     '&.Mui-focused': {
-      borderColor: '#3B82F6',
-      boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.2)'
+      borderColor: colors.primary,
+      backgroundColor: colors.background.tertiary,
+      boxShadow: `0 0 0 2px ${colors.primaryLight}`,
     },
-    '& .MuiOutlinedInput-input': {
-      color: 'rgba(255, 255, 255, 0.9)',
-      fontWeight: 500,
-      fontSize: '1rem',
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: 'none',
+    },
+    '& .MuiInputBase-input': {
+      color: colors.text.primary,
       '&::placeholder': {
-        color: 'rgba(255, 255, 255, 0.5)',
-        opacity: 1
-      }
+        color: colors.text.muted,
+        opacity: 1,
+      },
     },
     '& .MuiInputAdornment-root': {
-      color: 'rgba(255, 255, 255, 0.6)'
-    }
-  }
+      color: colors.text.muted,
+    },
+  },
 };
 
 // Results section styles
@@ -137,19 +139,27 @@ export const resultsHeaderStyles: SxProps<Theme> = {
 };
 
 export const resultsTitleStyles: SxProps<Theme> = {
-  color: 'rgba(255, 255, 255, 0.9)',
+  color: colors.text.primary,
   fontSize: '1.5rem',
   fontWeight: 700
 };
 
 export const resultsCountStyles: SxProps<Theme> = {
-  backgroundColor: 'rgba(59, 130, 246, 0.2)',
-  color: '#3B82F6',
-  border: '1px solid rgba(59, 130, 246, 0.4)',
+  backgroundColor: colors.primaryLight,
+  color: colors.primary,
+  border: `1px solid ${colors.primaryBorder}`,
   fontWeight: 600
 };
 
-// Grid styles
+// Tournament grid styles
+export const tournamentGridStyles: SxProps<Theme> = {
+  display: 'grid',
+  gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
+  gap: { xs: 2, sm: 3 },
+  mt: 4
+};
+
+// Legacy grid styles for backward compatibility
 export const tournamentsGridStyles: SxProps<Theme> = {
   display: 'grid',
   gap: 4,
@@ -175,16 +185,55 @@ export const errorContainerStyles: SxProps<Theme> = {
   padding: 8
 };
 
+// Empty state styles
+export const emptyStateStyles: SxProps<Theme> = {
+  textAlign: 'center',
+  py: 8,
+  color: colors.text.secondary,
+  '& .MuiTypography-h6': {
+    color: colors.text.primary,
+    mb: 2,
+  },
+  '& .MuiTypography-body1': {
+    color: colors.text.secondary,
+    mb: 3,
+  },
+};
+
 export const emptyStateContainerStyles: SxProps<Theme> = {
   ...sharedStyles.emptyStateContainer
 };
 
 export const emptyStateTextStyles: SxProps<Theme> = {
-  color: themeColors.text.secondary,
+  color: colors.text.secondary,
   mb: 1
 };
 
 export const emptyStateSubtextStyles: SxProps<Theme> = {
-  color: themeColors.text.disabled,
+  color: colors.text.disabled,
   fontSize: '0.875rem'
+};
+
+// Loading state styles
+export const loadingStateStyles: SxProps<Theme> = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: '400px',
+  color: colors.primary,
+};
+
+// Error state styles
+export const errorStateStyles: SxProps<Theme> = {
+  textAlign: 'center',
+  py: 8,
+  color: colors.error,
+  '& .MuiTypography-h6': {
+    color: colors.error,
+    mb: 2,
+  },
+  '& .MuiTypography-body1': {
+    color: colors.text.secondary,
+    mb: 3,
+  },
 };

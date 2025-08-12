@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import styled from 'styled-components';
 
 interface CardProps {
@@ -6,7 +7,7 @@ interface CardProps {
 }
 
 export const Card = styled.div<CardProps>`
-  background-color: ${({ theme }) => theme.colors?.background?.secondary || '#111827'};
+  background-color: ${({ theme }) => theme.colors?.background?.secondary || 'colors.background.secondary'};
   border-radius: ${({ theme }) => theme.borderRadius?.lg || '12px'};
   border: 1px solid rgba(255, 255, 255, 0.1);
   

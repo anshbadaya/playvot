@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import styled from 'styled-components';
 
 interface ButtonProps {
@@ -47,10 +48,10 @@ export const Button = styled.button<ButtonProps>`
     switch (variant) {
       case 'primary':
         return `
-          background-color: ${theme.colors?.primary || '#1D4ED8'};
-          color: #FFFFFF;
+          background-color: ${theme.colors?.primary || 'colors.primaryDark'};
+          color: colors.text.primary;
           &:hover:not(:disabled) {
-            background-color: ${theme.colors?.primaryHover || '#1E40AF'};
+            background-color: ${theme.colors?.primaryHover || 'colors.primaryHover'};
           }
         `;
       case 'secondary':
@@ -64,11 +65,11 @@ export const Button = styled.button<ButtonProps>`
       case 'outline':
         return `
           background-color: transparent;
-          color: ${theme.colors?.primary || '#1D4ED8'};
-          border: 2px solid ${theme.colors?.primary || '#1D4ED8'};
+          color: ${theme.colors?.primary || 'colors.primaryDark'};
+          border: 2px solid ${theme.colors?.primary || 'colors.primaryDark'};
           &:hover:not(:disabled) {
-            background-color: ${theme.colors?.primary || '#1D4ED8'};
-            color: #FFFFFF;
+            background-color: ${theme.colors?.primary || 'colors.primaryDark'};
+            color: colors.text.primary;
           }
         `;
       case 'ghost':
@@ -77,7 +78,7 @@ export const Button = styled.button<ButtonProps>`
           color: rgba(255, 255, 255, 0.8);
           &:hover:not(:disabled) {
             background-color: rgba(255, 255, 255, 0.1);
-            color: #FFFFFF;
+            color: colors.text.primary;
           }
         `;
       default:
@@ -93,7 +94,7 @@ export const Button = styled.button<ButtonProps>`
   
   /* Focus state */
   &:focus {
-    outline: 2px solid ${({ theme }) => theme.colors?.primary || '#1D4ED8'};
+    outline: 2px solid ${({ theme }) => theme.colors?.primary || 'colors.primaryDark'};
     outline-offset: 2px;
   }
 `;

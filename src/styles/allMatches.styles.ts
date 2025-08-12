@@ -1,11 +1,11 @@
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Typography, Card, Chip } from '@mui/material';
-import { themeColors, commonStyles } from '@/config/theme';
+import { colors, gradients } from '@/utils/colors';
 
 export const PageBackground = styled(Box)(({ theme }) => ({
-  background: `linear-gradient(135deg, ${themeColors.background} 0%, ${themeColors.secondary} 100%)`,
+  background: colors.gradients.background,
   minHeight: '100vh',
-  color: themeColors.text.primary,
+  color: colors.text.primary,
   display: 'flex',
   flexDirection: 'column',
   padding: theme.spacing(4, 0)
@@ -18,12 +18,12 @@ export const PageHeader = styled(Box)(({ theme }) => ({
 }));
 
 export const PageTitle = styled(Typography)(({ theme }) => ({
-  color: themeColors.text.primary,
+  color: colors.text.primary,
   fontSize: '2.5rem',
   fontWeight: 800,
   marginBottom: theme.spacing(2),
   textShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
-  background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+  background: colors.gradients.primary,
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
@@ -33,7 +33,7 @@ export const PageTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const PageSubtitle = styled(Typography)(({ theme }) => ({
-  color: alpha(themeColors.text.primary, 0.7),
+  color: colors.text.secondary,
   fontSize: '1.1rem',
   fontWeight: 500,
   maxWidth: 600,
@@ -44,8 +44,8 @@ export const PageSubtitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const MatchCardContainer = styled(Card)(({ theme }) => ({
-  background: `linear-gradient(135deg, ${alpha(themeColors.background, 0.15)} 0%, ${alpha(themeColors.background, 0.08)} 100%)`,
-  border: `2px solid ${alpha(themeColors.primary, 0.2)}`,
+  background: colors.gradients.card,
+  border: `2px solid ${colors.primaryBorder}`,
   backdropFilter: 'blur(12px)',
   borderRadius: 20,
   cursor: 'pointer',
@@ -60,16 +60,16 @@ export const MatchCardContainer = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: `linear-gradient(135deg, ${alpha(themeColors.primary, 0.05)} 0%, transparent 50%, ${alpha(themeColors.primary, 0.02)} 100%)`,
+    background: `linear-gradient(135deg, ${colors.primaryLight} 0%, transparent 50%, ${alpha(colors.primary, 0.02)} 100%)`,
     pointerEvents: 'none',
     zIndex: 0
   },
   '&:hover': {
     transform: 'translateY(-6px)',
-    boxShadow: `0 25px 50px ${alpha(themeColors.primary, 0.4)}`,
-    borderColor: alpha(themeColors.primary, 0.6),
+    boxShadow: `0 25px 50px ${colors.shadows.primary}`,
+    borderColor: colors.primaryBorder,
     '&::before': {
-      background: `linear-gradient(135deg, ${alpha(themeColors.primary, 0.1)} 0%, transparent 50%, ${alpha(themeColors.primary, 0.05)} 100%)`
+      background: `linear-gradient(135deg, ${alpha(colors.primary, 0.1)} 0%, transparent 50%, ${alpha(colors.primary, 0.05)} 100%)`
     }
   }
 }));
@@ -79,7 +79,7 @@ export const MatchHeader = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: theme.spacing(2, 3),
-  borderBottom: `1px solid ${alpha(themeColors.primary, 0.15)}`,
+  borderBottom: `1px solid ${colors.border.secondary}`,
   position: 'relative',
   zIndex: 1
 }));
@@ -91,14 +91,14 @@ export const MatchInfo = styled(Box)({
 });
 
 export const MatchTitle = styled(Typography)(({ theme }) => ({
-  color: alpha(themeColors.text.primary, 0.9),
+  color: colors.text.primary,
   fontSize: '0.9rem',
   fontWeight: 600
 }));
 
 export const TournamentBadge = styled(Chip)(({ theme }) => ({
-  background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.secondary} 100%)`,
-  color: themeColors.text.primary,
+  background: gradients.primaryToSecondary,
+  color: colors.text.primary,
   fontWeight: 700,
   fontSize: '0.8rem',
   height: 24
@@ -124,38 +124,38 @@ export const TeamIcon = styled(Box)(({ theme }) => ({
   width: 36,
   height: 36,
   borderRadius: '50%',
-  background: `linear-gradient(135deg, ${alpha(themeColors.primary, 0.2)} 0%, ${alpha(themeColors.secondary, 0.3)} 100%)`,
-  border: `1px solid ${alpha(themeColors.primary, 0.3)}`,
+  background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.secondaryLight} 100%)`,
+  border: `1px solid ${colors.primaryBorder}`,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: '0.9rem',
   fontWeight: 700,
-  color: themeColors.text.primary,
+  color: colors.text.primary,
   transition: 'all 0.2s ease',
   '&:hover': {
     transform: 'scale(1.05)',
-    borderColor: alpha(themeColors.primary, 0.6)
+    borderColor: colors.primaryBorder
   }
 }));
 
 export const TeamName = styled(Typography)(({ theme }) => ({
-  color: alpha(themeColors.text.primary, 0.9),
+  color: colors.text.primary,
   fontSize: '1rem',
   fontWeight: 600,
   flex: 1
 }));
 
 export const MatchTime = styled(Typography)(({ theme }) => ({
-  color: themeColors.warning,
+  color: colors.warning,
   fontSize: '1rem',
   fontWeight: 700,
   textAlign: 'center',
   margin: theme.spacing(3, 0),
   padding: theme.spacing(1, 2),
-  background: `linear-gradient(135deg, ${alpha(themeColors.warning, 0.1)} 0%, ${alpha(themeColors.warning, 0.05)} 100%)`,
+  background: `linear-gradient(135deg, ${colors.warningLight} 0%, ${alpha(colors.warning, 0.05)} 100%)`,
   borderRadius: 8,
-  border: `1px solid ${alpha(themeColors.warning, 0.2)}`,
+  border: `1px solid ${colors.warningBorder}`,
   display: 'inline-block',
   position: 'relative',
   zIndex: 1
@@ -166,22 +166,22 @@ export const NavigationSection = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   gap: theme.spacing(4),
   padding: theme.spacing(2, 3),
-  borderTop: `1px solid ${alpha(themeColors.border, 0.1)}`
+  borderTop: `1px solid ${colors.border.primary}`
 }));
 
 export const NavButton = styled(Typography)(({ theme }) => ({
-  color: alpha(themeColors.text.primary, 0.6),
+  color: colors.text.secondary,
   fontSize: '0.8rem',
   fontWeight: 600,
   cursor: 'pointer',
   transition: 'color 0.2s ease',
   '&:hover': {
-    color: alpha(themeColors.text.primary, 0.9)
+    color: colors.text.primary
   }
 }));
 
 export const SectionTitle = styled(Typography)(({ theme }) => ({
-  color: alpha(themeColors.text.primary, 0.9),
+  color: colors.text.primary,
   fontSize: '1.5rem',
   fontWeight: 700,
   marginBottom: theme.spacing(4),
@@ -193,7 +193,7 @@ export const SectionTitle = styled(Typography)(({ theme }) => ({
     top: '50%',
     width: '30px',
     height: '2px',
-    background: `linear-gradient(90deg, ${alpha(themeColors.primary, 0)}, ${themeColors.primary} 100%)`,
+    background: `linear-gradient(90deg, ${alpha(colors.primary, 0)} 0%, ${colors.primary} 100%)`,
     transform: 'translateY(-50%)'
   },
   '&::before': {
@@ -201,7 +201,7 @@ export const SectionTitle = styled(Typography)(({ theme }) => ({
   },
   '&::after': {
     right: '-30px',
-    background: `linear-gradient(90deg, ${themeColors.primary}, ${alpha(themeColors.primary, 0)} 100%)`
+    background: `linear-gradient(90deg, ${colors.primary} 0%, ${alpha(colors.primary, 0)} 100%)`
   },
   [theme.breakpoints.up('sm')]: {
     '&::before, &::after': {

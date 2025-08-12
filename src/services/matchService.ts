@@ -22,7 +22,7 @@ const fetchLiveMatches = async (): Promise<MatchesByType> => {
     const result = await response.json();
     console.log('Raw live API response:', result);
     
-    if (result.status === 'success' && result.data) {
+    if (result.status === 'success' && result.data && result.data.length > 0) {
       console.log('Live API data received:', result.data);
       console.log('Number of live card groups:', result.data.length);
       
@@ -37,13 +37,25 @@ const fetchLiveMatches = async (): Promise<MatchesByType> => {
       console.log('Processed live matches by type:', matchesByType);
       return matchesByType;
     } else {
-      console.log('Live API returned empty or invalid data, using dummy data');
-      return dummyMatchesData;
+      console.log('Live API returned empty or invalid data, returning empty live matches');
+      return {
+        cricket: [],
+        kabaddi: [],
+        football: [],
+        volleyball: [],
+        sports: []
+      };
     }
   } catch (error) {
     console.error('Error fetching live matches:', error);
-    console.log('Using dummy live matches data due to API error');
-    return dummyMatchesData;
+    console.log('Returning empty live matches due to API error');
+    return {
+      cricket: [],
+      kabaddi: [],
+      football: [],
+      volleyball: [],
+      sports: []
+    };
   }
 };
 
@@ -67,7 +79,7 @@ const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
     const result = await response.json();
     console.log('Raw upcoming API response:', result);
     
-    if (result.status === 'success' && result.data) {
+    if (result.status === 'success' && result.data && result.data.length > 0) {
       console.log('Upcoming API data received:', result.data);
       console.log('Number of upcoming card groups:', result.data.length);
       
@@ -82,13 +94,25 @@ const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
       console.log('Processed upcoming matches by type:', matchesByType);
       return matchesByType;
     } else {
-      console.log('Upcoming API returned empty or invalid data, using dummy data');
-      return dummyUpcomingMatchesData;
+      console.log('Upcoming API returned empty or invalid data, returning empty upcoming matches');
+      return {
+        cricket: [],
+        kabaddi: [],
+        football: [],
+        volleyball: [],
+        sports: []
+      };
     }
   } catch (error) {
     console.error('Error fetching upcoming matches:', error);
-    console.log('Using dummy upcoming matches data due to API error');
-    return dummyUpcomingMatchesData;
+    console.log('Returning empty upcoming matches due to API error');
+    return {
+      cricket: [],
+      kabaddi: [],
+      football: [],
+      volleyball: [],
+      sports: []
+    };
   }
 };
 

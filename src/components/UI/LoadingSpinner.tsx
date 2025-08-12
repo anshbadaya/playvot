@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import styled, { keyframes } from 'styled-components';
 
 const spin = keyframes`
@@ -12,7 +13,7 @@ interface LoadingSpinnerProps {
 
 export const LoadingSpinner = styled.div<LoadingSpinnerProps>`
   border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top: 2px solid ${({ color, theme }) => color || theme.colors?.primary || '#1D4ED8'};
+  border-top: 2px solid ${({ color, theme }) => color || theme.colors?.primary || 'colors.primaryDark'};
   border-radius: 50%;
   animation: ${spin} 1s linear infinite;
   

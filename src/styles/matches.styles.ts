@@ -1,10 +1,10 @@
+import { colors } from '@/utils/colors';
 import { SxProps, Theme } from '@mui/material';
-import { themeColors } from '@/config/theme';
 import { sharedStyles } from '@/styles/shared.styles';
 
 // Main container styles
 export const matchesContainerStyles: SxProps<Theme> = {
-  backgroundColor: themeColors.background,
+  backgroundColor: colors.background.primary,
   minHeight: '100vh',
   pt: { xs: 3, sm: 4 }
 };
@@ -22,7 +22,7 @@ export const sectionTitleContainerStyles: SxProps<Theme> = {
 };
 
 export const sectionTitleStyles: SxProps<Theme> = {
-  color: '#fff',
+  color: colors.text.primary,
   fontSize: { xs: '1.5rem', sm: '2rem' },
   fontWeight: 700,
   textTransform: 'uppercase',
@@ -36,7 +36,7 @@ export const sectionTitleStyles: SxProps<Theme> = {
     top: '50%',
     width: { xs: '30px', sm: '50px' },
     height: '2px',
-    background: 'linear-gradient(90deg, rgba(59, 130, 246, 0), rgba(59, 130, 246, 1))',
+    background: colors.primary,
     transform: 'translateY(-50%)'
   },
   '&:before': {
@@ -44,7 +44,7 @@ export const sectionTitleStyles: SxProps<Theme> = {
   },
   '&:after': {
     right: { xs: '-30px', sm: '-50px' },
-    background: 'linear-gradient(90deg, rgba(59, 130, 246, 1), rgba(59, 130, 246, 0))'
+    background: colors.primary
   }
 };
 
@@ -61,29 +61,29 @@ export const swiperContainerStyles: SxProps<Theme> = {
     bottom: 0,
   },
   '.swiper-pagination-bullet': {
-    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+    backgroundColor: colors.primaryLight,
     opacity: 0.5,
     width: '10px',
     height: '10px',
     margin: '0 6px',
     transition: 'all 0.3s ease',
     '&-active': {
-      backgroundColor: '#3B82F6',
+      backgroundColor: colors.primary,
       opacity: 1,
       transform: 'scale(1.2)'
     }
   },
   '.swiper-button-next, .swiper-button-prev': {
-    color: '#3B82F6',
+    color: colors.primary,
     width: '40px',
     height: '40px',
-    backgroundColor: 'rgba(15, 23, 42, 0.7)',
+    backgroundColor: colors.background.card,
     borderRadius: '50%',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+    boxShadow: colors.shadows.dark,
     transition: 'all 0.3s ease',
     '&:hover': {
-      color: 'white',
-      backgroundColor: '#3B82F6',
+      color: colors.text.primary,
+      backgroundColor: colors.primary,
       transform: 'scale(1.1)'
     },
     '&::after': {
@@ -98,8 +98,13 @@ export const swiperContainerStyles: SxProps<Theme> = {
     right: { xs: 4, md: -5 }
   },
   '.swiper-button-disabled': {
-    opacity: '0.35 !important',
-    cursor: 'not-allowed'
+    opacity: 0.3,
+    cursor: 'not-allowed',
+    '&:hover': {
+      transform: 'none',
+      backgroundColor: colors.background.card,
+      color: colors.text.muted
+    }
   }
 };
 
@@ -134,49 +139,59 @@ export const emptyStateContainerStyles: SxProps<Theme> = {
 };
 
 export const emptyStateTextStyles: SxProps<Theme> = {
-  color: themeColors.text.secondary,
+  color: colors.text.secondary,
   mb: 1
 };
 
 export const emptyStateSubtextStyles: SxProps<Theme> = {
-  color: themeColors.text.disabled,
+  color: colors.text.disabled,
   fontSize: '0.875rem'
 }; 
 
-// MatchCard Styles
+// Match card styles
 export const matchCardContainerStyles: SxProps<Theme> = {
   position: 'relative',
-  width: '100%',
-  cursor: 'pointer',
+  overflow: 'hidden',
+  borderRadius: '16px',
+  transition: 'all 0.3s ease',
   '&:hover': {
-    '& .card-content': {
-      transform: 'translateY(-2px)',
-      boxShadow: `0 4px 20px ${themeColors.primaryLight}`,
-    },
-    '& .shine': {
-      opacity: 1,
-    }
+    transform: 'translateY(-4px)',
+    boxShadow: colors.primaryLight
   }
 };
 
 export const matchCardShineStyles: SxProps<Theme> = {
   position: 'absolute',
-  inset: 0,
-  padding: '1px',
-  borderRadius: '12px',
-  background: `linear-gradient(120deg, ${themeColors.primaryLight}, rgba(0, 89, 255, 0.1) 25%, transparent 45%, transparent 55%, rgba(0, 89, 255, 0.1) 75%, ${themeColors.primaryLight})`,
-  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-  WebkitMaskComposite: 'xor',
-  maskComposite: 'exclude',
-  opacity: 0.8,
-  transition: 'opacity 0.3s ease'
+  top: 0,
+  left: '-100%',
+  width: '100%',
+  height: '100%',
+  background: `linear-gradient(120deg, ${colors.primaryLight}, rgba(0, 89, 255, 0.1))`,
+  transition: 'left 0.5s ease',
+  zIndex: 1,
+  '&:hover': {
+    left: '100%'
+  }
 };
 
 export const matchCardStyles: SxProps<Theme> = {
-  width: '100%',
-  background: `linear-gradient(180deg, ${themeColors.primaryLight} 0%, rgba(0, 89, 255, 0.02) 100%)`,
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
-  position: 'relative'
+  position: 'relative',
+  zIndex: 2,
+  background: `linear-gradient(180deg, ${colors.primaryLight} 0%, rgba(0, 89, 255, 0.02))`,
+  borderRadius: '16px',
+  border: `1px solid ${colors.primaryBorder}`,
+  padding: 3,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  backdropFilter: 'blur(10px)',
+  boxShadow: colors.shadows.dark,
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    borderColor: colors.primary,
+    boxShadow: `0 8px 32px ${colors.shadows.primary}`
+  }
 };
 
 export const matchCardContentStyles: SxProps<Theme> = {

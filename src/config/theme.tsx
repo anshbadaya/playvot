@@ -1,5 +1,6 @@
 // src/theme/theme.ts
 import { createTheme } from "@mui/material/styles";
+import { colors } from "./styledTheme";
 
 declare module '@mui/material/styles' {
   interface TypeBackground {
@@ -7,28 +8,28 @@ declare module '@mui/material/styles' {
   }
 }
 
-// Centralized theme colors and constants
+// Use the same color definitions from styledTheme
 export const themeColors = {
-  primary: '#3B82F6',
-  primaryLight: 'rgba(59, 130, 246, 0.1)',
-  primaryBorder: 'rgba(59, 130, 246, 0.2)',
-  secondary: '#1E293B',
-  secondaryLight: 'rgba(30, 41, 59, 0.6)',
-  success: '#10B981',
-  successLight: 'rgba(16, 185, 129, 0.1)',
-  warning: '#F59E0B',
-  warningLight: 'rgba(245, 158, 11, 0.1)',
-  error: '#EF4444',
-  errorLight: 'rgba(239, 68, 68, 0.1)',
-  purple: '#A855F7',
-  purpleLight: 'rgba(168, 85, 247, 0.1)',
-  background: '#0F172A',
-  surface: 'rgba(30, 41, 59, 0.4)',
-  border: 'rgba(59, 130, 246, 0.15)',
+  primary: colors.primary,
+  primaryLight: colors.primaryLight,
+  primaryBorder: colors.primaryBorder,
+  secondary: colors.secondary,
+  secondaryLight: colors.secondaryLight,
+  success: colors.success,
+  successLight: colors.successLight,
+  warning: colors.warning,
+  warningLight: colors.warningLight,
+  error: colors.error,
+  errorLight: colors.errorLight,
+  purple: colors.secondary,
+  purpleLight: colors.secondaryLight,
+  background: colors.background.tertiary,
+  surface: colors.background.surface,
+  border: colors.border.secondary,
   text: {
-    primary: '#FFFFFF',
-    secondary: '#94A3B8',
-    disabled: '#64748B'
+    primary: colors.text.primary,
+    secondary: colors.text.muted,
+    disabled: colors.text.disabled
   }
 };
 
@@ -45,7 +46,7 @@ export const commonStyles = {
     }
   },
   cardHeader: {
-    backgroundColor: themeColors.secondary,
+    backgroundColor: colors.background.secondary,
     borderBottom: `1px solid ${themeColors.border}`,
     padding: '16px',
     borderRadius: '12px 12px 0 0'
@@ -90,13 +91,8 @@ export const AppTheme = createTheme({
     },
     background: {
       default: themeColors.background,
-      paper: themeColors.secondary,
-      gradient: `
-        radial-gradient(circle at 20% 20%, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-        linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%)
-      `,
+      paper: colors.background.secondary,
+      gradient: colors.gradients.background,
     },
     error: {
       main: themeColors.error,
@@ -186,9 +182,9 @@ export const AppTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: `linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%)`,
+          background: colors.gradients.background,
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
-          borderBottom: "1px solid rgba(29, 78, 216, 0.2)",
+          borderBottom: `1px solid ${colors.primaryBorder}`,
           backdropFilter: "blur(10px)",
         },
       },

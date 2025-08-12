@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import { SxProps, Theme } from '@mui/material';
 import { themeColors } from '@/config/theme';
 import { sharedStyles } from '@/styles/shared.styles';
@@ -358,7 +359,7 @@ export const matchTabsButtonStyles = (isActive: boolean): SxProps<Theme> => ({
   py: { xs: 1, sm: 1.25 },
   fontSize: { xs: '0.75rem', sm: '0.8rem' },
   fontWeight: 600,
-  color: isActive ? '#F8FAFC' : 'rgba(148, 163, 184, 0.7)',
+  color: isActive ? 'colors.text.primary' : 'rgba(148, 163, 184, 0.7)',
   bgcolor: isActive ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
   borderRadius: '100px',
   border: `1px solid ${isActive ? 'rgba(59, 130, 246, 0.3)' : 'transparent'}`,
@@ -388,12 +389,12 @@ export const winProbabilityTeamsRowStyles: SxProps<Theme> = {
 };
 
 export const winProbabilityTeamStyles: SxProps<Theme> = {
-  color: '#3B82F6'
+  color: 'colors.primary'
 };
 
 export const winProbabilityTeamPercentageStyles: SxProps<Theme> = {
   ml: 1,
-  color: '#3B82F6',
+  color: 'colors.primary',
   fontWeight: 'bold'
 };
 
@@ -416,17 +417,17 @@ export const winProbabilityProgressContainerStyles: SxProps<Theme> = {
 };
 
 export const winProbabilityHomeBarStyles: SxProps<Theme> = {
-  bgcolor: '#3B82F6',
+  bgcolor: 'colors.primary',
   height: '100%'
 };
 
 export const winProbabilityDrawBarStyles: SxProps<Theme> = {
-  bgcolor: '#6B7280',
+  bgcolor: 'colors.text.muted',
   height: '100%'
 };
 
 export const winProbabilityAwayBarStyles: SxProps<Theme> = {
-  bgcolor: '#3B82F6',
+  bgcolor: 'colors.primary',
   height: '100%'
 }; 
 

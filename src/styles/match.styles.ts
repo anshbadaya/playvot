@@ -1,26 +1,26 @@
 import { styled, alpha } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { themeColors, commonStyles } from '@/config/theme';
+import { colors } from '@/utils/colors';
 
 export const PageBackground = styled(Box)(({ theme }) => ({
-  background: `linear-gradient(135deg, ${themeColors.background} 0%, ${themeColors.secondary} 100%)`,
+  background: colors.gradients.background,
   minHeight: '100vh',
-  color: themeColors.text.primary,
+  color: colors.text.primary,
   display: 'flex',
   flexDirection: 'column'
 }));
 
 export const TopBar = styled(Box)(({ theme }) => ({
-  ...commonStyles.card,
   position: 'sticky',
   top: 0,
   zIndex: 50,
-  background: alpha(themeColors.background, 0.95),
-  borderBottom: `1px solid ${themeColors.border}`,
+  background: alpha(colors.background.primary, 0.95),
+  borderBottom: `1px solid ${colors.border.primary}`,
   padding: theme.spacing(2),
   borderRadius: 0,
+  backdropFilter: 'blur(10px)',
   '&:hover': {
-    borderColor: themeColors.border,
+    borderColor: colors.border.primary,
     boxShadow: 'none'
   },
   [theme.breakpoints.down('sm')]: {
@@ -30,9 +30,13 @@ export const TopBar = styled(Box)(({ theme }) => ({
 
 export const TabPanel = styled(Box)({
   padding: '16px',
-  ...commonStyles.card,
+  backgroundColor: colors.background.card,
+  borderRadius: '12px',
+  border: `1px solid ${colors.border.primary}`,
+  backdropFilter: 'blur(8px)',
+  transition: 'all 0.2s ease-in-out',
   '&:hover': {
-    borderColor: themeColors.border,
-    boxShadow: 'none'
+    borderColor: colors.primaryBorder,
+    boxShadow: `0 4px 20px ${colors.primaryLight}`
   }
 }); 

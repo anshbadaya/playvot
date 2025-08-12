@@ -1,5 +1,5 @@
 import { SxProps, Theme } from '@mui/material';
-import { themeColors, commonStyles } from '@/config/theme';
+import { colors, colorUtils, colorCombinations } from '@/utils/colors';
 
 // Common style patterns
 export const sharedStyles = {
@@ -13,60 +13,77 @@ export const sharedStyles = {
 
   // Card patterns
   card: {
-    ...commonStyles.card,
-    padding: { xs: 2, sm: 2.5, md: 3 }
+    backgroundColor: colors.background.card,
+    borderRadius: '12px',
+    border: `1px solid ${colors.border.primary}`,
+    backdropFilter: 'blur(8px)',
+    transition: 'all 0.2s ease-in-out',
+    padding: { xs: 2, sm: 2.5, md: 3 },
+    '&:hover': {
+      borderColor: colors.primaryBorder,
+      boxShadow: `0 4px 20px ${colors.primaryLight}`
+    }
   },
 
   cardHeader: {
-    ...commonStyles.cardHeader,
+    backgroundColor: colors.background.secondary,
+    borderBottom: `1px solid ${colors.border.primary}`,
+    padding: '16px',
+    borderRadius: '12px 12px 0 0',
     marginBottom: 2
   },
 
   // Button patterns
   primaryButton: {
-    ...commonStyles.button,
-    backgroundColor: themeColors.primary,
-    color: themeColors.text.primary,
+    borderRadius: 8,
+    textTransform: 'none',
+    fontWeight: 500,
+    transition: 'all 0.2s ease-in-out',
+    backgroundColor: colors.primary,
+    color: colors.text.primary,
     '&:hover': {
-      backgroundColor: 'rgba(59, 130, 246, 0.9)',
+      backgroundColor: colors.primaryHover,
       transform: 'translateY(-1px)',
-      boxShadow: `0 4px 12px ${themeColors.primaryLight}`
+      boxShadow: `0 4px 12px ${colors.primaryLight}`
     }
   },
 
   secondaryButton: {
-    ...commonStyles.button,
+    borderRadius: 8,
+    textTransform: 'none',
+    fontWeight: 500,
+    transition: 'all 0.2s ease-in-out',
     backgroundColor: 'transparent',
-    color: themeColors.text.primary,
-    border: `1px solid ${themeColors.border}`,
+    color: colors.text.primary,
+    border: `1px solid ${colors.border.secondary}`,
     '&:hover': {
-      backgroundColor: themeColors.primaryLight,
-      borderColor: themeColors.primaryBorder,
+      backgroundColor: colors.primaryLight,
+      borderColor: colors.primaryBorder,
       transform: 'translateY(-1px)'
     }
   },
 
   // Text patterns
   heading: {
-    color: themeColors.text.primary,
+    color: colors.text.primary,
     fontWeight: 600,
     letterSpacing: '0.5px'
   },
 
   subheading: {
-    color: themeColors.text.secondary,
+    color: colors.text.secondary,
     fontWeight: 500,
     letterSpacing: '0.25px'
   },
 
   bodyText: {
-    color: themeColors.text.primary,
+    color: colors.text.primary,
     fontWeight: 400,
     lineHeight: 1.6
   },
 
   caption: {
-    color: themeColors.text.secondary,
+    color: colors.text.secondary,
     fontSize: '0.875rem',
     fontWeight: 400
   },
@@ -74,24 +91,24 @@ export const sharedStyles = {
   // Status patterns
   status: {
     success: {
-      backgroundColor: themeColors.successLight,
-      color: themeColors.success,
-      border: `1px solid ${themeColors.success}`
+      backgroundColor: colors.successLight,
+      color: colors.success,
+      border: `1px solid ${colors.successBorder}`
     },
     warning: {
-      backgroundColor: themeColors.warningLight,
-      color: themeColors.warning,
-      border: `1px solid ${themeColors.warning}`
+      backgroundColor: colors.warningLight,
+      color: colors.warning,
+      border: `1px solid ${colors.warningBorder}`
     },
     error: {
-      backgroundColor: themeColors.errorLight,
-      color: themeColors.error,
-      border: `1px solid ${themeColors.error}`
+      backgroundColor: colors.errorLight,
+      color: colors.error,
+      border: `1px solid ${colors.errorBorder}`
     },
     info: {
-      backgroundColor: themeColors.primaryLight,
-      color: themeColors.primary,
-      border: `1px solid ${themeColors.primary}`
+      backgroundColor: colors.primaryLight,
+      color: colors.primary,
+      border: `1px solid ${colors.primaryBorder}`
     }
   },
 
@@ -101,7 +118,7 @@ export const sharedStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '200px',
-    color: themeColors.primary
+    color: colors.primary
   },
 
   // Error patterns
@@ -111,7 +128,7 @@ export const sharedStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '200px',
-    color: themeColors.error,
+    color: colors.error,
     textAlign: 'center',
     padding: 3
   },
@@ -123,7 +140,7 @@ export const sharedStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '200px',
-    color: themeColors.text.secondary,
+    color: colors.text.secondary,
     textAlign: 'center',
     padding: 3
   },
@@ -192,13 +209,13 @@ export const sharedStyles = {
       right: 0,
       top: '50%',
       height: '1px',
-      backgroundColor: 'rgba(255, 255, 255, 0.08)',
+      backgroundColor: colorUtils.withOpacity(colors.text.primary, 0.08),
       zIndex: 0
     }
   },
 
   sectionTitleText: {
-    backgroundColor: themeColors.background,
+    backgroundColor: colors.background.primary,
     padding: '0 24px',
     position: 'relative',
     zIndex: 1,

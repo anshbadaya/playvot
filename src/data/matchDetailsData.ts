@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import { MatchData, ScorecardData } from '@/types/match-details';
 
 export const dummyMatchData: MatchData = {
@@ -556,9 +557,9 @@ export const dummyHighlightsData: Highlight[] = [
 ];
 
 export const dummyQuickStatsData: QuickStat[] = [
-  { value: '85%', label: 'Win Probability', color: '#3B82F6' },
-  { value: '2.85', label: 'Best Odds', color: '#10B981' },
-  { value: '12K', label: 'Active Bets', color: '#8B5CF6' }
+  { value: '85%', label: 'Win Probability', color: 'colors.primary' },
+  { value: '2.85', label: 'Best Odds', color: 'colors.success' },
+  { value: '12K', label: 'Active Bets', color: 'colors.secondary' }
 ];
 
 export const dummyBettingTabs = ['Main', 'Match', 'Fancy'];
@@ -611,10 +612,10 @@ export const dummyMethodOfDismissal: FancyBet[] = [
 ];
 
 export const dummyQuickBets: QuickBet[] = [
-  { type: 'FOUR', odds: 6.5, color: '#10B981' },
-  { type: 'SIX', odds: 12.0, color: '#8B5CF6' },
-  { type: 'DOT', odds: 2.8, color: '#94A3B8' },
-  { type: 'WICKET', odds: 8.5, color: '#EF4444' }
+  { type: 'FOUR', odds: 6.5, color: 'colors.success' },
+  { type: 'SIX', odds: 12.0, color: 'colors.secondary' },
+  { type: 'DOT', odds: 2.8, color: 'colors.text.muted' },
+  { type: 'WICKET', odds: 8.5, color: 'colors.error' }
 ];
 
 export const dummyMatchStats = {

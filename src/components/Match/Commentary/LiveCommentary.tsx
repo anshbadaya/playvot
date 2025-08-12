@@ -1,3 +1,4 @@
+import { colors } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -65,12 +66,12 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummy
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                   <Typography
                     variant="caption"
-                    sx={{ fontWeight: 'bold', color: comment.type === 'boundary' ? '#10B981' : 'gray' }}
+                    sx={{ fontWeight: 'bold', color: comment.type === 'boundary' ? 'colors.success' : 'gray' }}
                   >
                     {comment.time}
                   </Typography>
                   {comment.type === 'boundary' && (
-                    <Typography variant="caption" sx={{ fontWeight: 'bold', color: '#10B981' }}>
+                    <Typography variant="caption" sx={{ fontWeight: 'bold', color: 'colors.success' }}>
                       BOUNDARY
                     </Typography>
                   )}
@@ -100,10 +101,10 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummy
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <AccessTimeIcon sx={{ color: '#3B82F6', fontSize: 24 }} />
+                <AccessTimeIcon sx={{ color: 'colors.primary', fontSize: 24 }} />
               </Box>
               <Typography variant="h6" sx={{
-                color: '#FFFFFF',
+                color: 'colors.text.primary',
                 fontWeight: 600,
                 letterSpacing: '0.5px'
               }}>
@@ -162,7 +163,7 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummy
                     <Typography 
                       variant="body1" 
                       sx={{ 
-                        color: '#94A3B8',
+                        color: 'colors.text.muted',
                         fontWeight: 'bold'
                       }}
                     >
@@ -178,12 +179,12 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummy
                     alignItems: 'center'
                   }}>
                     {over.balls.map((runs, ballIdx) => {
-                      let bgColor = '#3B82F6'; // Default: 1 run (blue)
+                      let bgColor = 'colors.primary'; // Default: 1 run (blue)
                       
-                      if (runs === 0) bgColor = '#94A3B8'; // Dot ball (gray)
-                      else if (runs === 4) bgColor = '#10B981'; // 4 runs (green)
-                      else if (runs === 6) bgColor = '#8B5CF6'; // 6 runs (purple)
-                      else if (runs === 'W') bgColor = '#EF4444'; // Wicket (red)
+                      if (runs === 0) bgColor = 'colors.text.muted'; // Dot ball (gray)
+                      else if (runs === 4) bgColor = 'colors.success'; // 4 runs (green)
+                      else if (runs === 6) bgColor = 'colors.secondary'; // 6 runs (purple)
+                      else if (runs === 'W') bgColor = 'colors.error'; // Wicket (red)
                       
                       return (
                         <Box
@@ -217,7 +218,7 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummy
                     <Typography 
                       variant="body2" 
                       sx={{ 
-                        color: '#FFFFFF',
+                        color: 'colors.text.primary',
                         fontWeight: 'bold'
                       }}
                     >
@@ -230,7 +231,7 @@ const LiveCommentary: React.FC<LiveCommentaryProps> = ({ data, oversData = dummy
               <Box sx={{ 
                 p: 3, 
                 textAlign: 'center',
-                color: '#94A3B8'
+                color: 'colors.text.muted'
               }}>
                 <Typography variant="body2">
                   No over-by-over data available
