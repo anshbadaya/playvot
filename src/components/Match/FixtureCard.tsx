@@ -356,7 +356,7 @@ const VideoContainer = styled(Box)`
   border: 1px solid rgba(59, 130, 246, 0.2);
 `;
 
-const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
+const FixtureCard: React.FC<SportsMatchCardProps> = (props) => {
   const navigate = useNavigate();
   const { fixture_no, match_date, match, isLive } = props;
   const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category, start_time, end_time } = match;
@@ -372,7 +372,7 @@ const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
   const slug = `sports-${match_no}-${player_a.name.toLowerCase().replace(/\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\s+/g, '-')}`;
   
   const handleClick = () => {
-    navigate(`/match/${slug}`);
+    navigate(`/fixtures/${slug}`);
   };
   
   const handleScorecardClick = (e: React.MouseEvent) => {
@@ -690,4 +690,4 @@ const MatchCard: React.FC<SportsMatchCardProps> = (props) => {
   );
 };
 
-export default MatchCard;
+export default FixtureCard;

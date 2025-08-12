@@ -4,13 +4,11 @@ import { ThemeProvider } from "styled-components";
 import { styledTheme } from "@/config/styledTheme";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/contexts/AuthContext";
-import Login from "@/pages/Landing";
-import Match from "@/pages/Matches";
-import MatchDetailPage from "@/pages/MatchDetails";
+import Fixtures from "@/pages/Fixtures";
 import AboutPage from "@/pages/About";
 import LandingPage from "./pages/Landing";
 import TournamentsPage from "@/pages/Tournaments";
-import AllMatchesPage from "@/pages/AllMatches";
+import Matches from "@/pages/Matches";
 
 function App() {
   return (
@@ -20,10 +18,9 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/tournaments" element={<TournamentsPage />} />
-              <Route path="/matches" element={<AllMatchesPage />} />
-              <Route path="/match" element={<Match />} />
-              <Route path="/match/:slug" element={<MatchDetailPage />} />
+              <Route path="/tournaments/" element={<TournamentsPage />} />
+              <Route path="/tournaments/:slug" element={<Matches />} />
+              <Route path="/match/:slug" element={<Fixtures />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Router>

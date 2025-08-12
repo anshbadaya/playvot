@@ -1,238 +1,177 @@
-// pages/Matches.tsx
-import React from "react";
-import { Layout } from "@/components/Layout";
-import MatchCard from "@/components/Match/MatchCard";
+import React from 'react';
+import { Layout } from '@/components/Layout';
 import { 
   Box, 
   Container, 
   Typography, 
-  CircularProgress
-} from "@mui/material";
-import { useTheme, useMediaQuery } from "@mui/material";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
-
-// Custom hook and types
+  Chip
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
-import { SportsCardGroup } from '@/types/match';
-import BackgroundRefreshIndicator from '@/components/Shared/BackgroundRefreshIndicator';
+import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
+import { colors } from '@/utils/colors';
 
-// Styles
+// Import styled components
 import {
-  matchesContainerStyles,
-  matchesContentStyles,
-  sectionTitleContainerStyles,
-  sectionTitleStyles,
-  swiperContainerStyles,
-  gridContainerStyles,
-  sectionWrapperStyles,
-  loadingContainerStyles,
-  emptyStateContainerStyles,
-  emptyStateTextStyles,
-  emptyStateSubtextStyles
-} from '@/styles/matches.styles';
+  PageBackground,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
+  MatchCardContainer,
+  MatchHeader,
+  MatchInfo,
+  MatchTitle,
+  TournamentBadge,
+  TeamsSection,
+  TeamRow,
+  TeamIcon,
+  TeamName,
+  MatchTime,
+  SectionTitle,
+  GridContainer,
+  SectionContainer
+} from '@/styles/allMatches.styles';
 
-interface SportsSectionProps {
-  title: string;
-  cardGroups: SportsCardGroup[];
-  isMobile: boolean;
-  isLive?: boolean;
-}
+const AllMatches: React.FC = () => {
+  const navigate = useNavigate();
+  
+  // Use existing hooks for match data
+  const { data: liveData, loading: liveLoading } = useLiveMatches();
+  const { data: upcomingData, loading: upcomingLoading } = useUpcomingMatches();
 
-/**
- * Loading component
- */
-const LoadingState: React.FC = () => (
-  <Box sx={loadingContainerStyles}>
-    <CircularProgress size={40} />
-    <Typography sx={{ ml: 2 }}>Loading matches...</Typography>
-  </Box>
-);
-
-/**
- * Empty state component
- */
-const EmptyState: React.FC<{ message?: string }> = ({ message = "No matches found" }) => (
-  <Box sx={emptyStateContainerStyles}>
-    <Typography variant="h6" sx={emptyStateTextStyles}>
-      {message}
-    </Typography>
-    <Typography sx={emptyStateSubtextStyles}>
-      Check back later for new matches
-    </Typography>
-  </Box>
-);
-
-/**
- * SportsSection component for displaying sports matches grouped by card
- */
-const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobile, isLive = false }) => {
-  if (cardGroups.length === 0) {
-    return null;
-  }
-
-  return (
-    <Box sx={sectionWrapperStyles}>
-      <Box sx={sectionTitleContainerStyles}>
-        <Typography component="span" sx={sectionTitleStyles}>
-          {title}
-          {isLive && (
-            <Box component="span" sx={{ 
-              ml: 1, 
-              px: 1, 
-              py: 0.5, 
-              bgcolor: 'error.main', 
-              color: 'white', 
-              borderRadius: 1, 
-              fontSize: '0.8rem',
-              fontWeight: 'bold'
-            }}>
-              LIVE
-            </Box>
-          )}
-        </Typography>
-      </Box>
-
-      {cardGroups.map((cardGroup, groupIndex) => (
-        <Box key={`${title}-${cardGroup.card}-${cardGroup.fixture_no}-${groupIndex}`} sx={{ mb: 4 }}>
-          
-          <Box sx={swiperContainerStyles}>
-            {(isMobile || cardGroup.matches.length > 3) ? (
-              <Swiper
-                modules={[Pagination, Navigation]}
-                spaceBetween={24}
-                slidesPerView={isMobile ? 1 : 3}
-                pagination={{ 
-                  clickable: true,
-                  dynamicBullets: true
-                }}
-                navigation={!isMobile}
-                loop={cardGroup.matches.length > (isMobile ? 1 : 3)}
-                centeredSlides={isMobile}
-              >
-                {cardGroup.matches.map((match, index) => (
-                  <SwiperSlide key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
-                    <Box sx={{ px: 1 }}>
-                      <MatchCard 
-                        match={match} 
-                        card={cardGroup.card} 
-                        fixture_no={cardGroup.fixture_no} 
-                        match_date={cardGroup.match_date} 
-                        sportType="sports" 
-                        isLive={isLive}
-                      />
-                    </Box>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (
-              <Box sx={gridContainerStyles}>
-                {cardGroup.matches.map((match, index) => (
-                  <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
-                    <MatchCard 
-                      match={match} 
-                      card={cardGroup.card} 
-                      fixture_no={cardGroup.fixture_no} 
-                      match_date={cardGroup.match_date} 
-                      sportType="sports" 
-                      isLive={isLive}
-                    />
-                  </Box>
-                ))}
-              </Box>
-            )}
-          </Box>
-        </Box>
-      ))}
-    </Box>
+  // Use data from the data folder
+  const upcomingMatches = dummyUpcomingMatchesData.sports.flatMap(cardGroup => 
+    cardGroup.matches.map((match, index) => ({
+      id: `upcoming-${match.match_no}-${index}`,
+      matchNumber: `Match #${match.match_no}`,
+      tournament: cardGroup.card,
+      tournamentNumber: cardGroup.fixture_no.toString(),
+      team1: { name: match.player_a.name, icon: match.player_a.name.split(' ').map(n => n[0]).join('') },
+      team2: { name: match.player_b.name, icon: match.player_b.name.split(' ').map(n => n[0]).join('') },
+      time: new Date(`2025-08-06 ${match.start_time}`).toLocaleString('en-US', { 
+        weekday: 'short', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      isLive: false,
+      weightCategory: match.weight_category
+    }))
   );
-};
 
-/**
- * Main Matches page component
- */
-const Matches: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  // Use custom hooks for live and upcoming matches
-  const { 
-    data: liveData, 
-    loading: liveLoading, 
-    refreshing: liveRefreshing,
-    total: liveTotal 
-  } = useLiveMatches();
-
-  const { 
-    data: upcomingData, 
-    loading: upcomingLoading, 
-    refreshing: upcomingRefreshing,
-    total: upcomingTotal 
-  } = useUpcomingMatches();
-
-  // Calculate total matches for each section
-  const totalLiveMatches = liveData.sports ? liveData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
-  const totalUpcomingMatches = upcomingData.sports ? upcomingData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
-
-  console.log('Live matches data:', liveData);
-  console.log('Total live matches:', totalLiveMatches);
-  console.log('Upcoming matches data:', upcomingData);
-  console.log('Total upcoming matches:', totalUpcomingMatches);
+  const handleMatchClick = (matchId: string) => {
+    navigate(`/fixtures/${matchId}/`);
+  };
 
   return (
     <Layout>
-      <Box sx={matchesContainerStyles}>
-        <Container maxWidth="lg" sx={matchesContentStyles}>
-          {/* Live Matches Section */}
-          <Box sx={{ mb: 6 }}>
-            <BackgroundRefreshIndicator isRefreshing={liveRefreshing} showProgressBar={true}>
-              {liveLoading && <LoadingState />}
-              
-              {!liveLoading && (
-                <>
-                  {totalLiveMatches === 0 ? (
-                    <EmptyState message="No live matches currently" />
-                  ) : (
-                    <SportsSection
-                      title="Live Matches"
-                      cardGroups={liveData.sports}
-                      isMobile={isMobile}
-                      isLive={true}
-                    />
-                  )}
-                </>
-              )}
-            </BackgroundRefreshIndicator>
-          </Box>
+      <PageBackground>
+        <Container maxWidth="lg">
+          <PageHeader>
+            <PageTitle>All Matches</PageTitle>
+            <PageSubtitle>
+              View all upcoming and live matches across all tournaments. Click on any match to see detailed information and betting options.
+            </PageSubtitle>
+          </PageHeader>
+
+          {/* Live Matches Section - Displayed First */}
+          {!liveLoading && (
+            <SectionContainer>
+              <SectionTitle>Live Matches</SectionTitle>
+              <GridContainer>
+                {(liveData.sports && liveData.sports.length > 0 ? liveData.sports : dummyMatchesData.sports).flatMap(cardGroup => 
+                  cardGroup.matches.map((match, index) => (
+                    <Box key={`live-${match.match_no}-${index}`}>
+                      <MatchCardContainer onClick={() => navigate(`/match/${match.match_no}`)}>
+                        <MatchHeader>
+                          <MatchInfo>
+                            <MatchTitle>Match #{match.match_no} • Live</MatchTitle>
+                          </MatchInfo>
+                          <Chip 
+                            label="LIVE" 
+                            size="small" 
+                            sx={{ 
+                              bgcolor: colors.error,
+                              color: colors.text.primary,
+                              fontWeight: 'bold'
+                            }} 
+                          />
+                        </MatchHeader>
+
+                        <TeamsSection>
+                          <TeamRow>
+                            <TeamIcon>TA</TeamIcon>
+                            <TeamName>Team A</TeamName>
+                          </TeamRow>
+                          
+                          <Box sx={{ textAlign: 'center', my: 2 }}>
+                            <Typography variant="h6" sx={{ color: colors.text.secondary, fontSize: '1rem', fontWeight: 600 }}>
+                              VS
+                            </Typography>
+                          </Box>
+                          
+                          <TeamRow>
+                            <TeamIcon>TB</TeamIcon>
+                            <TeamName>Team B</TeamName>
+                          </TeamRow>
+
+                          <Box sx={{ textAlign: 'center', mt: 3 }}>
+                            <MatchTime>{new Date(`2025-08-05 ${match.start_time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</MatchTime>
+                          </Box>
+                        </TeamsSection>
+                      </MatchCardContainer>
+                    </Box>
+                  ))
+                )}
+              </GridContainer>
+            </SectionContainer>
+          )}
 
           {/* Upcoming Matches Section */}
-          <Box>
-            <BackgroundRefreshIndicator isRefreshing={upcomingRefreshing} showProgressBar={true}>
-              {upcomingLoading && <LoadingState />}
-              
-              {!upcomingLoading && (
-                <>
-                  {totalUpcomingMatches === 0 ? (
-                    <EmptyState message="No upcoming matches found" />
-                  ) : (
-                    <SportsSection
-                      title="Upcoming Matches"
-                      cardGroups={upcomingData.sports}
-                      isMobile={isMobile}
-                      isLive={false}
-                    />
-                  )}
-                </>
-              )}
-            </BackgroundRefreshIndicator>
-          </Box>
+          <SectionContainer>
+            <SectionTitle>Upcoming Matches</SectionTitle>
+            <GridContainer>
+              {upcomingMatches.map((match) => (
+                <Box key={match.id}>
+                  <MatchCardContainer onClick={() => handleMatchClick(match.id)}>
+                    <MatchHeader>
+                      <MatchInfo>
+                        <MatchTitle>{match.matchNumber} • {match.tournament}</MatchTitle>
+                      </MatchInfo>
+                      <TournamentBadge label={match.tournamentNumber} size="small" />
+                    </MatchHeader>
+
+                    <TeamsSection>
+                      <TeamRow>
+                        <TeamIcon>TA</TeamIcon>
+                        <TeamName>Team A</TeamName>
+                      </TeamRow>
+                      
+                      <Box sx={{ textAlign: 'center', my: 2 }}>
+                        <Typography variant="h6" sx={{ color: colors.text.secondary, fontSize: '1rem', fontWeight: 600 }}>
+                          VS
+                        </Typography>
+                      </Box>
+                      
+                      <TeamRow>
+                        <TeamIcon>TB</TeamIcon>
+                        <TeamName>Team B</TeamName>
+                      </TeamRow>
+
+                      <Box sx={{ textAlign: 'center', mt: 3 }}>
+                        <MatchTime>{match.time}</MatchTime>
+                      </Box>
+                    </TeamsSection>
+                  </MatchCardContainer>
+                </Box>
+              ))}
+            </GridContainer>
+          </SectionContainer>
         </Container>
-      </Box>
+      </PageBackground>
     </Layout>
   );
 };
 
-export default Matches;
+export default AllMatches;

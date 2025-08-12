@@ -154,7 +154,7 @@ const LandingPage = () => {
           severity: 'success',
         });
         setTimeout(() => {
-          navigate('/');
+          navigate('/tournaments');
         }, 500);
         return true;
       } else {

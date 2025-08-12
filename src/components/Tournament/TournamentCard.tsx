@@ -242,7 +242,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
   const navigate = useNavigate();
   
   const handleViewFixtures = () => {
-    navigate(`/matches`);
+    navigate(`/tournaments/${tournament.slug}`);
   };
   
   const handleViewEventData = () => {
