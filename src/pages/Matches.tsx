@@ -61,7 +61,7 @@ const AllMatches: React.FC = () => {
   );
 
   const handleMatchClick = (matchId: string) => {
-    navigate(`/fixtures/${matchId}/`);
+    navigate(`/match/${matchId}/`);
   };
 
   return (

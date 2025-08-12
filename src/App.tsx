@@ -5,11 +5,11 @@ import { styledTheme } from "@/config/styledTheme";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import LoginPage from "@/pages/Login";
-import Match from "@/pages/Matches";
-import MatchDetailPage from "@/pages/MatchDetails";
+import FixturesPage from "@/pages/Fixtures";
 import AboutPage from "@/pages/About";
 import LandingPage from "./pages/Landing";
 import TournamentsPage from "@/pages/Tournaments";
+import MatchesPage from "@/pages/Matches";
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,8 +27,8 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/tournaments" element={<ProtectedRoute><TournamentsPage /></ProtectedRoute>} />
-              <Route path="/match" element={<ProtectedRoute><Match /></ProtectedRoute>} />
-              <Route path="/match/:slug" element={<ProtectedRoute><MatchDetailPage /></ProtectedRoute>} />
+              <Route path="/tournaments/:slug" element={<ProtectedRoute><MatchesPage /></ProtectedRoute>} />
+              <Route path="/match/:slug" element={<ProtectedRoute><FixturesPage /></ProtectedRoute>} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Router>
