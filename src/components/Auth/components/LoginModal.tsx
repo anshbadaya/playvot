@@ -20,6 +20,7 @@ import {
   Visibility, 
   VisibilityOff,
   MailOutlineRounded,
+  Close,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/material/styles';
@@ -45,10 +46,25 @@ const LoginModalStyled = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   width: '90%',
   maxWidth: 400,
+  maxHeight: '90vh',
+  overflow: 'auto',
   animation: `${slideUp} 0.5s ease-out`,
+  position: 'relative',
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(3),
-    width: '95%',
+    padding: theme.spacing(2.5),
+    width: '90%',
+    maxWidth: '90%',
+    maxHeight: '80vh',
+    margin: 'auto',
+    transform: 'none',
+  },
+  [theme.breakpoints.down('xs')]: {
+    padding: theme.spacing(2),
+    width: '85%',
+    maxWidth: '85%',
+    maxHeight: '75vh',
+    margin: 'auto',
+    transform: 'none',
   },
 }));
 
@@ -68,7 +84,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     '&.Mui-focused': {
       background: 'rgba(255, 255, 255, 0.07)',
       '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'colors.primary',
+        borderColor: '#4461F2',
         borderWidth: '2px',
       },
     },
@@ -86,18 +102,28 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
         opacity: 1,
       },
     },
+    [theme.breakpoints.down('sm')]: {
+      height: '44px',
+      '& .MuiOutlinedInput-input': {
+        padding: '10px 12px',
+        fontSize: '14px',
+      },
+    },
   },
   '& .MuiInputLabel-root': {
     fontSize: '14px',
     color: 'rgba(255, 255, 255, 0.5)',
     '&.Mui-focused': {
-      color: 'colors.primary',
+      color: '#4461F2',
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '13px',
     },
   },
 }));
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
-  background: 'colors.primary',
+  background: '#4461F2',
   borderRadius: '8px',
   padding: '12px 24px',
   fontWeight: 600,
@@ -106,14 +132,19 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
   textTransform: 'uppercase',
   boxShadow: 'none',
   transition: 'all 0.2s ease',
-  color: 'colors.text.primary',
+  color: '#FFFFFF',
   '&:hover': {
-    background: 'colors.primaryHover',
+    background: '#3451E2',
     boxShadow: '0 4px 12px rgba(68, 97, 242, 0.3)',
-    color: 'colors.text.primary',
+    color: '#FFFFFF',
   },
   '& .MuiButton-label': {
-    color: 'colors.text.primary',
+    color: '#FFFFFF',
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px 20px',
+    fontSize: '13px',
+    letterSpacing: '0.2px',
   },
 }));
 
@@ -122,7 +153,7 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   border: '1px solid rgba(255, 255, 255, 0.08)',
   borderRadius: '8px',
   padding: '12px 24px',
-  color: 'colors.text.primary',
+  color: '#FFFFFF',
   textTransform: 'uppercase',
   fontWeight: 600,
   fontSize: '13px',
@@ -130,10 +161,15 @@ const SecondaryButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     background: 'rgba(255, 255, 255, 0.05)',
     borderColor: 'rgba(255, 255, 255, 0.12)',
-    color: 'colors.text.primary',
+    color: '#FFFFFF',
   },
   '& .MuiButton-label': {
-    color: 'colors.text.primary',
+    color: '#FFFFFF',
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px 20px',
+    fontSize: '12px',
+    letterSpacing: '0.2px',
   },
 }));
 
@@ -193,34 +229,76 @@ const LoginModal: React.FC<LoginModalProps> = ({
   if (!open) return null;
 
   return (
+    <>
     <Box
       position="fixed"
       top={0}
       left={0}
       right={0}
       bottom={0}
-      bgcolor="rgba(0, 0, 0, 0.8)"
+      bgcolor="rgba(0, 0, 0, 0.75)"
       display="flex"
       alignItems="center"
       justifyContent="center"
-      zIndex={2000}
+      zIndex={3000}
+      sx={{
+        padding: 0,
+        // Ensure modal is properly centered and visible
+        minHeight: '100vh',
+        minWidth: '100vw',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      role="dialog"
+      aria-modal="true"
       onClick={onClose}
     >
-      <LoginModalStyled onClick={(e) => e.stopPropagation()}>
-        <Box textAlign="center" mb={3}>
+      <LoginModalStyled 
+        onClick={(e) => e.stopPropagation()}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        {/* Close button for mobile */}
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            top: isMobile ? 8 : 16,
+            right: isMobile ? 8 : 16,
+            color: 'rgba(255, 255, 255, 0.7)',
+            zIndex: 1,
+            '&:hover': {
+              color: 'rgba(255, 255, 255, 0.9)',
+              background: 'rgba(255, 255, 255, 0.1)',
+            },
+          }}
+        >
+          <Close />
+        </IconButton>
+        
+        <Box textAlign="center" mb={isMobile ? 1.5 : 3}>
           <Typography 
-            variant="h4" 
+            variant={isMobile ? "h6" : "h4"}
             fontWeight={600}
             sx={{ 
               color: 'rgba(255, 255, 255, 0.95)',
               fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-              mb: 2,
+              mb: isMobile ? 0.5 : 2,
             }}
           >
             Welcome Back
           </Typography>
           <Typography 
-            variant="body1"
+            variant={isMobile ? "caption" : "body1"}
             sx={{ 
               color: 'rgba(255, 255, 255, 0.7)',
               fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -231,7 +309,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         </Box>
     
         <Box component="form" onSubmit={handleSubmit}>
-          <Box mb={3}>
+          <Box mb={isMobile ? 1.5 : 3}>
             <StyledTextField
               label="Username"
               variant="outlined"
@@ -244,15 +322,16 @@ const LoginModal: React.FC<LoginModalProps> = ({
               onBlur={onFieldBlur('username')}
               error={touched.username && Boolean(errors.username)}
               required
+              size={isMobile ? "small" : "medium"}
             />
             {touched.username && errors.username && (
-              <FormHelperText error sx={{ ml: 1.5, mt: 0.5 }}>
+              <FormHelperText error sx={{ ml: 1.5, mt: 0.5, fontSize: '12px' }}>
                 {errors.username}
               </FormHelperText>
             )}
           </Box>
 
-          <Box mb={3}>
+          <Box mb={isMobile ? 1.5 : 3}>
             <StyledTextField
               label="Password"
               variant="outlined"
@@ -266,12 +345,14 @@ const LoginModal: React.FC<LoginModalProps> = ({
               onBlur={onFieldBlur('password')}
               error={touched.password && Boolean(errors.password)}
               required
+              size={isMobile ? "small" : "medium"}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
+                      size={isMobile ? "small" : "medium"}
                       sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -281,7 +362,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
               }}
             />
             {touched.password && errors.password && (
-              <FormHelperText error sx={{ ml: 1.5, mt: 0.5 }}>
+              <FormHelperText error sx={{ ml: 1.5, mt: 0.5, fontSize: '12px' }}>
                 {errors.password}
               </FormHelperText>
             )}
@@ -292,35 +373,45 @@ const LoginModal: React.FC<LoginModalProps> = ({
             variant="contained"
             fullWidth
             disabled={isLoading}
-            sx={{ mb: 2 }}
+            sx={{ 
+              mb: isMobile ? 1 : 2,
+              height: isMobile ? '40px' : '48px',
+            }}
           >
-            {isLoading ? <CircularProgress size={24} /> : 'LOGIN'}
+            {isLoading ? <CircularProgress size={20} /> : 'LOGIN'}
           </PrimaryButton>
           
-          <StyledDivider>OR</StyledDivider>
+          {!isMobile && <StyledDivider>OR</StyledDivider>}
           
-          <Stack spacing={1.5}>
-            <SecondaryButton
-              variant="outlined"
-              fullWidth
-              startIcon={<MailOutlineRounded />}
-              onClick={() => alert('Email login not implemented yet.')}
-            >
-              Login with Email
-            </SecondaryButton>
-            
-            <SecondaryButton
-              variant="outlined"
-              fullWidth
-              startIcon={<GoogleIcon />}
-              onClick={() => alert('Google login not implemented yet.')}
-            >
-              Login with Google
-            </SecondaryButton>
-          </Stack>
+          {!isMobile && (
+            <Stack spacing={1.5}>
+              <SecondaryButton
+                variant="outlined"
+                fullWidth
+                startIcon={<MailOutlineRounded />}
+                onClick={() => alert('Email login not implemented yet.')}
+                size="medium"
+                sx={{ height: '48px' }}
+              >
+                Login with Email
+              </SecondaryButton>
+              
+              <SecondaryButton
+                variant="outlined"
+                fullWidth
+                startIcon={<GoogleIcon />}
+                onClick={() => alert('Google login not implemented yet.')}
+                size="medium"
+                sx={{ height: '48px' }}
+              >
+                Login with Google
+              </SecondaryButton>
+            </Stack>
+          )}
         </Box>
       </LoginModalStyled>
     </Box>
+    </>
   );
 };
 

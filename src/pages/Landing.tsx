@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
-  Snackbar,
-  Alert,
-  useTheme,
 } from '@mui/material';
 import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import { Layout } from '@/components/Layout';
 
 import {
@@ -17,7 +13,6 @@ import {
   WhyZoddzSection,
   EventsCalendarSection,
 } from '@/components/Landing';
-import { LoginModal } from '@/components/Auth';
 
 // Animations
 const float = keyframes`
@@ -73,17 +68,9 @@ const FloatingElement = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledAlert = styled(Alert)(({ theme }) => ({
-  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  color: 'rgba(255, 255, 255, 0.9)',
-  borderRadius: '8px',
-  '& .MuiAlert-icon': {
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-}));
-
 const LandingPage = () => {
   const navigate = useNavigate();
+<<<<<<< Updated upstream
   const theme = useTheme();
   const { login } = useAuth();
   
@@ -175,15 +162,17 @@ const LandingPage = () => {
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
+=======
+>>>>>>> Stashed changes
 
   return (
-    <Layout onLoginClick={() => setShowLoginModal(true)}>
+    <Layout onLoginClick={() => navigate('/login')}>
       <Background>
         <FloatingElement />
         <FloatingElement />
         <FloatingElement />
         
-        <HeroSection onLoginClick={() => setShowLoginModal(true)} />
+        <HeroSection onLoginClick={() => navigate('/login')} />
         
         <WhatIsZoddzSection />
         
@@ -192,33 +181,6 @@ const LandingPage = () => {
         <WhyZoddzSection />
         
         <EventsCalendarSection />
-
-        <LoginModal
-          open={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
-          onSubmit={handleLoginSubmit}
-          isLoading={isLoading}
-          errors={errors}
-          touched={touched}
-          onFieldChange={handleFieldChange}
-          onFieldBlur={handleFieldBlur}
-        />
-
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <StyledAlert
-            onClose={handleCloseSnackbar}
-            severity={snackbar.severity}
-            variant="filled"
-            sx={{ width: '100%' }}
-          >
-            {snackbar.message}
-          </StyledAlert>
-        </Snackbar>
       </Background>
     </Layout>
   );

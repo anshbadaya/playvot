@@ -2,21 +2,17 @@ import { colors } from '@/utils/colors';
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "@/contexts/AuthContext";
-import { Menu, MenuItem, Avatar, IconButton } from "@mui/material";
+import { Menu, MenuItem } from "@mui/material";
 
 interface HeaderProps {
-  searchPlaceholder?: string;
   logoPath?: string;
   logoAlt?: string;
-  onSearch?: (query: string) => void;
-  showSearch?: boolean;
-  onLoginClick?: () => void; // ← Add this for login callback
+  onLoginClick?: () => void;
 }
 
 const HeaderContainer = styled.header`
@@ -89,79 +85,7 @@ const Logo = styled.img`
   }
 `;
 
-const SearchContainer = styled.div`
-  display: none;
-  align-items: center;
-  background-color: ${colors.background.secondary};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: 8px 16px;
-  width: 400px;
-  border: 1px solid ${colors.border.secondary};
-  transition: all ${({ theme }) => theme.transitions.fast};
-  
-  &:focus-within {
-    border-color: ${colors.primaryBorder};
-    box-shadow: 0 0 0 2px ${colors.primaryLight};
-  }
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    width: 300px;
-  }
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 250px;
-  }
-`;
 
-const SearchInput = styled.input`
-  background: transparent;
-  border: none;
-  outline: none;
-  color: ${colors.text.primary};
-  font-size: 14px;
-  width: 100%;
-  margin-left: 8px;
-  
-  &::placeholder {
-    color: ${colors.text.muted};
-  }
-`;
-
-const SearchIconWrapper = styled.div`
-  color: ${colors.text.muted};
-  display: flex;
-  align-items: center;
-`;
-
-const MobileSearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: ${colors.background.secondary};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: 8px 16px;
-  width: 100%;
-  border: 1px solid ${colors.border.secondary};
-  transition: all ${({ theme }) => theme.transitions.fast};
-  
-  &:focus-within {
-    border-color: ${colors.primaryBorder};
-    box-shadow: 0 0 0 2px ${colors.primaryLight};
-  }
-`;
-
-const MobileSearchInput = styled.input`
-  background: transparent;
-  border: none;
-  outline: none;
-  color: ${colors.text.primary};
-  font-size: 14px;
-  width: 100%;
-  margin-left: 8px;
-  
-  &::placeholder {
-    color: ${colors.text.muted};
-  }
-`;
 
 const ActionButton = styled.button`
   background: ${colors.primary};
@@ -187,23 +111,7 @@ const ActionButton = styled.button`
   }
 `;
 
-const IconButtonStyled = styled.button`
-  background: transparent;
-  border: none;
-  color: ${colors.text.primary};
-  cursor: pointer;
-  padding: 8px;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  transition: all ${({ theme }) => theme.transitions.fast};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  &:hover {
-    background: ${colors.background.secondary};
-    color: ${colors.primary};
-  }
-`;
+
 
 const UserMenu = styled.div`
   position: relative;
@@ -231,27 +139,7 @@ const UserAvatar = styled.button`
   }
 `;
 
-const MobileMenuButton = styled.button`
-  background: transparent;
-  border: none;
-  color: ${colors.text.primary};
-  cursor: pointer;
-  padding: 8px;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  transition: all ${({ theme }) => theme.transitions.fast};
-  display: none;
-  
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  &:hover {
-    background: ${colors.background.secondary};
-    color: ${colors.primary};
-  }
-`;
+
 
 const MobileMenu = styled.div<{ isOpen: boolean }>`
   position: fixed;
@@ -308,25 +196,14 @@ const MobileMenuItem = styled.div`
 `;
 
 const Header: React.FC<HeaderProps> = ({
-  searchPlaceholder = "Search for matches...",
   logoPath = "/Logo.png",
   logoAlt = "Zoddz Logo",
-  onSearch,
-  showSearch = false,
   onLoginClick,
 }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value;
-    setSearchQuery(query);
-    onSearch?.(query);
-  };
 
   const handleProfileClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -347,10 +224,6 @@ const Header: React.FC<HeaderProps> = ({
     navigate("/profile");
   };
 
-  const toggleMobileSearch = () => {
-    setIsMobileSearchOpen(!isMobileSearchOpen);
-  };
-
   return (
     <HeaderContainer>
       <Toolbar>
@@ -360,20 +233,6 @@ const Header: React.FC<HeaderProps> = ({
             alt={logoAlt}
             onClick={() => navigate("/")}
           />
-          
-          {showSearch && (
-            <SearchContainer>
-              <SearchIconWrapper>
-                <SearchIcon fontSize="small" />
-              </SearchIconWrapper>
-              <SearchInput
-                type="text"
-                placeholder={searchPlaceholder}
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-            </SearchContainer>
-          )}
         </LeftSection>
 
         <RightSection>
@@ -414,32 +273,11 @@ const Header: React.FC<HeaderProps> = ({
             </>
           )}
           
-          <MobileMenuButton onClick={() => setIsMobileMenuOpen(true)}>
-            <SearchIcon fontSize="small" />
-          </MobileMenuButton>
+
         </RightSection>
       </Toolbar>
 
-      {/* Mobile Search */}
-      {isMobileSearchOpen && (
-        <div style={{ padding: '16px', borderTop: `1px solid ${colors.border.secondary}` }}>
-          <MobileSearchContainer>
-            <SearchIconWrapper>
-              <SearchIcon fontSize="small" />
-            </SearchIconWrapper>
-            <MobileSearchInput
-              type="text"
-              placeholder={searchPlaceholder}
-              value={searchQuery}
-              onChange={handleSearch}
-              autoFocus
-            />
-            <IconButtonStyled onClick={toggleMobileSearch}>
-              <CloseIcon fontSize="small" />
-            </IconButtonStyled>
-          </MobileSearchContainer>
-        </div>
-      )}
+
 
       {/* Mobile Menu */}
       <MobileMenu isOpen={isMobileMenuOpen}>

@@ -10,7 +10,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -43,14 +43,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     // For demo purposes, we'll use a mock login
     // In a real app, you would make an API call here
-    if (email && password) {
+    if (username && password) {
       const mockUser: User = {
         id: '123',
-        name: 'Demo User',
-        email: email,
+        name: username,
+        email: `${username}@example.com`,
         avatar: 'https://i.pravatar.cc/150?u=123'
       };
       
