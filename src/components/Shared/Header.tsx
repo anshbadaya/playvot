@@ -260,9 +260,9 @@ const Header: React.FC<HeaderProps> = ({
                     },
                   }}
                 >
-                  <MenuItem onClick={handleProfileNavigate}>
-                    <AccountCircleIcon fontSize="small" style={{ marginRight: '8px', color: colors.text.primary }} />
-                    Profile
+                  <MenuItem disabled>
+                    <AccountCircleIcon fontSize="small" style={{ marginRight: '8px', color: colors.text.disabled }} />
+                    Profile (coming soon)
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>
                     <LogoutIcon fontSize="small" style={{ marginRight: '8px', color: colors.text.primary }} />
@@ -307,8 +307,8 @@ const Header: React.FC<HeaderProps> = ({
           </MobileMenuItem>
         ) : (
           <>
-            <MobileMenuItem onClick={() => { handleProfileNavigate(); setIsMobileMenuOpen(false); }}>
-              Profile
+            <MobileMenuItem style={{ opacity: 0.6, pointerEvents: 'none' }}>
+              Profile (coming soon)
             </MobileMenuItem>
             <MobileMenuItem onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>
               Logout
