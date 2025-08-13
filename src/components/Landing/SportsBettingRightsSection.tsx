@@ -165,26 +165,7 @@ const SportsBettingRightsSection: React.FC = () => {
               fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
             }}
           >
-            Global Betting Rights{' '}
-            <Box component="span" sx={{ color: '#4461F2' }}>
-              Available
-            </Box>
-          </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              color: '#FFFFFF',
-              mb: 4,
-              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
-              fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-              opacity: 0.9,
-            }}
-          >
-            Exclusive betting rights for{' '}
-            <Box component="span" sx={{ color: '#10B981', fontWeight: 600 }}>
-              5 major sports
-            </Box>
-            {' '}across multiple leagues and tournaments
+            DOMINANT SUPPLY OF SPORTS DATA FROM THE INDIAN MARKET
           </Typography>
         </Box>
 
