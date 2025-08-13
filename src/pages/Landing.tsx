@@ -5,6 +5,7 @@ import {
 import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
+import { colors, colorUtils, gradients } from '@/utils/colors';
 
 import {
   HeroSection,
@@ -23,7 +24,7 @@ const float = keyframes`
 const Background = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   width: '100vw',
-  background: '#0F172A',
+  background: colors.gradients.background,
   position: 'relative',
   overflow: 'auto',
   '&::before': {
@@ -34,9 +35,17 @@ const Background = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     background: `
-      radial-gradient(circle at 20% 20%, rgba(41, 63, 157, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(56, 78, 183, 0.05) 0%, transparent 50%)
+      radial-gradient(circle at 20% 20%, ${colorUtils.withOpacity(colors.primary, 0.12)} 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, ${colorUtils.withOpacity(colors.secondary, 0.08)} 0%, transparent 50%)
     `,
+    pointerEvents: 'none',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    background: `linear-gradient(180deg, transparent 0%, ${colorUtils.withOpacity(colors.primary, 0.06)} 30%, transparent 60%)`,
+    maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
     pointerEvents: 'none',
   },
 }));

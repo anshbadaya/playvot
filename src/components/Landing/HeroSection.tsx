@@ -11,6 +11,7 @@ import {
 import { PlayArrow, ArrowForward } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/material/styles';
+import { colors, gradients, colorUtils } from '@/utils/colors';
 
 import Artboard1 from '@/assets/images/Artboard 1.png';
 
@@ -26,18 +27,18 @@ const slideUp = keyframes`
 `;
 
 const GlowText = styled('span')(({ theme }) => ({
-  background: 'linear-gradient(135deg, #4461F2 0%, #8B5CF6 50%, #10B981 100%)',
+  background: gradients.rainbow,
   backgroundClip: 'text',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
-  filter: 'drop-shadow(0 0 20px rgba(68, 97, 242, 0.3))',
+  filter: `drop-shadow(0 0 20px ${colors.shadows.primary})`,
   fontWeight: 'inherit',
   fontSize: 'inherit',
   fontFamily: 'inherit',
 }));
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
-  background: '#4461F2',
+  background: colors.primary,
   borderRadius: '8px',
   padding: '12px 24px',
   fontWeight: 600,
@@ -46,34 +47,34 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
   textTransform: 'uppercase',
   boxShadow: 'none',
   transition: 'all 0.2s ease',
-  color: '#FFFFFF',
+  color: colors.text.primary,
   '&:hover': {
-    background: '#3451E2',
-    boxShadow: '0 4px 12px rgba(68, 97, 242, 0.3)',
-    color: '#FFFFFF',
+    background: colors.primaryHover,
+    boxShadow: `0 4px 12px ${colors.shadows.primary}`,
+    color: colors.text.primary,
   },
   '& .MuiButton-label': {
-    color: '#FFFFFF',
+    color: colors.text.primary,
   },
 }));
 
 const SecondaryButton = styled(Button)(({ theme }) => ({
-  background: 'rgba(255, 255, 255, 0.02)',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  background: colors.background.surface,
+  border: `1px solid ${colors.border.primary}`,
   borderRadius: '8px',
   padding: '12px 24px',
-  color: '#FFFFFF',
+  color: colors.text.primary,
   textTransform: 'uppercase',
   fontWeight: 600,
   fontSize: '13px',
   transition: 'all 0.2s ease',
   '&:hover': {
-    background: 'rgba(255, 255, 255, 0.05)',
-    borderColor: 'rgba(255, 255, 255, 0.12)',
-    color: '#FFFFFF',
+    background: colorUtils.withOpacity(colors.background.surface, 1),
+    borderColor: colors.border.secondary,
+    color: colors.text.primary,
   },
   '& .MuiButton-label': {
-    color: '#FFFFFF',
+    color: colors.text.primary,
   },
 }));
 
@@ -112,7 +113,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
               variant="h1" 
               fontWeight={700}
               sx={{ 
-                color: '#FFFFFF',
+                color: colors.text.primary,
                 mb: 3,
                 fontSize: isMobile ? '2.5rem' : '3.5rem',
                 lineHeight: 1.2,
@@ -129,7 +130,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
               variant="h2" 
               fontWeight={600}
               sx={{ 
-                color: '#4461F2',
+                color: colors.primary,
                 mb: 4,
                 fontSize: isMobile ? '1.3rem' : '1.6rem',
                 lineHeight: 1.4,

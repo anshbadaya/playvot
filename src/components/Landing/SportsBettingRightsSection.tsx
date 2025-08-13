@@ -8,29 +8,42 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { colors } from '@/utils/colors';
+import { colors, gradients, colorUtils } from '@/utils/colors';
 
 const SportCard = styled(Card)(({ theme }) => ({
-  background: 'rgba(255, 255, 255, 0.05)',
-  backdropFilter: 'blur(15px)',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
+  background: colors.background.card,
+  backdropFilter: 'blur(16px)',
+  border: `1px solid ${colors.border.primary}`,
   borderRadius: '20px',
   padding: theme.spacing(4),
   height: '100%',
-  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+  transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease',
   cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    borderRadius: '20px',
+    padding: '1px',
+    background: gradients.primaryToSecondary,
+    mask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+    WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+    WebkitMaskComposite: 'xor',
+    maskComposite: 'exclude',
+    opacity: 0.35,
+    pointerEvents: 'none',
+  },
   '&:hover': {
-    transform: 'translateY(-8px) scale(1.02)',
-    background: 'rgba(255, 255, 255, 0.08)',
+    transform: 'translateY(-10px) scale(1.01)',
     borderColor: colors.primaryBorder,
-    boxShadow: `0 20px 40px ${colors.shadows.primary}, 0 8px 16px rgba(0, 0, 0, 0.2)`,
+    boxShadow: `0 24px 48px ${colors.shadows.primary}, 0 10px 20px rgba(0, 0, 0, 0.2)`,
   },
 }));
 
 const BettingRightsButton = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #4461F2 0%, #8B5CF6 100%)',
+  background: gradients.primaryToSecondary,
   borderRadius: '12px',
   padding: theme.spacing(1.5, 3),
   display: 'inline-block',
@@ -38,7 +51,7 @@ const BettingRightsButton = styled(Box)(({ theme }) => ({
   transition: 'all 0.3s ease',
   '&:hover': {
     transform: 'translateY(-2px)',
-    boxShadow: '0 8px 20px rgba(68, 97, 242, 0.4)',
+    boxShadow: `0 8px 20px ${colors.shadows.primary}`,
   },
 }));
 
@@ -133,7 +146,7 @@ const SportsBettingRightsSection: React.FC = () => {
       sx={{
         padding: theme.spacing(12, 0),
         position: 'relative',
-        background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+        background: `linear-gradient(135deg, ${colorUtils.withOpacity(colors.primary, 0.05)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.05)} 100%)`,
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -158,7 +171,7 @@ const SportsBettingRightsSection: React.FC = () => {
             variant="h2" 
             fontWeight={700}
             sx={{ 
-              color: '#FFFFFF',
+              color: colors.text.primary,
               mb: 3,
               fontSize: isMobile ? '2rem' : '2.8rem',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
@@ -199,12 +212,14 @@ const SportsBettingRightsSection: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '20px',
-                    background: `linear-gradient(135deg, ${sport.color}20 0%, ${sport.color}10 100%)`,
+                    width: '84px',
+                    height: '84px',
+                    borderRadius: '18px',
+                    background: `linear-gradient(135deg, ${sport.color}22 0%, ${sport.color}0F 100%)`,
                     marginBottom: theme.spacing(3),
-                    border: `2px solid ${sport.color}30`,
+                    border: `1px solid ${sport.color}33`,
+                    boxShadow: `0 10px 24px ${colors.shadows.primary}`,
+                    transition: 'transform 0.35s ease, box-shadow 0.35s ease',
                   }}
                 >
                   {sport.icon}
@@ -213,7 +228,7 @@ const SportsBettingRightsSection: React.FC = () => {
                 <Typography
                   variant="h4"
                   sx={{
-                    fontSize: '1.5rem',
+                    fontSize: '1.45rem',
                     fontWeight: 700,
                     marginBottom: theme.spacing(2),
                     color: sport.color,
@@ -243,9 +258,9 @@ const SportsBettingRightsSection: React.FC = () => {
                   variant="body1"
                   sx={{
                     fontSize: '1rem',
-                    lineHeight: 1.6,
+                    lineHeight: 1.7,
                     marginBottom: theme.spacing(3),
-                    color: '#FFFFFF',
+                    color: colors.text.primary,
                     opacity: 0.9,
                     flex: 1,
                   }}
@@ -255,15 +270,15 @@ const SportsBettingRightsSection: React.FC = () => {
 
                 <Box component="ul" sx={{ pl: 0, listStyle: 'none', mt: 'auto' }}>
                   {sport.features.map((feature, featureIndex) => (
-                    <Box component="li" key={featureIndex} sx={{ mb: 1.5, display: 'flex', alignItems: 'flex-start' }}>
+                    <Box component="li" key={featureIndex} sx={{ mb: 1.25, display: 'flex', alignItems: 'flex-start' }}>
                       <Box 
                         component="span" 
                         sx={{ 
-                          color: '#10B981', 
-                          fontSize: '1rem', 
-                          mr: 2, 
+                        color: colors.success, 
+                          fontSize: '0.95rem', 
+                          mr: 1.5, 
                           mt: 0.25,
-                          fontWeight: 'bold'
+                          fontWeight: 700,
                         }}
                       >
                         ✓
@@ -271,10 +286,10 @@ const SportsBettingRightsSection: React.FC = () => {
                       <Typography 
                         variant="body2" 
                         sx={{ 
-                          color: '#FFFFFF',
-                          opacity: 0.8,
-                          lineHeight: 1.5,
-                          fontSize: '0.9rem',
+                          color: colors.text.primary,
+                          opacity: 0.85,
+                          lineHeight: 1.55,
+                          fontSize: '0.92rem',
                         }}
                       >
                         {feature}

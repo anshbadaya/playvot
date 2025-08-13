@@ -7,15 +7,16 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { colors, gradients } from '@/utils/colors';
 
 import Artboard3 from '@/assets/images/Artboard 3.png';
 
 const GlowText = styled('span')(({ theme }) => ({
-  background: 'linear-gradient(135deg, #4461F2 0%, #8B5CF6 50%, #10B981 100%)',
+  background: gradients.rainbow,
   backgroundClip: 'text',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
-  filter: 'drop-shadow(0 0 20px rgba(68, 97, 242, 0.3))',
+  filter: `drop-shadow(0 0 20px ${colors.shadows.primary})`,
   fontWeight: 'inherit',
   fontSize: 'inherit',
   fontFamily: 'inherit',
@@ -34,7 +35,7 @@ const WhatIsZoddzSection: React.FC = () => {
       sx={{
         padding: theme.spacing(16, 0),
         position: 'relative',
-        background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
+        background: gradients.subtle,
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -60,7 +61,7 @@ const WhatIsZoddzSection: React.FC = () => {
               variant="h2" 
               fontWeight={700}
               sx={{ 
-                color: '#FFFFFF',
+                color: colors.text.primary,
                 mb: 4,
                 fontSize: isMobile ? '2rem' : '2.8rem',
                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
@@ -75,7 +76,7 @@ const WhatIsZoddzSection: React.FC = () => {
             <Typography 
               variant="h5" 
               sx={{ 
-                color: '#FFFFFF',
+                color: colors.text.primary,
                 mb: 4,
                 lineHeight: 1.6,
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
@@ -88,7 +89,7 @@ const WhatIsZoddzSection: React.FC = () => {
             <Typography 
               variant="h6" 
               sx={{ 
-                color: '#4461F2',
+                color: colors.primary,
                 mb: 6,
                 lineHeight: 1.5,
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
@@ -109,7 +110,7 @@ const WhatIsZoddzSection: React.FC = () => {
                 maxWidth: '100%', 
                 height: 'auto',
                 borderRadius: '20px',
-                boxShadow: '0 20px 40px rgba(68, 97, 242, 0.3)',
+                boxShadow: `0 20px 40px ${colors.shadows.primary}`,
               }} 
             />
           </Box>

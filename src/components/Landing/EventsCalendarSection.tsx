@@ -6,6 +6,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
+import { colors, colorUtils, gradients } from '@/utils/colors';
 
 const EventsCalendarSection: React.FC = () => {
   const theme = useTheme();
@@ -66,7 +67,7 @@ const EventsCalendarSection: React.FC = () => {
       sx={{
         padding: theme.spacing(12, 0),
         position: 'relative',
-        background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.03) 0%, rgba(139, 92, 246, 0.03) 100%)',
+        background: `linear-gradient(135deg, ${colorUtils.withOpacity(colors.primary, 0.03)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.03)} 100%)`,
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -75,8 +76,8 @@ const EventsCalendarSection: React.FC = () => {
           right: 0,
           bottom: 0,
           background: `
-            radial-gradient(circle at 20% 20%, rgba(68, 97, 242, 0.05) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%)
+            radial-gradient(circle at 20% 20%, ${colorUtils.withOpacity(colors.primary, 0.05)} 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, ${colorUtils.withOpacity(colors.secondary, 0.03)} 0%, transparent 50%)
           `,
           pointerEvents: 'none',
         },
@@ -86,27 +87,41 @@ const EventsCalendarSection: React.FC = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Box textAlign="center" mb={8}>
+        <Box textAlign="center" mb={10}>
           <Typography 
             variant="h2" 
             fontWeight={700}
             sx={{ 
-              color: '#FFFFFF',
+              color: colors.text.primary,
               mb: 3,
               fontSize: isMobile ? '2rem' : '2.8rem',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
               fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+              position: 'relative',
+              display: 'inline-block',
+              paddingBottom: theme.spacing(1.5),
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: '3px',
+                borderRadius: '3px',
+                background: gradients.primaryToSecondary,
+                opacity: 0.6,
+              },
             }}
           >
             Events Calendar{' '}
-            <Box component="span" sx={{ color: '#4461F2' }}>
+            <Box component="span" sx={{ color: colors.primary }}>
               2025–26
             </Box>
           </Typography>
           <Typography 
             variant="h5" 
             sx={{ 
-              color: '#FFFFFF',
+              color: colors.text.primary,
               mb: 4,
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
               fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -114,7 +129,7 @@ const EventsCalendarSection: React.FC = () => {
             }}
           >
             We're powering odds for{' '}
-            <Box component="span" sx={{ color: '#10B981', fontWeight: 600 }}>
+            <Box component="span" sx={{ color: colors.success, fontWeight: 600 }}>
               2500+ matches
             </Box>
             {' '}across multiple sports
@@ -122,18 +137,20 @@ const EventsCalendarSection: React.FC = () => {
           <Box 
             sx={{ 
               display: 'inline-block',
-              background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
-              border: '1px solid rgba(68, 97, 242, 0.2)',
-              borderRadius: '12px',
-              padding: theme.spacing(2, 4),
+              background: gradients.primaryToSecondary,
+              border: `1px solid ${colors.primaryBorder}`,
+              borderRadius: '14px',
+              padding: theme.spacing(1.75, 4),
               mb: 6,
+              boxShadow: `0 10px 24px ${colors.shadows.primary}`,
+              cursor: 'default',
             }}
           >
             <Typography 
               variant="h6" 
               fontWeight={600} 
               sx={{ 
-                color: '#4461F2',
+                color: colors.text.primary,
                 textTransform: 'uppercase',
                 letterSpacing: 1,
                 fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -150,7 +167,7 @@ const EventsCalendarSection: React.FC = () => {
               position: 'relative',
               width: isMobile ? 300 : 400,
               height: isMobile ? 300 : 400,
-              '&::before': {
+               '&::before': {
                 content: '""',
                 position: 'absolute',
                 top: '50%',
@@ -158,9 +175,10 @@ const EventsCalendarSection: React.FC = () => {
                 transform: 'translate(-50%, -50%)',
                 width: isMobile ? 200 : 280,
                 height: isMobile ? 200 : 280,
-                border: '2px dashed rgba(68, 97, 242, 0.2)',
+                 border: `2px dashed ${colorUtils.withOpacity(colors.primary, 0.25)}`,
                 borderRadius: '50%',
                 animation: 'rotate 20s linear infinite',
+                 boxShadow: `0 0 0 1px ${colorUtils.withOpacity(colors.primary, 0.06)} inset`,
               },
               '@keyframes rotate': {
                 '0%': { transform: 'translate(-50%, -50%) rotate(0deg)' },
@@ -182,8 +200,8 @@ const EventsCalendarSection: React.FC = () => {
                     left: '50%',
                     top: '50%',
                     transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
-                    background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
-                    border: '2px solid rgba(68, 97, 242, 0.4)',
+                     background: `radial-gradient(circle at 30% 30%, ${colorUtils.withOpacity(colors.primary, 0.18)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.12)} 100%)`,
+                     border: `1px solid ${colorUtils.withOpacity(colors.primary, 0.35)}`,
                     borderRadius: '50%',
                     width: isMobile ? 90 : 110,
                     height: isMobile ? 90 : 110,
@@ -192,15 +210,16 @@ const EventsCalendarSection: React.FC = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     backdropFilter: 'blur(15px)',
-                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                     transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease',
                     cursor: 'pointer',
+                     boxShadow: `0 12px 28px ${colors.shadows.primary}`,
                     '&:hover': {
-                      background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%)',
-                      borderColor: 'rgba(68, 97, 242, 0.7)',
+                      background: `radial-gradient(circle at 30% 30%, ${colorUtils.withOpacity(colors.primary, 0.25)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.2)} 100%)`,
+                      borderColor: colorUtils.withOpacity(colors.primary, 0.6),
                       transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(1.15)`,
-                      boxShadow: '0 10px 30px rgba(68, 97, 242, 0.4)',
+                      boxShadow: `0 18px 40px ${colors.shadows.primary}`,
                     },
-                    '&::before': {
+                     '&::before': {
                       content: '""',
                       position: 'absolute',
                       top: -2,
@@ -208,7 +227,7 @@ const EventsCalendarSection: React.FC = () => {
                       right: -2,
                       bottom: -2,
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, rgba(68, 97, 242, 0.3), rgba(139, 92, 246, 0.3))',
+                       background: `linear-gradient(135deg, ${colorUtils.withOpacity(colors.primary, 0.25)}, ${colorUtils.withOpacity(colors.secondary, 0.25)})`,
                       zIndex: -1,
                       opacity: 0,
                       transition: 'opacity 0.3s ease',
@@ -216,10 +235,24 @@ const EventsCalendarSection: React.FC = () => {
                     '&:hover::before': {
                       opacity: 1,
                     },
+                     '&::after': {
+                       content: '""',
+                       position: 'absolute',
+                       inset: 0,
+                       borderRadius: '50%',
+                       padding: '1px',
+                       background: gradients.primaryToSecondary,
+                       mask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+                       WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+                       WebkitMaskComposite: 'xor',
+                       maskComposite: 'exclude',
+                       opacity: 0.35,
+                       pointerEvents: 'none',
+                     },
                   }}
                 >
                   <Box sx={{ 
-                    color: 'rgba(255, 255, 255, 0.95)',
+                    color: colors.text.primary,
                     mb: 1,
                     display: 'flex',
                     alignItems: 'center',
@@ -231,7 +264,7 @@ const EventsCalendarSection: React.FC = () => {
                   <Typography 
                     variant="caption" 
                     sx={{ 
-                      color: 'rgba(255, 255, 255, 0.95)',
+                      color: colors.text.primary,
                       textAlign: 'center',
                       fontSize: isMobile ? '0.75rem' : '0.85rem',
                       fontWeight: 600,
@@ -252,7 +285,7 @@ const EventsCalendarSection: React.FC = () => {
           <Typography 
             variant="h6" 
             sx={{ 
-              color: '#FFFFFF',
+              color: colors.text.primary,
               maxWidth: 800,
               mx: 'auto',
               lineHeight: 1.6,

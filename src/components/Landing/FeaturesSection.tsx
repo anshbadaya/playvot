@@ -1,4 +1,4 @@
-import { colors } from '@/utils/colors';
+import { colors, gradients, colorUtils } from '@/utils/colors';
 import React from 'react';
 import {
   Box,
@@ -17,52 +17,61 @@ import {
 import { styled } from '@mui/material/styles';
 
 const GlowText = styled('span')(({ theme }) => ({
-  background: colors.gradients.rainbow,
+  background: gradients.rainbow,
   backgroundClip: 'text',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
-  filter: 'drop-shadow(0 0 20px rgba(68, 97, 242, 0.3))',
+  filter: `drop-shadow(0 0 20px ${colors.shadows.primary})`,
   fontWeight: 'inherit',
   fontSize: 'inherit',
   fontFamily: 'inherit',
 }));
 
 const FeatureCard = styled(Card)(({ theme }) => ({
-  background: 'rgba(255, 255, 255, 0.05)',
-  backdropFilter: 'blur(15px)',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
+  background: colors.background.card,
+  backdropFilter: 'blur(16px)',
+  border: `1px solid ${colors.border.primary}`,
   borderRadius: '20px',
   padding: theme.spacing(4),
   height: '100%',
-  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+  transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease',
   cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
   '&::before': {
     content: '""',
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.secondaryLight} 100%)`,
+    inset: 0,
+    background: `linear-gradient(135deg, ${colorUtils.withOpacity(colors.primary, 0.08)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.08)} 100%)`,
     opacity: 0,
-    transition: 'opacity 0.4s ease',
+    transition: 'opacity 0.35s ease',
+  },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    borderRadius: '20px',
+    padding: '1px',
+    background: gradients.primaryToSecondary,
+    mask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+    WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+    WebkitMaskComposite: 'xor',
+    maskComposite: 'exclude',
+    opacity: 0.4,
+    pointerEvents: 'none',
   },
   '&:hover': {
-    transform: 'translateY(-12px) scale(1.02)',
-    background: 'rgba(255, 255, 255, 0.08)',
+    transform: 'translateY(-10px) scale(1.01)',
     borderColor: colors.primaryBorder,
-    boxShadow: `0 20px 40px ${colors.shadows.primary}, 0 8px 16px rgba(0, 0, 0, 0.2)`,
-    '&::before': {
-      opacity: 1,
-    },
-    '& .feature-icon::before': {
-      opacity: 1,
+    boxShadow: `0 24px 48px ${colors.shadows.primary}, 0 10px 20px rgba(0, 0, 0, 0.2)`,
+    '&::before': { opacity: 1 },
+    '& .feature-icon': {
+      transform: 'translateY(-2px)',
+      boxShadow: `0 10px 24px ${colors.shadows.primary}`,
     },
   },
   '&:active': {
-    transform: 'translateY(-8px) scale(1.01)',
+    transform: 'translateY(-6px) scale(1.005)',
   },
 }));
 
@@ -103,6 +112,7 @@ const FeaturesSection: React.FC = () => {
       sx={{
         padding: theme.spacing(12, 0),
         position: 'relative',
+        background: `linear-gradient(135deg, ${colorUtils.withOpacity(colors.primary, 0.03)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.03)} 100%)`,
         [theme.breakpoints.down('md')]: {
           padding: theme.spacing(8, 0),
         },
@@ -126,6 +136,20 @@ const FeaturesSection: React.FC = () => {
               marginBottom: theme.spacing(3),
               color: colors.text.primary,
               textShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
+              display: 'inline-block',
+              paddingBottom: theme.spacing(1.5),
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: '3px',
+                borderRadius: '3px',
+                background: gradients.primaryToSecondary,
+                opacity: 0.6,
+              },
             }}
           >
             Why Choose <GlowText>Zoddz</GlowText>?
@@ -150,7 +174,7 @@ const FeaturesSection: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-            gap: theme.spacing(4),
+              gap: theme.spacing(4.5),
             [theme.breakpoints.up('lg')]: {
               gridTemplateColumns: 'repeat(2, 1fr)',
             },
@@ -184,18 +208,9 @@ const FeaturesSection: React.FC = () => {
                     background: `linear-gradient(135deg, ${colors.primaryLight} 0%, ${colors.secondaryLight} 100%)`,
                     marginBottom: theme.spacing(3),
                     position: 'relative',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      borderRadius: '20px',
-                      background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-                      opacity: 0,
-                      transition: 'opacity 0.4s ease',
-                    },
+                    border: `1px solid ${colors.primaryBorder}`,
+                    boxShadow: `0 6px 18px ${colors.shadows.primary}`,
+                    transition: 'transform 0.35s ease, box-shadow 0.35s ease',
                   }}
                 >
                   {feature.icon}
@@ -208,6 +223,7 @@ const FeaturesSection: React.FC = () => {
                     fontWeight: 600,
                     marginBottom: theme.spacing(2),
                     color: colors.text.primary,
+                    letterSpacing: '0.2px',
                   }}
                 >
                   {feature.title}
@@ -217,7 +233,7 @@ const FeaturesSection: React.FC = () => {
                   variant="body1"
                   sx={{
                     fontSize: '1rem',
-                    lineHeight: 1.6,
+                    lineHeight: 1.7,
                     marginBottom: theme.spacing(3),
                     color: colors.text.secondary,
                     flex: 1,
