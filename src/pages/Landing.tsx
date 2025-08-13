@@ -5,7 +5,7 @@ import {
 import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
-import { colors, colorUtils, gradients } from '@/utils/colors';
+import { colors, colorUtils } from '@/utils/colors';
 
 import {
   HeroSection,
@@ -50,6 +50,14 @@ const Background = styled(Box)(({ theme }) => ({
   },
 }));
 
+const AccentDivider = styled('div')(({ theme }) => ({
+  height: '1px',
+  width: '100%',
+  background: `linear-gradient(90deg, transparent, ${colorUtils.withOpacity(colors.primary, 0.45)}, ${colorUtils.withOpacity(colors.secondary, 0.45)}, transparent)`,
+  boxShadow: `0 0 24px ${colors.shadows.primary}`,
+  opacity: 0.7,
+}));
+
 const FloatingElement = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: '6px',
@@ -87,13 +95,14 @@ const LandingPage = () => {
         <FloatingElement />
         
         <HeroSection onLoginClick={() => navigate('/login')} />
+        <AccentDivider />
         
         <WhatIsZoddzSection />
-        
+        <AccentDivider />
         <FeaturesSection />
-        
+        <AccentDivider />
         <EventsCalendarSection />
-        
+        <AccentDivider />
         <SportsBettingRightsSection />
       </Background>
     </Layout>
