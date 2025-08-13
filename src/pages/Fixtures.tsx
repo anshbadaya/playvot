@@ -34,28 +34,21 @@ import {
   SectionContainer
 } from '@/styles/allMatches.styles';
 
-// Enhanced VS separator styling
+// Enhanced VS separator styling (centered)
 const VSContainer = styled(Box)(({ theme }) => ({
-  textAlign: 'center',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: theme.spacing(2.5),
   margin: theme.spacing(3, 0),
-  position: 'relative',
   '&::before, &::after': {
     content: '""',
-    position: 'absolute',
-    top: '50%',
-    width: '30%',
+    flex: 1,
     height: '1px',
-    background: `linear-gradient(90deg, 
-      transparent 0%, 
-      rgba(148, 163, 184, 0.3) 50%, 
-      transparent 100%)`,
-    transform: 'translateY(-50%)'
-  },
-  '&::before': {
-    left: 0
-  },
-  '&::after': {
-    right: 0
+    background: `linear-gradient(90deg,
+      rgba(148, 163, 184, 0.15) 0%,
+      rgba(148, 163, 184, 0.35) 50%,
+      rgba(148, 163, 184, 0.15) 100%)`
   }
 }));
 
@@ -137,6 +130,19 @@ const Fixtures: React.FC = () => {
       .join(' ');
   }, [selectedTournament, slug]);
 
+  const formatISTDateTime = (dateLike: Date | string) => {
+    const date = dateLike instanceof Date ? dateLike : new Date(dateLike);
+    const datePart = date.toLocaleDateString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
+      timeZone: 'Asia/Kolkata'
+    });
+    const timePart = date.toLocaleTimeString('en-US', {
+      hour: '2-digit', minute: '2-digit', hour12: true,
+      timeZone: 'Asia/Kolkata'
+    });
+    return `${datePart}, ${timePart} IST`;
+  };
+
   // Categorize upcoming dataset into upcoming vs past based on current time
   const now = React.useMemo(() => new Date(), []);
   const { upcomingMatches, pastMatches } = React.useMemo(() => {
@@ -206,7 +212,7 @@ const Fixtures: React.FC = () => {
             <ToggleButtonGroup
               value={selectedCategory}
               exclusive
-              onChange={(e, val) => val && setSelectedCategory(val)}
+              onChange={(e, val) => setSelectedCategory(val)}
               aria-label="match category selection"
               color="primary"
             >
@@ -233,22 +239,46 @@ const Fixtures: React.FC = () => {
                         </MatchHeader>
 
                         <TeamsSection>
-                          <TeamRow>
+                          <TeamRow sx={{ justifyContent: 'center' }}>
                             <TeamIcon>TA</TeamIcon>
-                            <TeamName>Team A</TeamName>
+                            <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team A</TeamName>
                           </TeamRow>
                           
                           <VSContainer>
                             <VSText variant="h6">VS</VSText>
                           </VSContainer>
                           
-                          <TeamRow>
+                          <TeamRow sx={{ justifyContent: 'center' }}>
                             <TeamIcon>TB</TeamIcon>
-                            <TeamName>Team B</TeamName>
+                            <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team B</TeamName>
                           </TeamRow>
 
                           <Box sx={{ textAlign: 'center', mt: 3 }}>
-                            <MatchTime>{new Date(`2025-08-05 ${match.start_time}`).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</MatchTime>
+                            <MatchTime>{formatISTDateTime(`${cardGroup.match_date} ${match.start_time}`)}</MatchTime>
+                          </Box>
+
+                          <Box sx={{ mt: 1 }}>
+                            <Box
+                              onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.match_no}`); }}
+                              sx={{
+                                width: '100%',
+                                py: 1.25,
+                                borderRadius: 2,
+                                cursor: 'pointer',
+                                userSelect: 'none',
+                                textAlign: 'center',
+                                color: '#22C55E',
+                                background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
+                                border: '1px solid rgba(16,185,129,0.35)',
+                                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
+                                fontWeight: 800,
+                                letterSpacing: '0.04em',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                                '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
+                              }}
+                            >
+                              ODDS/STREAMS
+                            </Box>
                           </Box>
                         </TeamsSection>
                       </MatchCardContainer>
@@ -275,23 +305,47 @@ const Fixtures: React.FC = () => {
                       </MatchHeader>
 
                       <TeamsSection>
-                        <TeamRow>
+                        <TeamRow sx={{ justifyContent: 'center' }}>
                           <TeamIcon>TA</TeamIcon>
-                          <TeamName>Team A</TeamName>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team A</TeamName>
                         </TeamRow>
                         
                         <VSContainer>
                           <VSText variant="h6">VS</VSText>
                         </VSContainer>
                         
-                        <TeamRow>
+                        <TeamRow sx={{ justifyContent: 'center' }}>
                           <TeamIcon>TB</TeamIcon>
-                          <TeamName>Team B</TeamName>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team B</TeamName>
                         </TeamRow>
 
                         <Box sx={{ textAlign: 'center', mt: 3 }}>
-                          <MatchTime>{match.time}</MatchTime>
+                          <MatchTime>{formatISTDateTime(match.start)}</MatchTime>
                         </Box>
+
+                      <Box sx={{ mt: 1 }}>
+                        <Box
+                          onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
+                          sx={{
+                            width: '100%',
+                            py: 1.25,
+                            borderRadius: 2,
+                            cursor: 'pointer',
+                            userSelect: 'none',
+                            textAlign: 'center',
+                            color: '#22C55E',
+                            background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
+                            border: '1px solid rgba(16,185,129,0.35)',
+                            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
+                            fontWeight: 800,
+                            letterSpacing: '0.04em',
+                            transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                            '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
+                          }}
+                        >
+                          Odds/Streams
+                        </Box>
+                      </Box>
                       </TeamsSection>
                     </MatchCardContainer>
                   </Box>
@@ -316,23 +370,47 @@ const Fixtures: React.FC = () => {
                       </MatchHeader>
 
                       <TeamsSection>
-                        <TeamRow>
+                        <TeamRow sx={{ justifyContent: 'center' }}>
                           <TeamIcon>TA</TeamIcon>
-                          <TeamName>Team A</TeamName>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team A</TeamName>
                         </TeamRow>
 
                         <VSContainer>
                           <VSText variant="h6">VS</VSText>
                         </VSContainer>
 
-                        <TeamRow>
+                        <TeamRow sx={{ justifyContent: 'center' }}>
                           <TeamIcon>TB</TeamIcon>
-                          <TeamName>Team B</TeamName>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team B</TeamName>
                         </TeamRow>
 
                         <Box sx={{ textAlign: 'center', mt: 3 }}>
-                          <MatchTime>{match.time}</MatchTime>
+                          <MatchTime>{formatISTDateTime(match.start)}</MatchTime>
                         </Box>
+
+                      <Box sx={{ mt: 1 }}>
+                        <Box
+                          onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
+                          sx={{
+                            width: '100%',
+                            py: 1.25,
+                            borderRadius: 2,
+                            cursor: 'pointer',
+                            userSelect: 'none',
+                            textAlign: 'center',
+                            color: '#22C55E',
+                            background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
+                            border: '1px solid rgba(16,185,129,0.35)',
+                            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
+                            fontWeight: 800,
+                            letterSpacing: '0.04em',
+                            transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                            '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
+                          }}
+                        >
+                          Odds/Streams
+                        </Box>
+                      </Box>
                       </TeamsSection>
                     </MatchCardContainer>
                   </Box>
