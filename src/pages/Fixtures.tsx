@@ -130,6 +130,8 @@ const Fixtures: React.FC = () => {
       .join(' ');
   }, [selectedTournament, slug]);
 
+  const titleLogo = (selectedTournament as any)?.logo || '/Logo.png';
+
   const formatISTDateTime = (dateLike: Date | string) => {
     const date = dateLike instanceof Date ? dateLike : new Date(dateLike);
     const datePart = date.toLocaleDateString('en-US', {
@@ -141,6 +143,12 @@ const Fixtures: React.FC = () => {
       timeZone: 'Asia/Kolkata'
     });
     return `${datePart}, ${timePart} IST`;
+  };
+
+  // Resolve team logo; fallback to Zoddz logo in public folder
+  const getTeamLogo = (teamName?: string) => {
+    // If you later add team-specific logos, resolve here
+    return '/Logo.png';
   };
 
   // Categorize upcoming dataset into upcoming vs past based on current time
@@ -201,7 +209,22 @@ const Fixtures: React.FC = () => {
       <PageBackground>
         <Container maxWidth="lg">
           <PageHeader>
-            <PageTitle>{tournamentName}</PageTitle>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 1 }}>
+              <Box
+                component="img"
+                src={titleLogo}
+                alt="Tournament Logo"
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  objectFit: 'contain',
+                  border: '1px solid rgba(148, 163, 184, 0.25)',
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.35)'
+                }}
+              />
+              <PageTitle sx={{ m: 0 }}>{tournamentName}</PageTitle>
+            </Box>
             <PageSubtitle>
               Select a category to view matches. Ongoing are shown first, then Upcoming, then Past.
             </PageSubtitle>
@@ -240,8 +263,10 @@ const Fixtures: React.FC = () => {
 
                         <TeamsSection>
                           <TeamRow sx={{ justifyContent: 'center' }}>
-                            <TeamIcon>TA</TeamIcon>
-                            <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team A</TeamName>
+                            <TeamIcon>
+                              <Box component="img" src={getTeamLogo(match.player_a?.team)} alt={match.player_a?.team || match.player_a?.name || 'Team A'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                            </TeamIcon>
+                            <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.player_a?.team || match.player_a?.name || 'Team A'}</TeamName>
                           </TeamRow>
                           
                           <VSContainer>
@@ -249,8 +274,10 @@ const Fixtures: React.FC = () => {
                           </VSContainer>
                           
                           <TeamRow sx={{ justifyContent: 'center' }}>
-                            <TeamIcon>TB</TeamIcon>
-                            <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team B</TeamName>
+                            <TeamIcon>
+                              <Box component="img" src={getTeamLogo(match.player_b?.team)} alt={match.player_b?.team || match.player_b?.name || 'Team B'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                            </TeamIcon>
+                            <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.player_b?.team || match.player_b?.name || 'Team B'}</TeamName>
                           </TeamRow>
 
                           <Box sx={{ textAlign: 'center', mt: 3 }}>
@@ -306,8 +333,10 @@ const Fixtures: React.FC = () => {
 
                       <TeamsSection>
                         <TeamRow sx={{ justifyContent: 'center' }}>
-                          <TeamIcon>TA</TeamIcon>
-                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team A</TeamName>
+                          <TeamIcon>
+                            <Box component="img" src={getTeamLogo(match.team1?.name)} alt={match.team1?.name || 'Team A'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                          </TeamIcon>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.team1?.name || 'Team A'}</TeamName>
                         </TeamRow>
                         
                         <VSContainer>
@@ -315,8 +344,10 @@ const Fixtures: React.FC = () => {
                         </VSContainer>
                         
                         <TeamRow sx={{ justifyContent: 'center' }}>
-                          <TeamIcon>TB</TeamIcon>
-                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team B</TeamName>
+                          <TeamIcon>
+                            <Box component="img" src={getTeamLogo(match.team2?.name)} alt={match.team2?.name || 'Team B'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                          </TeamIcon>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.team2?.name || 'Team B'}</TeamName>
                         </TeamRow>
 
                         <Box sx={{ textAlign: 'center', mt: 3 }}>
@@ -371,8 +402,10 @@ const Fixtures: React.FC = () => {
 
                       <TeamsSection>
                         <TeamRow sx={{ justifyContent: 'center' }}>
-                          <TeamIcon>TA</TeamIcon>
-                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team A</TeamName>
+                          <TeamIcon>
+                            <Box component="img" src={getTeamLogo(match.team1?.name)} alt={match.team1?.name || 'Team A'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                          </TeamIcon>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.team1?.name || 'Team A'}</TeamName>
                         </TeamRow>
 
                         <VSContainer>
@@ -380,8 +413,10 @@ const Fixtures: React.FC = () => {
                         </VSContainer>
 
                         <TeamRow sx={{ justifyContent: 'center' }}>
-                          <TeamIcon>TB</TeamIcon>
-                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>Team B</TeamName>
+                          <TeamIcon>
+                            <Box component="img" src={getTeamLogo(match.team2?.name)} alt={match.team2?.name || 'Team B'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                          </TeamIcon>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.team2?.name || 'Team B'}</TeamName>
                         </TeamRow>
 
                         <Box sx={{ textAlign: 'center', mt: 3 }}>
