@@ -119,7 +119,7 @@ const Footer: React.FC<FooterProps> = ({
           <ContactItem>
             <PhoneIcon />
             <Typography variant="body2">
-              +91
+            +971 50 328 9400
             </Typography>
           </ContactItem>
         </ContactSection>
