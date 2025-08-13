@@ -1,10 +1,10 @@
-import { colors } from '@/utils/colors';
+import { colors, colorUtils, gradients } from '@/utils/colors';
 import React from 'react';
 import { Box, Typography, Card, CardContent, Chip, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Tournament } from '@/types/tournament';
-import { CalendarToday, LocationOn, SportsSoccer, Event } from '@mui/icons-material';
+import { CalendarToday, LocationOn, SportsSoccer, Event, FormatListNumbered } from '@mui/icons-material';
 
 const TournamentCardContainer = styled(Box)`
   position: relative;
@@ -41,18 +41,34 @@ const ShineEffect = styled(Box)`
 `;
 
 const StyledCard = styled(Card)`
-  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.98) 100%);
-  border: 2px solid rgba(59, 130, 246, 0.4);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  transition: all 0.4s ease;
+  background: linear-gradient(135deg, rgba(13, 20, 36, 0.9) 0%, rgba(23, 32, 48, 0.95) 100%);
+  border: 1px solid ${colors.primaryBorder};
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   position: relative;
   z-index: 2;
   height: 100%;
-  
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1px;
+    background: ${gradients.primaryToSecondary};
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
   &:hover {
-    border-color: rgba(59, 130, 246, 0.7);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    border-color: ${colors.primaryBorder};
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.55);
+    transform: translateY(-4px);
   }
 `;
 
@@ -70,48 +86,26 @@ const TournamentHeader = styled(Box)`
 `;
 
 const StatusChip = styled(Chip)<{ status: string }>`
-  background-color: ${({ status }) => {
-    switch (status) {
-      case 'upcoming':
-        return 'rgba(59, 130, 246, 0.2)';
-      case 'ongoing':
-        return 'rgba(16, 185, 129, 0.2)';
-      case 'completed':
-        return 'rgba(107, 114, 128, 0.2)';
-      default:
-        return 'rgba(59, 130, 246, 0.2)';
-    }
-  }};
-  color: ${({ status }) => {
-    switch (status) {
-      case 'upcoming':
-        return 'colors.primary';
-      case 'ongoing':
-        return 'colors.success';
-      case 'completed':
-        return 'colors.text.muted';
-      default:
-        return 'colors.primary';
-    }
-  }};
-  border: 1px solid ${({ status }) => {
-    switch (status) {
-      case 'upcoming':
-        return 'rgba(59, 130, 246, 0.4)';
-      case 'ongoing':
-        return 'rgba(16, 185, 129, 0.4)';
-      case 'completed':
-        return 'rgba(107, 114, 128, 0.4)';
-      default:
-        return 'rgba(59, 130, 246, 0.4)';
-    }
-  }};
-  font-size: 0.75rem;
-  font-weight: 700;
-  height: 32px;
+  background: ${({ status }) =>
+    status === 'ongoing'
+      ? `linear-gradient(135deg, ${colorUtils.withOpacity(colors.success, 0.25)} 0%, ${colorUtils.withOpacity(colors.primary, 0.2)} 100%)`
+      : status === 'upcoming'
+      ? `linear-gradient(135deg, ${colorUtils.withOpacity(colors.primary, 0.25)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.2)} 100%)`
+      : colorUtils.withOpacity(colors.text.muted, 0.15)};
+  color: ${colors.text.primary};
+  border: 1px solid
+    ${({ status }) =>
+      status === 'ongoing'
+        ? colors.successBorder
+        : status === 'upcoming'
+        ? colors.primaryBorder
+        : 'rgba(148, 163, 184, 0.4)'};
+  font-size: 0.7rem;
+  font-weight: 800;
+  height: 30px;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.9px;
+  box-shadow: 0 6px 14px ${colors.shadows.primary};
 `;
 
 const TournamentTitle = styled(Typography)`
@@ -149,10 +143,10 @@ const InfoIcon = styled(Box)`
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: radial-gradient(circle at 30% 30%, ${colorUtils.withOpacity(colors.primary, 0.18)} 0%, ${colorUtils.withOpacity(colors.secondary, 0.12)} 100%);
+  border: 1px solid ${colorUtils.withOpacity(colors.primary, 0.35)};
   margin-right: 16px;
-  color: colors.primary;
+  color: ${colors.primary};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
@@ -195,12 +189,12 @@ const ActionButton = styled(Button)`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   
   &.primary {
-    background: linear-gradient(135deg, colors.primary 0%, colors.primaryDark 100%);
-    color: white;
-    border: 1px solid rgba(59, 130, 246, 0.5);
+    background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.primaryDark} 100%);
+    color: ${colors.text.primary};
+    border: 1px solid ${colors.primaryBorder};
     
     &:hover {
-      background: linear-gradient(135deg, colors.primaryHover 0%, colors.primaryHover 100%);
+      background: linear-gradient(135deg, ${colors.primaryHover} 0%, ${colors.primaryHover} 100%);
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
     }
@@ -208,7 +202,7 @@ const ActionButton = styled(Button)`
   
   &.secondary {
     background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
+    color: ${colors.text.primary};
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     
@@ -229,7 +223,7 @@ const SportIcon = styled(Box)`
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
   border: 2px solid rgba(59, 130, 246, 0.4);
-  color: colors.primary;
+  color: ${colors.primary};
   font-size: 1.5rem;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 `;
@@ -305,7 +299,9 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
               </InfoIcon>
               <InfoContent>
                 <InfoLabel>Date</InfoLabel>
-                <InfoValue>{formatDate(tournament.date)}</InfoValue>
+                <InfoValue>
+                  {tournament.endDate ? `${formatDate(tournament.date)} — ${formatDate(tournament.endDate)}` : formatDate(tournament.date)}
+                </InfoValue>
               </InfoContent>
             </InfoRow>
             
@@ -314,22 +310,20 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
                 <LocationOn sx={{ fontSize: '1.2rem' }} />
               </InfoIcon>
               <InfoContent>
-                <InfoLabel>Location</InfoLabel>
+                <InfoLabel>City/Country</InfoLabel>
                 <InfoValue>{tournament.city}, {tournament.country}</InfoValue>
               </InfoContent>
             </InfoRow>
-            
-            {tournament.venue && (
-              <InfoRow>
-                <InfoIcon>
-                  <Event sx={{ fontSize: '1.2rem' }} />
-                </InfoIcon>
-                <InfoContent>
-                  <InfoLabel>Venue</InfoLabel>
-                  <InfoValue>{tournament.venue}</InfoValue>
-                </InfoContent>
-              </InfoRow>
-            )}
+
+            <InfoRow>
+              <InfoIcon>
+                <FormatListNumbered sx={{ fontSize: '1.2rem' }} />
+              </InfoIcon>
+              <InfoContent>
+                <InfoLabel>Number of Matches</InfoLabel>
+                <InfoValue>{tournament.numberOfMatches}</InfoValue>
+              </InfoContent>
+            </InfoRow>
           </InfoSection>
           
 

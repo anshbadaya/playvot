@@ -87,6 +87,9 @@ const Tournaments: React.FC = () => {
     setSearchQuery
   } = useTournaments();
 
+  // Status filter: all | upcoming | ongoing (live)
+  const [selectedStatus, setSelectedStatus] = React.useState<'all' | 'upcoming' | 'ongoing'>('all');
+
   const handleSportChange = (event: React.MouseEvent<HTMLElement>, newSport: string) => {
     if (newSport !== null) {
       setSelectedSport(newSport);
@@ -96,6 +99,30 @@ const Tournaments: React.FC = () => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
+
+  const handleStatusChange = (event: React.MouseEvent<HTMLElement>, newStatus: 'all' | 'upcoming' | 'ongoing' | null) => {
+    if (newStatus !== null) {
+      setSelectedStatus(newStatus);
+    }
+  };
+
+  const displayedTournaments = React.useMemo(() => {
+    const statusPriority: Record<string, number> = { ongoing: 0, upcoming: 1, completed: 2 };
+    const base = selectedStatus === 'all'
+      ? filteredTournaments
+      : filteredTournaments.filter(t => t.status === selectedStatus);
+    return [...base].sort((a, b) => {
+      const diff = (statusPriority[a.status] ?? 99) - (statusPriority[b.status] ?? 99);
+      if (diff !== 0) return diff;
+      // Secondary sort by date ascending if same status
+      const da = new Date(a.date).getTime();
+      const db = new Date(b.date).getTime();
+      return da - db;
+    });
+  }, [filteredTournaments, selectedStatus]);
+
+  const selectedSportLabel = selectedSport === 'all' ? 'All' : (sportOptions.find(s => s.value === selectedSport)?.label || 'All');
+  const selectedStatusLabel = selectedStatus === 'all' ? '' : (selectedStatus === 'ongoing' ? 'Ongoing' : 'Upcoming');
 
   return (
     <Layout>
@@ -113,6 +140,7 @@ const Tournaments: React.FC = () => {
 
           {/* Controls Section */}
           <Box sx={controlsSectionStyles}>
+            {/* Sports Filter */}
             <ToggleButtonGroup
               value={selectedSport}
               exclusive
@@ -125,6 +153,19 @@ const Tournaments: React.FC = () => {
                   {sport.label}
                 </ToggleButton>
               ))}
+            </ToggleButtonGroup>
+
+            {/* Status Filter */}
+            <ToggleButtonGroup
+              value={selectedStatus}
+              exclusive
+              onChange={handleStatusChange}
+              aria-label="status selection"
+              sx={sportSelectorStyles}
+            >
+              <ToggleButton value="all">All</ToggleButton>
+              <ToggleButton value="ongoing">Ongoing</ToggleButton>
+              <ToggleButton value="upcoming">Upcoming</ToggleButton>
             </ToggleButtonGroup>
 
             <TextField
@@ -147,10 +188,10 @@ const Tournaments: React.FC = () => {
           <Box sx={resultsSectionStyles}>
             <Box sx={resultsHeaderStyles}>
               <Typography sx={resultsTitleStyles}>
-                {selectedSport === 'all' ? 'All Tournaments' : `${sportOptions.find(s => s.value === selectedSport)?.label} Tournaments`}
+                {`${selectedSportLabel} ${selectedStatusLabel}`.trim()} Tournaments
               </Typography>
               <Chip 
-                label={`${filteredTournaments.length} tournaments`} 
+                label={`${displayedTournaments.length} tournaments`} 
                 sx={resultsCountStyles}
               />
             </Box>
@@ -165,19 +206,19 @@ const Tournaments: React.FC = () => {
               </Box>
             )}
 
-            {!loading && !error && filteredTournaments.length === 0 && (
+            {!loading && !error && displayedTournaments.length === 0 && (
               <EmptyState 
                 message={
                   searchQuery 
                     ? `No tournaments found for "${searchQuery}"`
-                    : `No tournaments available for ${selectedSport === 'all' ? 'selected criteria' : sportOptions.find(s => s.value === selectedSport)?.label}`
+                    : `No tournaments available for ${selectedSportLabel}${selectedStatus !== 'all' ? ` (${selectedStatusLabel})` : ''}`
                 }
               />
             )}
 
-            {!loading && !error && filteredTournaments.length > 0 && (
+            {!loading && !error && displayedTournaments.length > 0 && (
               <Box sx={tournamentsGridStyles}>
-                {filteredTournaments.map((tournament) => (
+                {displayedTournaments.map((tournament) => (
                   <Box key={tournament.id}>
                     <TournamentCard tournament={tournament} />
                   </Box>

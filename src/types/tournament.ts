@@ -2,6 +2,7 @@ export interface Tournament {
   id: string;
   name: string;
   date: string;
+  endDate?: string;
   city: string;
   country: string;
   numberOfMatches: number;
