@@ -1,4 +1,4 @@
-# Zoddz - Premier Sports Betting Platform
+# Zoddz - Premier Sports Odds Platform
 
 A modern, responsive React application for sports betting with real-time updates, live odds, and comprehensive match details. Zoddz is your premier destination for sports wagering across cricket, football, kabaddi, volleyball, and more.
 
