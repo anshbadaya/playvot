@@ -237,7 +237,7 @@ const Header: React.FC<HeaderProps> = ({
 
         <RightSection>
           {!user ? (
-            <ActionButton onClick={onLoginClick}>
+            <ActionButton onClick={() => (onLoginClick ? onLoginClick() : navigate('/tournaments'))}>
               <PersonOutlineIcon fontSize="small" />
               Login
             </ActionButton>
@@ -302,7 +302,7 @@ const Header: React.FC<HeaderProps> = ({
         </MobileMenuItem>
         
         {!user ? (
-          <MobileMenuItem onClick={() => { onLoginClick?.(); setIsMobileMenuOpen(false); }}>
+          <MobileMenuItem onClick={() => { (onLoginClick ? onLoginClick() : navigate('/tournaments')); setIsMobileMenuOpen(false); }}>
             Login
           </MobileMenuItem>
         ) : (

@@ -108,7 +108,7 @@ const HighlightCard: React.FC<HighlightCardProps> = ({
   slug,
 }) => {
   return (
-    <Link to={`/match/${slug}`} style={{ textDecoration: "none" }}>
+    <Link to={`/fixture/${slug}`} style={{ textDecoration: "none" }}>
       <StyledCard>
         <Box sx={{ position: "relative", overflow: "hidden" }}>
           <CardMedia 

@@ -372,7 +372,7 @@ const FixtureCard: React.FC<SportsMatchCardProps> = (props) => {
   const slug = `sports-${match_no}-${player_a.name.toLowerCase().replace(/\s+/g, '-')}-vs-${player_b.name.toLowerCase().replace(/\s+/g, '-')}`;
   
   const handleClick = () => {
-    navigate(`/match/${slug}`);
+    navigate(`/fixture/${slug}`);
   };
   
   const handleScorecardClick = (e: React.MouseEvent) => {

@@ -88,13 +88,13 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout onLoginClick={() => navigate('/login')}>
+    <Layout onLoginClick={() => navigate('/tournaments')}>
       <Background>
         <FloatingElement />
         <FloatingElement />
         <FloatingElement />
         
-        <HeroSection onLoginClick={() => navigate('/login')} />
+        <HeroSection onLoginClick={() => navigate('/tournaments')} />
         <AccentDivider />
         
         <WhatIsZoddzSection />
