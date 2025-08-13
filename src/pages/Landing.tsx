@@ -54,7 +54,7 @@ const FloatingElement = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: '6px',
   height: '6px',
-  background: 'rgba(29, 78, 216, 0.4)',
+  background: colorUtils.withOpacity(colors.primary, 0.4),
   borderRadius: '50%',
   animation: `${float} 15s ease-in-out infinite`,
   '&:nth-of-type(1)': {
@@ -66,13 +66,13 @@ const FloatingElement = styled(Box)(({ theme }) => ({
     top: '60%',
     right: '20%',
     animationDelay: '5s',
-    background: 'rgba(139, 92, 246, 0.4)',
+    background: colorUtils.withOpacity(colors.secondary, 0.4),
   },
   '&:nth-of-type(3)': {
     bottom: '30%',
     left: '25%',
     animationDelay: '10s',
-    background: 'rgba(16, 185, 129, 0.4)',
+    background: colorUtils.withOpacity(colors.success, 0.4),
   },
 }));
 
