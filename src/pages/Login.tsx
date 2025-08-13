@@ -18,7 +18,6 @@ import {
   HeroSection,
   WhatIsZoddzSection,
   FeaturesSection,
-  WhyZoddzSection,
   EventsCalendarSection,
 } from '@/components/Landing';
 
@@ -299,7 +298,6 @@ const Login: React.FC = () => {
         <HeroSection onLoginClick={() => {}} />
         <WhatIsZoddzSection />
         <FeaturesSection />
-        <WhyZoddzSection />
         <EventsCalendarSection />
       </BackgroundContainer>
 

@@ -139,8 +139,8 @@ const AboutPage: React.FC = () => {
                 color: colors.text.primary,
               }}
             >
-              A name you can trust in the{' '}
-              <GlowText>Indian Sports Odds Market</GlowText>
+              A name you can trust from the{' '}
+              <GlowText>Indian Sports Market</GlowText>
             </Typography>
             <Typography 
               variant="h4" 
@@ -193,7 +193,7 @@ const AboutPage: React.FC = () => {
                     fontFamily: 'Inter, sans-serif',
                   }}
                 >
-                  Built for speed, trust, and insight, Zoddz is your edge in real-time sports gaming.
+                  Built for speed, trust, and insight.
                 </Typography>
               </CardContent>
             </ContentCard>

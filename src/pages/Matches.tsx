@@ -10,8 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
 import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
 import { colors } from '@/utils/colors';
-
-// Import styled components
+import { styled } from '@mui/material/styles';
 import {
   PageBackground,
   PageHeader,
@@ -31,6 +30,89 @@ import {
   GridContainer,
   SectionContainer
 } from '@/styles/allMatches.styles';
+
+// Enhanced VS separator styling
+const VSContainer = styled(Box)(({ theme }) => ({
+  textAlign: 'center',
+  margin: theme.spacing(3, 0),
+  position: 'relative',
+  '&::before, &::after': {
+    content: '""',
+    position: 'absolute',
+    top: '50%',
+    width: '30%',
+    height: '1px',
+    background: `linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(148, 163, 184, 0.3) 50%, 
+      transparent 100%)`,
+    transform: 'translateY(-50%)'
+  },
+  '&::before': {
+    left: 0
+  },
+  '&::after': {
+    right: 0
+  }
+}));
+
+const VSText = styled(Typography)(({ theme }) => ({
+  color: colors.text.secondary,
+  fontSize: '1.1rem',
+  fontWeight: 700,
+  letterSpacing: '0.1em',
+  textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+  background: `linear-gradient(135deg, 
+    rgba(148, 163, 184, 0.8) 0%, 
+    rgba(203, 213, 225, 0.9) 100%)`,
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+  padding: theme.spacing(1, 2),
+  borderRadius: 8,
+  border: '1px solid rgba(148, 163, 184, 0.2)',
+  backdropFilter: 'blur(10px)',
+  display: 'inline-block'
+}));
+
+// Enhanced live indicator
+const LiveIndicator = styled(Chip)(({ theme }) => ({
+  background: `linear-gradient(135deg, 
+    rgba(239, 68, 68, 0.9) 0%, 
+    rgba(220, 38, 38, 0.9) 100%)`,
+  color: colors.text.primary,
+  fontWeight: 700,
+  fontSize: '0.75rem',
+  height: 28,
+  borderRadius: 14,
+  border: '1px solid rgba(239, 68, 68, 0.3)',
+  boxShadow: `
+    0 4px 6px -1px rgba(239, 68, 68, 0.2),
+    0 2px 4px -1px rgba(239, 68, 68, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1)
+  `,
+  animation: 'pulse 2s ease-in-out infinite',
+  '& .MuiChip-label': {
+    padding: '0 12px',
+    letterSpacing: '0.05em'
+  },
+  '@keyframes pulse': {
+    '0%, 100%': {
+      boxShadow: `
+        0 4px 6px -1px rgba(239, 68, 68, 0.2),
+        0 2px 4px -1px rgba(239, 68, 68, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1)
+      `
+    },
+    '50%': {
+      boxShadow: `
+        0 6px 12px -2px rgba(239, 68, 68, 0.3),
+        0 4px 8px -1px rgba(239, 68, 68, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2)
+      `
+    }
+  }
+}));
 
 const AllMatches: React.FC = () => {
   const navigate = useNavigate();
@@ -88,15 +170,7 @@ const AllMatches: React.FC = () => {
                           <MatchInfo>
                             <MatchTitle>Match #{match.match_no} • Live</MatchTitle>
                           </MatchInfo>
-                          <Chip 
-                            label="LIVE" 
-                            size="small" 
-                            sx={{ 
-                              bgcolor: colors.error,
-                              color: colors.text.primary,
-                              fontWeight: 'bold'
-                            }} 
-                          />
+                          <LiveIndicator label="LIVE" size="small" />
                         </MatchHeader>
 
                         <TeamsSection>
@@ -105,11 +179,9 @@ const AllMatches: React.FC = () => {
                             <TeamName>Team A</TeamName>
                           </TeamRow>
                           
-                          <Box sx={{ textAlign: 'center', my: 2 }}>
-                            <Typography variant="h6" sx={{ color: colors.text.secondary, fontSize: '1rem', fontWeight: 600 }}>
-                              VS
-                            </Typography>
-                          </Box>
+                          <VSContainer>
+                            <VSText variant="h6">VS</VSText>
+                          </VSContainer>
                           
                           <TeamRow>
                             <TeamIcon>TB</TeamIcon>
@@ -148,11 +220,9 @@ const AllMatches: React.FC = () => {
                         <TeamName>Team A</TeamName>
                       </TeamRow>
                       
-                      <Box sx={{ textAlign: 'center', my: 2 }}>
-                        <Typography variant="h6" sx={{ color: colors.text.secondary, fontSize: '1rem', fontWeight: 600 }}>
-                          VS
-                        </Typography>
-                      </Box>
+                      <VSContainer>
+                        <VSText variant="h6">VS</VSText>
+                      </VSContainer>
                       
                       <TeamRow>
                         <TeamIcon>TB</TeamIcon>

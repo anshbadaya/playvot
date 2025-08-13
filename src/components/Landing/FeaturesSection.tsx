@@ -73,8 +73,21 @@ const FeaturesSection: React.FC = () => {
   const keyFeatures = [
     {
       icon: <Security sx={{ fontSize: 40, color: colors.primary }} />,
+      title: 'Agentic Traders using AI',
+      description: 'Ready to manage and handle games at high volumes, with super precision, using AI. All odds are generated and managed by AI Agent Traders.',
+      highlight: 'AI-Powered',
+    },
+  
+    {
+      icon: <TrendingUp sx={{ fontSize: 40, color: colors.warning }} />,
+      title: 'Micro-level pre-game data sheets',
+      description: 'For deeper analytics',
+      highlight: 'Data-Driven',
+    },
+    {
+      icon: <SportsCricket sx={{ fontSize: 40, color: colors.error }} />,
       title: 'Secure Interface',
-      description: 'Private & Secure login for each client with enterprise-grade encryption',
+      description: 'Private & Secure login for each client',
       highlight: '100% Secure',
     },
     {
@@ -82,18 +95,6 @@ const FeaturesSection: React.FC = () => {
       title: 'LIVE Manual Support',
       description: 'Full 360° degree support Pre game and during LIVE game. Quick Support options on Teams, Google Chats Or Whatsapp.',
       highlight: '24/7 Support',
-    },
-    {
-      icon: <TrendingUp sx={{ fontSize: 40, color: colors.warning }} />,
-      title: 'Micro-level pre-game data sheets',
-      description: 'Advanced analytics & accuracy with real-time data feeds and predictive modeling',
-      highlight: 'Data-Driven',
-    },
-    {
-      icon: <SportsCricket sx={{ fontSize: 40, color: colors.error }} />,
-      title: 'LIVE Game odds',
-      description: 'Real-time LIVE GAME Odds Management with instant updates and market analysis',
-      highlight: 'Real-Time',
     },
   ];
 

@@ -9,9 +9,8 @@ import { Layout } from '@/components/Layout';
 import {
   HeroSection,
   WhatIsZoddzSection,
-  FeaturesSection,
-  WhyZoddzSection,
-  EventsCalendarSection,
+  FeaturesSection,  EventsCalendarSection,
+  SportsBettingRightsSection,
 } from '@/components/Landing';
 
 // Animations
@@ -84,9 +83,9 @@ const LandingPage = () => {
         
         <FeaturesSection />
         
-        <WhyZoddzSection />
-        
         <EventsCalendarSection />
+        
+        <SportsBettingRightsSection />
       </Background>
     </Layout>
   );

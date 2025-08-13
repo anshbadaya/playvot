@@ -120,9 +120,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
                 fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
               }}
             >
-              A name you can trust in the{' '}
+              A name you can trust from the{' '}
               <GlowText>
-              Indian Sports Odds Market
+              Indian Sports Market
               </GlowText>
             </Typography>
             <Typography 
@@ -137,7 +137,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
                 fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
               }}
             >
-              Fast. Secure. Credible. Profitable.
+              Fast. Secure. Credible.
             </Typography>
             <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
               <PrimaryButton
@@ -145,7 +145,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLoginClick }) => {
                 onClick={onLoginClick}
                 startIcon={<PlayArrow />}
               >
-                Start Betting Now
+               See LIVE ODDS now
               </PrimaryButton>
               <SecondaryButton
                 size="large"

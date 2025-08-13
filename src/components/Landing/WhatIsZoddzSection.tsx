@@ -83,7 +83,7 @@ const WhatIsZoddzSection: React.FC = () => {
                 opacity: 0.95,
               }}
             >
-              We deliver the fastest, most secure, and most credible pre-game & live-game betting/gaming odds for the Indian sports market.
+              We deliver the fastest, most secure, and most credible pre-game & live-game betting/gaming odds from the Indian sports market.
             </Typography>
             <Typography 
               variant="h6" 
@@ -96,7 +96,7 @@ const WhatIsZoddzSection: React.FC = () => {
                 fontWeight: 600,
               }}
             >
-              Built for speed, trust, and insight, Zoddz is your edge in real-time sports gaming.
+              Built for speed, trust, and insight.
             </Typography>
             
             
