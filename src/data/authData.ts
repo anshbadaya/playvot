@@ -70,7 +70,7 @@ export const dummyUsers: User[] = [
     id: '6',
     username: 'zoddz',
     email: 'zoddz@gmail.com',
-    password: simpleHash('zodzz@123'),
+    password: simpleHash('zoddz@123'),
     name: 'Test User',
     avatar: 'https://i.pravatar.cc/150?u=test_user',
     role: 'user'
