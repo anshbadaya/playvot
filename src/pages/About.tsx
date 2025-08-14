@@ -183,7 +183,7 @@ const AboutPage: React.FC = () => {
                     fontWeight: 300,
                   }}
                 >
-                  We deliver the fastest, most secure, and most credible pre-game & live-game betting/gaming odds for the Indian sports market.
+                  We deliver the fastest, most secure, and most credible pre-game & live-game betting/gaming odds from the Indian sports market.
                 </Typography>
                 <Typography 
                   variant="h6" 
