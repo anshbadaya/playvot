@@ -258,7 +258,7 @@ const Login: React.FC = () => {
             variant={isMobile ? "body2" : "body1"}
             sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
           >
-            Sign in to access your betting dashboard
+            Sign in to access the odds dashboard
           </Typography>
         </Box>
     
