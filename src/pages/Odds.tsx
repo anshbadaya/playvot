@@ -122,7 +122,7 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
         }}
       >
         <iframe
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=1"
+          src="https://www.youtube-nocookie.com/embed/dhfhU1YQYZs?si=fkUSIWHawMbKFlCh"
           width="100%"
           height="100%"
           style={{ border: 0, borderRadius: '8px' }}
