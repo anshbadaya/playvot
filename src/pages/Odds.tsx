@@ -9,11 +9,7 @@ import {
   CircularProgress
 } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
+// Swiper removed - using responsive grid only
 
 // Custom hook and types
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
@@ -98,52 +94,19 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
 
       {cardGroups.map((cardGroup, groupIndex) => (
         <Box key={`${title}-${cardGroup.card}-${cardGroup.fixture_no}-${groupIndex}`} sx={{ mb: 4 }}>
-          
-          <Box sx={swiperContainerStyles}>
-            {(isMobile || cardGroup.matches.length > 3) ? (
-              <Swiper
-                modules={[Pagination, Navigation]}
-                spaceBetween={24}
-                slidesPerView={isMobile ? 1 : 3}
-                pagination={{ 
-                  clickable: true,
-                  dynamicBullets: true
-                }}
-                navigation={!isMobile}
-                loop={cardGroup.matches.length > (isMobile ? 1 : 3)}
-                centeredSlides={isMobile}
-              >
-                {cardGroup.matches.map((match, index) => (
-                  <SwiperSlide key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
-                    <Box sx={{ px: 1 }}>
-                      <FixtureCard 
-                        match={match} 
-                        card={cardGroup.card} 
-                        fixture_no={cardGroup.fixture_no} 
-                        match_date={cardGroup.match_date} 
-                        sportType="sports" 
-                        isLive={isLive}
-                      />
-                    </Box>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (
-              <Box sx={gridContainerStyles}>
-                {cardGroup.matches.map((match, index) => (
-                  <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
-                    <FixtureCard 
-                      match={match} 
-                      card={cardGroup.card} 
-                      fixture_no={cardGroup.fixture_no} 
-                      match_date={cardGroup.match_date} 
-                      sportType="sports" 
-                      isLive={isLive}
-                    />
-                  </Box>
-                ))}
+          <Box sx={gridContainerStyles}>
+            {cardGroup.matches.map((match, index) => (
+              <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
+                <FixtureCard 
+                  match={match} 
+                  card={cardGroup.card} 
+                  fixture_no={cardGroup.fixture_no} 
+                  match_date={cardGroup.match_date} 
+                  sportType="sports" 
+                  isLive={isLive}
+                />
               </Box>
-            )}
+            ))}
           </Box>
         </Box>
       ))}
