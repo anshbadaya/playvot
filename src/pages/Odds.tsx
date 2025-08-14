@@ -119,11 +119,11 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
     <Paper
       sx={{
         position: 'fixed',
-        top: isMobile ? '60px' : '80px',
+        top: isMobile ? '64px' : '64px',
         right: isMobile ? 'auto' : 0,
         left: isMobile ? '10%' : 'auto',
         width: isMobile ? '80%' : '50%',
-        height: isMobile ? 'calc(100vh - 120px)' : 'calc(100vh - 160px)',
+        height: isMobile ? 'calc(100vh - 128px)' : 'calc(100vh - 128px)',
         zIndex: 1000,
         background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
         border: '1px solid rgba(59, 130, 246, 0.3)',
