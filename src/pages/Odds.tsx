@@ -1,7 +1,7 @@
 // pages/Odds.tsx
 import React from "react";
 import { Layout } from "@/components/Layout";
-import FixtureCard from "@/components/Match/FixtureCard";
+import OddsCard from "@/components/Match/OddsCard";
 import { 
   Box, 
   Container, 
@@ -97,7 +97,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
           <Box sx={gridContainerStyles}>
             {cardGroup.matches.map((match, index) => (
               <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
-                <FixtureCard 
+                <OddsCard 
                   match={match} 
                   card={cardGroup.card} 
                   fixture_no={cardGroup.fixture_no} 

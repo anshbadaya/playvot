@@ -356,7 +356,7 @@ const VideoContainer = styled(Box)`
   border: 1px solid rgba(59, 130, 246, 0.2);
 `;
 
-const FixtureCard: React.FC<SportsMatchCardProps> = (props) => {
+const OddsCard: React.FC<SportsMatchCardProps> = (props) => {
   const navigate = useNavigate();
   const { fixture_no, match_date, match, isLive } = props;
   const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category, start_time, end_time } = match;
@@ -690,4 +690,4 @@ const FixtureCard: React.FC<SportsMatchCardProps> = (props) => {
   );
 };
 
-export default FixtureCard;
+export default OddsCard;
