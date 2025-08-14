@@ -2,7 +2,7 @@ import { colors, colorUtils, gradients } from '@/utils/colors';
 import React from 'react';
 import { Box, Typography, Card, CardContent, Chip, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Tournament } from '@/types/tournament';
 import { CalendarToday, LocationOn, SportsSoccer, Event, FormatListNumbered } from '@mui/icons-material';
 
@@ -233,14 +233,13 @@ interface TournamentCardProps {
 }
 
 const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
-  const navigate = useNavigate();
   
-  const handleViewFixtures = () => {
-    navigate(`/tournaments/${tournament.slug}`);
+    const handleViewFixtures = () => {
+    // Navigation will be handled by Link component
   };
-  
+
   const handleViewEventData = () => {
-    navigate(`/tournament/${tournament.slug}/event-data`);
+    // Navigation will be handled by Link component
   };
   
   const getSportIcon = (sportType: string) => {
@@ -329,20 +328,22 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament }) => {
 
           
           <ActionButtons>
-            <ActionButton
-              className="primary"
-              onClick={handleViewFixtures}
-              startIcon={<Event />}
-            >
-              Full Fixtures
-            </ActionButton>
-            <ActionButton
-              className="secondary"
-              onClick={handleViewEventData}
-              startIcon={<SportsSoccer />}
-            >
-              Event Data
-            </ActionButton>
+            <Link to={`/tournaments/${tournament.slug}`} style={{ textDecoration: 'none' }}>
+              <ActionButton
+                className="primary"
+                startIcon={<Event />}
+              >
+                Full Fixtures
+              </ActionButton>
+            </Link>
+            <Link to={`/tournament/${tournament.slug}/event-data`} style={{ textDecoration: 'none' }}>
+              <ActionButton
+                className="secondary"
+                startIcon={<SportsSoccer />}
+              >
+                Event Data
+              </ActionButton>
+            </Link>
           </ActionButtons>
         </CardContentStyled>
       </StyledCard>

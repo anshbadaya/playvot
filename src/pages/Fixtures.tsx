@@ -8,7 +8,7 @@ import {
   ToggleButtonGroup,
   ToggleButton
 } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
 import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
 import { dummyTournamentsData } from '@/data/tournamentsData';
@@ -111,7 +111,6 @@ const LiveIndicator = styled(Chip)(({ theme }) => ({
 }));
 
 const Fixtures: React.FC = () => {
-  const navigate = useNavigate();
   const { slug } = useParams();
   const [selectedCategory, setSelectedCategory] = React.useState<'ongoing' | 'upcoming' | 'past' | null>(null);
   
@@ -231,9 +230,7 @@ const Fixtures: React.FC = () => {
     return { upcomingMatches: upcomingList, pastMatches: pastList };
   }, [upcomingData, now]);
 
-  const handleMatchClick = (matchId: string) => {
-    navigate(`/fixture/${matchId}/`);
-  };
+
 
   return (
     <Layout>
@@ -282,9 +279,9 @@ const Fixtures: React.FC = () => {
                 {(liveData.sports && liveData.sports.length > 0 ? liveData.sports : dummyMatchesData.sports).flatMap(cardGroup => 
                   cardGroup.matches.map((match, index) => (
                     <Box key={`live-${match.match_no}-${index}`}>
-                      <MatchCardContainer 
-                        onClick={() => navigate(`/fixture/${match.match_no}`)}
-                        sx={{
+                      <Link to={`/fixture/${match.match_no}`} style={{ textDecoration: 'none' }}>
+                        <MatchCardContainer 
+                          sx={{
                           position: 'relative',
                           '&::before': {
                             content: '""',
@@ -354,30 +351,33 @@ const Fixtures: React.FC = () => {
                           </Box>
 
                           <Box sx={{ mt: 1 }}>
-                            <Box
-                              onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.match_no}`); }}
-                              sx={{
-                                width: '100%',
-                                py: 1.25,
-                                borderRadius: 2,
-                                cursor: 'pointer',
-                                userSelect: 'none',
-                                textAlign: 'center',
-                                color: '#22C55E',
-                                background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
-                                border: '1px solid rgba(16,185,129,0.35)',
-                                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
-                                fontWeight: 800,
-                                letterSpacing: '0.04em',
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-                                '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
-                              }}
-                            >
-                              ODDS/STREAMS
-                            </Box>
+                            <Link to={`/match/${match.match_no}`} style={{ textDecoration: 'none' }}>
+                              <Box
+                                onClick={(e) => { e.stopPropagation(); }}
+                                sx={{
+                                  width: '100%',
+                                  py: 1.25,
+                                  borderRadius: 2,
+                                  cursor: 'pointer',
+                                  userSelect: 'none',
+                                  textAlign: 'center',
+                                  color: '#22C55E',
+                                  background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
+                                  border: '1px solid rgba(16,185,129,0.35)',
+                                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
+                                  fontWeight: 800,
+                                  letterSpacing: '0.04em',
+                                  transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                                  '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
+                                }}
+                              >
+                                ODDS/STREAMS
+                              </Box>
+                            </Link>
                           </Box>
                         </TeamsSection>
                       </MatchCardContainer>
+                    </Link>
                     </Box>
                   ))
                 )}
@@ -405,8 +405,8 @@ const Fixtures: React.FC = () => {
                 )}
                 {upcomingMatches.map((match) => (
                   <Box key={match.id}>
-                    <MatchCardContainer 
-                      onClick={() => handleMatchClick(match.id)}
+                    <Link to={`/fixture/${match.id}`} style={{ textDecoration: 'none' }}>
+                      <MatchCardContainer
                       sx={{
                         background: 'rgba(15, 23, 42, 0.6)',
                         position: 'relative',
@@ -467,32 +467,35 @@ const Fixtures: React.FC = () => {
                         </Box>
 
                         <Box sx={{ mt: 1 }}>
-                          <Box
-                            onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
-                            sx={{
-                              width: '100%',
-                              py: 1.25,
-                              borderRadius: 2,
-                              cursor: 'pointer',
-                              userSelect: 'none',
-                              textAlign: 'center',
-                              color: '#22C55E',
-                              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                              border: '1px solid rgba(16, 185, 129, 0.3)',
-                              fontWeight: 600,
-                              letterSpacing: '0.04em',
-                              transition: 'all 0.2s ease',
-                              '&:hover': { 
-                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                                borderColor: 'rgba(16, 185, 129, 0.5)'
-                              }
-                            }}
-                          >
-                            Odds/Streams
-                          </Box>
+                          <Link to={`/match/${match.id}`} style={{ textDecoration: 'none' }}>
+                            <Box
+                              onClick={(e) => { e.stopPropagation(); }}
+                              sx={{
+                                width: '100%',
+                                py: 1.25,
+                                borderRadius: 2,
+                                cursor: 'pointer',
+                                userSelect: 'none',
+                                textAlign: 'center',
+                                color: '#22C55E',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                border: '1px solid rgba(16, 185, 129, 0.3)',
+                                fontWeight: 600,
+                                letterSpacing: '0.04em',
+                                transition: 'all 0.2s ease',
+                                '&:hover': { 
+                                  backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                  borderColor: 'rgba(16, 185, 129, 0.5)'
+                                }
+                              }}
+                            >
+                              Odds/Streams
+                            </Box>
+                          </Link>
                         </Box>
                       </TeamsSection>
                     </MatchCardContainer>
+                    </Link>
                   </Box>
                 ))}
               </GridContainer>
@@ -506,8 +509,8 @@ const Fixtures: React.FC = () => {
               <GridContainer>
                 {pastMatches.map((match) => (
                   <Box key={`past-${match.id}`}>
-                    <MatchCardContainer 
-                      onClick={() => handleMatchClick(match.id)}
+                    <Link to={`/fixture/${match.id}`} style={{ textDecoration: 'none' }}>
+                      <MatchCardContainer
                       sx={{
                         background: 'rgba(15, 23, 42, 0.4)',
                         position: 'relative',
@@ -570,32 +573,35 @@ const Fixtures: React.FC = () => {
                         </Box>
 
                         <Box sx={{ mt: 1 }}>
-                          <Box
-                            onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
-                            sx={{
-                              width: '100%',
-                              py: 1.25,
-                              borderRadius: 2,
-                              cursor: 'pointer',
-                              userSelect: 'none',
-                              textAlign: 'center',
-                              color: 'rgba(255, 255, 255, 0.5)',
-                              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                              border: '1px solid rgba(255, 255, 255, 0.1)',
-                              fontWeight: 500,
-                              letterSpacing: '0.04em',
-                              transition: 'all 0.2s ease',
-                              '&:hover': { 
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                borderColor: 'rgba(255, 255, 255, 0.2)'
-                              }
-                            }}
-                          >
-                            Odds/Streams
-                          </Box>
+                          <Link to={`/match/${match.id}`} style={{ textDecoration: 'none' }}>
+                            <Box
+                              onClick={(e) => { e.stopPropagation(); }}
+                              sx={{
+                                width: '100%',
+                                py: 1.25,
+                                borderRadius: 2,
+                                cursor: 'pointer',
+                                userSelect: 'none',
+                                textAlign: 'center',
+                                color: 'rgba(255, 255, 255, 0.5)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                fontWeight: 500,
+                                letterSpacing: '0.04em',
+                                transition: 'all 0.2s ease',
+                                '&:hover': { 
+                                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                  borderColor: 'rgba(255, 255, 255, 0.2)'
+                                }
+                              }}
+                            >
+                              Odds/Streams
+                            </Box>
+                          </Link>
                         </Box>
                       </TeamsSection>
                     </MatchCardContainer>
+                    </Link>
                   </Box>
                 ))}
               </GridContainer>

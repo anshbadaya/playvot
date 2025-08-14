@@ -12,7 +12,7 @@ import {
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { colors } from '@/utils/colors';
 import {
   HeroSection,
@@ -255,7 +255,6 @@ const FooterSlogan = styled(Typography)(({ theme }) => ({
 const Login: React.FC = () => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const { login } = useAuth();
-  const navigate = useNavigate();
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -276,7 +275,7 @@ const Login: React.FC = () => {
     try {
       const success = await login(username, password);
       if (success) {
-        navigate('/tournaments');
+        window.location.href = '/tournaments';
       } else {
         setErrors({ password: 'Invalid credentials' });
       }
@@ -303,13 +302,14 @@ const Login: React.FC = () => {
 
       {/* Login overlay */}
       <LoginOverlay>
-        <BackButton
-          onClick={() => navigate('/')}
-          startIcon={<ArrowBack />}
-          size="small"
-        >
-          Back
-        </BackButton>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <BackButton
+            startIcon={<ArrowBack />}
+            size="small"
+          >
+            Back
+          </BackButton>
+        </Link>
         
         <LoginCard>
           <Box textAlign="center" mb={4}>

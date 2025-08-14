@@ -3,7 +3,7 @@ import {
   Box,
 } from '@mui/material';
 import { styled, keyframes } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { colors, colorUtils } from '@/utils/colors';
 
@@ -85,16 +85,14 @@ const FloatingElement = styled(Box)(({ theme }) => ({
 }));
 
 const LandingPage = () => {
-  const navigate = useNavigate();
-
   return (
-    <Layout onLoginClick={() => navigate('/tournaments')}>
+    <Layout onLoginClick={() => window.location.href = '/tournaments'}>
       <Background>
         <FloatingElement />
         <FloatingElement />
         <FloatingElement />
         
-        <HeroSection onLoginClick={() => navigate('/tournaments')} />
+        <HeroSection onLoginClick={() => window.location.href = '/tournaments'} />
         <AccentDivider />
         
         <WhatIsZoddzSection />

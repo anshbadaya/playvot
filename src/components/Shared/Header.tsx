@@ -1,7 +1,7 @@
 import { colors } from '@/utils/colors';
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -222,7 +222,6 @@ const Header: React.FC<HeaderProps> = ({
   logoAlt = "Zoddz Logo",
   onLoginClick,
 }) => {
-  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -241,12 +240,12 @@ const Header: React.FC<HeaderProps> = ({
   const handleLogout = () => {
     logout();
     handleClose();
-    navigate("/");
+    // Navigation will be handled by Link component
   };
 
   const handleProfileNavigate = () => {
     handleClose();
-    navigate("/profile");
+    // Navigation will be handled by Link component
   };
 
   return (
@@ -254,23 +253,28 @@ const Header: React.FC<HeaderProps> = ({
       <Toolbar>
         <LeftSection>
           {!isHomePage && (
-            <BackButton onClick={() => navigate(-1)}>
-              <BackIcon />
-            </BackButton>
+            <Link to="#" onClick={(e) => { e.preventDefault(); window.history.back(); }} style={{ textDecoration: 'none' }}>
+              <BackButton>
+                <BackIcon />
+              </BackButton>
+            </Link>
           )}
-          <Logo
-            src={logoPath}
-            alt={logoAlt}
-            onClick={() => navigate("/")}
-          />
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Logo
+              src={logoPath}
+              alt={logoAlt}
+            />
+          </Link>
         </LeftSection>
 
         <RightSection>
           {!user ? (
-            <ActionButton onClick={() => (onLoginClick ? onLoginClick() : navigate('/tournaments'))}>
-              <PersonOutlineIcon fontSize="small" />
-              Login
-            </ActionButton>
+            <Link to="/tournaments" style={{ textDecoration: 'none' }}>
+              <ActionButton onClick={onLoginClick}>
+                <PersonOutlineIcon fontSize="small" />
+                Login
+              </ActionButton>
+            </Link>
           ) : (
             <>
               <UserMenu>
@@ -319,27 +323,39 @@ const Header: React.FC<HeaderProps> = ({
         </MobileMenuHeader>
         
         {!isHomePage && (
-          <MobileMenuItem onClick={() => { navigate(-1); setIsMobileMenuOpen(false); }}>
-            ← Back
-          </MobileMenuItem>
+          <Link to="#" onClick={(e) => { e.preventDefault(); window.history.back(); setIsMobileMenuOpen(false); }} style={{ textDecoration: 'none' }}>
+            <MobileMenuItem>
+              ← Back
+            </MobileMenuItem>
+          </Link>
         )}
-        <MobileMenuItem onClick={() => { navigate("/"); setIsMobileMenuOpen(false); }}>
-          Home
-        </MobileMenuItem>
-        <MobileMenuItem onClick={() => { navigate("/matches"); setIsMobileMenuOpen(false); }}>
-          Matches
-        </MobileMenuItem>
-        <MobileMenuItem onClick={() => { navigate("/tournaments"); setIsMobileMenuOpen(false); }}>
-          Tournaments
-        </MobileMenuItem>
-        <MobileMenuItem onClick={() => { navigate("/about"); setIsMobileMenuOpen(false); }}>
-          About
-        </MobileMenuItem>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <MobileMenuItem onClick={() => setIsMobileMenuOpen(false)}>
+            Home
+          </MobileMenuItem>
+        </Link>
+        <Link to="/matches" style={{ textDecoration: 'none' }}>
+          <MobileMenuItem onClick={() => setIsMobileMenuOpen(false)}>
+            Matches
+          </MobileMenuItem>
+        </Link>
+        <Link to="/tournaments" style={{ textDecoration: 'none' }}>
+          <MobileMenuItem onClick={() => setIsMobileMenuOpen(false)}>
+            Tournaments
+          </MobileMenuItem>
+        </Link>
+        <Link to="/about" style={{ textDecoration: 'none' }}>
+          <MobileMenuItem onClick={() => setIsMobileMenuOpen(false)}>
+            About
+          </MobileMenuItem>
+        </Link>
         
         {!user ? (
-          <MobileMenuItem onClick={() => { (onLoginClick ? onLoginClick() : navigate('/tournaments')); setIsMobileMenuOpen(false); }}>
-            Login
-          </MobileMenuItem>
+          <Link to="/tournaments" style={{ textDecoration: 'none' }}>
+            <MobileMenuItem onClick={() => { onLoginClick && onLoginClick(); setIsMobileMenuOpen(false); }}>
+              Login
+            </MobileMenuItem>
+          </Link>
         ) : (
           <>
             <MobileMenuItem style={{ opacity: 0.6, pointerEvents: 'none' }}>

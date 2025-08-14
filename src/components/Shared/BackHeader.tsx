@@ -1,7 +1,7 @@
 import { colors } from '@/utils/colors';
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import Logo from "@/assets/images/Logo.png";
 
@@ -75,14 +75,14 @@ const Spacer = styled.div`
 `;
 
 const BackHeader: React.FC = () => {
-  const navigate = useNavigate();
-
   return (
     <HeaderContainer>
       <Toolbar>
-        <BackButton onClick={() => navigate(-1)}>
-          <BackIcon />
-        </BackButton>
+        <Link to="#" onClick={(e) => { e.preventDefault(); window.history.back(); }} style={{ textDecoration: 'none' }}>
+          <BackButton>
+            <BackIcon />
+          </BackButton>
+        </Link>
 
         <LogoImage
           src={Logo}
