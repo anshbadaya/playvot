@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -8,27 +8,24 @@ import {
   IconButton,
   CircularProgress,
   useMediaQuery,
+  Paper,
 } from '@mui/material';
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePublicGuard } from '@/hooks/useAuthGuard';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { colors } from '@/utils/colors';
-import {
-  HeroSection,
-  WhatIsZoddzSection,
-  FeaturesSection,
-  EventsCalendarSection,
-} from '@/components/Landing';
 
-// Background with landing page content
+// Background container
 const BackgroundContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   width: '100vw',
   background: '#0F172A',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: theme.spacing(2),
   position: 'relative',
-  overflow: 'auto',
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -44,66 +41,8 @@ const BackgroundContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-// Floating animation for background elements
-const FloatingElement = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  width: '6px',
-  height: '6px',
-  background: 'rgba(29, 78, 216, 0.4)',
-  borderRadius: '50%',
-  animation: 'float 15s ease-in-out infinite',
-  
-  '@keyframes float': {
-    '0%, 100%': { 
-      transform: 'translateY(0px) rotate(0deg)' 
-    },
-    '33%': { 
-      transform: 'translateY(-20px) rotate(5deg)' 
-    },
-    '66%': { 
-      transform: 'translateY(10px) rotate(-3deg)' 
-    }
-  },
-  
-  '&:nth-of-type(1)': {
-    top: '20%',
-    left: '15%',
-    animationDelay: '0s',
-  },
-  
-  '&:nth-of-type(2)': {
-    top: '60%',
-    right: '20%',
-    animationDelay: '5s',
-    background: 'rgba(139, 92, 246, 0.4)',
-  },
-  
-  '&:nth-of-type(3)': {
-    bottom: '30%',
-    left: '25%',
-    animationDelay: '10s',
-    background: 'rgba(16, 185, 129, 0.4)',
-  },
-}));
-
-// Login overlay container
-const LoginOverlay = styled(Box)(({ theme }) => ({
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  background: 'rgba(15, 23, 42, 0.85)',
-  backdropFilter: 'blur(8px)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: theme.spacing(2),
-  zIndex: 1000,
-}));
-
-// Login card container
-const LoginCard = styled(Box)(({ theme }) => ({
+// Login card
+const LoginCard = styled(Paper)(({ theme }) => ({
   background: 'rgba(15, 23, 42, 0.95)',
   backdropFilter: 'blur(20px)',
   border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -174,6 +113,11 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
       fontSize: '13px',
     },
   },
+  '& .MuiFormHelperText-root': {
+    color: '#ef4444',
+    fontSize: '12px',
+    marginLeft: '4px',
+  },
 }));
 
 // Primary login button
@@ -205,8 +149,6 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-
-
 // Back button
 const BackButton = styled(Button)(({ theme }) => ({
   position: 'absolute',
@@ -235,33 +177,12 @@ const BackButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-// Footer slogan
-const FooterSlogan = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  bottom: theme.spacing(3),
-  left: '50%',
-  transform: 'translateX(-50%)',
-  color: colors.primary,
-  fontSize: '14px',
-  fontWeight: 600,
-  letterSpacing: '0.5px',
-  textAlign: 'center',
-  zIndex: 1001,
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '12px',
-    bottom: theme.spacing(2),
-  },
-}));
-
 const Login: React.FC = () => {
   const isMobile = useMediaQuery('(max-width:600px)');
-  const { login } = useAuth();
+  const { login, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redirect authenticated users away from login page
-  usePublicGuard();
-  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -271,16 +192,24 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!username.trim() || !password.trim()) {
-      setErrors({ password: 'Please fill in all fields' });
+    // Clear previous errors
+    setErrors({});
+    
+    // Basic validation
+    if (!username.trim()) {
+      setErrors(prev => ({ ...prev, username: 'Username is required' }));
+      return;
+    }
+    
+    if (!password.trim()) {
+      setErrors(prev => ({ ...prev, password: 'Password is required' }));
       return;
     }
     
     setIsLoading(true);
-    setErrors({});
     
     try {
-      const result = await login(username, password);
+      const result = await login(username.trim(), password);
       
       if (result.success) {
         // Redirect to the page they were trying to access, or tournaments as default
@@ -296,103 +225,98 @@ const Login: React.FC = () => {
     }
   };
 
-  return (
-    <>
-      {/* Background with landing page content */}
+  // Show loading if auth is still initializing
+  if (authLoading) {
+    return (
       <BackgroundContainer>
-        <FloatingElement />
-        <FloatingElement />
-        <FloatingElement />
-        
-        <HeroSection onLoginClick={() => {}} />
-        <WhatIsZoddzSection />
-        <FeaturesSection />
-        <EventsCalendarSection />
+        <CircularProgress size={40} sx={{ color: colors.primary }} />
       </BackgroundContainer>
+    );
+  }
 
-      {/* Login overlay */}
-      <LoginOverlay>
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <BackButton
-            startIcon={<ArrowBack />}
-            size="small"
-          >
-            Back
-          </BackButton>
-        </Link>
-        
-        <LoginCard>
-          <Box textAlign="center" mb={4}>
-            <Typography 
-              variant={isMobile ? "h5" : "h4"}
-              fontWeight={700}
-              sx={{ color: colors.text.primary, mb: 1 }}
-            >
-              Welcome Back
-            </Typography>
-            <Typography 
-              variant={isMobile ? "body2" : "body1"}
-              sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
-            >
-              Sign in to access your betting dashboard
-            </Typography>
-          </Box>
+  return (
+    <BackgroundContainer>
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <BackButton
+          startIcon={<ArrowBack />}
+          size="small"
+        >
+          Back
+        </BackButton>
+      </Link>
       
-          <Box component="form" onSubmit={handleSubmit}>
-            <Box mb={3}>
-              <StyledTextField
-                placeholder="Username *"
-                variant="outlined"
-                fullWidth
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                error={Boolean(errors.username)}
-                helperText={errors.username}
-              />
-            </Box>
-
-            <Box mb={3}>
-              <StyledTextField
-                placeholder="Password *"
-                variant="outlined"
-                fullWidth
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={Boolean(errors.password)}
-                helperText={errors.password}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Box>
-
-            <PrimaryButton
-              type="submit"
-              variant="contained"
+      <LoginCard>
+        <Box textAlign="center" mb={4}>
+          <Typography 
+            variant={isMobile ? "h5" : "h4"}
+            fontWeight={700}
+            sx={{ color: colors.text.primary, mb: 1 }}
+          >
+            Welcome Back
+          </Typography>
+          <Typography 
+            variant={isMobile ? "body2" : "body1"}
+            sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+          >
+            Sign in to access your betting dashboard
+          </Typography>
+        </Box>
+    
+        <Box component="form" onSubmit={handleSubmit}>
+          <Box mb={3}>
+            <StyledTextField
+              label="Username"
+              variant="outlined"
               fullWidth
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              error={Boolean(errors.username)}
+              helperText={errors.username}
               disabled={isLoading}
-              sx={{ mb: 3 }}
-            >
-              {isLoading ? <CircularProgress size={20} color="inherit" /> : 'LOGIN'}
-            </PrimaryButton>
+              autoComplete="username"
+            />
           </Box>
-        </LoginCard>
-        
-        <FooterSlogan>
-          Fast. Secure. Credible. Profitable.
-        </FooterSlogan>
-      </LoginOverlay>
-    </>
+
+          <Box mb={3}>
+            <StyledTextField
+              label="Password"
+              variant="outlined"
+              fullWidth
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={Boolean(errors.password)}
+              helperText={errors.password}
+              disabled={isLoading}
+              autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
+                      disabled={isLoading}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+
+          <PrimaryButton
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={isLoading}
+            sx={{ mb: 3 }}
+          >
+            {isLoading ? <CircularProgress size={20} color="inherit" /> : 'LOGIN'}
+          </PrimaryButton>
+        </Box>
+      </LoginCard>
+    </BackgroundContainer>
   );
 };
 

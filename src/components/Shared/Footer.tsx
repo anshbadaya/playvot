@@ -1,8 +1,8 @@
 import { colors } from '@/utils/colors';
 import React from "react";
-import { Box, Typography, Container, Grid, Paper } from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Link as RouterLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 
@@ -43,7 +43,7 @@ const FooterLinks = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-const FooterLink = styled(RouterLink)(({ theme }) => ({
+const FooterLink = styled(Link)(({ theme }) => ({
   color: colors.text.secondary,
   textDecoration: 'none',
   transition: 'all 0.2s ease',
@@ -86,26 +86,23 @@ const MapContainer = styled(Box)(({ theme }) => ({
   margin: '0 auto',
 }));
 
-const Footer: React.FC<FooterProps> = ({ 
-  copyrightText = `© ${new Date().getFullYear()} All rights reserved.`,
-  links = [
-    { text: "About Us", href: "/about" },
-  ],
-  companyName = "Zoddz"
-}) => {
+const Footer: React.FC<FooterProps> = ({}) => {
+  const handleLinkClick = () => {
+    // Scroll to top when navigating to a new page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <FooterContainer>
       <Container maxWidth="lg">
         <FooterText>
-          {companyName ? `${copyrightText} ${companyName}` : copyrightText}
+          {`© ${new Date().getFullYear()} Zoddz. All rights reserved.`}
         </FooterText>
         
         <FooterLinks>
-          {links.map((link, index) => (
-            <FooterLink key={index} to={link.href}>
-              {link.text}
-            </FooterLink>
-          ))}
+          <FooterLink to="/about" onClick={handleLinkClick}>
+            About Us
+          </FooterLink>
         </FooterLinks>
         
         <ContactSection>
@@ -119,7 +116,7 @@ const Footer: React.FC<FooterProps> = ({
           <ContactItem>
             <PhoneIcon />
             <Typography variant="body2">
-            +971 50 328 9400
+              +971 50 328 9400
             </Typography>
           </ContactItem>
         </ContactSection>

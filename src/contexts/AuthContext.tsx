@@ -16,6 +16,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,34 +31,55 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Check if user is already logged in (from localStorage)
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const initializeAuth = () => {
       try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        setIsAuthenticated(true);
+        const storedUser = localStorage.getItem('playvot_user');
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          // Validate user data structure
+          if (parsedUser && 
+              typeof parsedUser.id === 'string' &&
+              typeof parsedUser.username === 'string' &&
+              typeof parsedUser.name === 'string' &&
+              typeof parsedUser.email === 'string' &&
+              ['user', 'admin'].includes(parsedUser.role)) {
+            setUser(parsedUser);
+          } else {
+            // Invalid user data, clear it
+            localStorage.removeItem('playvot_user');
+          }
+        }
       } catch (error) {
         console.error('Failed to parse stored user data:', error);
-        localStorage.removeItem('user');
+        localStorage.removeItem('playvot_user');
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
+
+    initializeAuth();
   }, []);
 
   const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      // Basic input validation
+      if (!username?.trim() || !password?.trim()) {
+        return { success: false, error: 'Username and password are required' };
+      }
+
       // Validate credentials using dummy data
-      const validation = validateCredentials(username, password);
+      const validation = validateCredentials(username.trim(), password);
       
       if (!validation.isValid) {
         return { success: false, error: validation.error };
       }
       
       if (!validation.user) {
-        return { success: false, error: 'User not found' };
+        return { success: false, error: 'Invalid credentials' };
       }
       
       // Create auth user object without sensitive data
@@ -71,8 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       setUser(authUser);
-      setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(authUser));
+      localStorage.setItem('playvot_user', JSON.stringify(authUser));
       
       return { success: true };
     } catch (error) {
@@ -83,12 +104,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem('user');
+    localStorage.removeItem('playvot_user');
   };
 
+  const isAuthenticated = !!user;
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

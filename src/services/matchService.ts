@@ -1,21 +1,76 @@
 import { MatchesByType, MatchFilters, MatchesResponse, SportsCardGroup } from '@/types/match';
 import { API_CONFIG, getApiHeaders } from '@/config/api';
-import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
 
 /**
  * Fetch live matches from the API endpoint
  * @returns Promise<MatchesByType>
  */
 const fetchLiveMatches = async (): Promise<MatchesByType> => {
-  // DEV MODE: Return dummy live data for experimentation in Odds page
-  console.log('[DEV] Returning dummy live matches');
-  return {
-    cricket: [],
-    kabaddi: [],
-    football: [],
-    volleyball: [],
-    sports: dummyMatchesData.sports,
-  };
+  try {
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LIVE_FIXTURES}`, {
+      method: 'GET',
+      headers: getApiHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log('Live matches API response:', responseData);
+
+    // Validate API response structure
+    if (!responseData.data || !Array.isArray(responseData.data)) {
+      console.error('Invalid API response structure - missing or invalid data array:', responseData);
+      throw new Error('Invalid API response structure');
+    }
+
+    // Transform API response to match our data structure
+    // The API returns data in responseData.data array
+    const now = new Date();
+    
+    // Add isLive property to each match based on current time
+    const processedData = responseData.data.map((cardGroup: any) => ({
+      ...cardGroup,
+      matches: cardGroup.matches.map((match: any) => {
+        const startDate = new Date(`${cardGroup.match_date}T${match.start_time}`);
+        const endDate = new Date(`${cardGroup.match_date}T${match.end_time}`);
+        const isLive = now >= startDate && now <= endDate;
+        
+        return {
+          ...match,
+          isLive
+        };
+      })
+    }));
+    
+    const transformedData = {
+      cricket: [],
+      kabaddi: [],
+      football: [],
+      volleyball: [],
+      sports: processedData, // Use the processed data with isLive property
+    };
+    
+    console.log('Transformed live matches data:', transformedData);
+    console.log('Number of sports card groups:', transformedData.sports.length);
+    if (transformedData.sports.length > 0) {
+      console.log('First card group:', transformedData.sports[0]);
+      console.log('Number of matches in first group:', transformedData.sports[0].matches?.length || 0);
+    }
+    
+    return transformedData;
+  } catch (error) {
+    console.error('Error fetching live matches from API:', error);
+    // Return empty data structure on error
+    return {
+      cricket: [],
+      kabaddi: [],
+      football: [],
+      volleyball: [],
+      sports: [],
+    };
+  }
 };
 
 /**
@@ -23,15 +78,71 @@ const fetchLiveMatches = async (): Promise<MatchesByType> => {
  * @returns Promise<MatchesByType>
  */
 const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
-  // DEV MODE: Return dummy upcoming data
-  console.log('[DEV] Returning dummy upcoming matches');
-  return {
-    cricket: [],
-    kabaddi: [],
-    football: [],
-    volleyball: [],
-    sports: dummyUpcomingMatchesData.sports,
-  };
+  try {
+    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`, {
+      method: 'GET',
+      headers: getApiHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log('Upcoming matches API response:', responseData);
+
+    // Validate API response structure
+    if (!responseData.data || !Array.isArray(responseData.data)) {
+      console.error('Invalid API response structure - missing or invalid data array:', responseData);
+      throw new Error('Invalid API response structure');
+    }
+
+    // Transform API response to match our data structure
+    // The API returns data in responseData.data array
+    const now = new Date();
+    
+    // Add isLive property to each match based on current time
+    const processedData = responseData.data.map((cardGroup: any) => ({
+      ...cardGroup,
+      matches: cardGroup.matches.map((match: any) => {
+        const startDate = new Date(`${cardGroup.match_date}T${match.start_time}`);
+        const endDate = new Date(`${cardGroup.match_date}T${match.end_time}`);
+        const isLive = now >= startDate && now <= endDate;
+        
+        return {
+          ...match,
+          isLive
+        };
+      })
+    }));
+    
+    const transformedData = {
+      cricket: [],
+      kabaddi: [],
+      football: [],
+      volleyball: [],
+      sports: processedData, // Use the processed data with isLive property
+    };
+    
+    console.log('Transformed upcoming matches data:', transformedData);
+    console.log('Number of sports card groups:', transformedData.sports.length);
+    if (transformedData.sports.length > 0) {
+      console.log('First card group:', transformedData.sports[0]);
+      console.log('Number of matches in first group:', transformedData.sports[0].matches?.length || 0);
+    }
+    
+    return transformedData;
+  } catch (error) {
+    console.error('Error fetching upcoming matches from API:', error);
+    // Return empty data structure on error
+    return {
+      cricket: [],
+      kabaddi: [],
+      football: [],
+      volleyball: [],
+      sports: [],
+    };
+  }
 };
 
 /**
@@ -67,6 +178,14 @@ export const fetchMatches = async (filters?: MatchFilters): Promise<MatchesRespo
             filteredData[sportKey] = filteredData[sportKey].filter(match => 
               filters.isLive ? match.isLive : !match.isLive
             );
+          } else {
+            // Filter sports matches by isLive status
+            filteredData.sports = filteredData.sports.map(cardGroup => ({
+              ...cardGroup,
+              matches: cardGroup.matches.filter(match => 
+                filters.isLive ? match.isLive : !match.isLive
+              )
+            })).filter(cardGroup => cardGroup.matches.length > 0);
           }
         });
       }

@@ -1,5 +1,4 @@
 // Custom Hooks
-export * from './useMatchData';
-export * from './useMatchDetails';
-export * from './useTournaments';
-export * from './useAuthGuard'; 
+export { useMatches, useLiveMatches, useUpcomingMatches } from './useMatchData';
+export { useMatchDetails } from './useMatchDetails';
+export { useTournaments } from './useTournaments'; 
