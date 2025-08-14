@@ -361,9 +361,7 @@ const OddsCard: React.FC<SportsMatchCardProps> = (props) => {
   const { fixture_no, match_date, match, isLive } = props;
   const { match_no, player_a, player_b, pre_match_odds, live_match_odds, weight_category, start_time, end_time } = match;
   
-  // Modal states
-  const [scorecardModalOpen, setScorecardModalOpen] = useState(false);
-  const [streamsModalOpen, setStreamsModalOpen] = useState(false);
+
   
   // Use live odds if available and match is live, otherwise fall back to pre-match odds
   const oddsToDisplay = (live_match_odds && isLive) ? live_match_odds : pre_match_odds;
@@ -377,21 +375,18 @@ const OddsCard: React.FC<SportsMatchCardProps> = (props) => {
   
   const handleScorecardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setScorecardModalOpen(true);
+    // Redirect to Cricbuzz website instead of opening modal
+    window.open('https://www.cricbuzz.com/live-cricket-scores', '_blank');
   };
   
   const handleStreamsClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setStreamsModalOpen(true);
+    if (props.onStreamsClick) {
+      props.onStreamsClick(match);
+    }
   };
   
-  const handleCloseScorecardModal = () => {
-    setScorecardModalOpen(false);
-  };
-  
-  const handleCloseStreamsModal = () => {
-    setStreamsModalOpen(false);
-  };
+
   
   return (
     <MatchCardContainer isLive={isLive}>
@@ -618,74 +613,9 @@ const OddsCard: React.FC<SportsMatchCardProps> = (props) => {
         </StyledCard>
       </Box>
       
-      {/* Scorecard Modal */}
-      <Modal
-        open={scorecardModalOpen}
-        onClose={handleCloseScorecardModal}
-        aria-labelledby="scorecard-modal-title"
-        aria-describedby="scorecard-modal-description"
-      >
-        <ModalContainer>
-          <ModalHeader>
-            <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
-              Live Scorecard - {player_a.name} vs {player_b.name}
-            </Typography>
-            <IconButton
-              onClick={handleCloseScorecardModal}
-              sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </ModalHeader>
-          <ModalContent>
-            <IframeContainer>
-              <iframe
-                src="https://www.cricbuzz.com/live-cricket-scores"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                title="Live Cricket Scorecard"
-                allowFullScreen
-              />
-            </IframeContainer>
-          </ModalContent>
-        </ModalContainer>
-      </Modal>
+
       
-      {/* Streams Modal */}
-      <Modal
-        open={streamsModalOpen}
-        onClose={handleCloseStreamsModal}
-        aria-labelledby="streams-modal-title"
-        aria-describedby="streams-modal-description"
-      >
-        <ModalContainer>
-          <ModalHeader>
-            <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
-              Live Stream - {player_a.name} vs {player_b.name}
-            </Typography>
-            <IconButton
-              onClick={handleCloseStreamsModal}
-              sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </ModalHeader>
-          <ModalContent>
-            <VideoContainer>
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                title="Live Match Stream"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </VideoContainer>
-          </ModalContent>
-        </ModalContainer>
-      </Modal>
+
     </MatchCardContainer>
   );
 };

@@ -36,6 +36,7 @@ export interface SportsMatchCardProps {
   match: SportsMatch;
   sportType?: 'sports';
   isLive?: boolean;
+  onStreamsClick?: (match: SportsMatch) => void;
 }
 
 export interface MatchesByType {

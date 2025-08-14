@@ -1,19 +1,22 @@
 // pages/Odds.tsx
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "@/components/Layout";
 import OddsCard from "@/components/Match/OddsCard";
 import { 
   Box, 
   Container, 
   Typography, 
-  CircularProgress
+  CircularProgress,
+  Paper,
+  IconButton
 } from "@mui/material";
 import { useTheme, useMediaQuery } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 // Swiper removed - using responsive grid only
 
 // Custom hook and types
 import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
-import { SportsCardGroup } from '@/types/match';
+import { SportsCardGroup, SportsMatch } from '@/types/match';
 import BackgroundRefreshIndicator from '@/components/Shared/BackgroundRefreshIndicator';
 
 // Styles
@@ -36,6 +39,7 @@ interface SportsSectionProps {
   cardGroups: SportsCardGroup[];
   isMobile: boolean;
   isLive?: boolean;
+  onStreamsClick?: (match: SportsMatch) => void;
 }
 
 /**
@@ -63,9 +67,84 @@ const EmptyState: React.FC<{ message?: string }> = ({ message = "No matches foun
 );
 
 /**
+ * Video Stream Component
+ */
+interface VideoStreamProps {
+  match: SportsMatch | null;
+  onClose: () => void;
+}
+
+const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
+  if (!match) return null;
+
+  return (
+    <Paper
+      sx={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        width: isMobile ? '100%' : '50%',
+        height: '100vh',
+        zIndex: 1000,
+        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
+        border: '1px solid rgba(59, 130, 246, 0.3)',
+        borderRadius: 0,
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(20px)',
+        overflow: 'hidden'
+      }}
+    >
+      {/* Header */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 2,
+          borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
+          background: 'rgba(15, 23, 42, 0.9)'
+        }}
+      >
+        <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
+          Live Stream - {match.player_a.name} vs {match.player_b.name}
+        </Typography>
+        <IconButton
+          onClick={onClose}
+          sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      {/* Video Content */}
+      <Box
+        sx={{
+          width: '100%',
+          height: 'calc(100vh - 80px)',
+          padding: 2
+        }}
+      >
+        <iframe
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+          width="100%"
+          height="100%"
+          style={{ border: 0, borderRadius: '8px' }}
+          title="Live Match Stream"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </Box>
+    </Paper>
+  );
+};
+
+/**
  * SportsSection component for displaying sports matches grouped by card
  */
-const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobile, isLive = false }) => {
+const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobile, isLive = false, onStreamsClick }) => {
   if (cardGroups.length === 0) {
     return null;
   }
@@ -104,6 +183,7 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
                   match_date={cardGroup.match_date} 
                   sportType="sports" 
                   isLive={isLive}
+                  onStreamsClick={onStreamsClick}
                 />
               </Box>
             ))}
@@ -121,6 +201,9 @@ const OddsPage: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  // State for video stream
+  const [selectedMatch, setSelectedMatch] = useState<SportsMatch | null>(null);
+
   // Use custom hooks for live and upcoming matches
   const { 
     data: liveData, 
@@ -136,6 +219,16 @@ const OddsPage: React.FC = () => {
     total: upcomingTotal 
   } = useUpcomingMatches();
 
+  // Handle streams click
+  const handleStreamsClick = (match: SportsMatch) => {
+    setSelectedMatch(match);
+  };
+
+  // Handle close video stream
+  const handleCloseVideoStream = () => {
+    setSelectedMatch(null);
+  };
+
   // Calculate total matches for each section
   const totalLiveMatches = liveData.sports ? liveData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
   const totalUpcomingMatches = upcomingData.sports ? upcomingData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
@@ -147,7 +240,11 @@ const OddsPage: React.FC = () => {
 
   return (
     <Layout>
-      <Box sx={matchesContainerStyles}>
+      <Box sx={{
+        ...matchesContainerStyles,
+        width: selectedMatch && !isMobile ? '50%' : '100%',
+        transition: 'width 0.3s ease'
+      }}>
         <Container maxWidth="lg" sx={matchesContentStyles}>
           {/* Live Matches Section */}
           <Box sx={{ mb: 6 }}>
@@ -164,6 +261,7 @@ const OddsPage: React.FC = () => {
                       cardGroups={liveData.sports}
                       isMobile={isMobile}
                       isLive={true}
+                      onStreamsClick={handleStreamsClick}
                     />
                   )}
                 </>
@@ -186,6 +284,7 @@ const OddsPage: React.FC = () => {
                       cardGroups={upcomingData.sports}
                       isMobile={isMobile}
                       isLive={false}
+                      onStreamsClick={handleStreamsClick}
                     />
                   )}
                 </>
@@ -194,6 +293,12 @@ const OddsPage: React.FC = () => {
           </Box>
         </Container>
       </Box>
+
+      {/* Video Stream Component */}
+      <VideoStream 
+        match={selectedMatch} 
+        onClose={handleCloseVideoStream} 
+      />
     </Layout>
   );
 };
