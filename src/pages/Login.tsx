@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -12,7 +12,8 @@ import {
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useAuth } from '@/contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { usePublicGuard } from '@/hooks/useAuthGuard';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { colors } from '@/utils/colors';
 import {
   HeroSection,
@@ -255,6 +256,11 @@ const FooterSlogan = styled(Typography)(({ theme }) => ({
 const Login: React.FC = () => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect authenticated users away from login page
+  usePublicGuard();
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -271,16 +277,20 @@ const Login: React.FC = () => {
     }
     
     setIsLoading(true);
+    setErrors({});
     
     try {
-      const success = await login(username, password);
-      if (success) {
-        window.location.href = '/tournaments';
+      const result = await login(username, password);
+      
+      if (result.success) {
+        // Redirect to the page they were trying to access, or tournaments as default
+        const from = location.state?.from?.pathname || '/tournaments';
+        navigate(from, { replace: true });
       } else {
-        setErrors({ password: 'Invalid credentials' });
+        setErrors({ password: result.error || 'Invalid credentials' });
       }
     } catch (error) {
-      setErrors({ password: 'Login failed' });
+      setErrors({ password: 'Login failed. Please try again.' });
     } finally {
       setIsLoading(false);
     }

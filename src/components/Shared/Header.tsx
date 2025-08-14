@@ -269,7 +269,7 @@ const Header: React.FC<HeaderProps> = ({
 
         <RightSection>
           {!user ? (
-            <Link to="/tournaments" style={{ textDecoration: 'none' }}>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
               <ActionButton onClick={onLoginClick}>
                 <PersonOutlineIcon fontSize="small" />
                 Login
@@ -296,7 +296,7 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   <MenuItem disabled>
                     <AccountCircleIcon fontSize="small" style={{ marginRight: '8px', color: colors.text.disabled }} />
-                    Profile (coming soon)
+                    Profile
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>
                     <LogoutIcon fontSize="small" style={{ marginRight: '8px', color: colors.text.primary }} />
@@ -351,7 +351,7 @@ const Header: React.FC<HeaderProps> = ({
         </Link>
         
         {!user ? (
-          <Link to="/tournaments" style={{ textDecoration: 'none' }}>
+          <Link to="/login" style={{ textDecoration: 'none' }}>
             <MobileMenuItem onClick={() => { onLoginClick && onLoginClick(); setIsMobileMenuOpen(false); }}>
               Login
             </MobileMenuItem>
@@ -359,7 +359,7 @@ const Header: React.FC<HeaderProps> = ({
         ) : (
           <>
             <MobileMenuItem style={{ opacity: 0.6, pointerEvents: 'none' }}>
-              Profile (coming soon)
+              Profile
             </MobileMenuItem>
             <MobileMenuItem onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>
               Logout

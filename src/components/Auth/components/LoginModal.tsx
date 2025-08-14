@@ -192,7 +192,7 @@ const StyledDivider = styled(Divider)(({ theme }) => ({
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (username: string, password: string) => Promise<boolean>;
+  onSubmit: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   isLoading: boolean;
   errors: { username?: string; password?: string };
   touched: { username: boolean; password: boolean };
@@ -219,8 +219,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await onSubmit(username, password);
-    if (success) {
+    const result = await onSubmit(username, password);
+    if (result.success) {
       setUsername('');
       setPassword('');
     }

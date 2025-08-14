@@ -1,16 +1,20 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { User, validateCredentials } from '@/data/authData';
 
-interface User {
+// User interface without sensitive data
+interface AuthUser {
   id: string;
+  username: string;
   name: string;
   email: string;
   avatar?: string;
+  role: 'user' | 'admin';
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -25,7 +29,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   // Check if user is already logged in (from localStorage)
@@ -43,23 +47,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
-    // For demo purposes, we'll use a mock login
-    // In a real app, you would make an API call here
-    if (username && password) {
-      const mockUser: User = {
-        id: '123',
-        name: username,
-        email: `${username}@example.com`,
-        avatar: 'https://i.pravatar.cc/150?u=123'
+  const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // Validate credentials using dummy data
+      const validation = validateCredentials(username, password);
+      
+      if (!validation.isValid) {
+        return { success: false, error: validation.error };
+      }
+      
+      if (!validation.user) {
+        return { success: false, error: 'User not found' };
+      }
+      
+      // Create auth user object without sensitive data
+      const authUser: AuthUser = {
+        id: validation.user.id,
+        username: validation.user.username,
+        name: validation.user.name,
+        email: validation.user.email,
+        avatar: validation.user.avatar,
+        role: validation.user.role
       };
       
-      setUser(mockUser);
+      setUser(authUser);
       setIsAuthenticated(true);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      return true;
+      localStorage.setItem('user', JSON.stringify(authUser));
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: 'An unexpected error occurred' };
     }
-    return false;
   };
 
   const logout = () => {
