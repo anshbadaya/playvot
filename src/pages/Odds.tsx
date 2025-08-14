@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // Swiper removed - using responsive grid only
 
 // Custom hook and types
-import { useLiveMatches, useUpcomingMatches } from '@/hooks/useMatchData';
+import { useUpcomingMatches } from '@/hooks/useMatchData';
 import { SportsCardGroup, SportsMatch } from '@/types/match';
 import BackgroundRefreshIndicator from '@/components/Shared/BackgroundRefreshIndicator';
 
@@ -34,12 +34,47 @@ import {
   emptyStateSubtextStyles
 } from '@/styles/matches.styles';
 
+// Demo data for single live odds
+const demoLiveMatch: SportsMatch = {
+  match_no: 1,
+  player_a: {
+    code: 1,
+    name: "Team Alpha",
+    team: "Alpha"
+  },
+  player_b: {
+    code: 2,
+    name: "Team Beta", 
+    team: "Beta"
+  },
+  pre_match_odds: {
+    a: 1.85,
+    b: 2.15
+  },
+  live_match_odds: {
+    a: 1.90,
+    b: 2.10
+  },
+  weight_category: "T20",
+  start_time: "18:30",
+  end_time: "22:30",
+  isLive: true
+};
+
+const demoLiveCardGroup: SportsCardGroup = {
+  card: "Card A",
+  fixture_no: 1,
+  match_date: "2024-01-15",
+  matches: [demoLiveMatch]
+};
+
 interface SportsSectionProps {
   title: string;
   cardGroups: SportsCardGroup[];
   isMobile: boolean;
   isLive?: boolean;
   onStreamsClick?: (match: SportsMatch) => void;
+  showOnlyFirst?: boolean;
 }
 
 /**
@@ -167,10 +202,28 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
 /**
  * SportsSection component for displaying sports matches grouped by card
  */
-const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobile, isLive = false, onStreamsClick }) => {
+const SportsSection: React.FC<SportsSectionProps> = ({ 
+  title, 
+  cardGroups, 
+  isMobile, 
+  isLive = false, 
+  onStreamsClick,
+  showOnlyFirst = false 
+}) => {
   if (cardGroups.length === 0) {
     return null;
   }
+
+  // If showOnlyFirst is true, only show the first match from the first card group
+  const displayCardGroups = showOnlyFirst && cardGroups.length > 0 
+    ? [{
+        ...cardGroups[0],
+        matches: cardGroups[0].matches.slice(0, 1) // Only take the first match
+      }]
+    : cardGroups;
+
+  // Check if this is a single card display (for live match)
+  const isSingleCard = displayCardGroups.length === 1 && displayCardGroups[0].matches.length === 1;
 
   return (
     <Box sx={sectionWrapperStyles}>
@@ -194,11 +247,33 @@ const SportsSection: React.FC<SportsSectionProps> = ({ title, cardGroups, isMobi
         </Typography>
       </Box>
 
-      {cardGroups.map((cardGroup, groupIndex) => (
+      {displayCardGroups.map((cardGroup, groupIndex) => (
         <Box key={`${title}-${cardGroup.card}-${cardGroup.fixture_no}-${groupIndex}`} sx={{ mb: 4 }}>
-          <Box sx={gridContainerStyles}>
+          <Box sx={{
+            ...gridContainerStyles,
+            // Special styling for single card
+            ...(isSingleCard && {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              maxWidth: { xs: '100%', sm: '500px', md: '600px' },
+              margin: '0 auto',
+              gridTemplateColumns: '1fr'
+            })
+          }}>
             {cardGroup.matches.map((match, index) => (
-              <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`}>
+              <Box key={`${title}-${cardGroup.card}-${match.match_no}-${groupIndex}-${index}`} sx={{
+                // Enhanced styling for single card
+                ...(isSingleCard && {
+                  width: '100%',
+                  maxWidth: { xs: '100%', sm: '500px', md: '600px' },
+                  transform: 'scale(1.02)',
+                  '&:hover': {
+                    transform: 'scale(1.05) translateY(-8px)',
+                    transition: 'all 0.3s ease'
+                  }
+                })
+              }}>
                 <OddsCard 
                   match={match} 
                   card={cardGroup.card} 
@@ -225,16 +300,9 @@ const OddsPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // State for video stream
-  const [selectedMatch, setSelectedMatch] = useState<SportsMatch | null>(null);
+  const [selectedMatch, setSelectedMatch] = useState<SportsMatch | null>(demoLiveMatch);
 
-  // Use custom hooks for live and upcoming matches
-  const { 
-    data: liveData, 
-    loading: liveLoading, 
-    refreshing: liveRefreshing,
-    total: liveTotal 
-  } = useLiveMatches();
-
+  // Use custom hook for upcoming matches only
   const { 
     data: upcomingData, 
     loading: upcomingLoading, 
@@ -252,12 +320,10 @@ const OddsPage: React.FC = () => {
     setSelectedMatch(null);
   };
 
-  // Calculate total matches for each section
-  const totalLiveMatches = liveData.sports ? liveData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
+  // Calculate total upcoming matches
   const totalUpcomingMatches = upcomingData.sports ? upcomingData.sports.reduce((sum, cardGroup) => sum + cardGroup.matches.length, 0) : 0;
 
-  console.log('Live matches data:', liveData);
-  console.log('Total live matches:', totalLiveMatches);
+  console.log('Demo live match:', demoLiveMatch);
   console.log('Upcoming matches data:', upcomingData);
   console.log('Total upcoming matches:', totalUpcomingMatches);
 
@@ -287,51 +353,36 @@ const OddsPage: React.FC = () => {
           position: 'relative',
           zIndex: 1
         }}>
-          {/* Live Matches Section */}
-          <Box sx={{ mb: 6 }}>
-            <BackgroundRefreshIndicator isRefreshing={liveRefreshing} showProgressBar={true}>
-              {liveLoading && <LoadingState />}
-              
-              {!liveLoading && (
-                <>
-                  {totalLiveMatches === 0 ? (
-                    <EmptyState message="No live matches currently" />
-                  ) : (
-                    <SportsSection
-                      title="Live Matches"
-                      cardGroups={liveData.sports}
-                      isMobile={isMobile}
-                      isLive={true}
-                      onStreamsClick={handleStreamsClick}
-                    />
-                  )}
-                </>
-              )}
-            </BackgroundRefreshIndicator>
+          {/* Live Match Section - Using demo data */}
+          <Box sx={{ 
+            mb: 6,
+            pt: 2,
+            pb: 4,
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(15, 23, 42, 0.1) 100%)',
+            borderRadius: 3,
+            border: '1px solid rgba(59, 130, 246, 0.1)',
+            position: 'relative',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
+              borderRadius: 3,
+              zIndex: -1
+            }
+          }}>
+            <SportsSection
+              title="Live Match"
+              cardGroups={[demoLiveCardGroup]}
+              isMobile={isMobile}
+              isLive={true}
+              onStreamsClick={handleStreamsClick}
+            />
           </Box>
 
-          {/* Upcoming Matches Section */}
-          <Box>
-            <BackgroundRefreshIndicator isRefreshing={upcomingRefreshing} showProgressBar={true}>
-              {upcomingLoading && <LoadingState />}
-              
-              {!upcomingLoading && (
-                <>
-                  {totalUpcomingMatches === 0 ? (
-                    <EmptyState message="No upcoming matches found" />
-                  ) : (
-                    <SportsSection
-                      title="Upcoming Matches"
-                      cardGroups={upcomingData.sports}
-                      isMobile={isMobile}
-                      isLive={false}
-                      onStreamsClick={handleStreamsClick}
-                    />
-                  )}
-                </>
-              )}
-            </BackgroundRefreshIndicator>
-          </Box>
         </Container>
       </Box>
 

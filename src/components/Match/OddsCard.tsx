@@ -397,54 +397,7 @@ const OddsCard: React.FC<SportsMatchCardProps> = (props) => {
       <ShineEffect className="shine" />
       
       <Box sx={{ borderRadius: '16px', overflow: 'hidden', height: '100%' }}>
-        <FixtureHeader isLive={isLive}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 2,
-            width: '100%',
-            justifyContent: 'space-between'
-          }}>
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1
-            }}>
-              <Typography sx={{ 
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>
-                Match #{match_no}
-              </Typography>
-              <Typography sx={{ 
-                color: 'rgba(255, 255, 255, 0.5)',
-                fontSize: '0.8rem',
-                fontWeight: 600
-              }}>
-                |
-              </Typography>
-              <FixtureText>Fixture #{fixture_no}</FixtureText>
-            </Box>
-            {isLive && (
-              <Box sx={{ 
-                px: 1.5, 
-                py: 0.5, 
-                bgcolor: '#EF4444', 
-                color: 'white', 
-                borderRadius: 1, 
-                fontSize: '0.7rem',
-                fontWeight: 'bold',
-                animation: `${livePulse} 2s infinite`,
-                boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)'
-              }}>
-                LIVE
-              </Box>
-            )}
-          </Box>
-        </FixtureHeader>
+
         
         <StyledCard isLive={isLive}>
           <CardContentStyled>
