@@ -1,5 +1,23 @@
 import { DefaultTheme } from 'styled-components';
 
+// Font families - Centralized font system
+export const fonts = {
+  // Primary Headings & Odds (Impact + Recognition)
+  primary: '"Alternate Gothic", "United Sans", "Impact", sans-serif',
+  
+  // Secondary Headings & Branding
+  secondary: '"Montserrat", "ITC Avant Garde Gothic", sans-serif',
+  
+  // Body & UI Text
+  body: '"Roboto", sans-serif',
+  
+  // Data / Stats & Accent Numbers
+  data: '"Open Sans Condensed", "Benton Sans", sans-serif',
+  
+  // Fallback system
+  fallback: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
+};
+
 // Single source of truth for all colors
 export const colors = {
   // Primary colors
@@ -79,6 +97,7 @@ export const colors = {
 
 export const styledTheme: DefaultTheme = {
   colors,
+  fonts,
   spacing: {
     xs: '4px',
     sm: '8px',
@@ -116,6 +135,7 @@ export const styledTheme: DefaultTheme = {
 declare module 'styled-components' {
   export interface DefaultTheme {
     colors: typeof colors;
+    fonts: typeof fonts;
     spacing: {
       xs: string;
       sm: string;

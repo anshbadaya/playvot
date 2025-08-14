@@ -1,4 +1,5 @@
 import { colors } from '@/utils/colors';
+import { typography } from '@/utils/fonts';
 import React, { useState } from 'react';
 import { 
   Box, 
@@ -148,9 +149,10 @@ const MatchTypeText = styled(Typography)`
 
 const MatchTitleText = styled(Typography)`
   color: rgba(255, 255, 255, 1);
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.3;
+  font-family: ${typography.cardTitle.fontFamily};
+  font-size: ${typography.cardTitle.fontSize};
+  font-weight: ${typography.cardTitle.fontWeight};
+  line-height: ${typography.cardTitle.lineHeight};
   margin-bottom: ${({ theme }) => theme.spacing(2)};
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 `;
@@ -193,8 +195,10 @@ const TeamText = styled(Typography)`
 
 const OddsText = styled(Typography)<{ isLive?: boolean }>`
   color: ${({ isLive }) => isLive ? '#10B981' : 'rgba(255, 255, 255, 0.8)'};
-  font-size: 1rem;
-  font-weight: 700;
+  font-family: ${typography.odds.fontFamily};
+  font-size: ${typography.odds.fontSize};
+  font-weight: ${typography.odds.fontWeight};
+  line-height: ${typography.odds.lineHeight};
   padding: ${({ theme }) => theme.spacing(0.8, 1.5)};
   background: ${({ isLive }) => isLive 
     ? 'rgba(16, 185, 129, 0.15)' 

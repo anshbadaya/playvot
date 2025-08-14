@@ -1,6 +1,7 @@
 import { colors, gradients } from '@/utils/colors';
 import { SxProps, Theme } from '@mui/material';
 import { sharedStyles } from '@/styles/shared.styles';
+import { typography } from '@/utils/fonts';
 
 // Main container styles
 export const tournamentsContainerStyles: SxProps<Theme> = {
@@ -25,12 +26,10 @@ export const pageHeaderStyles: SxProps<Theme> = {
 };
 
 export const pageTitleStyles: SxProps<Theme> = {
+  ...typography.pageTitle,
   color: colors.text.primary,
-  fontSize: { xs: '2rem', sm: '3rem' },
-  fontWeight: 700,
   mb: 2,
-  textShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
-  letterSpacing: '0.5px'
+  textShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)'
 };
 
 export const pageSubtitleStyles: SxProps<Theme> = {

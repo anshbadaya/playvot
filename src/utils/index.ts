@@ -5,4 +5,7 @@ export * from './constants';
 export * from './helpers';
 
 // Color utilities
-export * from './colors'; 
+export * from './colors';
+
+// Font utilities
+export * from './fonts'; 

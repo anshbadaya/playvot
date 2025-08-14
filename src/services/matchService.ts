@@ -7,56 +7,15 @@ import { dummyMatchesData, dummyUpcomingMatchesData } from '@/data/matchesData';
  * @returns Promise<MatchesByType>
  */
 const fetchLiveMatches = async (): Promise<MatchesByType> => {
-  try {
-    console.log('Fetching live matches from API:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LIVE_FIXTURES}`);
-    
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LIVE_FIXTURES}`, {
-      method: 'GET',
-      headers: getApiHeaders()
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log('Raw live API response:', result);
-    
-    if (result.status === 'success' && result.data && result.data.length > 0) {
-      console.log('Live API data received:', result.data);
-      console.log('Number of live card groups:', result.data.length);
-      
-      const matchesByType: MatchesByType = {
-        cricket: [],
-        kabaddi: [],
-        football: [],
-        volleyball: [],
-        sports: result.data
-      };
-
-      console.log('Processed live matches by type:', matchesByType);
-      return matchesByType;
-    } else {
-      console.log('Live API returned empty or invalid data, returning empty live matches');
-      return {
-        cricket: [],
-        kabaddi: [],
-        football: [],
-        volleyball: [],
-        sports: []
-      };
-    }
-  } catch (error) {
-    console.error('Error fetching live matches:', error);
-    console.log('Returning empty live matches due to API error');
-    return {
-      cricket: [],
-      kabaddi: [],
-      football: [],
-      volleyball: [],
-      sports: []
-    };
-  }
+  // DEV MODE: Return dummy live data for experimentation in Odds page
+  console.log('[DEV] Returning dummy live matches');
+  return {
+    cricket: [],
+    kabaddi: [],
+    football: [],
+    volleyball: [],
+    sports: dummyMatchesData.sports,
+  };
 };
 
 /**
@@ -64,56 +23,15 @@ const fetchLiveMatches = async (): Promise<MatchesByType> => {
  * @returns Promise<MatchesByType>
  */
 const fetchUpcomingMatches = async (): Promise<MatchesByType> => {
-  try {
-    console.log('Fetching upcoming matches from API:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`);
-    
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ALL_FIXTURES}`, {
-      method: 'GET',
-      headers: getApiHeaders()
-    });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log('Raw upcoming API response:', result);
-    
-    if (result.status === 'success' && result.data && result.data.length > 0) {
-      console.log('Upcoming API data received:', result.data);
-      console.log('Number of upcoming card groups:', result.data.length);
-      
-      const matchesByType: MatchesByType = {
-        cricket: [],
-        kabaddi: [],
-        football: [],
-        volleyball: [],
-        sports: result.data
-      };
-
-      console.log('Processed upcoming matches by type:', matchesByType);
-      return matchesByType;
-    } else {
-      console.log('Upcoming API returned empty or invalid data, returning empty upcoming matches');
-      return {
-        cricket: [],
-        kabaddi: [],
-        football: [],
-        volleyball: [],
-        sports: []
-      };
-    }
-  } catch (error) {
-    console.error('Error fetching upcoming matches:', error);
-    console.log('Returning empty upcoming matches due to API error');
-    return {
-      cricket: [],
-      kabaddi: [],
-      football: [],
-      volleyball: [],
-      sports: []
-    };
-  }
+  // DEV MODE: Return dummy upcoming data
+  console.log('[DEV] Returning dummy upcoming matches');
+  return {
+    cricket: [],
+    kabaddi: [],
+    football: [],
+    volleyball: [],
+    sports: dummyUpcomingMatchesData.sports,
+  };
 };
 
 /**
