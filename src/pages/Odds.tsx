@@ -116,25 +116,73 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
   if (!match) return null;
 
   return (
-    <Paper
+        <Box
       sx={{
         position: 'fixed',
-        top: isMobile ? '64px' : '64px',
-        right: isMobile ? 'auto' : 0,
-        left: isMobile ? '10%' : 'auto',
-        width: isMobile ? '80%' : '50%',
-        height: isMobile ? 'calc(100vh - 128px)' : 'calc(100vh - 128px)',
-        zIndex: 1000,
-        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
-        border: '1px solid rgba(59, 130, 246, 0.3)',
-        borderRadius: isMobile ? '12px' : 0,
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(20px)',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column'
+        top: 0,
+        right: 0,
+        width: isMobile ? '100%' : '50%',
+        height: '100vh',
+        zIndex: 999,
+        pointerEvents: 'auto',
+        overflow: 'hidden'
       }}
     >
+      <Paper
+        sx={{
+          position: 'absolute',
+          top: isMobile ? '64px' : '64px',
+          right: isMobile ? '10%' : 0,
+          left: isMobile ? '10%' : 'auto',
+          width: isMobile ? '80%' : '100%',
+          height: isMobile ? 'calc(100vh - 128px)' : 'calc(100vh - 128px)',
+          zIndex: 1000,
+          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+          borderRadius: isMobile ? '12px' : 0,
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(20px)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          userSelect: 'none',
+          pointerEvents: 'auto',
+          touchAction: 'none',
+          resize: 'none',
+          transform: 'none !important',
+          willChange: 'auto',
+          backfaceVisibility: 'hidden',
+          perspective: 'none',
+                  transformStyle: 'flat',
+        scrollBehavior: 'auto',
+        overscrollBehavior: 'none',
+        '& *': {
+          userSelect: 'none',
+          touchAction: 'none',
+          pointerEvents: 'auto',
+          scrollBehavior: 'auto',
+          overscrollBehavior: 'none'
+        },
+        '&:hover': {
+          transform: 'none !important',
+          top: isMobile ? '64px' : '64px',
+          right: isMobile ? '10%' : 0,
+          left: isMobile ? '10%' : 'auto'
+        },
+        '&:active': {
+          transform: 'none !important',
+          top: isMobile ? '64px' : '64px',
+          right: isMobile ? '10%' : 0,
+          left: isMobile ? '10%' : 'auto'
+        },
+        '&:focus': {
+          transform: 'none !important',
+          top: isMobile ? '64px' : '64px',
+          right: isMobile ? '10%' : 0,
+          left: isMobile ? '10%' : 'auto'
+        }
+        }}
+      >
       {/* Header */}
       <Box
         sx={{
@@ -209,6 +257,7 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
         </IconButton>
       </Box>
     </Paper>
+  </Box>
   );
 };
 
