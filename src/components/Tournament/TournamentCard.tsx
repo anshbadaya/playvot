@@ -10,7 +10,7 @@ const TournamentCardContainer = styled(Box)`
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   
   &:hover {
@@ -54,7 +54,7 @@ const StyledCard = styled(Card)`
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 20px;
+    border-radius: 16px;
     padding: 1px;
     background: ${gradients.primaryToSecondary};
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);

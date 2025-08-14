@@ -27,13 +27,10 @@ export const pageHeaderStyles: SxProps<Theme> = {
 export const pageTitleStyles: SxProps<Theme> = {
   color: colors.text.primary,
   fontSize: { xs: '2rem', sm: '3rem' },
-  fontWeight: 800,
+  fontWeight: 700,
   mb: 2,
-  textShadow: '0px 4px 8px rgba(0, 0, 0, 0.5)',
-  background: colors.gradients.rainbow,
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text'
+  textShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
+  letterSpacing: '0.5px'
 };
 
 export const pageSubtitleStyles: SxProps<Theme> = {

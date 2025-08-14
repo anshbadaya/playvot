@@ -225,9 +225,7 @@ const Fixtures: React.FC = () => {
               />
               <PageTitle sx={{ m: 0 }}>{tournamentName}</PageTitle>
             </Box>
-            <PageSubtitle>
-              Select a category to view matches. Ongoing are shown first, then Upcoming, then Past.
-            </PageSubtitle>
+
           </PageHeader>
 
           {/* Category Selector */}

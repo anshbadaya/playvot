@@ -5,8 +5,20 @@ import { sharedStyles } from '@/styles/shared.styles';
 // Main container styles
 export const matchesContainerStyles: SxProps<Theme> = {
   backgroundColor: colors.background.primary,
+  background: colors.gradients.background,
   minHeight: '100vh',
-  pt: { xs: 3, sm: 4 }
+  pt: { xs: 3, sm: 4 },
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: colors.gradients.background,
+    zIndex: -1
+  }
 };
 
 export const matchesContentStyles: SxProps<Theme> = {

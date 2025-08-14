@@ -21,7 +21,7 @@ const MatchDetailsPage: React.FC = () => {
   } = useMatchDetails('zim-vs-nz-2024'); // In a real app, this would come from URL params
 
   return (
-    <Layout showBackHeader>
+    <Layout>
       <PageBackground>
         <BackgroundRefreshIndicator isRefreshing={refreshing} showProgressBar={true}>
           {/* Loading State */}

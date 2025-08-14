@@ -228,6 +228,28 @@ export const dummyMatchesData: MatchesByType = {
           start_time: "19:00:00",
           end_time: "19:40:00",
           isLive: true
+        },
+        {
+          match_no: 5,
+          player_a: { code: 1110, name: "Karan Thakur", team: "GOA GLADIATORS" },
+          player_b: { code: 1018, name: "Pradeep Joshi", team: "NAGPUR NINJAS" },
+          pre_match_odds: { a: 1.92, b: 1.88 },
+          live_match_odds: { a: 1.80, b: 2.05 },
+          weight_category: "80 KG MEN",
+          start_time: "21:45:00",
+          end_time: "22:25:00",
+          isLive: true
+        },
+        {
+          match_no: 6,
+          player_a: { code: 1112, name: "Harsh Vardhan", team: "SURAT SPARTANS" },
+          player_b: { code: 1020, name: "Nitin Rawat", team: "RAJKOT RANGERS" },
+          pre_match_odds: { a: 2.05, b: 1.75 },
+          live_match_odds: { a: 1.98, b: 1.82 },
+          weight_category: "95 KG MEN",
+          start_time: "22:35:00",
+          end_time: "23:10:00",
+          isLive: true
         }
       ]
     },
@@ -284,6 +306,57 @@ export const dummyMatchesData: MatchesByType = {
           weight_category: "75 KG MEN",
           start_time: "21:00:00",
           end_time: "21:40:00",
+          isLive: true
+        },
+        {
+          match_no: 7,
+          player_a: { code: 1120, name: "Rohit Jhamb", team: "PATIALA PREDATORS" },
+          player_b: { code: 1026, name: "Vipul Nair", team: "COCHIN CRUSADERS" },
+          pre_match_odds: { a: 1.70, b: 2.20 },
+          live_match_odds: { a: 1.62, b: 2.45 },
+          weight_category: "68 KG MEN",
+          start_time: "22:00:00",
+          end_time: "22:35:00",
+          isLive: true
+        },
+        {
+          match_no: 8,
+          player_a: { code: 1122, name: "Shivam Chouhan", team: "INDORE IRONS" },
+          player_b: { code: 1028, name: "Yash Arora", team: "AGRA ARCHERS" },
+          pre_match_odds: { a: 2.30, b: 1.60 },
+          live_match_odds: { a: 2.10, b: 1.72 },
+          weight_category: "72 KG MEN",
+          start_time: "23:15:00",
+          end_time: "23:50:00",
+          isLive: true
+        }
+      ]
+    },
+    {
+      card: "EXHIBITION CARD",
+      fixture_no: 3,
+      match_date: "2025-01-15",
+      matches: [
+        {
+          match_no: 9,
+          player_a: { code: 1130, name: "Anshul Rana", team: "KANPUR KNIGHTS" },
+          player_b: { code: 1030, name: "Deepu Yadav", team: "LUCKNOW LIONS" },
+          pre_match_odds: { a: 1.95, b: 1.90 },
+          live_match_odds: { a: 1.85, b: 2.05 },
+          weight_category: "60 KG MEN",
+          start_time: "18:00:00",
+          end_time: "18:40:00",
+          isLive: true
+        },
+        {
+          match_no: 10,
+          player_a: { code: 1132, name: "Samarjeet Singh", team: "JAIPUR JAGUARS" },
+          player_b: { code: 1032, name: "Aviral Kaushik", team: "UDAIPUR UNITED" },
+          pre_match_odds: { a: 1.60, b: 2.35 },
+          live_match_odds: { a: 1.55, b: 2.50 },
+          weight_category: "66 KG MEN",
+          start_time: "19:00:00",
+          end_time: "19:40:00",
           isLive: true
         }
       ]

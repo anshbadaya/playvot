@@ -133,9 +133,7 @@ const Tournaments: React.FC = () => {
             <Typography sx={pageTitleStyles}>
               Tournaments
             </Typography>
-            <Typography sx={pageSubtitleStyles}>
-              Discover and explore exciting tournaments across various sports. Select your favorite sport to view upcoming events, fixtures, and event data.
-            </Typography>
+
           </Box>
 
           {/* Controls Section */}

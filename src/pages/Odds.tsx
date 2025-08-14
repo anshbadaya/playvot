@@ -101,7 +101,7 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           alignItems: 'center',
           padding: 2,
           borderBottom: '1px solid rgba(59, 130, 246, 0.2)',
@@ -111,24 +111,18 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
         <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
           Live Stream - {match.player_a.name} vs {match.player_b.name}
         </Typography>
-        <IconButton
-          onClick={onClose}
-          sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
-        >
-          <CloseIcon />
-        </IconButton>
       </Box>
 
       {/* Video Content */}
       <Box
         sx={{
           width: '100%',
-          height: 'calc(100vh - 80px)',
+          height: 'calc(100vh - 180px)',
           padding: 2
         }}
       >
         <iframe
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=1"
           width="100%"
           height="100%"
           style={{ border: 0, borderRadius: '8px' }}
@@ -136,6 +130,35 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
+      </Box>
+
+      {/* Close Button at Bottom */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 2,
+          borderTop: '1px solid rgba(59, 130, 246, 0.2)',
+          background: 'rgba(15, 23, 42, 0.9)'
+        }}
+      >
+        <IconButton
+          onClick={onClose}
+          sx={{ 
+            color: 'white',
+            backgroundColor: 'rgba(239, 68, 68, 0.8)',
+            padding: 2,
+            borderRadius: 2,
+            '&:hover': {
+              backgroundColor: 'rgba(239, 68, 68, 1)',
+              transform: 'scale(1.05)'
+            },
+            transition: 'all 0.2s ease'
+          }}
+        >
+          <CloseIcon sx={{ fontSize: 28 }} />
+        </IconButton>
       </Box>
     </Paper>
   );
@@ -243,9 +266,27 @@ const OddsPage: React.FC = () => {
       <Box sx={{
         ...matchesContainerStyles,
         width: selectedMatch && !isMobile ? '50%' : '100%',
-        transition: 'width 0.3s ease'
+        transition: 'width 0.3s ease',
+        backgroundColor: '#0A0A23 !important',
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%) !important',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(135deg, #0a0a23 0%, #111827 50%, #0f172a 100%)',
+          zIndex: -1
+        }
       }}>
-        <Container maxWidth="lg" sx={matchesContentStyles}>
+        <Container maxWidth="lg" sx={{
+          ...matchesContentStyles,
+          position: 'relative',
+          zIndex: 1
+        }}>
           {/* Live Matches Section */}
           <Box sx={{ mb: 6 }}>
             <BackgroundRefreshIndicator isRefreshing={liveRefreshing} showProgressBar={true}>

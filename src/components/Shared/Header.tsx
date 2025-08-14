@@ -6,6 +6,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useAuth } from "@/contexts/AuthContext";
 import { Menu, MenuItem } from "@mui/material";
 
@@ -53,6 +54,27 @@ const LeftSection = styled.div`
     gap: ${({ theme }) => theme.spacing.sm};
     margin-left: ${({ theme }) => theme.spacing.md};
   }
+`;
+
+const BackButton = styled.button`
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  transition: all ${({ theme }) => theme.transitions.normal};
+  
+  &:hover {
+    background: ${colors.background.secondary};
+    opacity: 0.8;
+  }
+`;
+
+const BackIcon = styled(KeyboardBackspaceIcon)`
+  font-size: 24px;
+  color: ${colors.text.primary};
 `;
 
 const RightSection = styled.div`
@@ -205,6 +227,9 @@ const Header: React.FC<HeaderProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Check if we're on the home page
+  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/landing';
+
   const handleProfileClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -228,6 +253,11 @@ const Header: React.FC<HeaderProps> = ({
     <HeaderContainer>
       <Toolbar>
         <LeftSection>
+          {!isHomePage && (
+            <BackButton onClick={() => navigate(-1)}>
+              <BackIcon />
+            </BackButton>
+          )}
           <Logo
             src={logoPath}
             alt={logoAlt}
@@ -288,6 +318,11 @@ const Header: React.FC<HeaderProps> = ({
           </MobileMenuCloseButton>
         </MobileMenuHeader>
         
+        {!isHomePage && (
+          <MobileMenuItem onClick={() => { navigate(-1); setIsMobileMenuOpen(false); }}>
+            ← Back
+          </MobileMenuItem>
+        )}
         <MobileMenuItem onClick={() => { navigate("/"); setIsMobileMenuOpen(false); }}>
           Home
         </MobileMenuItem>
