@@ -119,17 +119,20 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
     <Paper
       sx={{
         position: 'fixed',
-        top: 0,
-        right: 0,
-        width: isMobile ? '100%' : '50%',
-        height: '100vh',
+        top: isMobile ? '60px' : '80px',
+        right: isMobile ? 'auto' : 0,
+        left: isMobile ? '10%' : 'auto',
+        width: isMobile ? '80%' : '50%',
+        height: isMobile ? 'calc(100vh - 120px)' : 'calc(100vh - 160px)',
         zIndex: 1000,
         background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
         border: '1px solid rgba(59, 130, 246, 0.3)',
-        borderRadius: 0,
+        borderRadius: isMobile ? '12px' : 0,
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
         backdropFilter: 'blur(20px)',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       {/* Header */}
@@ -152,18 +155,28 @@ const VideoStream: React.FC<VideoStreamProps> = ({ match, onClose }) => {
       <Box
         sx={{
           width: '100%',
-          height: 'calc(100vh - 180px)',
-          padding: 2
+          flex: 1,
+          padding: 2,
+          minHeight: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
         }}
       >
         <iframe
           src="https://www.youtube-nocookie.com/embed/dhfhU1YQYZs?si=fkUSIWHawMbKFlCh"
           width="100%"
           height="100%"
-          style={{ border: 0, borderRadius: '8px' }}
+          style={{ 
+            border: 0, 
+            borderRadius: '8px',
+            overflow: 'hidden',
+            pointerEvents: 'auto'
+          }}
           title="Live Match Stream"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          scrolling="no"
         />
       </Box>
 
