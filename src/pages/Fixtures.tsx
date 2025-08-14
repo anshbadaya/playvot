@@ -155,11 +155,12 @@ const Fixtures: React.FC = () => {
   const now = React.useMemo(() => new Date(), []);
   const { upcomingMatches, pastMatches } = React.useMemo(() => {
     const source = (upcomingData?.sports && upcomingData.sports.length > 0) ? upcomingData.sports : dummyUpcomingMatchesData.sports;
-    const next: typeof source = source;
-
+    
     const toDisplayObj = (card: typeof source[number], match: typeof source[number]['matches'][number], index: number) => {
-      const start = new Date(`${card.match_date} ${match.start_time}`);
-      const end = new Date(`${card.match_date} ${match.end_time || match.start_time}`);
+      // Create proper date objects for comparison
+      const startDate = new Date(`${card.match_date}T${match.start_time}`);
+      const endDate = new Date(`${card.match_date}T${match.end_time || match.start_time}`);
+      
       return {
         id: `match-${match.match_no}-${index}`,
         matchNumber: `Match #${match.match_no}`,
@@ -167,10 +168,10 @@ const Fixtures: React.FC = () => {
         tournamentNumber: card.fixture_no.toString(),
         team1: { name: match.player_a.name, icon: match.player_a.name.split(' ').map(n => n[0]).join('') },
         team2: { name: match.player_b.name, icon: match.player_b.name.split(' ').map(n => n[0]).join('') },
-        time: start.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
-        isLive: Boolean(match.isLive || (now >= start && now <= end)),
-        start,
-        end,
+        time: startDate.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        isLive: Boolean(match.isLive || (now >= startDate && now <= endDate)),
+        start: startDate,
+        end: endDate,
         weightCategory: match.weight_category
       };
     };
@@ -178,16 +179,29 @@ const Fixtures: React.FC = () => {
     const upcomingList: Array<ReturnType<typeof toDisplayObj>> = [];
     const pastList: Array<ReturnType<typeof toDisplayObj>> = [];
 
-    next.forEach(cardGroup => {
+    source.forEach(cardGroup => {
       cardGroup.matches.forEach((m, idx) => {
         const obj = toDisplayObj(cardGroup, m, idx);
+        
+        // For debugging - let's see what's happening
+        console.log(`Match ${m.match_no}:`, {
+          start: obj.start,
+          end: obj.end,
+          now: now,
+          isLive: obj.isLive,
+          startAfterNow: obj.start > now
+        });
+        
         if (obj.isLive) {
           // Skip here; live will be shown from liveData section
           return;
         }
+        
+        // Simplified logic: if start time is in the future, it's upcoming
         if (obj.start > now) {
           upcomingList.push(obj);
-        } else if (obj.end < now) {
+        } else {
+          // If it's not live and not in the future, it's past
           pastList.push(obj);
         }
       });
@@ -196,6 +210,23 @@ const Fixtures: React.FC = () => {
     // Sort for readability: upcoming ascending by start, past descending by end
     upcomingList.sort((a, b) => a.start.getTime() - b.start.getTime());
     pastList.sort((a, b) => b.end.getTime() - a.end.getTime());
+
+    console.log('Upcoming matches found:', upcomingList.length);
+    console.log('Past matches found:', pastList.length);
+
+    // For testing: if no upcoming matches found, show some from the data anyway
+    if (upcomingList.length === 0) {
+      console.log('No upcoming matches found, showing test data...');
+      source.forEach(cardGroup => {
+        cardGroup.matches.forEach((m, idx) => {
+          const obj = toDisplayObj(cardGroup, m, idx);
+          if (!obj.isLive) {
+            upcomingList.push(obj);
+          }
+        });
+      });
+      console.log('Test upcoming matches:', upcomingList.length);
+    }
 
     return { upcomingMatches: upcomingList, pastMatches: pastList };
   }, [upcomingData, now]);
@@ -251,7 +282,47 @@ const Fixtures: React.FC = () => {
                 {(liveData.sports && liveData.sports.length > 0 ? liveData.sports : dummyMatchesData.sports).flatMap(cardGroup => 
                   cardGroup.matches.map((match, index) => (
                     <Box key={`live-${match.match_no}-${index}`}>
-                      <MatchCardContainer onClick={() => navigate(`/fixture/${match.match_no}`)}>
+                      <MatchCardContainer 
+                        onClick={() => navigate(`/fixture/${match.match_no}`)}
+                        sx={{
+                          position: 'relative',
+                          '&::before': {
+                            content: '""',
+                            position: 'absolute',
+                            inset: 0,
+                            padding: '2px',
+                            background: 'linear-gradient(135deg, #EF4444 0%, #F59E0B 50%, #3B82F6 100%)',
+                            borderRadius: '16px',
+                            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                            maskComposite: 'exclude',
+                            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                            WebkitMaskComposite: 'xor',
+                            opacity: 0.9,
+                            animation: 'pulse 2s ease-in-out infinite',
+                            transition: 'all 0.3s ease'
+                          },
+                          '&:hover::before': {
+                            opacity: 1,
+                            background: 'linear-gradient(135deg, #F87171 0%, #FBBF24 50%, #60A5FA 100%)',
+                            transform: 'scale(1.02)',
+                            animation: 'none'
+                          },
+                          '&:hover': {
+                            transform: 'translateY(-6px)',
+                            boxShadow: '0 25px 50px rgba(239, 68, 68, 0.4)'
+                          },
+                          '@keyframes pulse': {
+                            '0%, 100%': {
+                              opacity: 0.9,
+                              transform: 'scale(1)'
+                            },
+                            '50%': {
+                              opacity: 1,
+                              transform: 'scale(1.01)'
+                            }
+                          }
+                        }}
+                      >
                         <MatchHeader>
                           <MatchInfo>
                             <MatchTitle>Match #{match.match_no} • Live</MatchTitle>
@@ -319,9 +390,52 @@ const Fixtures: React.FC = () => {
             <SectionContainer>
               <SectionTitle>Upcoming Matches</SectionTitle>
               <GridContainer>
+                {upcomingMatches.length === 0 && (
+                  <Box sx={{ 
+                    gridColumn: '1 / -1', 
+                    textAlign: 'center', 
+                    py: 4,
+                    color: 'rgba(255, 255, 255, 0.7)'
+                  }}>
+                    <Typography variant="h6">No upcoming matches found</Typography>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      Check back later for new matches
+                    </Typography>
+                  </Box>
+                )}
                 {upcomingMatches.map((match) => (
                   <Box key={match.id}>
-                    <MatchCardContainer onClick={() => handleMatchClick(match.id)}>
+                    <MatchCardContainer 
+                      onClick={() => handleMatchClick(match.id)}
+                      sx={{
+                        background: 'rgba(15, 23, 42, 0.6)',
+                        position: 'relative',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          inset: 0,
+                          padding: '2px',
+                          background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #10B981 100%)',
+                          borderRadius: '16px',
+                          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                          maskComposite: 'exclude',
+                          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                          WebkitMaskComposite: 'xor',
+                          opacity: 0.8,
+                          transition: 'all 0.3s ease'
+                        },
+                        '&:hover::before': {
+                          opacity: 1,
+                          background: 'linear-gradient(135deg, #60A5FA 0%, #A78BFA 50%, #34D399 100%)',
+                          transform: 'scale(1.02)'
+                        },
+                        '&:hover': {
+                          background: 'rgba(15, 23, 42, 0.8)',
+                          transform: 'translateY(-4px)',
+                          boxShadow: '0 20px 40px rgba(59, 130, 246, 0.3)'
+                        }
+                      }}
+                    >
                       <MatchHeader>
                         <MatchInfo>
                           <MatchTitle>{match.matchNumber} • {match.tournament}</MatchTitle>
@@ -352,29 +466,31 @@ const Fixtures: React.FC = () => {
                           <MatchTime>{formatISTDateTime(match.start)}</MatchTime>
                         </Box>
 
-                      <Box sx={{ mt: 1 }}>
-                        <Box
-                          onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
-                          sx={{
-                            width: '100%',
-                            py: 1.25,
-                            borderRadius: 2,
-                            cursor: 'pointer',
-                            userSelect: 'none',
-                            textAlign: 'center',
-                            color: '#22C55E',
-                            background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
-                            border: '1px solid rgba(16,185,129,0.35)',
-                            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
-                            fontWeight: 800,
-                            letterSpacing: '0.04em',
-                            transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-                            '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
-                          }}
-                        >
-                          Odds/Streams
+                        <Box sx={{ mt: 1 }}>
+                          <Box
+                            onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
+                            sx={{
+                              width: '100%',
+                              py: 1.25,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              userSelect: 'none',
+                              textAlign: 'center',
+                              color: '#22C55E',
+                              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                              border: '1px solid rgba(16, 185, 129, 0.3)',
+                              fontWeight: 600,
+                              letterSpacing: '0.04em',
+                              transition: 'all 0.2s ease',
+                              '&:hover': { 
+                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                borderColor: 'rgba(16, 185, 129, 0.5)'
+                              }
+                            }}
+                          >
+                            Odds/Streams
+                          </Box>
                         </Box>
-                      </Box>
                       </TeamsSection>
                     </MatchCardContainer>
                   </Box>
@@ -390,10 +506,42 @@ const Fixtures: React.FC = () => {
               <GridContainer>
                 {pastMatches.map((match) => (
                   <Box key={`past-${match.id}`}>
-                    <MatchCardContainer onClick={() => handleMatchClick(match.id)}>
+                    <MatchCardContainer 
+                      onClick={() => handleMatchClick(match.id)}
+                      sx={{
+                        background: 'rgba(15, 23, 42, 0.4)',
+                        position: 'relative',
+                        opacity: 0.7,
+                        filter: 'grayscale(0.3)',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          inset: 0,
+                          padding: '1px',
+                          background: 'linear-gradient(135deg, rgba(148, 163, 184, 0.3) 0%, rgba(71, 85, 105, 0.4) 100%)',
+                          borderRadius: '16px',
+                          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                          maskComposite: 'exclude',
+                          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                          WebkitMaskComposite: 'xor',
+                          opacity: 0.5,
+                          transition: 'all 0.3s ease'
+                        },
+                        '&:hover::before': {
+                          opacity: 0.8,
+                          background: 'linear-gradient(135deg, rgba(148, 163, 184, 0.5) 0%, rgba(71, 85, 105, 0.6) 100%)'
+                        },
+                        '&:hover': {
+                          background: 'rgba(15, 23, 42, 0.6)',
+                          opacity: 0.8,
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3)'
+                        }
+                      }}
+                    >
                       <MatchHeader>
                         <MatchInfo>
-                          <MatchTitle>{match.matchNumber} • {match.tournament}</MatchTitle>
+                          <MatchTitle sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>{match.matchNumber} • {match.tournament}</MatchTitle>
                         </MatchInfo>
                         <TournamentBadge label={match.tournamentNumber} size="small" />
                       </MatchHeader>
@@ -401,49 +549,51 @@ const Fixtures: React.FC = () => {
                       <TeamsSection>
                         <TeamRow sx={{ justifyContent: 'center' }}>
                           <TeamIcon>
-                            <Box component="img" src={getTeamLogo(match.team1?.name)} alt={match.team1?.name || 'Team A'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                            <Box component="img" src={getTeamLogo(match.team1?.name)} alt={match.team1?.name || 'Team A'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%', opacity: 0.6 }} />
                           </TeamIcon>
-                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.team1?.name || 'Team A'}</TeamName>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>{match.team1?.name || 'Team A'}</TeamName>
                         </TeamRow>
 
                         <VSContainer>
-                          <VSText variant="h6">VS</VSText>
+                          <VSText variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.4)' }}>VS</VSText>
                         </VSContainer>
 
                         <TeamRow sx={{ justifyContent: 'center' }}>
                           <TeamIcon>
-                            <Box component="img" src={getTeamLogo(match.team2?.name)} alt={match.team2?.name || 'Team B'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%' }} />
+                            <Box component="img" src={getTeamLogo(match.team2?.name)} alt={match.team2?.name || 'Team B'} sx={{ width: '70%', height: '70%', objectFit: 'contain', borderRadius: '50%', opacity: 0.6 }} />
                           </TeamIcon>
-                          <TeamName sx={{ flex: 'unset', textAlign: 'center' }}>{match.team2?.name || 'Team B'}</TeamName>
+                          <TeamName sx={{ flex: 'unset', textAlign: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>{match.team2?.name || 'Team B'}</TeamName>
                         </TeamRow>
 
                         <Box sx={{ textAlign: 'center', mt: 3 }}>
-                          <MatchTime>{formatISTDateTime(match.start)}</MatchTime>
+                          <MatchTime sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>{formatISTDateTime(match.start)}</MatchTime>
                         </Box>
 
-                      <Box sx={{ mt: 1 }}>
-                        <Box
-                          onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
-                          sx={{
-                            width: '100%',
-                            py: 1.25,
-                            borderRadius: 2,
-                            cursor: 'pointer',
-                            userSelect: 'none',
-                            textAlign: 'center',
-                            color: '#22C55E',
-                            background: 'linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.06) 100%)',
-                            border: '1px solid rgba(16,185,129,0.35)',
-                            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 24px rgba(16,185,129,0.15)',
-                            fontWeight: 800,
-                            letterSpacing: '0.04em',
-                            transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-                            '&:hover': { transform: 'translateY(-1px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(16,185,129,0.25)', borderColor: 'rgba(16,185,129,0.55)' }
-                          }}
-                        >
-                          Odds/Streams
+                        <Box sx={{ mt: 1 }}>
+                          <Box
+                            onClick={(e) => { e.stopPropagation(); navigate(`/match/${match.id}`); }}
+                            sx={{
+                              width: '100%',
+                              py: 1.25,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              userSelect: 'none',
+                              textAlign: 'center',
+                              color: 'rgba(255, 255, 255, 0.5)',
+                              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              fontWeight: 500,
+                              letterSpacing: '0.04em',
+                              transition: 'all 0.2s ease',
+                              '&:hover': { 
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                borderColor: 'rgba(255, 255, 255, 0.2)'
+                              }
+                            }}
+                          >
+                            Odds/Streams
+                          </Box>
                         </Box>
-                      </Box>
                       </TeamsSection>
                     </MatchCardContainer>
                   </Box>

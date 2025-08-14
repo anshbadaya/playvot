@@ -450,17 +450,111 @@ export const dummyUpcomingMatchesData: MatchesByType = {
     {
       card: "MAIN CARD",
       fixture_no: 3,
+      match_date: "2025-01-15",
+      matches: [
+        {
+          match_no: 11,
+          player_a: {
+            code: 1201,
+            name: "Rahul Sharma",
+            team: "DELHI DRAGONS"
+          },
+          player_b: {
+            code: 1202,
+            name: "Vikram Malhotra",
+            team: "MUMBAI MONSTERS"
+          },
+          pre_match_odds: {
+            a: 1.85,
+            b: 1.95
+          },
+          weight_category: "75 KG MEN",
+          start_time: "22:00:00",
+          end_time: "22:40:00"
+        },
+        {
+          match_no: 12,
+          player_a: {
+            code: 1203,
+            name: "Arjun Singh",
+            team: "BANGALORE BEASTS"
+          },
+          player_b: {
+            code: 1204,
+            name: "Karan Patel",
+            team: "CHENNAI CRUSHERS"
+          },
+          pre_match_odds: {
+            a: 2.10,
+            b: 1.70
+          },
+          weight_category: "80 KG MEN",
+          start_time: "23:00:00",
+          end_time: "23:40:00"
+        }
+      ]
+    },
+    {
+      card: "UNDER CARD",
+      fixture_no: 4,
+      match_date: "2025-01-15",
+      matches: [
+        {
+          match_no: 13,
+          player_a: {
+            code: 1205,
+            name: "Surya Kumar",
+            team: "HYDERABAD HAMMERS"
+          },
+          player_b: {
+            code: 1206,
+            name: "Aditya Verma",
+            team: "KOLKATA KNIGHTS"
+          },
+          pre_match_odds: {
+            a: 1.65,
+            b: 2.25
+          },
+          weight_category: "70 KG MEN",
+          start_time: "22:30:00",
+          end_time: "23:10:00"
+        },
+        {
+          match_no: 14,
+          player_a: {
+            code: 1207,
+            name: "Rohit Gupta",
+            team: "PUNE PUNISHERS"
+          },
+          player_b: {
+            code: 1208,
+            name: "Amit Kumar",
+            team: "AHMEDABAD ASSASSINS"
+          },
+          pre_match_odds: {
+            a: 1.90,
+            b: 1.90
+          },
+          weight_category: "85 KG MEN",
+          start_time: "23:30:00",
+          end_time: "00:10:00"
+        }
+      ]
+    },
+    {
+      card: "MAIN CARD",
+      fixture_no: 5,
       match_date: "2025-01-16",
       matches: [
         {
-          match_no: 6,
+          match_no: 15,
           player_a: {
-            code: 1101,
+            code: 1301,
             name: "Prakash Kumar",
             team: "UTTAR PRADESH"
           },
           player_b: {
-            code: 1012,
+            code: 1302,
             name: "Rajesh Singh",
             team: "BIHAR BOXERS"
           },
@@ -473,14 +567,14 @@ export const dummyUpcomingMatchesData: MatchesByType = {
           end_time: "19:10:00"
         },
         {
-          match_no: 7,
+          match_no: 16,
           player_a: {
-            code: 1103,
+            code: 1303,
             name: "Amit Patel",
             team: "MAHARASHTRA"
           },
           player_b: {
-            code: 1014,
+            code: 1304,
             name: "Suresh Kumar",
             team: "KARNATAKA"
           },
@@ -496,18 +590,18 @@ export const dummyUpcomingMatchesData: MatchesByType = {
     },
     {
       card: "UNDER CARD",
-      fixture_no: 4,
+      fixture_no: 6,
       match_date: "2025-01-16",
       matches: [
         {
-          match_no: 8,
+          match_no: 17,
           player_a: {
-            code: 1105,
+            code: 1305,
             name: "Mohan Das",
             team: "WEST BENGAL"
           },
           player_b: {
-            code: 1016,
+            code: 1306,
             name: "Vikram Singh",
             team: "ODISHA"
           },
@@ -520,14 +614,14 @@ export const dummyUpcomingMatchesData: MatchesByType = {
           end_time: "21:10:00"
         },
         {
-          match_no: 9,
+          match_no: 18,
           player_a: {
-            code: 1126,
+            code: 1307,
             name: "Deepanker Mech",
             team: "ROHTAK ROWDIES"
           },
           player_b: {
-            code: 1155,
+            code: 1308,
             name: "Sanu Joy",
             team: "SHER-E-LUDHIANA"
           },
@@ -537,7 +631,7 @@ export const dummyUpcomingMatchesData: MatchesByType = {
           },
           weight_category: "70 KG MEN",
           start_time: "18:10:00",
-          end_time: "18:50:00"
+            end_time: "18:50:00"
         }
       ]
     }
