@@ -65,7 +65,16 @@ export const dummyUsers: User[] = [
     name: 'Test User',
     avatar: 'https://i.pravatar.cc/150?u=test_user',
     role: 'user'
-  }
+  },
+  {
+    id: '6',
+    username: 'zoddz',
+    email: 'zoddz@gmail.com',
+    password: simpleHash('zodzz@123'),
+    name: 'Test User',
+    avatar: 'https://i.pravatar.cc/150?u=test_user',
+    role: 'user'
+  },
 ];
 
 // Rate limiting simulation
